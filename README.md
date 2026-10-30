@@ -16,7 +16,11 @@ uv sync
 
 本地使用适配当前系统的 `kickmix` 包。比赛附带的 `kickmix.so` 面向 Kaggle 镜像，不能直接当作 macOS 动态库使用。固定依赖版本见 `uv.lock`；与线上评测比较时，同时记录所用 kickmix 和官方 verifier 版本。
 
-2026-10-30 初始化已完成 Python 3.12.13 环境与依赖安装，当前使用 `kickmix 1.0.0`。本仓库尚未运行基线的全量官方验证，没有本地 PASS 或总分记录。
+2026-10-30 初始化已完成 Python 3.12.13 环境与依赖安装，当前使用 `kickmix 1.0.0`。官方参考基线尚未运行三项全量本地验证。
+
+同日已引入 Heliosli notebook v26 / dataset v24 的公开组合 `v45_oz`，18 个候选文件和 ZIP 成员均与公开清单的 SHA-256 一致。化学任务已通过默认规模官方本地验证（78,080 shots，salt `notebook-verification`），成本 `337,991,954.0482345`；invsqrt、DQI 本机仅检查文件完整性。作者保存的三项完整验证日志给出本地 GM `23.0355`，不代表我们的线上分数。来源、复现范围和提交状态见 [provenance.json](experiments/20261030_public_best/provenance.json)，实际实验结果见 [log.csv](experiments/log.csv)。
+
+按本次明确提交指令，已于北京时间 2026-10-30 22:29 向 Kaggle 提交一次，编号 `57808271`；平台已受理，暂未返回线上分数。提交包为 `submissions/20261030_public_best/submission.zip`。
 
 已手动检查三个脚本及官方 CLI 的帮助入口，读取真实 invsqrt/ANGLE 基线的静态资源，并将完整参考提交打包为 `submissions/baseline.zip`（13 个文件）。这只确认环境、读取与打包可用，不代表全量评分通过。
 
@@ -69,7 +73,7 @@ artifacts/candidate/
 uv run python scripts/package_submission.py artifacts/candidate --output submissions/submission.zip
 ```
 
-打包不等于验证通过，也不会向 Kaggle 提交。实验结论记入 [experiments/log.csv](experiments/log.csv)，可读说明见 [experiments/README.md](experiments/README.md)。本地 verifier 的结果、作者自报的 LB 和实际线上评分分开记录。
+打包不等于验证通过，也不会向 Kaggle 提交。比赛接口要求上传文件名恰好为 `submission.zip`；区分多个版本时使用不同的父目录。实验结论记入 [experiments/log.csv](experiments/log.csv)，可读说明见 [experiments/README.md](experiments/README.md)。本地 verifier 的结果、作者自报的 LB 和实际线上评分分开记录。
 
 ## 研究入口
 
