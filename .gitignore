@@ -1,0 +1,25 @@
+.venv/
+.uv-cache/
+.python-install/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+
+# Local source data and generated research artifacts.
+/data/*
+!/data/README.md
+/artifacts/*
+!/artifacts/.gitkeep
+/submissions/*
+!/submissions/.gitkeep
+/experiments/runs/
+
+# Credentials and short-lived download links.
+kaggle.json
+access_token*
+*download-url*

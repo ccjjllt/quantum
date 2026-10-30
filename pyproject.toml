@@ -1,0 +1,17 @@
+[project]
+name = "quantum-circuit-research"
+version = "0.1.0"
+description = "Research workspace for verifiable quantum circuit compilation"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "kickmix",
+    "numpy",
+    "scipy",
+]
+
+[project.optional-dependencies]
+notebooks = ["ipykernel", "jupyterlab", "matplotlib"]
+
+[tool.uv]
+package = false
+cache-dir = ".uv-cache"
