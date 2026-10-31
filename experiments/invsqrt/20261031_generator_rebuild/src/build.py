@@ -33,6 +33,7 @@ class B:
         self.peak = (0, '')
         self.label = ''
         self.garbage = {}
+        self.took_prefix_shortcut = False
 
     def note(self, where=''):
         n = self.b.num_allocated_qubits
@@ -104,7 +105,11 @@ class B:
             while k > 0 and not all(isinstance(s_, km.q) for s_ in srcs[:k]):
                 k -= 1
             plain = srcs[:k]
-            if k > 0 and cin is None and len({id(s_) for s_ in plain}) == k and not set(map(id, plain)).intersection(map(id, list(srcs[k:]) + list(tgt))):
+            plain_ids = [s_.id for s_ in plain]
+            occupied = [s_.id for s_ in list(srcs[k:]) + list(tgt) if isinstance(s_, km.q)]
+            # Two wrappers of one qubit are the same line. Object identity is not.
+            if k > 0 and cin is None and len(set(plain_ids)) == k and set(plain_ids).isdisjoint(occupied):
+                self.took_prefix_shortcut = True
                 self._in_prefix = True
                 try:
                     if subtract:

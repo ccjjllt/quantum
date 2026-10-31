@@ -52,32 +52,70 @@ def score(C0, R, ytgt, w):
     return np.max(np.abs(C0 + R - ytgt) * w)
 
 
+def virtual_parity_bits(prm: M.Params) -> list[int]:
+    """C2 positions whose rounded-row parities fix the virtual low bit of T.
+
+    This is the same symmetric difference as circuit.parity_indices, evaluated
+    on the curvature register of width F2-1. The fit keeps C1's low bit equal
+    to that parity, so the integer derivative is even and the omitted wire is 0.
+    """
+    parity: set[int] = set()
+    width = prm.F2 - 1
+    for i in prm.rowsA:
+        e = prm.eA(i) + 1
+        if e < 0:
+            continue
+        if e < width:
+            parity.symmetric_difference_update({e})
+        if 0 <= e - 1 < width:
+            parity.symmetric_difference_update({e - 1})
+    return sorted(parity)
+
+
+def derivative_parity_matches(c1: int, c2: int, bits: list[int]) -> bool:
+    acc = 0
+    for k in bits:
+        acc ^= (int(c2) >> k) & 1
+    return (int(c1) & 1) == acc
+
+
+def row_obeys_virtual_bits(c0: int, c1: int, c2: int, prm: M.Params) -> bool:
+    return (int(c0) & 1) == 0 and derivative_parity_matches(c1, c2, virtual_parity_bits(prm))
+
+
 def best_C0(R, ytgt, w, top=None):
+    """Even constant word. An odd candidate is not scored and not clamped into range."""
     d = R - ytgt
     c = -0.5 * (d.max() + d.min())
+    hi = None if top is None else int(top - 1 - R.max())
     best = None
-    cands = [np.floor(c) - 1, np.floor(c), np.floor(c) + 1, np.floor(c) + 2]
-    if top is not None:
-        hi = top - 1 - R.max()
-        cands = [min(v, hi) for v in cands]
-    for C0 in cands:
+    for C0 in (int(np.floor(c)) + offset for offset in (-2, -1, 0, 1, 2, 3)):
+        if C0 & 1:
+            continue
+        if hi is not None and C0 > hi:
+            continue
         sc = score(C0, R, ytgt, w)
         if best is None or sc < best[0]:
             best = (sc, int(C0))
+    if best is None:
+        return (np.inf, 0)
     return best
 
 
 def best_C0_g(R, ytgt, w, G0, top):
     d = R - ytgt
     c = int(np.floor(-0.5 * (d.max() + d.min()) + (1 << G0) / 2))
-    best = None
     hi = int(top - 1 - R.max())
-    cands = sorted(set(min(v, hi) for v in range(c - (1 << G0), c + (1 << G0) + 1)))
-    for C0 in cands:
-        e = (((C0 + R) >> G0) << G0) + ((1 << G0) - 1) / 2.0 * 0 - ytgt
+    best = None
+    for C0 in range(c - (1 << G0), c + (1 << G0) + 1):
+        if C0 & 1 or C0 > hi:
+            continue
+        e = (((C0 + R) >> G0) << G0) - ytgt
         sc = np.max(np.abs(e) * w)
         if best is None or sc < best[0]:
-            best = (sc, C0)
+            best = (sc, int(C0))
+    if best is None:
+        return (np.inf, 0)
     return best
 
 
@@ -92,17 +130,27 @@ def fit_segment(p, xn, prm: M.Params, rad1=6, rad2=3):
     top = 1 << (prm.F0 - 1)
     zeros = np.zeros(len(b), np.int64)
     cache = {}
+    parity_bits = virtual_parity_bits(prm)
 
     def ev(C1, C2):
         key = (C1, C2)
         if key in cache:
             return cache[key]
-        T = M.eval_T(zeros + C1, zeros + C2, b, prm)
-        if T.min() < 0 or T.max() >= (1 << prm.nT) or C1 >= (1 << prm.nT):
+        # Virtual low bit of T: the curvature parity has to match C1, and every
+        # integer derivative in this segment has to be even. The constant word
+        # returned below is already even, so a later +1 adjustment is a no-op.
+        if not derivative_parity_matches(C1, C2, parity_bits):
             r = (np.inf, 0)
         else:
-            R = M.eval_Y(zeros, T, b, prm)
-            r = best_C0(R, ytgt, w, top) if prm.G0 == 0 else best_C0_g(R, ytgt, w, prm.G0, top)
+            T = M.eval_T(zeros + C1, zeros + C2, b, prm)
+            odd_derivative = int(np.max(T & 1)) != 0
+            if odd_derivative or T.min() < 0 or T.max() >= (1 << prm.nT) or C1 >= (1 << prm.nT):
+                r = (np.inf, 0)
+            else:
+                R = M.eval_Y(zeros, T, b, prm)
+                r = best_C0(R, ytgt, w, top) if prm.G0 == 0 else best_C0_g(R, ytgt, w, prm.G0, top)
+                if int(r[1]) & 1:
+                    r = (np.inf, 0)
         cache[key] = r
         return r
 
@@ -123,7 +171,12 @@ def fit_segment(p, xn, prm: M.Params, rad1=6, rad2=3):
                 sc, C0 = ev(C1b + d1, C2b + d2)
                 if sc < best[0] - 1e-12:
                     best = (sc, C0, C1b + d1, C2b + d2); improved = True
-    return best
+    sc, C0, C1, C2 = best
+    if not derivative_parity_matches(C1, C2, parity_bits) or (int(C0) & 1):
+        alt_sc, alt_c0 = ev(C1 ^ 1, C2)
+        if alt_sc < sc:
+            sc, C0, C1 = alt_sc, alt_c0, C1 ^ 1
+    return (sc, int(C0), int(C1), int(C2))
 
 
 _D = None

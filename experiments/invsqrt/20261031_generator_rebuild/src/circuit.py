@@ -206,6 +206,147 @@ def win_step(bb,x,prm,op,L,wins,cbits,fwd,store,kbig=0,qcap=None):
   for i in reversed(big):row(i,list(L))
 
 
+def generalized_win_step(bb, x, prm, op, L, wins, cbits, fwd, store, kbig=0, qcap=None):
+    """Same windowed output Horner when the rounded bits are not exactly 13..0.
+
+    The recipe schedule stays on win_step. This path is the explicit form of the
+    upstream generalized outer step: missing operand bits are zeros, not a
+    different algorithm.
+    """
+    b = bb.b
+    assert kbig == 0 and qcap is None
+    winrows = {i for _, rows in wins for i in rows}
+    big = [i for i in prm.rowsB if i not in winrows]
+    order = big + [i for _, rows in wins for i in rows]
+    prior = {}
+    active = set()
+    for i in order:
+        prior[i] = sorted(active)
+        e = prm.eB(i) + 1
+        if e < 0:
+            continue
+        if e < len(op):
+            active.symmetric_difference_update({e})
+        if 0 <= e - 1 < len(op):
+            active.symmetric_difference_update({e - 1})
+
+    def row(i, win):
+        e = prm.eB(i) + 1
+        ctl = x[i]
+        if not fwd:
+            b.x(ctl)
+        for q in win:
+            b.cx(ctl, q)
+        if not fwd:
+            b.x(ctl)
+        bit = op[e] if 0 <= e < len(op) else None
+        previous = op[e - 1] if 0 <= e - 1 < len(op) else None
+        src = [op[p + e + 1] if 0 <= p + e + 1 < len(op) else None for p in range(len(win))]
+        carry = None
+        if bit is not None or previous is not None:
+            carry = b.alloc_qubits(1)[0]
+            js = set(prior[i])
+            if bit is not None:
+                js.symmetric_difference_update({e})
+
+            def prepare():
+                for k in sorted(js):
+                    if 0 <= k < len(op) and op[k] is not None:
+                        b.cx(op[k], ctl)
+                if bit is not None and previous is not None:
+                    b.cx(bit, previous)
+
+            def undo():
+                if bit is not None and previous is not None:
+                    b.cx(bit, previous)
+                for k in reversed(sorted(js)):
+                    if 0 <= k < len(op) and op[k] is not None:
+                        b.cx(op[k], ctl)
+
+            prepare()
+            b.init_and(ctl, previous if previous is not None else bit, carry)
+            undo()
+            if bit is not None:
+                b.cx(bit, carry)
+        bb.add(src, win, cin=carry)
+        if carry is not None:
+            if bit is not None:
+                b.cx(bit, carry)
+            prepare()
+            b.del_and(ctl, previous if previous is not None else bit, carry)
+            undo()
+            b.free(km.array([carry]))
+        if not fwd:
+            b.x(ctl)
+        for q in win:
+            b.cx(ctl, q)
+        if not fwd:
+            b.x(ctl)
+
+    def fold(idx, subtract):
+        k = wins[idx][0] - 1
+        cq = store[idx]
+        target = list(L[k:wins[idx - 1][0] - 1]) + list(store[idx - 1]) if idx else list(L[k:])
+        source = list(cq) + [cq[-1]] * (len(target) - len(cq))
+        bb.add(source[:len(target)], target, subtract=subtract)
+
+    if fwd:
+        for i in big:
+            row(i, list(L))
+        for j, (k, rows) in enumerate(wins):
+            reg = list(b.alloc_qubits(cbits[j]))
+            store.append(reg)
+            for i in rows:
+                row(i, list(L[:k - 1]) + reg)
+        for j in reversed(range(len(wins))):
+            fold(j, False)
+    else:
+        for j in range(len(wins)):
+            fold(j, True)
+        for j in reversed(range(len(wins))):
+            _k, rows = wins[j]
+            for i in reversed(rows):
+                row(i, list(L[:wins[j][0] - 1]) + store[j])
+            b.free(km.array(store[j]))
+        store.clear()
+        for i in reversed(big):
+            row(i, list(L))
+
+
+def xor_output_lsb(b, prm, Tr, dest):
+    """XOR (Y' - C0) & 1 onto dest.
+
+    Each signed rounded row flips the accumulator LSB exactly when that
+    rounded value is odd, and the sign is irrelevant mod 2. T's bit 0 is the
+    virtual even bit, so it is not a wire. u is even, so this parity is L's LSB.
+    """
+    width = len(Tr) + 1
+
+    def bit(k):
+        if k <= 0 or k >= width:
+            return None
+        return Tr[k - 1]
+
+    for i in prm.rowsB:
+        shift = prm.eB(i) + 1
+        if shift <= 0:
+            continue
+        hi = bit(shift)
+        lo = bit(shift - 1)
+        if hi is not None:
+            b.cx(hi, dest)
+        if lo is not None:
+            b.cx(lo, dest)
+
+
+def output_horner(bb, x, prm, op, L, wins, cbits, fwd, store, kbig=0, qcap=None):
+    schedule = [prm.eB(i) + 1 for i in prm.rowsB]
+    if prm.rowsB == tuple(range(14)) and schedule == list(range(13, -1, -1)):
+        win_step(bb, x, prm, op, L, wins, cbits, fwd, store, kbig, qcap)
+    else:
+        generalized_win_step(bb, x, prm, op, L, wins, cbits, fwd, store, kbig, qcap)
+
+
 def build_ladder(tables, prm, o, lay, angs):
     """sd-mode circuit with the H/L output split (px21 + fused phasing always on)."""
     bb = Bd.B()
@@ -295,17 +436,29 @@ def build_ladder(tables, prm, o, lay, angs):
     bb.label = 'B'
     if o.wins:
         wstore = []
-        win_step(bb, x, prm, [None]+list(Tr), Lr, o.wins, o.wcb, True, wstore, o.kbig, o.qcap)
+        output_horner(bb, x, prm, [None]+list(Tr), Lr, o.wins, o.wcb, True, wstore, o.kbig, o.qcap)
     else:
         Bd.sd_step(bb, x, prm.rowsB, Tr, Lr, prm.eB, LB, [], True, False)
     # --- phase L
+    # Lr holds L >> 1. u is even, so it does not carry into bit 1, and L's LSB
+    # is (Y' - C0) & 1. G0>=1 drops that bit. G0=0 phases it.
     ext = b.alloc_qubits(3)
-    RL = list(Lr[prm.G0-1:]) + list(ext)
+    low_lsb = None
+    if prm.G0 == 0:
+        low_lsb = b.alloc_qubits(1)[0]
+        xor_output_lsb(b, prm, Tr, low_lsb)
+        data = [low_lsb] + list(Lr)
+    else:
+        data = list(Lr[prm.G0 - 1:])
+    RL = data + list(ext)
     bb.label = 'Lphase'
     Bd.fused_phase(bb, RL, LB - prm.G0 - 1, angfn(angs[1], 0), flags4)
     b.free(ext)
+    if low_lsb is not None:
+        xor_output_lsb(b, prm, Tr, low_lsb)
+        b.free(km.array([low_lsb]))
     if o.wins:
-        win_step(bb, x, prm, [None]+list(Tr), Lr, o.wins, o.wcb, False, wstore, o.kbig, o.qcap)
+        output_horner(bb, x, prm, [None]+list(Tr), Lr, o.wins, o.wcb, False, wstore, o.kbig, o.qcap)
     else:
         Bd.sd_step(bb, x, prm.rowsB, Tr, Lr, prm.eB, LB, [], False, False)
     if curvature_state is not None:

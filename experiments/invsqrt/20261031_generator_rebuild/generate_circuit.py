@@ -12,6 +12,8 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
+
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -114,6 +116,51 @@ def build_from_tables(tables, prm, angles, *, lb, s, plan, retire, initial_looku
     return circ, resources
 
 
+def angles_sha256(angles) -> str:
+    raw = json.dumps(angles).encode()
+    return hashlib.sha256(raw).hexdigest()
+
+
+def resolve_angles(tables, prm, lb, s, angles_path, recipe):
+    """Published angles stay on the published table. Any other table is calibrated."""
+    published_angles = phase_angles()
+    published_tables = tables_from_recipe(recipe, even_c0=True)
+    published_params = tuple(int(v) for v in recipe["params"])
+    same_params = (prm.F0, prm.FT, prm.F2, prm.G0) == published_params
+    same_table = tables.shape == published_tables.shape and np.array_equal(tables, published_tables)
+    if same_params and same_table:
+        return published_angles, {
+            "angle_source": "published recipe calibration",
+            "angles_calibrated_to_table": True,
+            "refused_published_angles": False,
+            "angles_sha256": angles_sha256(published_angles),
+        }
+    refused = False
+    if angles_path is not None:
+        given = phase_angles(angles_path)
+        if given == published_angles:
+            refused = True
+            print("refused published angles for a non-recipe table", flush=True)
+    lay = H.layout(tables, prm, lb, s)
+    if lay is None:
+        raise SystemExit(f"no high/low layout for angle calibration at LB={lb} S={s}")
+    calibrated = H.calibrate_multi(tables, prm, lay, drop=1, iters=12, verbose=False)
+    if calibrated is None:
+        raise SystemExit("absolute-margin angle calibration failed")
+    angles, worst, margin, nrot = calibrated
+    return angles, {
+        "angle_source": "absolute-margin calibration of this table",
+        "angles_calibrated_to_table": True,
+        "refused_published_angles": refused,
+        "angles_sha256": angles_sha256(angles),
+        "published_angles_sha256": angles_sha256(published_angles),
+        "angles_differ_from_published": angles != published_angles,
+        "calibration_worst_ratio": worst,
+        "calibration_margin": margin,
+        "calibration_nrot": nrot,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--F0", type=int, default=28)
@@ -140,7 +187,7 @@ def main() -> int:
             raise SystemExit("a precision other than the published recipe needs --tables from a refit")
         payload = json.loads(args.tables.read_text())
         rows = payload["tables"] if isinstance(payload, dict) else payload
-        tables = __import__("numpy").array(rows, dtype="int64")
+        tables = np.array(rows, dtype="int64")
         prm = M.Params(
             F0=args.F0, FT=args.FT, F2=args.F2, G0=args.G0,
             booth=False, sd=True, tcap=True,
@@ -150,7 +197,7 @@ def main() -> int:
     else:
         prm = params_from_recipe(recipe)
         tables = tables_from_recipe(recipe, even_c0=True)
-    angles = phase_angles(args.angles)
+    angles, angle_info = resolve_angles(tables, prm, args.LB, args.S, args.angles, recipe)
 
     circ, resources = build_from_tables(
         tables, prm, angles,
@@ -167,6 +214,7 @@ def main() -> int:
         "F0": prm.F0, "FT": prm.FT, "F2": prm.F2, "G0": prm.G0,
         "rowsA": list(prm.rowsA), "rowsB": list(prm.rowsB),
         "sd": prm.sd, "tcap": prm.tcap,
+        **angle_info,
     })
     manifest = {
         "generator": "experiments/invsqrt/20261031_generator_rebuild/generate_circuit.py",
@@ -182,11 +230,21 @@ def main() -> int:
         "resources": resources,
         "units": UNITS,
     }
+    manifest["angles"] = angles
     manifest_path = args.manifest or args.out.with_suffix(".manifest.json")
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     (args.out.with_suffix(".resources.json")).write_text(json.dumps(resources, indent=2) + "\n")
+    angles_path = args.out.with_suffix(".angles.json")
+    angles_path.write_text(json.dumps({"angles": angles, **angle_info}, indent=2) + "\n")
     print(UNITS)
-    print(json.dumps({"canonical_kmb_sha256": canonical, "qubits": resources["qubits"], "static_toffoli_like": resources["static_toffoli_like"], "official_verifier_called": False, "baseline_kmb_read": False}, indent=2))
+    print(json.dumps({
+        "canonical_kmb_sha256": canonical,
+        "qubits": resources["qubits"],
+        "static_toffoli_like": resources["static_toffoli_like"],
+        "official_verifier_called": False,
+        "baseline_kmb_read": False,
+        **angle_info,
+    }, indent=2))
     return 0
 
 

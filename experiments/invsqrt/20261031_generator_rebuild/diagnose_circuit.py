@@ -7,6 +7,7 @@ This entry does not import or call the official verifier.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -121,12 +122,37 @@ def sample_inputs(mode: str, seed: int):
     }
 
 
+# One simulator per (seed, batch size). Later batches keep its measurement PRNG.
+_STREAMS: dict[tuple[int, int], dict] = {}
+_PROBE_Q = 4000
+
+
+def measurement_stream(seed: int, batch_size: int) -> tuple[km.Simulator, int]:
+    key = (int(seed), int(batch_size))
+    slot = _STREAMS.get(key)
+    if slot is None:
+        slot = {
+            "sim": km.Simulator(batch_size=batch_size, seed=int(seed), counting_operations=True),
+            "index": 0,
+        }
+        _STREAMS[key] = slot
+    index = slot["index"]
+    slot["index"] = index + 1
+    return slot["sim"], index
+
+
 def run_batch(circ, tables, prm, xs, seed: int) -> dict:
     regs = circ.register_data
     xreg = km.array(list(regs["x"]))
     scratch = km.array([km.q(i) for i in range(circ.num_qubits) if km.q(i) not in set(regs["x"])])
-    sim = km.Simulator(batch_size=len(xs), seed=seed, counting_operations=True)
+    sim, stream_index = measurement_stream(seed, len(xs))
     sim.clear_for_shot()
+    sim.clear_operation_statistics()
+    # One HMR ahead of the circuit samples the stream the circuit is about to use.
+    sim.do(km.Circuit(f"HMR q{_PROBE_Q} b{_PROBE_Q}\n"))
+    probe = sim.read_across_shots(km.b(_PROBE_Q)).astype(np.uint8)
+    fingerprint = hashlib.sha256(probe.tobytes()).hexdigest()
+    sim.clear_operation_statistics()
     sim.write_across_shots(xreg, bits_of(xs.astype(np.uint64), 22))
     sim.do(circ)
     got = ints_of(sim.read_across_shots(xreg))
@@ -143,6 +169,9 @@ def run_batch(circ, tables, prm, xs, seed: int) -> dict:
         "executed_toffoli_like_mean": float(stats.num_toffoli_like / len(xs)),
         "executed_t_like_mean": float(stats.num_t_like / len(xs)),
         "executed_rotations_mean": float(stats.num_z_pow(min_clifford_hierarchy_level=4) / len(xs)),
+        "stream_batch_index": int(stream_index),
+        "measurement_fingerprint": fingerprint,
+        "measurement_stream_restarted": False,
     }
 
 
@@ -155,13 +184,43 @@ def main() -> int:
     parser.add_argument("--prefix", type=int, default=0)
     parser.add_argument("--LB", type=int, default=21)
     parser.add_argument("--S", type=int, default=20)
+    parser.add_argument("--F0", type=int, default=None)
+    parser.add_argument("--FT", type=int, default=None)
+    parser.add_argument("--F2", type=int, default=None)
+    parser.add_argument("--G0", type=int, default=None)
+    parser.add_argument("--tables", type=Path, default=None)
+    parser.add_argument("--angles", type=Path, default=None)
+    parser.add_argument("--max-batches", type=int, default=0)
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args()
     loaded = load_recipe()
     recipe = loaded["recipe"]
-    prm = params_from_recipe(recipe)
-    tables = tables_from_recipe(recipe)
-    angles = phase_angles()
+    if args.tables is not None:
+        payload = json.loads(args.tables.read_text())
+        rows = payload["tables"] if isinstance(payload, dict) else payload
+        tables = np.array(rows, dtype=np.int64)
+        f0 = args.F0 if args.F0 is not None else int(recipe["params"][0])
+        ft = args.FT if args.FT is not None else int(recipe["params"][1])
+        f2 = args.F2 if args.F2 is not None else int(recipe["params"][2])
+        g0 = args.G0 if args.G0 is not None else int(recipe["params"][3])
+        drop_a = {int(v) for v in recipe.get("dropA", [5])}
+        prm = M.Params(
+            F0=f0, FT=ft, F2=f2, G0=g0, booth=False, sd=True, tcap=True,
+            rowsA=tuple(i for i in range(14) if i not in drop_a),
+            rowsB=tuple(range(14)),
+        )
+        if args.angles is None:
+            raise SystemExit("a non-recipe table needs --angles calibrated to that table")
+        angles = phase_angles(args.angles)
+        published_tables = tables_from_recipe(recipe, even_c0=True)
+        published_angles = phase_angles()
+        different_table = tables.shape != published_tables.shape or not np.array_equal(tables, published_tables)
+        if different_table and angles == published_angles:
+            raise SystemExit("refusing published angles for a different coefficient table")
+    else:
+        prm = params_from_recipe(recipe)
+        tables = tables_from_recipe(recipe)
+        angles = phase_angles(args.angles)
     plan = args.plan or loaded["options"]["plan"]
     circ, resources = build_from_tables(
         tables, prm, angles, lb=args.LB, s=args.S, plan=plan,
@@ -183,12 +242,21 @@ def main() -> int:
     if args.mode == "local":
         input_sets = sample_inputs("local", UNIFORM_DRAW_SEED)
         sets = [(name, seed, values) for seed in SIMULATOR_SEEDS for name, values in input_sets.items()]
+        batch_count = 0
         for name, seed, xs in sets:
-            for offset in range(0, len(xs), 256):
-                row = run_batch(circ, tables, prm, xs[offset:offset + 256], seed)
+            runnable = xs
+            if len(runnable) % 256:
+                runnable = np.resize(runnable, int(np.ceil(len(runnable) / 256) * 256))
+            for offset in range(0, len(runnable), 256):
+                row = run_batch(circ, tables, prm, runnable[offset:offset + 256], seed)
                 row["set"] = name
                 records.append(row)
                 print(json.dumps(row), flush=True)
+                batch_count += 1
+                if args.max_batches and batch_count >= args.max_batches:
+                    break
+            if args.max_batches and batch_count >= args.max_batches:
+                break
     else:
         xs = sample_inputs(args.mode, args.seed)
         row = run_batch(circ, tables, prm, xs, args.seed)

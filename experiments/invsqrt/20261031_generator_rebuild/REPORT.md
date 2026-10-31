@@ -60,6 +60,8 @@ Mean T-like gates 1. Mean general rotations 44. Qubits **87**. The uniform mean 
 
 With the published margin 51,187,461, rotation synthesis is 1,272.97 T. Equivalent cost `C = 1,661.57`. Score `Q * C = 144,556.97`. Artifact: `artifacts/20261031_invsqrt_generator_rebuild/local_diagnosis.json`.
 
+The batch loop now keeps one measurement stream per simulator seed instead of constructing a new simulator for every batch. Two successive batches of the fixed numpy-seed `20261030` uniform draw, both under simulator seed `101`, have measurement fingerprints `fcb00b4d79f10a511a7b41906a29b2a69f1e6fc470277f6712bfcb0859815937` and `5e707e5805c51fb6ccfde3dae68f3b2d5cd176f3636986b75a33274acfac71de`. Repeating the first batch reproduces the first fingerprint. Both batches restored `x`, cleared scratch, and matched the model phase. Executed Toffoli-like means were 1,342.75 and 1,343.0234375. This sample is not an official PASS. The table above was measured when each batch restarted the seed.
+
 ## Full official verification
 
 Not run, and this section does not record an official PASS. No candidate that passed the classical screen and the local diagnosis has a measured cost at or below 0.95 times the recorded baseline, so the 200,540,928-shot verifier was not started for the baseline seed `20261031` or a candidate seed `20261101`. A shorter run is not a substitute. Python in this workspace is 3.12 and kickmix is 1.0.0; that stack was used for generation and the local sample only. No portfolio zip exists for this experiment.
@@ -76,7 +78,57 @@ The 5% target is still open. The best measured cost is **144,556.97**. That is t
 
 The best emitted score is 43.2% higher than the recorded baseline. Free synthesis would still leave `87 * 1,343.33 = 116,869.77`, which is above both the recorded baseline and the threshold. The gap is the width. The adder-carry peak during the output Horner is 87 qubits (`B add n=20`), and every schedule stayed at or above that.
 
-Charging the cheapest positive grid synthesis (228.35 Toffoli-equivalents) on top of the measured 1,343 Toffolis at 87 qubits still gives about **136,700**, above 95,893.58. That addition is only an illustration: those other cells were not emitted as circuits, and several improve relative error while the width-fixed score stays above the emitted circuit. They are rejected. The 108 six-bit cells have negative margins, so they have no synthesis charge and no cost win.
+Charging the cheapest positive grid synthesis (228.35 Toffoli-equivalents) on top of the measured 1,343 Toffolis at 87 qubits still gives about **136,700**, above 95,893.58. That figure is an illustration from before the fit and the angles were required to correspond. It does not exclude those cells. The corrected evaluation is in the next section. The 108 six-bit cells have negative margins, so they have no synthesis charge and no cost win.
+
+## Corrected evaluation of the 35 passes
+
+The 35 seven-bit cells that passed the earlier grid were refit with the even constant word and the derivative virtual-bit parity inside the score. An even-word adjustment changes none of those constant words. None is a truncation of the published table. A cell is not excluded because the earlier mismatched-angle or width-fixed illustration was expensive.
+
+`F0=27, FT=20, F2=10, G0=0` fails the constrained model: 10 tolerance violations, overflow 0, absolute margin **-79,381,055**, first failure `x=734557`. It has no circuit cost.
+
+`G0=0` phases the real low-word LSB. `u` is even, so that bit is `(Y' - C0) & 1`, the parity of the rounded output rows, not a fresh `|0>`. A smoke sample of `F0=28, FT=19, F2=8, G0=0` and one of `F0=28, FT=20, F2=8, G0=0` both restored `x`, cleared scratch, and matched the model phase.
+
+The other 34 cells that pass the constrained model were built on that path. Angles are the absolute-margin calibration of that table. The recipe-precision refit reproduces the published even table, so it keeps the published calibration. Qubits run from 87 to 98. Static Toffoli-like counts run from 1,354 to 1,465. The lowest static product is `87 × 1,354 = 117,798`, which is above 95,893.58 before rotation synthesis.
+
+| F0 | FT | F2 | G0 | status | margin | Q | static Toffoli | angles |
+| ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: | --- |
+| 27 | 20 | 10 | 0 | fail | -79,381,055 |  |  | model failed, no circuit |
+| 28 | 19 | 8 | 0 | measured | 5,891,269 | 87 | 1,360 | calibrated to this table |
+| 28 | 19 | 8 | 1 | measured | 5,891,269 | 87 | 1,354 | published table calibration |
+| 28 | 19 | 9 | 0 | measured | 101,134,417 | 88 | 1,371 | calibrated to this table |
+| 28 | 19 | 9 | 1 | measured | 71,904,517 | 88 | 1,364 | calibrated to this table |
+| 28 | 19 | 9 | 2 | measured | 26,994,355 | 88 | 1,359 | calibrated to this table |
+| 28 | 19 | 10 | 0 | measured | 115,821,808 | 89 | 1,370 | calibrated to this table |
+| 28 | 19 | 10 | 1 | measured | 115,821,808 | 89 | 1,366 | calibrated to this table |
+| 28 | 19 | 10 | 2 | measured | 37,859,211 | 89 | 1,359 | calibrated to this table |
+| 28 | 20 | 8 | 0 | measured | 106,855,201 | 88 | 1,398 | calibrated to this table |
+| 28 | 20 | 8 | 1 | measured | 106,855,201 | 88 | 1,392 | calibrated to this table |
+| 28 | 20 | 9 | 0 | measured | 208,335,547 | 89 | 1,410 | calibrated to this table |
+| 28 | 20 | 9 | 1 | measured | 205,424,028 | 89 | 1,405 | calibrated to this table |
+| 28 | 20 | 9 | 2 | measured | 151,436,154 | 89 | 1,398 | calibrated to this table |
+| 28 | 20 | 10 | 0 | measured | 236,384,815 | 90 | 1,415 | calibrated to this table |
+| 28 | 20 | 10 | 1 | measured | 222,681,612 | 90 | 1,409 | calibrated to this table |
+| 28 | 20 | 10 | 2 | measured | 177,976,186 | 90 | 1,403 | calibrated to this table |
+| 29 | 19 | 8 | 0 | measured | 125,343,749 | 95 | 1,408 | calibrated to this table |
+| 29 | 19 | 8 | 1 | measured | 125,343,749 | 95 | 1,402 | calibrated to this table |
+| 29 | 19 | 8 | 2 | measured | 37,063,412 | 95 | 1,396 | calibrated to this table |
+| 29 | 19 | 9 | 0 | measured | 186,386,851 | 96 | 1,418 | calibrated to this table |
+| 29 | 19 | 9 | 1 | measured | 167,220,594 | 96 | 1,412 | calibrated to this table |
+| 29 | 19 | 9 | 2 | measured | 157,157,806 | 96 | 1,407 | calibrated to this table |
+| 29 | 19 | 10 | 0 | measured | 200,775,026 | 97 | 1,420 | calibrated to this table |
+| 29 | 19 | 10 | 1 | measured | 194,617,324 | 97 | 1,413 | calibrated to this table |
+| 29 | 19 | 10 | 2 | measured | 170,510,980 | 97 | 1,407 | calibrated to this table |
+| 29 | 20 | 8 | 0 | measured | 196,867,263 | 96 | 1,448 | calibrated to this table |
+| 29 | 20 | 8 | 1 | measured | 181,101,203 | 96 | 1,442 | calibrated to this table |
+| 29 | 20 | 8 | 2 | measured | 164,145,343 | 96 | 1,436 | calibrated to this table |
+| 29 | 20 | 9 | 0 | measured | 293,143,425 | 97 | 1,461 | calibrated to this table |
+| 29 | 20 | 9 | 1 | measured | 293,143,425 | 97 | 1,455 | calibrated to this table |
+| 29 | 20 | 9 | 2 | measured | 290,148,643 | 97 | 1,449 | calibrated to this table |
+| 29 | 20 | 10 | 0 | measured | 321,057,626 | 98 | 1,465 | calibrated to this table |
+| 29 | 20 | 10 | 1 | measured | 335,065,303 | 98 | 1,459 | calibrated to this table |
+| 29 | 20 | 10 | 2 | measured | 299,816,822 | 98 | 1,453 | calibrated to this table |
+
+Adder peak on the corrected builder, published recipe: prefix 0 allocates **87** qubits at `B add n=20 cached=0`, static Toffoli-like 1,354. Prefix 8, the plain-qubit prefix attempt, still peaks at **87** on that same add and raises the static count to 1,372. The peak did not fall. The 5% target is still open. No portfolio zip was written. Artifact: `artifacts/20261031_invsqrt_generator_rebuild/corrected_grid.json`.
 
 ## Failed routes and counterexamples
 
@@ -132,4 +184,4 @@ The 7-bit row is the same fraction width as the quadratic recipe plus one cubic 
 
 ## Why the target stays open
 
-Beating 95,893.58 from a circuit whose Toffoli count is already about 1,343 requires the width to fall to about 71 even with free synthesis, and to about 57 at the measured synthesis cost. The register floor of this schedule is the live sum of the 22-bit input, the 20-bit low word, the 17-bit derivative, the remaining curvature bits, and the adder carries. The carries set the peak at 87, and the plain-qubit prefix does not remove them. No searched precision, segment size, window plan, or cubic table produced a measured score under the threshold.
+Beating 95,893.58 from a circuit whose Toffoli count is already about 1,343 requires the width to fall to about 71 even with free synthesis, and to about 57 at the measured synthesis cost. The register floor of this schedule is the live sum of the 22-bit input, the 20-bit low word, the 17-bit derivative, the remaining curvature bits, and the adder carries. On the corrected builder the carries still set the peak at 87 (`B add n=20`), and a prefix of 8 does not remove them. The lowest static product among the 34 built cells is 117,798. No searched precision, segment size, window plan, or cubic table produced a measured score under the threshold. The 5% target is still open.
