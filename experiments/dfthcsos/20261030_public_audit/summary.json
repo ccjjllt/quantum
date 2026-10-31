@@ -1,0 +1,116 @@
+{
+  "subject": "Submitted Heliosli notebook v26 / dataset v24 / portfolio v45_oz chemistry",
+  "verification_scope": {
+    "prior_evidence": "Full local official dfthcsos PASS, 78080 shots, salt notebook-verification, recorded in artifacts/20261030_public_best/local_dfthcsos.json",
+    "this_audit": "Original cost-function enumeration; static loader statistics; 1 trajectory per each of 1220 addresses using official recover_words_from_circuits(seed=20261030), forward/reverse, npz table exactly matches recovered table; algebraic structure scan on 76 complete 16-address blocks, final 4 addresses excluded. No new candidate and no full verifier run. Also ran a decoded-vector algebra diagnostic of block-preserving B-axis permutation; no circuit construction or full scoring."
+  },
+  "baseline": {
+    "R": 8,
+    "B": 143,
+    "C": 60,
+    "N": 76,
+    "brot": 8,
+    "J": 5,
+    "lambda_eff": 48.32336162007705,
+    "T_total": 16266,
+    "Q_total": 430,
+    "cost": 337991954.0482345,
+    "Q_formula": "42 outer persistent + 44 inner persistent + 5*8 angle words + max(96 outer temporary,304 inner temporary,75 ANGLE temporary)",
+    "T_parts": {
+      "angles": 8336,
+      "inner_state_preparation": 5311,
+      "givens": 2250,
+      "outer_state_preparation": 369
+    }
+  },
+  "defects_and_limits": [
+    {
+      "finding": "Three numerical constraints are almost saturated",
+      "evidence": {
+        "error_1_margin_microHa": 0.5899607264624185,
+        "error_2_margin_microHa": 0.558901898976838,
+        "E_gap_floor_margin_microHa": 1.0000176127178406
+      },
+      "meaning": "Not evidence of current invalidity; naive coefficient/angle edits have almost no remaining error budget, and fixed-word lambda polishing has diminishing returns."
+    },
+    {
+      "finding": "Reducing ANGLE scratch alone does not reduce the charged Q_total",
+      "evidence": "ANGLE temporary=75, while inner-state-preparation temporary=304 sets max; current single ANGLE=126 qubits against cap128",
+      "meaning": "Scratch optimization is useful when it enables lower-Toffoli loaders under the 128Q cap, not as a direct score win."
+    },
+    {
+      "finding": "Official heuristic selects QROAM block for Toffoli and then a beta*(N-1) workspace threshold, not global T*Q",
+      "evidence": "brot8->9 changes implied inner QROAM k4->5, total Q430->738; holding loader T and lambda fixed gives cost x1.577423588652604",
+      "meaning": "Increasing precision is expensive here. Model settings are fixed by the verifier and cannot be overridden by a submitted state-preparation implementation."
+    },
+    {
+      "finding": "Batch size and angle precision are coupled to learned Boolean structure",
+      "evidence": "At J5, bit0 of delta words is affine in low4 address bits for every complete block in loaders4..14; bit1 is also affine for loaders5,7,9,11,13. J4 changes post-first-loader bit0 affine fraction from78.609% to0.201%, J6 to0.219%.",
+      "meaning": "Changing J or unconstrained angle words usually destroys existing synthesis advantages. ANF counts are a structural proxy, not proof of a Toffoli bound."
+    }
+  ],
+  "prioritized_directions": [
+    {
+      "priority": 1,
+      "direction": "Co-optimize fixed-word ANGLE synthesis, shared Boolean terms and scratch allocation at J5",
+      "reason": "ANGLE execution is51.248% of total T; first four loaders cost301 Toffoli/pass, later loaders279 or258; 2 spare physical qubits under cap",
+      "minimal_falsifiable_experiment": "Choose one301-Toffoli loader and preserve its complete XOR truth table. Synthesize shared nonlinear terms / measurement cleanup under128Q, compare actual executed Toffolis on all1220 addresses and both pass states. Only if improved, verify all64shots per address.",
+      "payoff_condition": "10% lower total ANGLE T at unchanged Q/lambda yields chemistry cost -5.1248%, overall score x1.0176906; this is a scenario, not achieved."
+    },
+    {
+      "priority": 2,
+      "direction": "Exact B-axis/address permutation coupled to loader re-synthesis",
+      "reason": "Simultaneously permuting decoded two-body vector rows and the W B-axis within each rho preserves X, native offsets, lambda and both errors in exact arithmetic. This avoids consuming the nearly exhausted numerical error budget. H2_I and offset_W may remain unchanged.",
+      "minimal_falsifiable_experiment": "Permute the eight complete globally16-address-aligned blocks within each rho, leaving its15boundary rows fixed, to preserve low4bit affine structure. Seek improved sharing across high-address blocks, synthesize one full loader family, and require fewer actual Toffolis with every loader<=128Q. A block-internal affine permutation also preserves the affine subspace.",
+      "evidence": "Deterministic block reversal measured max|delta X|=4.440892098500626e-16, max native-offset change=1.7763568394002505e-15, lambda_H2 difference=0.0; these are floating-point summation differences.",
+      "limitations": "A permutation changes the actual required lookup table. Updating npz angle_words alone has no score effect; circuits must be regenerated. Low4bit ANF term counts stay invariant under this restricted block permutation and cannot predict a gate-count win."
+    },
+    {
+      "priority": 3,
+      "direction": "Quantization-aware factorization with explicit low-bit affine constraints matched to the loader design",
+      "reason": "Current tables encode arithmetic structure; unconstrained lower-error tables can become more expensive circuits. Target the four costly unstructured early loaders or extend second-bit affine relations.",
+      "minimal_falsifiable_experiment": "Fix J5/brot8 and most table words; introduce one blockwise affine bit constraint, refit W/H2_I using decoded words and exact official metrics; compare feasible error margins, lambda and an actually synthesized loader. Reject when physical error or total lambda*T*Q worsens.",
+      "payoff_condition": "No promised numeric gain; use actual encoded words, not only unquantized U, as the optimizer objective."
+    },
+    {
+      "priority": 4,
+      "direction": "Small structured shape search around cost plateaus, not monotonic size reduction",
+      "reason": "C56 hypothetical cost ratio0.9784766 and C48 ratio0.9347825 if lambda/loader T held fixed, but upstream v15 reports error2=20.44/23.86mHa for those shapes. B143 is at a cheap block boundary; B144 adds482T; B128 triggersQ701 and cost x1.46196 under same assumptions.",
+      "minimal_falsifiable_experiment": "First compare C59/60 with structure-preserving warm starts and beta8; require error1/error2<=20mHa and E_gap>floor, then measure regenerated loaders. Do not count merely smaller tensor dimensions as success.",
+      "payoff_condition": "Hypothetical cost tables assume unchanged lambda and loader T and do not establish feasible candidates."
+    },
+    {
+      "priority": 5,
+      "direction": "Only change global J after a circuit-level break-even check",
+      "reason": "Every loader must declare identical selection and word registers, so per-loader different J is invalid. J4 Q422 tolerates angle T<=8644.36 (+3.70%); J6 Q438 needs angle T<=8038.90 (-3.56%); J10 Q470 needs <=6951.66 (-16.61%).",
+      "minimal_falsifiable_experiment": "Generate one complete family for an exact same angle table at J4 or structure-preserving J10; retain it only if actual full-family T beats its break-even budget and every circuit <=128Q.",
+      "payoff_condition": "Existing J5 affine structure means these cost-only opportunities may be eliminated by synthesis overhead."
+    }
+  ],
+  "ruled_out_in_this_scope": {
+    "C_zero_padding": "Exact same Hamiltonian/loaded vectors/circuits when added W and H2_I entries are zero. C=60..512 yielded no lower cost thanC60.",
+    "B_R_zero_padding": "B=143..1024 and R=8..64 yielded no lower heuristic TQ even optimistically holding loader T fixed. These transforms additionally need new/reindexed address support. One-axis scan only; not a global impossibility proof.",
+    "fixed_shift_tuning": "Submitted H1_I/Hsym_lower are replaced by official fixed shifts. KEEP_BITS=10 is fixed. Changing these is not an optimization variable."
+  },
+  "upstream_reports_not_locally_reproduced": {
+    "source": "https://www.kaggle.com/code/ahmedberatozer/quantum-ai-df-thc-group-compression",
+    "version": 15,
+    "claims": {
+      "fixed_word_lambda_polish": "48.33499 to48.33124, about0.008% chemistry improvement; error2 binding",
+      "C56_error_mHa": 20.44,
+      "C48_error_mHa": 23.86,
+      "C44_error_mHa": 26.56,
+      "C60_new_words_error_mHa": 19.48
+    },
+    "scope": "Author reports of particular optimizer runs; not lower bounds or proofs of impossibility. Source checked via Kaggle MCP during this audit."
+  },
+  "sources": {
+    "official_costs": "data/competition/verifiers/dfthcsos/scoreinfra/costs_prepare.py",
+    "official_register_contract": "data/competition/verifiers/dfthcsos/scoreinfra/circuits.py",
+    "official_metrics": "data/competition/verifiers/dfthcsos/verify.py",
+    "resource_results": "artifacts/20261030_public_audit/dfthcsos/resource_sensitivity.json",
+    "padding_results": "artifacts/20261030_public_audit/dfthcsos/padding_cost_audit.json",
+    "word_structure": "artifacts/20261030_public_audit/dfthcsos/table_structure.json",
+    "permutation_diagnostic": "artifacts/20261030_public_audit/dfthcsos/permutation_invariance.json"
+  }
+}

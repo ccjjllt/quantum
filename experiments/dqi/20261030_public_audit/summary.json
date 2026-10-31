@@ -1,0 +1,107 @@
+{
+  "scope": "Read-only audit of the submitted DQI binary plus 2304 manually run fixed-weight diagnostic shots; no candidate mutation, no full official verification, no Kaggle submission",
+  "sources": [
+    {
+      "url": "https://www.kaggle.com/code/hengck23/dqi-kmb-at-59-56854",
+      "version": 1,
+      "local": "artifacts/20261030_public_audit/dqi/hengck23_v1.ipynb",
+      "role": "Current iteration-014 handoff, generator deliberately omitted"
+    },
+    {
+      "url": "https://www.kaggle.com/code/somejoint/quantum-circuits-22-77-local-gm-889-qubit-dqi",
+      "version": 21,
+      "local": "artifacts/20261030_public_audit/dqi/somejoint_v21_source",
+      "role": "92 embedded source files extracted by AST literal_eval and checked against embedded hashes; older different DQI hash, not current generator; not executed"
+    },
+    {
+      "url": "https://www.kaggle.com/code/ahmedberatozer/quantum-ai-df-thc-group-compression",
+      "version": 15,
+      "local": "artifacts/20261030_public_audit/dqi/ahmedberatozer_v15.ipynb",
+      "role": "Claims measurement-clear and norm shortcuts closed; claims not independently proved here"
+    },
+    {
+      "url": "https://arxiv.org/html/1906.07456v2",
+      "version": "v2, 2020-09-08",
+      "role": "Table 2 gives symmetric bilinear complexity <=42 at q=2,n=12; an upper bound, not proof of optimality"
+    },
+    {
+      "path": "data/competition/verifiers/dqi/verify_submission_dqi.py",
+      "role": "Authoritative scoring, sampling and register constraints"
+    }
+  ],
+  "measurements": {
+    "static": "artifacts/20261030_public_audit/dqi/cost_analysis.json",
+    "stage_estimates": "artifacts/20261030_public_audit/dqi/stage_static_costs.json",
+    "stage_scope": "Derived from rounded native SVG widths, about +/-1 gate; not runtime stage measurement",
+    "diagnostic_files": [
+      "artifacts/20261030_public_audit/dqi/fixed_weight_probe.json",
+      "artifacts/20261030_public_audit/dqi/fixed_weight_boundary_probe.json"
+    ],
+    "diagnostic_shots": 2304,
+    "diagnostic_result": "256 shots per weight. w=0: 0 value,131 phase errors. w=2,8,16:256 value errors each. w=17,18,19,20,35:0 errors each. Fixed weights are not the scoring distribution.",
+    "diagnostic_limitation": "Confirms severe low-weight approximation behavior, consistent with upstream omissions. Does not prove exact failing branches, ordinary-distribution correctness, general pole/phase safety, or any lower failure-rate bound.",
+    "online_gap": "If other task costs and mean T are unchanged, one DQI failure instead of zero predicts GM23.000342976 from upstream rounded23.0355, close to observed23.00037. Agreement is not attribution proof."
+  },
+  "bottlenecks": [
+    "840 input syndrome qubits mandatory, current Q889 leaves49 private. At fixed T,R, ideal Q840 can improve whole GM at most3.852%; Q888 gives only0.0751% and can afford at most977.54 extra Toffolis.",
+    "60,050,827 total operations include53,434,000 CX. Those Clifford operations do not enter Toffoli-like billing directly. Optimize them for experiment throughput, not claimed score gain.",
+    "Current static Toffoli434512 versus upstream mean433785; existing classical runtime guards skip onlyabout0.168% of static budget.",
+    "Static share estimates: unextract28.29%, convert+unconvert29.76%, extract14.73%, synthesis+unsynthesis17.03%, scan10.19%. Dominant return work is structural, not an obvious duplicated-pass bug.",
+    "R0=1.19126046 even with zero observed failures. Under upstream Poisson lambda0.32 estimate, eliminating all failures justifiesabout623 extra Toffolis, assuming unchanged width. Full low-weight guard restoration costingabout2200T is not automatically profitable.",
+    "P(w<=16) implies at mostabout0.01613 failures per102400shots, only5.04% of upstream Poisson lambda0.32. These witnessed branches cannot explain all failure intensity. Repairing them only justifiesabout31 extra meanToffolis in that model; prioritize structural savings over blanket guard restoration."
+  ],
+  "priorities": [
+    {
+      "rank": 1,
+      "direction": "Recover exact current generator and classify failure witnesses before optimization",
+      "reason": "Published current binary lacks generate.py; older SomeJoint generator differs. Our diagnostic confirms deliberate approximations. Source-reproducible edits and phase repair cannot be audited from binary provenance alone.",
+      "next_experiment": "Port handoff steps into the available older source, compare phase/value behavior and costs per stage, then obtain exact current hash or explain mathematically equivalent differences. Keep fixed-weight counterexamples and ordinary samples separate.",
+      "score_gain": "Enabler, no direct gain claimed."
+    },
+    {
+      "rank": 2,
+      "direction": "Co-design public node order with extract/synthesis/unextract",
+      "reason": "Handoff identifies singleton-last arrangement as an open structural reduction ofabout0.7k-2.5kT; source constants currently encode singleton-first confluent groups. Changes affect multiple stages and free linear maps.",
+      "next_experiment": "Derive and classically check the singleton-last map and head conventions; build only affected kernels, count true nonlinear calls including reverse cleanup. Require >=1300T net reduction at Q<=889 and unchanged failure behavior for >0.1% whole-GM gain.",
+      "score_gain": "Upper end of upstream estimate about0.19% whole GM; unverified hypothesis."
+    },
+    {
+      "rank": 3,
+      "direction": "Reduce GF(2^24) bilinear rank or jointly synthesize adjacent arithmetic",
+      "reason": "Existing99-rank multiplier is a construction, not a proven lower bound. Handoff estimatesabout1400T saved for each removed rank term across calls. Norm alone is equivalent to one GF(2^12) product plus free linear squares, so isolated norm re-synthesis does not bypass arithmetic difficulty.",
+      "next_experiment": "Search an explicit rank98-or-lower tensor decomposition or shared neighboring multiplication schedule; verify all basis-pair products and reversible cleanup, then count workspace. Reject if extra width erases savings.",
+      "score_gain": "One rank term could yieldabout0.108% whole GM at fixed Q,R; frequency is upstream estimate, not independently profiled."
+    },
+    {
+      "rank": 4,
+      "direction": "Specialized phase evaluation that avoids conversion stages",
+      "reason": "Current scan already computes mask-weighted phase, not a full error vector. Two conversion stages consumeabout29.76% static Toffolis. Ordinary Forney inverse_phase was already costed at68T/point andabout135k extraT, so naive removal loses.",
+      "next_experiment": "Derive a cheaper trace/rational-phase primitive or fused conversion/scan schedule. Account for all4095 positions, mask projection, poles, reversible restoration and measured phase correction. Compare against current129k conversion budget before a full build.",
+      "score_gain": "Potentially larger structural gain, high uncertainty; no working cheaper primitive found here."
+    },
+    {
+      "rank": 5,
+      "direction": "Treat width and robustness as constrained cost trades, not independent targets",
+      "reason": "Global889Q peaks occur in several sites; improving a single allocator peak may not change Q. One observed failure costs0.4593% DQI andabout0.1526% GM; eliminating rare events may cost more than its expectation benefit.",
+      "next_experiment": "For each width or guard change, calculate R_new/R_old*(Q_new/Q_old)^2*(T_new/T_old). Compare predetermined salts and stratified witnesses, not best observed seed.",
+      "score_gain": "Per-case; no savings claimed."
+    }
+  ],
+  "do_not_reopen_without_new_reason": [
+    "Blind CNOT cancellation or raw total-operation optimization: usually unbilled.",
+    "Repeated norm/measurement-clear shortcut claims: upstream says already audited; validate assumptions rather than assume an untouched site.",
+    "Unextract should cost the same as extract: reverse phase cleanup requires additional value chains in present design.",
+    "Simple drop-more-guards sweep: published tested cuts have poor savedT/expectedfailure tradeoffs.",
+    "Treat rank42 or48-private under a fixed operation set as universal mathematical lower bounds."
+  ],
+  "small_inconsistency_to_recheck": "Handoff labels retaining norm cache -12100T,+12Q a net loss. At present889Q/433785T and unchangedR, formula instead gives costfactor0.9985267 and GM+0.04916%. Different peak accounting or failure behavior could explain it; do not call it a verified candidate.",
+  "low_weight_repair_budget": {
+    "max_expected_failures_from_weights_le_16": 0.016132927143816898,
+    "upper_mass_p16": 1.575481166388369e-07,
+    "upstream_lambda": 0.32,
+    "fraction_of_upstream_lambda": 0.050415397324427805,
+    "extra_Toffoli_budget_if_only_low_weight_failures_exist": 32.101830418033266,
+    "extra_Toffoli_budget_repairing_this_mass_from_lambda_032": 30.701212662695543,
+    "scope": "Poisson sensitivity calculation using upstream failure estimate and worst-case assumption all w<=16 fail; not observed rate or proven attribution"
+  }
+}

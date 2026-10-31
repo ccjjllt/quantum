@@ -18,9 +18,11 @@ uv sync
 
 2026-10-30 初始化已完成 Python 3.12.13 环境与依赖安装，当前使用 `kickmix 1.0.0`。官方参考基线尚未运行三项全量本地验证。
 
-同日已引入 Heliosli notebook v26 / dataset v24 的公开组合 `v45_oz`，18 个候选文件和 ZIP 成员均与公开清单的 SHA-256 一致。化学任务已通过默认规模官方本地验证（78,080 shots，salt `notebook-verification`），成本 `337,991,954.0482345`；invsqrt、DQI 本机仅检查文件完整性。作者保存的三项完整验证日志给出本地 GM `23.0355`，不代表我们的线上分数。来源、复现范围和提交状态见 [provenance.json](experiments/20261030_public_best/provenance.json)，实际实验结果见 [log.csv](experiments/log.csv)。
+同日已引入 Heliosli notebook v26 / dataset v24 的公开组合 `v45_oz`，18 个候选文件和 ZIP 成员均与公开清单的 SHA-256 一致。化学任务已通过默认规模官方本地验证（78,080 shots，salt `notebook-verification`），成本 `337,991,954.0482345`；提交前 invsqrt、DQI 本机仅检查文件完整性，后续完成了局部诊断。作者保存的三项完整验证日志给出本地 GM `23.0355`，与我们的线上分数分开记录。组件来源保存在 `artifacts/20261030_public_best/release/CREDITS.md`，实验结果分别保存在各子任务目录。
 
-按本次明确提交指令，已于北京时间 2026-10-30 22:29 向 Kaggle 提交一次，编号 `57808271`；平台已受理，暂未返回线上分数。提交包为 `submissions/20261030_public_best/submission.zip`。
+按本次明确提交指令，已于北京时间 2026-10-30 22:29 向 Kaggle 提交一次，编号 `57808271`；平台状态为 `COMPLETE`，Public Score 为 **23.00037**。提交包为 `submissions/20261030_public_best/submission.zip`，平台返回记录保存在 `artifacts/20261030_public_best/kaggle_submission.json`。
+
+该组合的后续审计分别保存在 [invsqrt](experiments/invsqrt/20261030_public_audit/)、[dqi](experiments/dqi/20261030_public_audit/) 和 [dfthcsos](experiments/dfthcsos/20261030_public_audit/)：已完成三项定向诊断和成本分析，记录了 DQI 的低权重错误、化学的结构与成本阶梯、invsqrt 的恢复成本；尚未生成更优候选。
 
 已手动检查三个脚本及官方 CLI 的帮助入口，读取真实 invsqrt/ANGLE 基线的静态资源，并将完整参考提交打包为 `submissions/baseline.zip`（13 个文件）。这只确认环境、读取与打包可用，不代表全量评分通过。
 
@@ -73,7 +75,7 @@ artifacts/candidate/
 uv run python scripts/package_submission.py artifacts/candidate --output submissions/submission.zip
 ```
 
-打包不等于验证通过，也不会向 Kaggle 提交。比赛接口要求上传文件名恰好为 `submission.zip`；区分多个版本时使用不同的父目录。实验结论记入 [experiments/log.csv](experiments/log.csv)，可读说明见 [experiments/README.md](experiments/README.md)。本地 verifier 的结果、作者自报的 LB 和实际线上评分分开记录。
+打包不等于验证通过，也不会向 Kaggle 提交。比赛接口要求上传文件名恰好为 `submission.zip`；区分多个版本时使用不同的父目录。实验结论保存在对应子任务的实验目录，记录约定见 [experiments/README.md](experiments/README.md)。本地 verifier 的结果、作者自报的 LB 和实际线上评分分开记录。
 
 ## 研究入口
 
