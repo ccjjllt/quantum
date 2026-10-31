@@ -1,0 +1,113 @@
+{
+  "dataset": "dmitriigluzdov/vqcc-femoco-public-factorization",
+  "dataset_url": "https://www.kaggle.com/datasets/dmitriigluzdov/vqcc-femoco-public-factorization",
+  "version": 39,
+  "retrieved_on": "2026-10-31",
+  "license": "Apache-2.0",
+  "license_note": "Dataset metadata licenseName is Apache 2.0. vendored LICENSE and NOTICE are the copies downloaded with the sources.",
+  "baseline_kmb_sha256": "6dbb98b34c3b16f1c4e019350c10d42259a6faa97e464c9b7c9390f877f392f4",
+  "baseline_recorded_cost": 100940.61,
+  "baseline_path_readonly": "artifacts/20261030_public_best/candidate/invsqrt.kmb",
+  "verifier_path_readonly": "data/competition/verifiers/invsqrt/verify_submission_invsqrt.py",
+  "recipe_is_not_the_62q_circuit": true,
+  "five_percent_target": "still open",
+  "best_measured_cost": 144556.97,
+  "portfolio_zip": null,
+  "files": [
+    {
+      "path": "vendor/LICENSE",
+      "bytes": 11560,
+      "sha256": "3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5"
+    },
+    {
+      "path": "vendor/NOTICE",
+      "bytes": 12261,
+      "sha256": "1234ffea53bca2963afcdae38edb4c2d8a5b74b2434e23b77eb2ccbc2c048ff3"
+    },
+    {
+      "path": "vendor/build.py",
+      "bytes": 26633,
+      "sha256": "eef91d07c4c99d92545272d5d6e4daeb78a925e3d7307d27b093699d34f49e3e"
+    },
+    {
+      "path": "vendor/calib.py",
+      "bytes": 4761,
+      "sha256": "9777a679e6ace7e8df67ed61df2a5d61e91a2f7d542161916d48ba1f33e9f209"
+    },
+    {
+      "path": "vendor/check.py",
+      "bytes": 2621,
+      "sha256": "2644d8d137efec140b3a5e95d47810fb9cec604752e50dff9f341f67880c48c1"
+    },
+    {
+      "path": "vendor/exact.py",
+      "bytes": 5592,
+      "sha256": "3bb4a976bdaea773ed6d8c9c574b2a9dca28d0ceaee19261348874b4faf4b5c2"
+    },
+    {
+      "path": "vendor/fit.py",
+      "bytes": 5296,
+      "sha256": "0ab68492466fde0156cb54379a4e18d6673b183d83e4674101f55b58a43111d0"
+    },
+    {
+      "path": "vendor/hsplit.py",
+      "bytes": 18663,
+      "sha256": "fc1fa942a08425bc580980d980b3cd34bfcda47f6db6b7ab137595ae2d4513ec"
+    },
+    {
+      "path": "vendor/model.py",
+      "bytes": 9185,
+      "sha256": "65bf89538e736f5d02add43c7f74bb57c02b4fa3f699df02b9e83cd984a58162"
+    },
+    {
+      "path": "vendor/round10_fit.py",
+      "bytes": 5257,
+      "sha256": "3ae38a7c4bb5e959328a0f1500ad81696d6a527d6dda96643ac7586cd7d17500"
+    },
+    {
+      "path": "vendor/round10_inv.py",
+      "bytes": 11477,
+      "sha256": "8450a5ccbc2730d59abea83d36688036dd614d3054757f623f9bdc35bea91cb9"
+    },
+    {
+      "path": "vendor/round10_lookup.py",
+      "bytes": 4176,
+      "sha256": "6444cef6426ea9f3485792118e1ae714d4b765e20ae4d1a9fa0b57f6173a5bc7"
+    },
+    {
+      "path": "vendor/round10_virtual.py",
+      "bytes": 6233,
+      "sha256": "6b72cfb26841262d33a6fa27ab109310a93f1b066fd2afe206a1c308eb27d5bb"
+    },
+    {
+      "path": "vendor/round5_marsyas_build.py",
+      "bytes": 1952,
+      "sha256": "b6d3d8d05e2c6370a606ac80a79be334296c7eaf51691c6635eeb684b012ae17"
+    },
+    {
+      "path": "vendor/round5_virtual.py",
+      "bytes": 3834,
+      "sha256": "13c72596a67b8b60ffa73e06219c27dc969af91534fac82cb904c7de726e0c54"
+    },
+    {
+      "path": "vendor/round9_marsyas_phase.py",
+      "bytes": 3564,
+      "sha256": "4df703e891f629a1288bf8680967a83ecc1e0f765c887ae82b9e8f37fc453a11"
+    },
+    {
+      "path": "vendor/run.py",
+      "bytes": 5179,
+      "sha256": "34260ed900fbedc209664c54cb7b0421506548ccd9a50bf3e89085f7900da9cf"
+    },
+    {
+      "path": "vendor/selected_invsqrt.json",
+      "bytes": 11728,
+      "sha256": "7eb8d467ef56d99a421a0ac4c09b96944db8e791c15e5692907d04f61fb2824a"
+    },
+    {
+      "path": "vendor/selected_phase_fit.json",
+      "bytes": 1327,
+      "sha256": "e02d62cba8fe76b2eb631ac8a176f05b3f617a3298b4a1965ad6203d518cf868"
+    }
+  ]
+}

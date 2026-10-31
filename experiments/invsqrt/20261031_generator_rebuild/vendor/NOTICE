@@ -1,0 +1,200 @@
+This directory ports only the inverse-square-root code from the public sources.
+The following upstream NOTICE is retained verbatim for provenance; its history
+also describes unrelated source components that are not included in this port.
+Changes by OpenAI Codex (2026-10-24): reviewed dependency-only extraction,
+local deterministic build CLI, strict hash guards, and fresh verifier records.
+
+Quantum Circuits resource labs (2026)
+Original experiments, explanations and added implementations: anazemcev / ViberTeam.
+Released under the Apache License, Version 2.0, subject to upstream notices.
+
+Attribution and dependencies
+
+Google Quantum AI competition authors: task specifications, reference circuits,
+Kickmix simulator and unchanged official verification/file-reader code.
+https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation
+
+Rudra Bhaskar: direct polynomial phasing, retained coefficient table and
+low-memory arithmetic adapted by the inverse-square-root implementation.
+https://www.kaggle.com/code/rudrabhaskar/direct-polynomial-phasing-verified-search?scriptVersionId=361364488
+
+LightningV08: compressed normalization flags.
+https://www.kaggle.com/code/lightningv08/quantum-circuits-memory-algebra
+
+Sumit Chongder: open centered signed-digit inverse-square-root generator,
+coefficient fitting, integer pipeline and arithmetic, retained and credited.
+https://www.kaggle.com/code/sumitchongder/notebook2f196e646b?scriptVersionId=361357149
+Added adaptation: split high-word phasing, allocation after normalization,
+folded final carry, and borrowing a proven constant input bit as clean carry.
+The later 92-qubit revision reduces curvature precision F2 from 10 to 9,
+regenerates the coefficient table, and certifies the complete promised input
+domain. Its same-table ordinary-schedule comparison has 102 qubits; the
+original Sumit coefficient table and 103-qubit circuit remain credited above.
+
+Kozykappa: physical ensemble compression, sparse column rotations, and prior
+public work on reachable-control simplification and clean-wire allocation.
+https://www.kaggle.com/code/kozykappa/quantum-circuits-sparse-sos-factors-and-circuit
+
+Kozykorpesh / Kozykappa: two-address banked XOR QROM construction, adapted
+from Sumit's public arithmetic and used for the chemistry angle lookup.
+https://www.kaggle.com/code/kozykappa/quantum-ai-compact-arithmetic-banked-qrom?scriptVersionId=361433617
+Kirill Tymchishin v10: integration of our public arithmetic/decoder/factors
+with that banked lookup, which supplies the comparison baseline for this release.
+https://www.kaggle.com/code/kirilltym/quantum-circuits-qrom-tower42?scriptVersionId=361453242
+Added adaptation: omit zero difference-bank columns and apply an exact
+reversible CNOT change of output basis for dependent columns. Both tables
+are transformed, preserving the XOR oracle on arbitrary input targets.
+
+k256.dev: public compiled DQI decoder and starting chemistry factorization.
+The decoder's original generator is not included in that publication.
+https://www.kaggle.com/code/k256net/claude?scriptVersionId=361337610
+
+Accessible public dependency mirror: Kirill Tymchishin, version 7, labelled
+Apache 2.0 by Kaggle. Both reused artifacts are pinned by SHA-256. This mirror
+label alone does not establish the full upstream ownership chain.
+https://www.kaggle.com/code/kirilltym/quantum-circuits-qrom-tower42?scriptVersionId=361358116
+
+Added changes: split-phase scheduling and separate stage caches for invsqrt;
+independent bounded Boolean-polynomial circuit simplification for DQI;
+alternating sparse rotations and effective-norm optimization for chemistry;
+layout/precision experiments, resource explanations and full verification reports.
+
+The scored archive, generated candidates and public dependencies are identified
+separately in the notebook's reports. No endorsement by upstream authors is implied.
+
+Calibrated arithmetic revision
+
+Kozykorpesh: published explicit calibrated integer coefficients and open
+exact-domain minimax regeneration, plus transitive AND implications.
+https://www.kaggle.com/code/kozykappa/quantum-ai-compact-arithmetic-banked-qrom?scriptVersionId=361456406
+
+Alex Chilton: shared prefix normalization and empty-target temporary-AND
+shift moves with measurement-based inverse and phase correction.
+https://www.kaggle.com/code/alexchilton/where-the-toffolis-go-anatomy-a-cheaper-invsqrt?scriptVersionId=361472684
+
+Our additions in this revision: use the promised input bound to replace
+mutually exclusive inverted-top-bit ANDs by affine logic; algebraic-normal-
+form lookup and measurement-phase cleanup for the exact chemistry words;
+a fast C++ binary implementation of Kozykorpesh's implication pass with
+validated globally-clean conditional facts. The resulting DQI binary is
+identical to Kozykorpesh's published output, not a new decoder design.
+The original generator/compiled-input limits and notices above still apply.
+
+Final derivative-split integration
+
+Rudra Bhaskar: derivative residual/coarse representation, top-carry reuse,
+and static-high phase checkpoint generator, published under Apache-2.0.
+https://www.kaggle.com/code/rudrabhaskar/highest-public-score-direct-polynomial-phasing?scriptVersionId=361445283
+Kirill Tymchishin v11: integration of that generator with Alex Chilton's
+normalization and empty-target shift schedules; the 95-qubit baseline.
+https://www.kaggle.com/code/kirilltym/quantum-circuits-qrom-tower42?scriptVersionId=361491814
+Our final integration generalizes the derivative-split widths for the
+explicit Kozykorpesh table, borrows one normalized constant input bit as
+an adder carry, and applies the promised-input top-bit affine identity.
+The three ablation rows retain the same coefficient model.
+
+Source & Exact Compilation release
+
+The sections above retain the history and notices of the earlier resource labs.
+This release targets the existing public vqcc-banked-clean-staging notebook.
+Its decoder is generated from the newly credited sources below; it does not
+require the earlier compiled-decoder dependency or a previous submission ZIP.
+
+A. Gu, A. H. Kemeny, S. F. Yelin and M. D. Lukin: reversible Reed-Solomon
+decoder, shared-path Berlekamp-Massey recurrence, in-place evaluator,
+half-degree Bezout pass, tower-field arithmetic, compressed reversal history,
+and approximation-window policy. Apache License, Version 2.0; the original
+source notices and separate GU_LICENSE are retained.
+https://arxiv.org/abs/2610.22367
+https://github.com/andigu/uncompute/tree/64b5a13aa249f1360846657392e6c66817b26d0f
+
+Dmitrii Gluzdov: competition-field formula derivation, Kickmix adapter,
+record-reading phase sweep and readable source-built portfolio. Apache-2.0.
+Adapted source V3, run 361529794:
+https://www.kaggle.com/code/dmitriigluzdov/quantum-circuit-compilation-from-source?scriptVersionId=361529794
+The separately scored V1, run 361509836, returned 6.12847 for submission
+57567302. V1 and V3 contain identical embedded generator modules.
+https://www.kaggle.com/code/dmitriigluzdov/quantum-circuit-compilation-from-source?scriptVersionId=361509836
+
+Dmitrii's public FeMoCo numerical input, dataset V2 / source 21143008,
+is published under Apache-2.0. Original factor refinement traces to k256.dev,
+Kozykorpesh and Artem1410/anazemcev; the input's provenance credits remain.
+https://www.kaggle.com/datasets/dmitriigluzdov/vqcc-femoco-public-factorization/versions/2
+femoco_public_words.npz SHA-256:
+9afd0ca5e90dd1740fe713e4ac1c26736184ea9bc4d4b57a6eeefafd608ee193
+
+Our added implementations in this release, Apache-2.0:
+- Full-domain arithmetic compiler: exhaustive Boolean truth vectors over the
+  original promised input domain certify five Clifford replacements. The
+  credited coefficient table, phases, measurements and integer model remain.
+- Numerical gauge generator: simultaneous orthogonal transformations of W
+  and H2_I reduce the normalization objective, with a bound on augmented-Gram
+  drift and unchanged angle words under the original physical checks.
+- DQI exact simplification and symbolic scratch-lifetime packing: unregistered
+  wires are reused only after conservative proof of a globally clean state;
+  the placement pass preserves register IDs, gate order and phase corrections.
+  The decoder algorithm and field port remain credited to Gu et al. and
+  Dmitrii Gluzdov. Compiler reports distinguish structural certificates from
+  full official candidate verification.
+
+Historical Kaggle scores identify their exact upstream or earlier archives.
+New cost-derived projections are labelled separately; creating an archive
+does not submit it to the competition or establish an observed score.
+
+Source & Exact Compilation: deferred arithmetic and phase calibration
+
+Dmitrii Gluzdov, source V4 / run361569612: deferred coefficient-register
+demolition and shared algebraic-normal-form measurement phase repair.
+The scheduling origin is credited there to the Gaussian circuit of Gu et al.
+Our adaptation keeps the narrower fixed coefficient/carry schedule and its
+existing normalization, applies the full-domain compiler, and combines the
+two coefficient repairs after their measurement phases have commuted through
+the intervening reversible arithmetic. Apache License, Version2.0.
+https://www.kaggle.com/code/dmitriigluzdov/quantum-circuit-compilation-from-source?scriptVersionId=361569612
+
+mizeroluckygall, Quantum Circuits | Rotation Calibration, V3/run361537580:
+full-input rotation activation collection, cutting-plane linear programming,
+exact integer phase-margin checks and removal of small rotations. That
+publication also credits lightningv08's Memory & Algebra work for exhaustive
+phase calibration. Apache License, Version2.0. Original function bodies and
+source references are retained beside the adapted portable module.
+Our changes give the routines an explicit circuit API, add a conservative
+supported-circuit guard, bound matrix-scan memory, retain exact dyadic
+corrections and require independent phase replay and full official checking.
+The phase optimization uses the full legal input domain rather than a
+favorable verifier salt or circuit hash.
+https://www.kaggle.com/code/mizeroluckygall/quantum-circuits-rotation-calibration-39-char?scriptVersionId=361537580
+https://www.kaggle.com/code/lightningv08/quantum-circuits-memory-algebra
+
+
+Source & Exact Compilation V4: signed-gauge and curvature schedule
+
+Kozykorpesh V3/run361677445, Apache2.0:
+https://www.kaggle.com/code/kozykappa/quantum-ai-lb-score-6-68108?scriptVersionId=361677445
+Gray-curvature checkpoints and reload plans, signed-Givens gauge,
+four-address difference banks, selective scratch pebbling, symbolic DQI
+lowering, and the source context for the portable adapters used in V4.
+The attributed Sumit/Rudra/Alex/Kirill/Artem arithmetic lineage is retained.
+
+Dmitrii Gluzdov V6/run361592338, Apache2.0:
+https://www.kaggle.com/code/dmitriigluzdov/quantum-circuit-compilation-from-source?scriptVersionId=361592338
+Compact inverse-norm schedules, template-word loans and streamed sweep,
+building on the credited Gu decoder and earlier competition-field port.
+
+Our V4 modifications: explicit small-public-input arithmetic adapters;
+five full-domain Clifford reductions on the new schedule; newly hash-bound
+integer rotation calibration; small-input signed-vector reconstruction
+certificate; integration with our orthogonal factor gauge and ANF cleanup;
+fresh full-verifier and complete28-member source/archive receipts.
+No upstream algorithm is claimed as our invention.
+
+
+Relevant arithmetic notice retained from notebook #01 (2026-10-24 snapshot):
+
+Arithmetic and decoder source dependencies retained in this scoring notebook:
+Sumit Chongder; Rudra Bhaskar; Kozykorpesh; Alex Chilton; Kirill Tym;
+Dmitrii Gluzdov V7/run361726742 (84Q schedule, coefficient data, exact rewrites,
+fixed calibration); Zongao Bian (virtual low-bit idea); mizeroluckygall and
+lightningv08 (phase calibration). Upstream source docstrings/links remain.
+
+This port includes neither its chemistry checkpoint nor its decoder code.
