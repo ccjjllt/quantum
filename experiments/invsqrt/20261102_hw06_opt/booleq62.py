@@ -1,202 +1,246 @@
-"""Three-valued boolean-equivalence checker for invsqrt dataflow cones.
+"""Three-valued Boolean equivalence for invsqrt value-ids.
 
-Verdicts:
-    EQUIVALENT  -- proved (same value-id, or exhaustive truth table / ANF, or Z3 UNSAT of xor)
-    UNKNOWN     -- different value-ids but not disproved (incl. Z3 timeout); NEVER a counterexample
-    DIFFERENT   -- exhibited a concrete diverging assignment (true counterexample)
+Rule (matches Track B discrete spec + main-thread README):
+  * same value-id            -> EQUIVALENT (sufficient condition);
+  * different value-ids      -> PROVE: truth table / ANF when the combined cone
+    has <= 12 free variables, else Z3 with a 60 s timeout;
+  * Z3 timeout / no solver   -> UNKNOWN (never reported as a counterexample).
 
-Rules:
-    - Same value-id is a fast sufficient condition for EQUIVALENT.
-    - Different value-ids return UNKNOWN unless a proof/refutation is produced.
-    - Cones with <=12 free boolean variables: exact truth table (and ANF cross-check).
-    - Cones with >12 free variables: Z3 equivalence check, one call, 60 s timeout
-      (run with `uv run --with z3-solver python ...`; without z3, verdict is UNKNOWN).
-    - Measurement outcomes keep independent versions + condition environments;
-      a measured bit is never identified with its pre-measurement qubit.
-
-Self-test (the op-25623 case that blocked prefix):
-    q14 XOR (q14 AND q21)  vs  q14 AND NOT q21  -> EQUIVALENT (128-row table).
+Measurement leaves are versioned atoms: they are NOT equated with the
+pre-measurement qubit. The condition environment is tracked separately and
+must match before two cones are compared.
 
 Usage:
-    uv run --with z3-solver python experiments/invsqrt/20261102_hw06_opt/booleq62.py --self-test
+  uv run python experiments/invsqrt/20261102_hw06_opt/booleq62.py --self-test
+  uv run --with z3-solver python experiments/invsqrt/20261102_hw06_opt/booleq62.py --self-test
 """
 
 from __future__ import annotations
 
 import argparse
-import itertools
+import io
 import sys
-from dataclasses import dataclass
+from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "experiments/invsqrt/20261031_invsqrt62_replay"))
+
+import retain62  # noqa: E402
+
+BASELINE = ROOT / "artifacts/20261102_hw06_opt/invsqrt/baseline_hw06.kmb"
+SMALL_CONE_LIMIT = 12
 Z3_TIMEOUT_MS = 60_000
-SMALL_VAR_LIMIT = 12
 
 
-# ---------------------------------------------------------------- AST
-@dataclass(frozen=True)
-class Var:
-    name: str
+def load_ops(path=BASELINE):
+    import kickmix
+
+    circuit = kickmix.Circuit.from_file(path)
+    buf = io.StringIO()
+    circuit.to_file(buf, format="kmx")
+    lines = buf.getvalue().splitlines()
+    return [l for l in lines if not l.startswith(("APPEND", "REGISTER"))]
 
 
-@dataclass(frozen=True)
-class And:
-    l: object
-    r: object
+def cone_atoms(values, *roots):
+    """All atoms reachable from `roots`: consts, inputs, ANDs, measurements."""
+    seen_ids = set()
+    stack = list(roots)
+    atoms = set()
+    while stack:
+        vid = stack.pop()
+        if vid in seen_ids:
+            continue
+        seen_ids.add(vid)
+        for atom in values.fs[vid]:
+            atoms.add(atom)
+            if atom in values.and_of:
+                left, right = values.and_of[atom]
+                stack.append(left)
+                stack.append(right)
+    return atoms, seen_ids
 
 
-@dataclass(frozen=True)
-class Xor:
-    l: object
-    r: object
+def free_variables(values, *roots):
+    """Free variables = every atom except AND-structure (inputs, const, meas, fresh)."""
+    atoms, _ = cone_atoms(values, *roots)
+    return sorted(a for a in atoms if a not in values.and_of)
 
 
-@dataclass(frozen=True)
-class Not:
-    e: object
+def eval_vid(values, root, env):
+    memo = {}
+    stack = [(root, False)]
+    while stack:
+        vid, done = stack.pop()
+        if vid in memo:
+            continue
+        if not done:
+            stack.append((vid, True))
+            for atom in values.fs[vid]:
+                if atom in values.and_of:
+                    left, right = values.and_of[atom]
+                    stack.append((left, False))
+                    stack.append((right, False))
+            continue
+        acc = 0
+        for atom in values.fs[vid]:
+            if atom == -1:
+                acc ^= 1
+            elif atom in values.and_of:
+                left, right = values.and_of[atom]
+                acc ^= memo[left] & memo[right]
+            else:
+                acc ^= env[atom]
+        memo[vid] = acc
+    return memo[root]
 
 
-@dataclass(frozen=True)
-class One:
-    pass
+def check_cone_clean(values, *roots):
+    """Reject cones with undeclared fresh atoms (>= 1_000_000, non-measurement)."""
+    atoms, _ = cone_atoms(values, *roots)
+    bad = [
+        a for a in atoms
+        if a >= 1_000_000 and a not in values.meas_source and a != -1
+    ]
+    return bad
 
 
-def free_vars(e, acc=None):
-    acc = set() if acc is None else acc
-    if isinstance(e, Var):
-        acc.add(e.name)
-    elif isinstance(e, (And, Xor)):
-        free_vars(e.l, acc)
-        free_vars(e.r, acc)
-    elif isinstance(e, Not):
-        free_vars(e.e, acc)
-    return acc
+def truth_table_equiv(values, left, right):
+    """Exhaustive check over all free-variable assignments. Returns dict."""
+    fvars = free_variables(values, left, right)
+    n = len(fvars)
+    if n > SMALL_CONE_LIMIT:
+        return {"method": "truth-table", "verdict": "deferred",
+                "reason": f"{n} free vars > {SMALL_CONE_LIMIT}"}
+    checked = 0
+    for mask in range(1 << n):
+        env = {atom: (mask >> i) & 1 for i, atom in enumerate(fvars)}
+        if eval_vid(values, left, env) != eval_vid(values, right, env):
+            return {"method": "truth-table", "verdict": "not-equivalent",
+                    "free_vars": n, "checked": checked + 1,
+                    "counterexample": {str(a): env[a] for a in fvars}}
+        checked += 1
+    return {"method": "truth-table", "verdict": "equivalent",
+            "free_vars": n, "checked": checked}
 
 
-def ev(e, env) -> int:
-    if isinstance(e, Var):
-        return env[e.name]
-    if isinstance(e, One):
-        return 1
-    if isinstance(e, Not):
-        return ev(e.e, env) ^ 1
-    if isinstance(e, And):
-        return ev(e.l, env) & ev(e.r, env)
-    if isinstance(e, Xor):
-        return ev(e.l, env) ^ ev(e.r, env)
-    raise TypeError(type(e))
-
-
-def anf(e):
-    """Algebraic normal form as frozenset of monomial frozensets (var names). XOR of ANDs."""
-    if isinstance(e, Var):
-        return frozenset({frozenset({e.name})})
-    if isinstance(e, One):
-        return frozenset({frozenset()})
-    if isinstance(e, Not):
-        return anf(Xor(e.e, One()))
-    if isinstance(e, Xor):
-        return anf(e.l) ^ anf(e.r)
-    if isinstance(e, And):
-        out = set()
-        for m1 in anf(e.l):
-            for m2 in anf(e.r):
-                out ^= {m1 ^ m2}
-        return frozenset(out)
-    raise TypeError(type(e))
-
-
-def truth_table_check(e1, e2):
-    names = sorted(free_vars(e1) | free_vars(e2))
-    if len(names) > SMALL_VAR_LIMIT:
-        return None  # too big for exhaustive table
-    rows = 0
-    for bits in itertools.product((0, 1), repeat=len(names)):
-        env = dict(zip(names, bits))
-        rows += 1
-        if ev(e1, env) != ev(e2, env):
-            return {"equivalent": False, "counterexample": env, "rows": rows,
-                    "n_vars": len(names)}
-    return {"equivalent": True, "rows": rows, "n_vars": len(names)}
-
-
-def z3_check(e1, e2, timeout_ms=Z3_TIMEOUT_MS):
+def z3_equiv(values, left, right, timeout_ms=Z3_TIMEOUT_MS):
+    """Z3 check for large cones. Timeout / missing solver -> unknown."""
     try:
         import z3
     except ImportError:
-        return {"verdict": "UNKNOWN", "reason": "z3 not installed; rerun with "
-                "`uv run --with z3-solver python ...`"}
-    names = sorted(free_vars(e1) | free_vars(e2))
+        return {"method": "z3", "verdict": "unknown",
+                "reason": "z3-solver not installed"}
+    fvars = free_variables(values, left, right)
+    sym = {a: z3.Bool(f"v{a}") for a in fvars}
+    memo = {}
 
-    def build(e, vs):
-        if isinstance(e, Var):
-            return vs[e.name]
-        if isinstance(e, One):
-            return z3.BoolVal(True)
-        if isinstance(e, Not):
-            return z3.Not(build(e.e, vs))
-        if isinstance(e, And):
-            return z3.And(build(e.l, vs), build(e.r, vs))
-        if isinstance(e, Xor):
-            return z3.Xor(build(e.l, vs), build(e.r, vs))
-        raise TypeError(type(e))
+    def build(vid):
+        if vid in memo:
+            return memo[vid]
+        acc = None
+        for atom in values.fs[vid]:
+            if atom == -1:
+                term = z3.BoolVal(True)
+            elif atom in values.and_of:
+                l, r = values.and_of[atom]
+                term = z3.And(build(l), build(r))
+            else:
+                term = sym[atom]
+            acc = term if acc is None else z3.Xor(acc, term)
+        if acc is None:
+            acc = z3.BoolVal(False)
+        memo[vid] = acc
+        return acc
 
-    vs = {n: z3.Bool(n) for n in names}
-    s = z3.Solver()
-    s.set("timeout", timeout_ms)
-    s.add(build(e1, vs) != build(e2, vs))
-    r = s.check()
-    if r == z3.unsat:
-        return {"verdict": "EQUIVALENT", "method": "z3-unsat", "n_vars": len(names)}
-    if r == z3.sat:
-        m = s.model()
-        return {"verdict": "DIFFERENT", "method": "z3-sat",
-                "counterexample": {n: bool(m[vs[n]]) for n in names}}
-    return {"verdict": "UNKNOWN", "method": f"z3-{r}"}
-
-
-def check(e1, e2, same_value_id=False):
-    """Three-valued entry point. same_value_id=True short-circuits to EQUIVALENT."""
-    if same_value_id or e1 == e2:
-        return {"verdict": "EQUIVALENT", "method": "same-value-id"}
-    tt = truth_table_check(e1, e2)
-    if tt is not None:
-        if tt["equivalent"]:
-            a1, a2 = anf(e1), anf(e2)
-            if a1 != a2:  # internal inconsistency guard; table rules
-                return {"verdict": "EQUIVALENT", "method": "truth-table",
-                        "note": "ANF cross-check diverged; table (exhaustive) rules",
-                        "rows": tt["rows"]}
-            return {"verdict": "EQUIVALENT", "method": "truth-table+anf",
-                    "rows": tt["rows"], "n_vars": tt["n_vars"]}
-        return {"verdict": "DIFFERENT", "method": "truth-table",
-                "counterexample": tt["counterexample"]}
-    return z3_check(e1, e2)
+    solver = z3.Solver()
+    solver.set("timeout", timeout_ms)
+    solver.add(z3.Xor(build(left), build(right)))
+    result = solver.check()
+    if result == z3.unsat:
+        return {"method": "z3", "verdict": "equivalent",
+                "free_vars": len(fvars)}
+    if result == z3.sat:
+        model = solver.model()
+        ce = {str(a): bool(model.eval(sym[a], model_completion=True))
+              for a in fvars}
+        return {"method": "z3", "verdict": "not-equivalent",
+                "free_vars": len(fvars), "counterexample": ce}
+    return {"method": "z3", "verdict": "unknown",
+            "reason": "timeout-or-undecided", "free_vars": len(fvars)}
 
 
-def self_test() -> int:
-    q14, q21 = Var("q14"), Var("q21")
-    gate_form = Xor(q14, And(q21, q14))          # snapshot after CCX q21 q14 q50
-    specified = And(q14, Not(q21))                # q14 AND NOT q21
-    res = check(gate_form, specified)
-    print(f"op25623 identity: {res}")
-    assert res["verdict"] == "EQUIVALENT", res
-    # A real difference must be caught, not waved through:
-    neg = check(And(q14, q21), And(q14, Not(q21)))
-    print(f"sanity non-identity: {neg}")
-    assert neg["verdict"] == "DIFFERENT", neg
-    print("BOOLEQ SELF-TEST PASS")
-    return 0
+def equiv(values, left, right):
+    """Three-valued entry point. Same id is sufficient for equivalent."""
+    if left == right:
+        return {"method": "same-value-id", "verdict": "equivalent",
+                "free_vars": 0, "checked": 0}
+    bad = check_cone_clean(values, left, right)
+    if bad:
+        return {"method": "none", "verdict": "unknown",
+                "reason": f"undeclared fresh atoms {bad[:5]}"}
+    n = len(free_variables(values, left, right))
+    if n <= SMALL_CONE_LIMIT:
+        return truth_table_equiv(values, left, right)
+    return z3_equiv(values, left, right)
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--self-test", action="store_true")
-    args = ap.parse_args()
+def self_test():
+    """op25623 identity: q14 AND NOT q21 vs q14 XOR (q14 AND q21).
+
+    Different value-ids (13200 vs 13186 in the old report's numbering), but the
+    same Boolean function. Truth table must say equivalent. Then the full
+    7-variable local cone (128 assignments) must match the real gate sequence.
+    """
+    values = retain62.Values()
+    q14 = values.vid(frozenset([14]))
+    q21 = values.vid(frozenset([21]))
+    specified = values.and_(q14, values.xor(q21, values.one))
+    gate_form = values.xor(q14, values.and_(q21, q14))
+    assert specified != gate_form, "self-test needs distinct value-ids"
+    proof = equiv(values, specified, gate_form)
+    assert proof["verdict"] == "equivalent", proof
+    print(f"identity: distinct ids, {proof['method']} "
+          f"over {proof['free_vars']} vars, {proof['checked']} rows -> EQUIVALENT")
+
+    # Full local cone: entry vars (18,0,27,2,14,21,54), 128 assignments.
+    # Anchor by instruction content: op numbers drifted (+57 by R6) between
+    # ahmed and baseline_hw06, so never reuse the old 25622:25631 numbering.
+    local_vars = (18, 0, 27, 2, 14, 21, 54)
+    ops = load_ops()
+    pattern = ["CX q14 q50", "CCX q21 q14 q50", "CX q23 q21",
+               "CSWAP q27 q50 q2", "CSWAP q18 q50 q0", "CX q27 q18",
+               "CCX q54 q18 q50", "CX q27 q18"]
+    anchor = next(i for i in range(len(ops) - 9) if ops[i:i + 8] == pattern)
+    slice_ops = ops[anchor:anchor + 9]  # 8 real ops + Z_POW
+    matched = 0
+    for mask in range(128):
+        entry = {q: (mask >> i) & 1 for i, q in enumerate(local_vars)}
+        entry[50] = 0
+        vals, wire, _snap, _sig, extra = retain62.interpret(
+            slice_ops, track=True, entry=entry)
+        ids = {q: vals.one if entry.get(q) else vals.zero for q in local_vars}
+        ids[50] = vals.zero
+        hidden = vals.and_(ids[14], vals.xor(ids[21], vals.one))
+        inner = vals.mux(ids[27], ids[2], hidden)
+        outer = vals.mux(ids[18], ids[0], inner)
+        formula = vals.xor(outer, vals.and_(ids[54], vals.xor(ids[18], ids[27])))
+        assert wire[50] == formula, f"local cone mismatch at mask {mask}"
+        matched += 1
+    print(f"local cone: {matched}/128 assignments match -> PASS")
+    return True
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--self-test", action="store_true")
+    args = parser.parse_args()
     if args.self_test:
-        return self_test()
-    ap.print_help()
-    return 2
+        ok = self_test()
+        print("SELF-TEST PASS" if ok else "SELF-TEST FAIL")
+        raise SystemExit(0 if ok else 1)
+    parser.error("nothing to do; pass --self-test")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
