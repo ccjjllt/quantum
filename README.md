@@ -22,6 +22,8 @@ uv sync
 
 按本次明确提交指令，已于北京时间 2026-10-30 22:29 向 Kaggle 提交一次，编号 `57808271`；平台状态为 `COMPLETE`，Public Score 为 **23.00037**。提交包为 `submissions/20261030_public_best/submission.zip`，平台返回记录保存在 `artifacts/20261030_public_best/kaggle_submission.json`。
 
+2026-11-01 按用户新的明确提交指令，原样采用 Hedge Wizardry notebook v5 的公开组合（Ehan 62Q invsqrt、HW-06 892Q DQI、C40 化学混合加载器），本机核对 ZIP CRC 及 18 个成员哈希后，于北京时间 23:41 提交一次，编号 `57876561`，等待线上评分。作者在 Kaggle 上使用官方 verifier 和 kickmix fork 0.3.1 的完整验证记录给出本地 GM **23.837909266369813**；本机没有重跑官方验证。提交包为 `submissions/20261101_public_hw06/submission.zip`，来源、校验及平台记录保存在 `artifacts/20261101_public_hw06/`，三个子任务分别记录于各自的 `20261101_public_hw06/` 实验目录。
+
 该组合的后续审计分别保存在 [invsqrt](experiments/invsqrt/20261030_public_audit/)、[dqi](experiments/dqi/20261030_public_audit/) 和 [dfthcsos](experiments/dfthcsos/20261030_public_audit/)：已完成三项定向诊断和成本分析，记录了 DQI 的低权重错误、化学的结构与成本阶梯、invsqrt 的恢复成本；尚未生成更优候选。
 
 已手动检查三个脚本及官方 CLI 的帮助入口，读取真实 invsqrt/ANGLE 基线的静态资源，并将完整参考提交打包为 `submissions/baseline.zip`（13 个文件）。这只确认环境、读取与打包可用，不代表全量评分通过。
