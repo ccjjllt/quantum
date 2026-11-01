@@ -1,13 +1,14 @@
-"""Build the 62-qubit Ahmed circuit from a frozen yoyobar tray plus one semantic patch.
+"""Hybrid 62-qubit generator: yoyobar tray replay plus local semantic replacements.
 
-The process reads the frozen KMX tray written under this experiment. It does not
-open the public oracle KMB. Unmigrated intervals stay on that tray and are marked
-replay. The history-cache window is emitted by the patch below.
+Semantic spans are the input complement, the 41 general rotations, and the Ahmed
+history cache. Every other op is copied from the frozen tray. This is not a
+complete semantic generator. The public oracle KMB is not a generation input.
 """
 
 from __future__ import annotations
 
 import hashlib
+import importlib.metadata
 import io
 import json
 import sys
@@ -27,6 +28,11 @@ ROOT = Path(__file__).resolve().parents[3]
 ART = ROOT / "artifacts/20261031_invsqrt62_replay/invsqrt"
 TRAY = ART / "yoyobar_tray.kmx"
 ANGLES = ART / "angles.json"
+SCRIPT = Path(__file__).resolve()
+PUBLIC_KMB = ROOT / "artifacts/20261030_public_best/candidate/invsqrt.kmb"
+VERIFIER = ROOT / "data/competition/verifiers/invsqrt/verify_submission_invsqrt.py"
+REPLAY_SCRIPT = Path(__file__).resolve().parent / "replay62.py"
+EXTRACT_SCRIPT = Path(__file__).resolve().parent / "extract62.py"
 
 AHMED_SHA = "6dbb98b34c3b16f1c4e019350c10d42259a6faa97e464c9b7c9390f877f392f4"
 YOYOBAR_SHA = "a568bc79348165bad5be2349960d200300c5639ffd2142aca6d548e764a399d9"
@@ -103,6 +109,122 @@ def apply_ahmed_patch(ops: list[str]) -> list[str]:
     )
 
 
+def file_record(path: Path, role: str, *, opened_for_generation: bool) -> dict:
+    data = path.read_bytes()
+    return {
+        "role": role,
+        "path": str(path.resolve()),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "bytes": len(data),
+        "opened_for_generation": opened_for_generation,
+    }
+
+
+def ranges_from(indexes: list[int]) -> list[dict]:
+    if not indexes:
+        return []
+    ordered = sorted(indexes)
+    spans = []
+    start = prev = ordered[0]
+    for index in ordered[1:]:
+        if index == prev + 1:
+            prev = index
+            continue
+        spans.append({"start": start, "stop_exclusive": prev + 1, "ops": prev - start + 1})
+        start = prev = index
+    spans.append({"start": start, "stop_exclusive": prev + 1, "ops": prev - start + 1})
+    return spans
+
+
+STAGE_BOUNDS = (
+    ("A", 16127, 20738),
+    ("B", 20738, 25630),
+    ("Lphase", 25630, 28726),
+)
+
+
+def split_ranges(spans: list[dict], cuts: list[int]) -> list[dict]:
+    """Break spans on stage edges so one range cannot cover two of A, B, and Lphase."""
+    pieces = []
+    for span in spans:
+        points = [span["start"]]
+        points.extend(cut for cut in cuts if span["start"] < cut < span["stop_exclusive"])
+        points.append(span["stop_exclusive"])
+        for left, right in zip(points, points[1:]):
+            pieces.append({"start": left, "stop_exclusive": right, "ops": right - left})
+    return pieces
+
+
+def stage_coverage(semantic: set[int]) -> list[dict]:
+    """Disjoint half-open stage records. Semantic and replay pieces tile each stage."""
+    stages = []
+    for name, start, stop in STAGE_BOUNDS:
+        sem_ops = [op for op in range(start, stop) if op in semantic]
+        replay_ops = [op for op in range(start, stop) if op not in semantic]
+        record = {
+            "name": name,
+            "start": start,
+            "stop_exclusive": stop,
+            "mode": "replay" if not sem_ops else "replay_except_listed_semantic_ops",
+            "semantic_ranges": ranges_from(sem_ops),
+            "replay_ranges": ranges_from(replay_ops),
+            "semantic_ops": len(sem_ops),
+            "replay_ops": len(replay_ops),
+        }
+        covered = sorted(sem_ops + replay_ops)
+        if covered != list(range(start, stop)) or len(covered) != len(set(covered)):
+            raise SystemExit(f"{name} semantic and replay ranges are not a disjoint tile")
+        stages.append(record)
+    for left, right in zip(stages, stages[1:]):
+        if left["stop_exclusive"] > right["start"]:
+            raise SystemExit("A/B/Lphase coverage ranges overlap")
+    return stages
+
+
+def coverage(n_ops: int, rotation_ops: list[int]) -> dict:
+    """Ahmed-index spans. Rotations sit before the history-cache patch, so their indexes match."""
+    semantic = set(range(3, 23))
+    semantic.update(rotation_ops)
+    semantic.update((46718, 46720))
+    semantic.update(range(46798, 46808))
+    if any(op >= n_ops for op in semantic):
+        raise SystemExit("semantic op is outside the Ahmed circuit")
+    replay = [i for i in range(n_ops) if i not in semantic]
+    cuts = [bound for _name, start, stop in STAGE_BOUNDS for bound in (start, stop)]
+    semantic_ranges = split_ranges(ranges_from(sorted(semantic)), cuts)
+    replay_ranges = split_ranges(ranges_from(replay), cuts)
+    stages = stage_coverage(semantic)
+    return {
+        "semantic_ops": len(semantic),
+        "replay_ops": len(replay),
+        "semantic_ranges": semantic_ranges,
+        "replay_ranges": replay_ranges,
+        "stages_disjoint": True,
+        "stages": stages,
+        "remaining_tray": "Every replay range is copied from yoyobar_tray.kmx, with the history-cache window spliced around the Ahmed patch. A, B, and Lphase intervals are disjoint.",
+        "semantic_generation_complete": False,
+    }
+
+
+def provenance() -> dict:
+    kickmix_dist = importlib.metadata.version("kickmix")
+    return {
+        "generator_kind": "托盘重放加局部语义替换的混合生成器",
+        "semantic_generation_complete": False,
+        "kickmix_distribution_version": kickmix_dist,
+        "kickmix_module_version": getattr(kickmix, "__version__", None),
+        "verifier": file_record(VERIFIER, "official invsqrt verifier, unchanged", opened_for_generation=False),
+        "chain": [
+            file_record(PUBLIC_KMB, "public source KMB; hashed for provenance, not a generation input", opened_for_generation=False),
+            file_record(REPLAY_SCRIPT, "replay62.py split the public KMB into the yoyobar tray", opened_for_generation=False),
+            file_record(EXTRACT_SCRIPT, "extract62.py wrote angles.json from the public circuit", opened_for_generation=False),
+            file_record(TRAY, "yoyobar tray copied by the generator", opened_for_generation=True),
+            file_record(ANGLES, "41 angles read by the generator", opened_for_generation=True),
+            file_record(SCRIPT, "this generator", opened_for_generation=True),
+        ],
+    }
+
+
 def canonical(header, ops):
     circuit = kickmix.Circuit.from_file(io.StringIO("\n".join(header + ops) + "\n"), format="kmx")
     buf = io.BytesIO()
@@ -160,29 +282,43 @@ def run_set(circuit, xs, seed):
     x_reg, scratch = official.validate_registers(circuit, spec)
     sim = kickmix.Simulator(batch_size=256, seed=seed, counting_operations=True)
     x_bad = 0
-    scratch_bad = 0
+    scratch_axis1 = 0
+    real_dirty = 0
+    pad_dirty = 0
+    pad_shots = 0
     phases = []
     for offset in range(0, len(xs), 256):
         batch = xs[offset:offset + 256]
+        n = len(batch)
         padded = np.zeros(256, dtype=np.uint64)
-        padded[: len(batch)] = batch
+        padded[:n] = batch
         sim.clear_for_shot()
         sim.write_across_shots(x_reg, official.to_bits(padded, spec.width))
         sim.do(circuit)
         got = official.from_bits(sim.read_across_shots(x_reg))
-        x_bad += int(np.count_nonzero(got[: len(batch)] != batch))
+        x_bad += int(np.count_nonzero(got[:n] != batch))
         bits = np.asarray(sim.read_across_shots(scratch))
-        # Official verifier: dirty = read_across_shots(scratch).any(axis=1).
-        scratch_bad += int(np.count_nonzero(bits.any(axis=1)))
-        for i in range(len(batch)):
+        if bits.shape[0] != len(scratch):
+            raise SystemExit(f"scratch bit shape {bits.shape} is not (qubits, shots)")
+        # Whole-batch qubit OR, including the zero padding. Not a per-x cost.
+        scratch_axis1 += int(np.count_nonzero(bits.any(axis=1)))
+        real_dirty += int(np.count_nonzero(bits[:, :n].any(axis=0)))
+        if n < 256:
+            pad_dirty += int(np.count_nonzero(bits[:, n:].any(axis=0)))
+            pad_shots += 256 - n
+        for i in range(n):
             phases.append(official.half_turns_to_units(sim.read_shot_phase(i)))
     stats = sim.operation_statistics()
     return {
-        "x_errors": x_bad,
-        "scratch_dirty_axis1": scratch_bad,
-        "phases": phases,
-        "toffoli_like": int(stats.num_toffoli_like),
-        "shots_counted": int(stats.num_shots) if hasattr(stats, "num_shots") else len(xs),
+        "x_errors_real": x_bad,
+        "scratch_dirty_axis1": scratch_axis1,
+        "scratch_dirty_real_shots": real_dirty,
+        "scratch_dirty_padding_shots": pad_dirty,
+        "padding_shots": pad_shots,
+        "real_shots": int(len(xs)),
+        "phases_real": phases,
+        "toffoli_like_batch_total": int(stats.num_toffoli_like),
+        "shots_in_operation_counter": int(stats.num_shots) if hasattr(stats, "num_shots") else None,
     }
 
 
@@ -193,20 +329,33 @@ def directed_diff(baseline, generated):
         for seed in (101, 202, 303):
             base = run_set(baseline, xs, seed)
             gen = run_set(generated, xs, seed)
-            phase_mismatch = sum(a != b for a, b in zip(base["phases"], gen["phases"]))
+            phase_mismatch = sum(a != b for a, b in zip(base["phases_real"], gen["phases_real"]))
             row = {
                 "set": name,
                 "seed": seed,
-                "shots": int(len(xs)),
-                "baseline_x_errors": base["x_errors"],
-                "generated_x_errors": gen["x_errors"],
+                "real_shots": int(len(xs)),
+                "padding_shots": gen["padding_shots"],
+                "baseline_x_errors_real": base["x_errors_real"],
+                "generated_x_errors_real": gen["x_errors_real"],
+                "baseline_x_errors": base["x_errors_real"],
+                "generated_x_errors": gen["x_errors_real"],
+                "baseline_scratch_dirty_real_shots": base["scratch_dirty_real_shots"],
+                "generated_scratch_dirty_real_shots": gen["scratch_dirty_real_shots"],
+                "baseline_scratch_dirty_padding_shots": base["scratch_dirty_padding_shots"],
+                "generated_scratch_dirty_padding_shots": gen["scratch_dirty_padding_shots"],
                 "baseline_scratch_dirty_axis1": base["scratch_dirty_axis1"],
                 "generated_scratch_dirty_axis1": gen["scratch_dirty_axis1"],
                 "scratch_predicate": "read_across_shots(scratch).any(axis=1)",
+                "scratch_axis1_meaning": "整批量子比特 OR，含 padding，不是单个 x 的脏计数",
+                "phase_mismatches_real_inputs": phase_mismatch,
                 "phase_mismatches_vs_baseline": phase_mismatch,
-                "generated_toffoli_like_total": gen["toffoli_like"],
-                "baseline_toffoli_like_total": base["toffoli_like"],
-                "generated_cost_not_higher": gen["toffoli_like"] <= base["toffoli_like"],
+                "generated_toffoli_like_batch_total": gen["toffoli_like_batch_total"],
+                "baseline_toffoli_like_batch_total": base["toffoli_like_batch_total"],
+                "toffoli_like_is_batch_total": True,
+                "toffoli_like_includes_padding": True,
+                "per_x_cost": None,
+                "cost_note": "整批累计值，含 256-shot padding，不能当作单个 x 的成本",
+                "generated_cost_not_higher": gen["toffoli_like_batch_total"] <= base["toffoli_like_batch_total"],
             }
             if name in ("x161", "x888", "carry"):
                 row["inputs"] = [int(x) for x in xs]
@@ -238,9 +387,11 @@ def main():
     diff_ok = all(
         row["baseline_x_errors"] == 0
         and row["generated_x_errors"] == 0
+        and row["baseline_scratch_dirty_real_shots"] == 0
+        and row["generated_scratch_dirty_real_shots"] == 0
         and row["baseline_scratch_dirty_axis1"] == 0
         and row["generated_scratch_dirty_axis1"] == 0
-        and row["phase_mismatches_vs_baseline"] == 0
+        and row["phase_mismatches_real_inputs"] == 0
         and row["generated_cost_not_higher"]
         for row in diff_rows
     )
@@ -253,6 +404,12 @@ def main():
         "hash_equals_a568": sha_y == YOYOBAR_SHA,
         "hash_equals_6dbb": sha_a == AHMED_SHA,
         "gate_level_replay_complete": hash_match,
+        "gate_level_replay_complete_meaning": "托盘重放及哈希一致",
+        "semantic_generation_complete": False,
+        "generator_kind": "托盘重放加局部语义替换的混合生成器",
+        "provenance": provenance(),
+        "coverage": coverage(len(ahmed_ops), rotation_ops),
+        "unconfirmed_stages_remain_replay": ["A", "B", "Lphase"],
         "static_toffoli_like_ahmed": int(ahmed_circuit.operation_statistics().num_toffoli_like),
         "static_toffoli_like_yoyobar": int(yoyo_circuit.operation_statistics().num_toffoli_like),
         "opened_paths": opened,
@@ -300,7 +457,7 @@ def main():
             },
         ],
     }
-    text = json.dumps(report, indent=2) + "\n"
+    text = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
     out = ART / "generate_report.json"
     out.write_text(text)
     print(text, end="")

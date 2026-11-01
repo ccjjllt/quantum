@@ -1,10 +1,14 @@
 """Screen one retention candidate on the 62-qubit invsqrt circuit.
 
 The screen covers ops 15583:36941. Repeated CCX segments are exact op-text
-copies separated by more than 2000 ops, then grouped into rows. A copy is
-eligible only when the boolean value-id of 1 or 2 wires is cleared and later
-recomputed by that copy. Break-even uses baseline C = 1628.0743548387097.
-No second candidate is applied. This script does not run the official verifier.
+copies separated by more than 2000 ops, then grouped into rows. A copy enters
+the savings ranking only when all of the following hold: frontier size is 1 or
+2, the source and copy value signatures are equal, every frontier target is
+zero before the copy, the retained value is not overwritten across its
+lifetime, and the source-to-copy span does not cross an unexplained HMR/R.
+Break-even uses baseline C = 1628.0743548387097. No second candidate is
+applied. This script does not run the official verifier and does not write
+retain_r1.kmb.
 """
 
 from __future__ import annotations
@@ -13,6 +17,8 @@ import io
 import json
 from collections import defaultdict
 from pathlib import Path
+
+import numpy as np
 
 import kickmix
 
@@ -196,14 +202,18 @@ def interpret(ops, capture_ccx=None, capture_at=None):
     """Boolean interpreter. A non-empty condition stack gates every write.
 
     The active condition is the AND of every pushed bit and any inline `if`.
-    PUSH/POP themselves always update the stack.
+    PUSH/POP themselves always update the stack. HMR and R are recorded as
+    barriers and are not given a classical inverse.
     """
     values = Values()
     wire = [values.vid(frozenset([q])) for q in range(62)]
     condition = []
     bit_values = {}
     snap = {}
+    cond_at = {}
     ccx_sig = {}
+    history = [[] for _ in range(62)]
+    barriers = []
     capture_ccx = capture_ccx or set()
     capture_at = capture_at or set()
 
@@ -230,6 +240,10 @@ def interpret(ops, capture_ccx=None, capture_at=None):
             return new
         return values.mux(cond, new, old)
 
+    def write(q, new):
+        wire[q] = new
+        history[q].append((index, new))
+
     for index, line in enumerate(ops):
         parts = line.split()
         kind = parts[0]
@@ -251,52 +265,137 @@ def interpret(ops, capture_ccx=None, capture_at=None):
         elif kind == "SWAP":
             a, b = qn(parts[1]), qn(parts[2])
             old_a, old_b = wire[a], wire[b]
-            wire[a] = when(old_a, old_b, cond)
-            wire[b] = when(old_b, old_a, cond)
+            write(a, when(old_a, old_b, cond))
+            write(b, when(old_b, old_a, cond))
         elif kind == "CSWAP":
             c, a, b = qn(parts[1]), qn(parts[2]), qn(parts[3])
             old_a, old_b = wire[a], wire[b]
             swapped_a = values.mux(wire[c], old_b, old_a)
             swapped_b = values.mux(wire[c], old_a, old_b)
-            wire[a] = when(old_a, swapped_a, cond)
-            wire[b] = when(old_b, swapped_b, cond)
+            write(a, when(old_a, swapped_a, cond))
+            write(b, when(old_b, swapped_b, cond))
         elif kind == "CX":
             a, b = qn(parts[1]), qn(parts[2])
             old = wire[b]
-            wire[b] = when(old, values.xor(old, wire[a]), cond)
+            write(b, when(old, values.xor(old, wire[a]), cond))
         elif kind == "CCX":
             a, b, t = qn(parts[1]), qn(parts[2]), qn(parts[3])
             if index in capture_ccx:
                 ccx_sig[index] = {
                     "op": index,
                     "controls": [wire[a], wire[b]],
+                    "control_qubits": [a, b],
                     "target": wire[t],
+                    "target_qubit": t,
                     "condition": list(condition),
                     "active_condition": cond,
                 }
             old = wire[t]
-            wire[t] = when(old, values.xor(old, values.and_(wire[a], wire[b])), cond)
+            write(t, when(old, values.xor(old, values.and_(wire[a], wire[b])), cond))
         elif kind == "X":
             t = qn(parts[1])
             old = wire[t]
-            wire[t] = when(old, values.xor(old, values.one), cond)
+            write(t, when(old, values.xor(old, values.one), cond))
         elif kind in ("HMR", "R"):
+            barriers.append(
+                {
+                    "op": index,
+                    "kind": kind,
+                    "line": line,
+                    "condition": list(condition),
+                    "condition_depth": len(condition),
+                }
+            )
             q = qn(parts[1])
             old = wire[q]
-            wire[q] = when(old, values.zero, cond)
+            write(q, when(old, values.zero, cond))
             if len(parts) > 2 and parts[2].startswith("b"):
                 bit = int(parts[2][1:])
                 old_bit = bit_values.get(bit, values.fresh())
                 bit_values[bit] = when(old_bit, values.fresh(), cond)
         if index in capture_at:
             snap[index] = tuple(wire)
-    return values, wire, snap, ccx_sig
+            cond_at[index] = list(condition)
+    return values, wire, snap, ccx_sig, {
+        "history": history,
+        "barriers": barriers,
+        "cond_at": cond_at,
+    }
 
 
 def wires_after(op_lines):
     """Final qubit value ids after `op_lines`. Used to check the condition stack."""
-    _values, wire, _snap, _sig = interpret(op_lines)
+    _values, wire, _snap, _sig, _extra = interpret(op_lines)
     return wire
+
+
+def check_condition_semantics():
+    """The shipped interpreter must match kickmix on a blocked X and a later X."""
+    blocked = wires_after(["BIT_STORE0 b0", "PUSH_CONDITION if b0", "X q1"])
+    base = wires_after([])
+    if blocked[1] != base[1]:
+        raise SystemExit("condition stack failed to block X q1")
+    opened = wires_after(["BIT_STORE1 b0", "PUSH_CONDITION if b0", "X q1"])
+    if opened[1] == base[1]:
+        raise SystemExit("condition stack failed to fire X q1")
+    text = "\n".join([
+        "REGISTER r0 \"x\"",
+        "APPEND_TO_REGISTER q0 r0",
+        "APPEND_TO_REGISTER q1 r0",
+        "BIT_STORE0 b0",
+        "PUSH_CONDITION if b0",
+        "X q1",
+        "",
+    ])
+    circuit = kickmix.Circuit.from_file(io.StringIO(text), format="kmx")
+    sim = kickmix.Simulator(batch_size=1, seed=1)
+    sim.clear_for_shot()
+    sim.do(circuit)
+    bit = int(np_bit(sim, 1))
+    if bit != 0:
+        raise SystemExit(f"kickmix executed a blocked X, q1={bit}")
+
+
+def np_bit(sim, qubit):
+    bits = np.asarray(sim.read_across_shots(kickmix.array([kickmix.q(qubit)])))
+    return int(bits.reshape(-1)[0])
+
+
+def signature_key(row):
+    return (row["controls"], row["target"], row["condition"], row["active_condition"])
+
+
+def lifetime_evidence(q, source_value, zero, src_end, copy_start, copy_end, history):
+    """The retained value may be cleared to zero, recomputed, and then left intact."""
+    window = [
+        {"op": op, "value_id": vid, "is_zero": vid == zero, "is_source_value": vid == source_value}
+        for op, vid in history[q]
+        if src_end < op <= copy_end
+    ]
+    pre = [item for item in window if item["op"] < copy_start]
+    reasons = []
+    if not pre or not pre[-1]["is_zero"]:
+        reasons.append("not_cleared_to_zero_before_copy")
+    if any(not item["is_zero"] and not item["is_source_value"] for item in pre):
+        reasons.append("intermediate_value_before_copy")
+    restored = False
+    for item in window:
+        if item["op"] < copy_start:
+            continue
+        if item["is_source_value"]:
+            restored = True
+        elif restored:
+            reasons.append("overwritten_after_restore")
+            break
+    if not restored:
+        reasons.append("source_value_not_restored")
+    return {
+        "qubit": q,
+        "source_value_id": source_value,
+        "unoverwritten": not reasons,
+        "reasons": reasons,
+        "writes": window,
+    }
 
 
 def frontier(ops, segments):
@@ -312,7 +411,7 @@ def frontier(ops, segments):
         for index in range(seg["copy"][0], seg["copy"][1] + 1):
             if ops[index].startswith("CCX"):
                 ccx_in_segment.add(index)
-    values, _wire, snap, ccx_sig = interpret(ops, ccx_in_segment, need)
+    values, _wire, snap, ccx_sig, extra = interpret(ops, ccx_in_segment, need)
     scored = []
     for seg in segments:
         src_before = snap[seg["src"][0] - 1]
@@ -328,62 +427,179 @@ def frontier(ops, segments):
                 and src_end[q] != src_before[q]
             ):
                 outs.append(q)
-        row = dict(seg)
-        row["frontier_qubits"] = outs
-        row["frontier"] = len(outs)
-        row["width_if_retained"] = 62 + len(outs)
-        # The copy is the recomputation. Keeping the value removes that copy's
-        # Toffoli-like gates. Count only that copy, and only for a frontier of
-        # one or two outputs. The clear may share wires with other live data.
-        row["conservative_toffoli_like_saved"] = seg["copy_toffoli_like"] if 1 <= len(outs) <= 2 else 0
         src_sig = [ccx_sig[i] for i in range(seg["src"][0], seg["src"][1] + 1) if i in ccx_sig]
         copy_sig = [ccx_sig[i] for i in range(seg["copy"][0], seg["copy"][1] + 1) if i in ccx_sig]
-        row["versioned_signature"] = src_sig
-        row["copy_versioned_signature"] = copy_sig
-        row["value_signature_equal"] = [
-            (left["controls"], left["target"], left["condition"], left["active_condition"])
-            for left in src_sig
-        ] == [
-            (right["controls"], right["target"], right["condition"], right["active_condition"])
-            for right in copy_sig
+        equal = [signature_key(left) for left in src_sig] == [signature_key(right) for right in copy_sig]
+        zero_rows = [
+            {"qubit": q, "value_id": copy_before[q], "is_zero": copy_before[q] == values.zero}
+            for q in outs
         ]
-        row["break_even_tests"] = break_even_tests(row["conservative_toffoli_like_saved"], len(outs))
+        zero_holds = bool(outs) and all(item["is_zero"] for item in zero_rows)
+        copy_ccx_targets = [
+            {
+                "op": item["op"],
+                "target_qubit": item["target_qubit"],
+                "value_id_before": item["target"],
+                "is_zero": item["target"] == values.zero,
+                "condition": item["condition"],
+                "active_condition": item["active_condition"],
+            }
+            for item in copy_sig
+        ]
+        lives = [
+            lifetime_evidence(
+                q, src_end[q], values.zero, seg["src"][1], seg["copy"][0], seg["copy"][1], extra["history"]
+            )
+            for q in outs
+        ]
+        life_ok = bool(outs) and all(item["unoverwritten"] for item in lives)
+        crossed = [
+            row for row in extra["barriers"]
+            if seg["src"][0] <= row["op"] <= seg["copy"][1]
+        ]
+        # No HMR/R in this screen has a separate classical account, so every
+        # barrier the span crosses is unexplained.
+        unexplained = bool(crossed)
+        frontier_ok = 1 <= len(outs) <= 2
+        eligible = frontier_ok and equal and zero_holds and life_ok and not unexplained
+        saved = seg["copy_toffoli_like"] if eligible else None
+        row = dict(seg)
+        row.update(
+            {
+                "frontier_qubits": outs,
+                "frontier": len(outs),
+                "width_if_retained": 62 + len(outs),
+                "eligible": eligible,
+                "conservative_toffoli_like_saved": saved,
+                "versioned_signature": src_sig,
+                "copy_versioned_signature": copy_sig,
+                "value_signature_equal": equal,
+                "condition_environment": {
+                    "src_before": extra["cond_at"][seg["src"][0] - 1],
+                    "src_after": extra["cond_at"][seg["src"][1]],
+                    "copy_before": extra["cond_at"][seg["copy"][0] - 1],
+                    "copy_after": extra["cond_at"][seg["copy"][1]],
+                },
+                "zero_before_copy": {
+                    "holds": zero_holds,
+                    "frontier": zero_rows,
+                    "copy_ccx_targets": copy_ccx_targets,
+                },
+                "lifetime": {
+                    "unoverwritten": life_ok,
+                    "frontier": lives,
+                },
+                "hmr_r_barrier": {
+                    "crossed": bool(crossed),
+                    "unexplained": unexplained,
+                    "count": len(crossed),
+                    "ops": crossed,
+                },
+                "break_even_tests": break_even_tests(saved or 0, len(outs)) if eligible else None,
+            }
+        )
         scored.append(row)
     return scored
 
 
+def exclusion_reasons(row):
+    reasons = []
+    if not 1 <= row["frontier"] <= 2:
+        reasons.append("frontier_not_in_1_2")
+    if not row["value_signature_equal"]:
+        reasons.append("value_signature_unequal")
+    if not row["zero_before_copy"]["holds"]:
+        reasons.append("target_not_zero_before_copy")
+    if not row["lifetime"]["unoverwritten"]:
+        reasons.append("lifetime_overwritten")
+    if row["hmr_r_barrier"]["unexplained"]:
+        reasons.append("unexplained_hmr_r_barrier")
+    return reasons
+
+
+def repeated_ccx_ops(ops, scored):
+    listed = []
+    for row in scored:
+        reasons = exclusion_reasons(row)
+        for index in range(row["src"][0], row["src"][1] + 1):
+            if not ops[index].startswith("CCX"):
+                continue
+            listed.append(
+                {
+                    "op": index,
+                    "line": ops[index],
+                    "src": row["src"],
+                    "copy": row["copy"],
+                    "exclusion_reasons": reasons,
+                }
+            )
+    return listed
+
+
+def require_ranked_proofs(ranked):
+    for row in ranked:
+        if not 1 <= row["frontier"] <= 2:
+            raise SystemExit("ranked row frontier is outside 1..2")
+        if row["value_signature_equal"] is not True:
+            raise SystemExit("ranked row signatures differ")
+        if not row["versioned_signature"] or not row["copy_versioned_signature"]:
+            raise SystemExit("ranked row is missing a version signature")
+        if not row["zero_before_copy"]["holds"]:
+            raise SystemExit("ranked row is missing zero-before-copy")
+        if not row["lifetime"]["unoverwritten"]:
+            raise SystemExit("ranked row lifetime is overwritten")
+        if row["hmr_r_barrier"]["unexplained"]:
+            raise SystemExit("ranked row crosses an unexplained HMR/R barrier")
+        env = row["condition_environment"]
+        for key in ("src_before", "src_after", "copy_before", "copy_after"):
+            if key not in env:
+                raise SystemExit(f"ranked row is missing condition environment {key}")
+        if row["conservative_toffoli_like_saved"] is None:
+            raise SystemExit("ranked row is missing a savings figure")
+
+
 def main():
+    check_condition_semantics()
     ops = load_ops()
     segments, groups = repeated_segments(ops)
     scored = frontier(ops, segments)
-    eligible = [row for row in scored if 1 <= row["frontier"] <= 2]
-    eligible.sort(key=lambda row: -row["conservative_toffoli_like_saved"])
-    best = eligible[0] if eligible else None
-    save = best["conservative_toffoli_like_saved"] if best else 0
-    best_tests = best["break_even_tests"] if best else break_even_tests(0, 0)
-    decision = "stop"
-    if best and (best_tests["q63"]["passed"] or best_tests["q64"]["passed"]) and not best_tests["q65"]["passed"]:
-        decision = "keep"
-    reason = (
-        "No frontier-1 or frontier-2 copy clears its width-specific break-even. "
-        f"The largest conservative saving is {save} Toffoli-like gates. "
-        f"63Q requires >{BREAK_EVEN[63]:.3f}, 64Q requires >{BREAK_EVEN[64]:.3f}, and 65Q is rejected."
-    )
-    if decision == "keep":
-        reason = "A frontier-1 or frontier-2 copy cleared its break-even."
+    ranked = [row for row in scored if row["eligible"]]
+    ranked.sort(key=lambda row: -row["conservative_toffoli_like_saved"])
+    require_ranked_proofs(ranked)
+    best = ranked[0] if ranked else None
+    if best is None:
+        decision = "no_eligible_candidate"
+        reason = (
+            "窗口 15583:36941 在当前筛选规则下没有可证明的保留条目。"
+            "规则同时要求 frontier 为 1 或 2、source/copy 值签名相等、copy 前目标为零、"
+            "保留值存活期无覆盖，以及未跨越未解释的 HMR/R。"
+            "这不是保留路线的全局否定。"
+        )
+    else:
+        tests = best["break_even_tests"]
+        decision = "stop"
+        if (tests["q63"]["passed"] or tests["q64"]["passed"]) and not tests["q65"]["passed"]:
+            decision = "keep"
+        reason = "有通过证明的条目，但没有越过 63Q 或 64Q 回本线。" if decision == "stop" else "有条目越过回本线。"
+    ccx_ops = repeated_ccx_ops(ops, scored)
+    measured = sum(group["repeated_ccx"] for group in groups)
+    if len(ccx_ops) != measured:
+        raise SystemExit(f"repeated CCX list {len(ccx_ops)} != measured {measured}")
+    if any(not item["exclusion_reasons"] for item in ccx_ops) and best is None:
+        raise SystemExit("an unexcluded CCX is outside the savings ranking")
     report = {
         "window": list(WINDOW),
+        "decision_scope": "仅限窗口 15583:36941 与当前筛选规则，不是保留路线的全局否定。",
         "segment_groups": len(groups),
         "segments_15": len(groups),
         "matched_parts": len(segments),
-        "repeated_ccx": sum(group["repeated_ccx"] for group in groups),
+        "repeated_ccx": measured,
+        "repeated_ccx_ops": ccx_ops,
         "repeated_ccx_reconciliation": {
-            "measured": sum(group["repeated_ccx"] for group in groups),
-            "audit_figure": 141,
-            "difference": 141 - sum(group["repeated_ccx"] for group in groups),
-            "measured_rule": "Non-overlapping exact op-text copies of length at least 8, separated by at least 2000 ops, then grouped into 15 source rows.",
-            "audit_figure_meaning": "141 is the earlier audit count of ordered repeated CCX in ops 15583:36941.",
-            "effect_on_stop": "The stop uses the measured count. The 8-gate difference cannot lift the best frontier-2 save of 4 above the 64Q line 50.877.",
+            "measured": measured,
+            "measured_ops_listed": len(ccx_ops),
+            "historical_141": "历史数字不可复现",
+            "reconciliation": "历史数字不可复现",
         },
         "groups": [
             {
@@ -396,9 +612,17 @@ def main():
                         "copy": part["copy"],
                         "repeated_ccx": part["repeated_ccx"],
                         "frontier": part["frontier"],
+                        "frontier_qubits": part["frontier_qubits"],
+                        "eligible": part["eligible"],
                         "value_signature_equal": part["value_signature_equal"],
                         "versioned_signature": part["versioned_signature"],
-                        "break_even_tests": part["break_even_tests"],
+                        "copy_versioned_signature": part["copy_versioned_signature"],
+                        "condition_environment": part["condition_environment"],
+                        "zero_before_copy": part["zero_before_copy"],
+                        "lifetime": part["lifetime"],
+                        "hmr_r_barrier": part["hmr_r_barrier"],
+                        "conservative_toffoli_like_saved": part["conservative_toffoli_like_saved"],
+                        "exclusion_reasons": exclusion_reasons(part),
                     }
                     for part in (
                         next(row for row in scored if row["src"] == part_src["src"])
@@ -414,28 +638,59 @@ def main():
             "q64_net_save_required": BREAK_EVEN[64],
             "q65": "rejected",
         },
-        "best_frontier_le_2": {
+        "ranked": [
+            {
+                "src": row["src"],
+                "copy": row["copy"],
+                "frontier": row["frontier"],
+                "frontier_qubits": row["frontier_qubits"],
+                "value_signature_equal": row["value_signature_equal"],
+                "versioned_signature": row["versioned_signature"],
+                "copy_versioned_signature": row["copy_versioned_signature"],
+                "condition_environment": row["condition_environment"],
+                "zero_before_copy": row["zero_before_copy"],
+                "lifetime": row["lifetime"],
+                "hmr_r_barrier": row["hmr_r_barrier"],
+                "conservative_toffoli_like_saved": row["conservative_toffoli_like_saved"],
+                "break_even_tests": row["break_even_tests"],
+            }
+            for row in ranked
+        ],
+        "best": None if best is None else {
             "src": best["src"],
             "copy": best["copy"],
             "frontier": best["frontier"],
-            "frontier_qubits": best["frontier_qubits"],
             "conservative_toffoli_like_saved": best["conservative_toffoli_like_saved"],
-            "break_even_tests": best_tests,
-        } if best else None,
-        "break_even_tests": best_tests,
+            "break_even_tests": best["break_even_tests"],
+        },
+        "best_frontier_le_2": None,
         "decision": decision,
         "reason": reason,
         "retain_r1_written": False,
         "official_verify_allowed": False,
+        "official_verifier_shots": 0,
         "signature": "boolean value-id; PUSH stack and inline if are ANDed; conditional CX/CCX/X are not unconditional",
     }
-    text = json.dumps(report, indent=2) + "\n"
+    if best is None and report["best"] is not None:
+        raise SystemExit("best was set without an eligible row")
+    text = json.dumps(report, indent=2, ensure_ascii=False) + "\n"
+    if best is None and "\"conservative_toffoli_like_saved\": 4" in text:
+        raise SystemExit("ineligible screen wrote a savings of 4")
+    if "历史数字不可复现" not in text:
+        raise SystemExit("missing the historical-list statement")
     ART.mkdir(parents=True, exist_ok=True)
     (ART / "retention_candidates.json").write_text(text)
     retain = ART / "retain_r1.kmb"
     if retain.exists():
         retain.unlink()
-    print(json.dumps({"decision": decision, "groups": len(groups), "repeated_ccx": report["repeated_ccx"], "best_save": save}, indent=2))
+    print(json.dumps({
+        "decision": decision,
+        "groups": len(groups),
+        "repeated_ccx": measured,
+        "listed_ccx": len(ccx_ops),
+        "ranked": len(ranked),
+        "best": None if best is None else best["src"],
+    }, indent=2))
 
 
 if __name__ == "__main__":

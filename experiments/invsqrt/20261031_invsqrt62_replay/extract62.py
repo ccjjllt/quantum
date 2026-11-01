@@ -397,6 +397,441 @@ def layout_from_phase(header, ops, angles):
     }
 
 
+def condition_before(ops):
+    """Condition stack and depth as each op begins. PUSH/POP have not yet run."""
+    stack = []
+    depths = []
+    stacks = []
+    for line in ops:
+        depths.append(len(stack))
+        stacks.append(list(stack))
+        if line.startswith("PUSH_CONDITION"):
+            stack.append(line.split()[-1])
+        elif line.startswith("POP_CONDITION") and stack:
+            stack.pop()
+    return depths, stacks
+
+
+def select_horner_cuts(ops):
+    """Depth-0 cuts at stage edges, CX-fanout registers, and HMR/R cluster boundaries.
+
+    A conditional CSWAP is not a cut. Cuts prefer an empty condition stack.
+    """
+    depths, stacks = condition_before(ops)
+    wanted = {16127, 20738, 25630}
+    i = 16127
+    while i < 25630:
+        if ops[i].startswith("CX"):
+            ctrl = ops[i].split()[1]
+            j = i + 1
+            while j < 25630 and ops[j].startswith("CX") and ops[j].split()[1] == ctrl:
+                j += 1
+            if j - i >= 8:
+                wanted.add(i)
+            i = j
+            continue
+        i += 1
+    # HMR/R that closes a run sitting next to a CCX. Keep depth 0, and keep
+    # boundaries at least 400 ops apart so the file stays a cut set, not a dump.
+    last_hmr = -1000
+    for i in range(16127, 25630):
+        kind = ops[i].split()[0]
+        if kind not in ("HMR", "R") or depths[i] != 0:
+            continue
+        window = ops[max(16127, i - 20):i + 20]
+        if not any(line.startswith("CCX") for line in window):
+            continue
+        if i - last_hmr < 400:
+            continue
+        wanted.add(i)
+        last_hmr = i
+    cuts = []
+    for op in sorted(wanted):
+        cuts.append(
+            {
+                "op": op,
+                "condition_depth": depths[op],
+                "condition_environment": stacks[op],
+                "empty_condition_stack": depths[op] == 0,
+            }
+        )
+    return cuts
+
+
+def dataflow_until(ops, cut, depths):
+    """Last write, direct source, SWAP map, and unresolved CSWAP barriers before `cut`."""
+    last_op = [-1] * 62
+    last_line = [""] * 62
+    last_kind = [""] * 62
+    source = [""] * 62
+    logical = list(range(62))
+    cswaps = []
+    conditional_swaps = []
+    for index, line in enumerate(ops[:cut]):
+        parts = line.split()
+        kind = parts[0]
+        qubits = [qubit_of(tok) for tok in parts[1:] if tok.startswith("q")]
+        conditional = depths[index] > 0 or "if" in parts
+        if kind == "SWAP" and len(qubits) >= 2:
+            if conditional:
+                conditional_swaps.append({"op": index, "qubits": qubits[:2], "applied": False})
+            else:
+                a, b = qubits[0], qubits[1]
+                logical[a], logical[b] = logical[b], logical[a]
+                last_op[a] = last_op[b] = index
+                last_line[a] = last_line[b] = line
+                last_kind[a] = last_kind[b] = kind
+                source[a] = f"SWAP with q{b}"
+                source[b] = f"SWAP with q{a}"
+        elif kind == "CSWAP" and len(qubits) >= 3:
+            cswaps.append(
+                {
+                    "op": index,
+                    "control": qubits[0],
+                    "targets": qubits[1:3],
+                    "conditional_on_stack": conditional,
+                    "resolved": False,
+                    "barrier": True,
+                }
+            )
+        elif kind == "CX" and len(qubits) >= 2:
+            tgt = qubits[1]
+            last_op[tgt] = index
+            last_line[tgt] = line
+            last_kind[tgt] = kind
+            source[tgt] = f"XOR q{qubits[0]}"
+        elif kind == "CCX" and len(qubits) >= 3:
+            tgt = qubits[2]
+            last_op[tgt] = index
+            last_line[tgt] = line
+            last_kind[tgt] = kind
+            source[tgt] = f"AND q{qubits[0]} q{qubits[1]}"
+        elif kind == "X" and qubits:
+            tgt = qubits[0]
+            last_op[tgt] = index
+            last_line[tgt] = line
+            last_kind[tgt] = kind
+            source[tgt] = "NOT"
+        elif kind in ("HMR", "R") and qubits:
+            tgt = qubits[0]
+            last_op[tgt] = index
+            last_line[tgt] = line
+            last_kind[tgt] = kind
+            source[tgt] = "reset-to-zero; measured bit is a barrier"
+    return {
+        "last_op": last_op,
+        "last_line": last_line,
+        "last_kind": last_kind,
+        "source": source,
+        "logical_map_swap_only": logical,
+        "cswap_barriers": cswaps,
+        "conditional_swap_barriers": conditional_swaps,
+        "cswap_applied_as_static_swap": False,
+    }
+
+
+def decompose_full(x: int):
+    t = 21 - (int(x).bit_length() - 1)
+    xn = int(x) << t
+    p = t & 1
+    s = t >> 1
+    address = (p << 7) | ((xn >> 13) & 127)
+    delta = xn & ((1 << 13) - 1)
+    return {"x": int(x), "t": t, "xn": xn, "p": p, "s": s, "address": address, "delta": delta}
+
+
+def x_from_parts(address: int, s: int, delta: int):
+    p = address >> 7
+    t = (s << 1) | p
+    if delta & ((1 << t) - 1):
+        return None
+    xn = (1 << 21) | ((address & 127) << 13) | (delta & ((1 << 13) - 1))
+    if not (1 << 21) <= xn < (1 << 22):
+        return None
+    x = xn >> t
+    if not 1 <= x <= MAX_X:
+        return None
+    got = decompose_full(x)
+    if got["address"] != address or got["s"] != s or got["delta"] != delta:
+        return None
+    return got
+
+
+def horner_samples():
+    """Several deltas at one (address, s), plus other address/s controls."""
+    rows = []
+    deltas = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096,
+              3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191]
+    for delta in deltas:
+        got = x_from_parts(0, 0, delta)
+        if got is not None:
+            got["role"] = "fixed_address_s"
+            rows.append(got)
+    for address, s, delta in (
+        (1, 0, 0), (1, 0, 1), (2, 0, 0), (64, 0, 0), (127, 0, 0),
+        (128, 0, 0), (128, 0, 2), (0, 1, 0), (0, 1, 4), (0, 2, 0),
+        (0, 3, 0), (0, 7, 0), (5, 1, 8), (17, 1, 0),
+    ):
+        got = x_from_parts(address, s, delta)
+        if got is not None:
+            got["role"] = "address_s_control"
+            rows.append(got)
+    seen = set()
+    unique = []
+    for row in rows:
+        if row["x"] in seen:
+            continue
+        seen.add(row["x"])
+        unique.append(row)
+    return unique
+
+
+def snap_cuts(header, ops, xs, cuts, seed):
+    spec = official.ProblemSpecInvSqrt.for_n_p(10)
+    circuit = kickmix.Circuit.from_file(ART / "ahmed.kmb")
+    x_reg, _scratch = official.validate_registers(circuit, spec)
+    out = {cut: [] for cut in cuts}
+    probes = kickmix.array([kickmix.q(i) for i in range(62)])
+    ordered = sorted(cuts)
+    for offset in range(0, len(xs), 256):
+        chunk = np.asarray(xs[offset:offset + 256], dtype=np.uint64)
+        sim = kickmix.Simulator(batch_size=256, seed=seed)
+        buf = np.zeros(256, dtype=np.uint64)
+        buf[: len(chunk)] = chunk
+        sim.clear_for_shot()
+        sim.write_across_shots(x_reg, official.to_bits(buf, 22))
+        prev = 0
+        for cut in ordered:
+            stage = kickmix.Circuit.from_file(
+                io.StringIO("\n".join(header + ops[prev:cut]) + "\n"), format="kmx"
+            )
+            sim.do(stage)
+            mat = np.asarray(sim.read_across_shots(probes))
+            if mat.shape[0] != 62:
+                mat = mat.T
+            out[cut].append(mat[:, : len(chunk)].astype(np.uint8))
+            prev = cut
+    return {cut: np.concatenate(parts, axis=1) for cut, parts in out.items()}
+
+
+def pack_bits(column):
+    word = 0
+    for bit, value in enumerate(column):
+        word |= int(value) << bit
+    return word
+
+
+def _contiguous(items, index_of):
+    if not items:
+        return []
+    ordered = sorted(items, key=index_of)
+    runs = [[ordered[0]]]
+    for item in ordered[1:]:
+        if index_of(item) == index_of(runs[-1][-1]) + 1:
+            runs[-1].append(item)
+        else:
+            runs.append([item])
+    return runs
+
+
+def _variation_key(wire):
+    return (
+        wire["varies_with_delta"],
+        wire["varies_with_address"],
+        wire["varies_with_s"],
+        wire["measurement_dependent"],
+    )
+
+
+def enumerate_integer_registers(cuts):
+    """Contiguous width-8 and width-19 runs from variation class and value origin.
+
+    A wider fanout is not sliced down to 8 or 19. Width 19 stays an empty list
+    when no run has that length.
+    """
+    found = []
+    for cut in cuts:
+        wires = cut["wires"]
+        by_class = {}
+        by_origin = {}
+        for wire in wires:
+            vkey = _variation_key(wire)
+            by_class.setdefault(vkey, []).append(wire)
+            by_origin.setdefault(vkey + (wire["last_write_kind"], wire["direct_source"]), []).append(wire)
+        groups = (
+            ("physical_variation_class", by_class, lambda wire: wire["q"]),
+            ("physical_variation_class_and_value_origin", by_origin, lambda wire: wire["q"]),
+            ("logical_variation_class", by_class, lambda wire: wire["logical_label_after_unconditional_swap"]),
+        )
+        for basis, buckets, index_of in groups:
+            for key, group in buckets.items():
+                for run in _contiguous(group, index_of):
+                    if len(run) not in (8, 19):
+                        continue
+                    vkey = key[:4]
+                    origins = sorted({(wire["last_write_kind"], wire["direct_source"]) for wire in run})
+                    uniform = len(origins) == 1
+                    if basis == "logical_variation_class" and not uniform:
+                        role = "rejected"
+                        reading = "Logical labels are contiguous inside one variation class, but the physical wires do not share a value origin."
+                    elif len(run) == 8 and vkey == (False, True, False, False) and uniform:
+                        role = "C2"
+                        reading = "Address-only 8-bit word. Low qubit index is bit 0. It does not vary with delta or s on the sample that defined the class."
+                    elif len(run) == 19 and vkey[0] and not vkey[3] and uniform:
+                        role = "T"
+                        reading = "Delta-dependent 19-bit word. Low qubit index is bit 0. Horner shifts are e_i = 21+8-19-i."
+                    elif (
+                        len(run) == 8
+                        and basis != "logical_variation_class"
+                        and vkey[0]
+                        and not vkey[3]
+                        and uniform
+                        and all(wire["q"] < 13 for wire in run)
+                    ):
+                        role = "delta_slice"
+                        reading = "Width-8 slice of a delta-varying class. Integer reading: wire q holds delta bit q. Not C2, because it varies with delta. Not T, because the width is 8."
+                    else:
+                        role = "rejected"
+                        reading = "Width matches 8 or 19, but variation class or value origin does not fit a C2 or T register."
+                    found.append(
+                        {
+                            "cut": cut["op"],
+                            "stage": cut["stage"],
+                            "basis": basis,
+                            "width": len(run),
+                            "role": role,
+                            "variation_class": {
+                                "varies_with_delta": vkey[0],
+                                "varies_with_address": vkey[1],
+                                "varies_with_s": vkey[2],
+                                "measurement_dependent": vkey[3],
+                            },
+                            "value_origins": [{"kind": kind, "source": source} for kind, source in origins],
+                            "value_origin_uniform": uniform,
+                            "wires": [wire["q"] for wire in run],
+                            "logical_labels": [wire["logical_label_after_unconditional_swap"] for wire in run],
+                            "bit_order": "ascending qubit index, low qubit is bit 0",
+                            "integer_interpretation": reading,
+                            "last_write_ops": [wire["last_write_op"] for wire in run],
+                            "counterexample": None if role in ("C2", "T", "delta_slice") else reading,
+                        }
+                    )
+    width_19 = [row for row in found if row["width"] == 19]
+    width_8_origin = [
+        row for row in found
+        if row["width"] == 8 and row["basis"] == "physical_variation_class_and_value_origin"
+    ]
+    return {
+        "candidates": found,
+        "width_8_count": sum(1 for row in found if row["width"] == 8),
+        "width_19_count": len(width_19),
+        "width_19_physical_variation_class": [
+            row for row in width_19 if row["basis"] == "physical_variation_class"
+        ],
+        "width_19_physical_variation_class_and_value_origin": [
+            row for row in width_19 if row["basis"] == "physical_variation_class_and_value_origin"
+        ],
+        "width_19_logical_variation_class": [
+            row for row in width_19 if row["basis"] == "logical_variation_class"
+        ],
+        "width_8_value_origin": width_8_origin,
+        "note": "Exact lengths only. A fanout wider than 8 or 19 is not sliced.",
+    }
+
+
+def horner_cut_record(header, ops):
+    """Variation-class cuts. Width 19/8 is not decided by a two-delta constant count."""
+    depths, _stacks = condition_before(ops)
+    cuts = select_horner_cuts(ops)
+    samples = horner_samples()
+    xs = [row["x"] for row in samples]
+    mats = snap_cuts(header, ops, xs, [row["op"] for row in cuts], seed=101)
+    mats_b = snap_cuts(header, ops, xs, [row["op"] for row in cuts], seed=202)
+    fixed = [i for i, row in enumerate(samples) if row["role"] == "fixed_address_s"]
+    records = []
+    for cut in cuts:
+        flow = dataflow_until(ops, cut["op"], depths)
+        mat = mats[cut["op"]]
+        other = mats_b[cut["op"]]
+        wires = []
+        for q in range(62):
+            fixed_vals = {int(mat[q, i]) for i in fixed}
+            addr_vals = {
+                int(mat[q, i])
+                for i, row in enumerate(samples)
+                if row["delta"] == 0 and row["s"] == 0
+            }
+            shift_vals = {
+                int(mat[q, i])
+                for i, row in enumerate(samples)
+                if row["address"] == 0 and row["delta"] == 0
+            }
+            meas = any(int(mat[q, i]) != int(other[q, i]) for i in range(len(samples)))
+            wires.append(
+                {
+                    "q": q,
+                    "last_write_op": flow["last_op"][q],
+                    "last_write_kind": flow["last_kind"][q],
+                    "direct_source": flow["source"][q],
+                    "measurement_dependent": meas,
+                    "varies_with_delta": len(fixed_vals) > 1,
+                    "varies_with_address": len(addr_vals) > 1,
+                    "varies_with_s": len(shift_vals) > 1,
+                    "reference_bit": int(mat[q, 0]),
+                    "logical_label_after_unconditional_swap": flow["logical_map_swap_only"][q],
+                }
+            )
+        ref = samples[0]
+        records.append(
+            {
+                **cut,
+                "stage": "A" if cut["op"] < 20738 else ("B" if cut["op"] < 25630 else "pre_Lphase"),
+                "snapshot_meaning": "computational-basis bits immediately before this op, seed 101",
+                "snapshot_reference": {
+                    "x": ref["x"],
+                    "address": ref["address"],
+                    "s": ref["s"],
+                    "delta": ref["delta"],
+                    "bits": "".join(str(int(mat[q, 0])) for q in range(62)),
+                },
+                "cswap_state": {
+                    "applied_as_static_swap": False,
+                    "unresolved_barrier_count": len(flow["cswap_barriers"]),
+                    "conditional_swap_barrier_count": len(flow["conditional_swap_barriers"]),
+                    "note": "Every CSWAP stays an unresolved barrier. Only an unconditional SWAP updates the logical map.",
+                },
+                "wires": wires,
+            }
+        )
+    fanouts = []
+    i = 16127
+    while i < 25630:
+        if ops[i].startswith("CX"):
+            ctrl = ops[i].split()[1]
+            j = i + 1
+            targets = [qubit_of(ops[i].split()[2])]
+            while j < 25630 and ops[j].startswith("CX") and ops[j].split()[1] == ctrl:
+                targets.append(qubit_of(ops[j].split()[2]))
+                j += 1
+            if len(targets) >= 8:
+                fanouts.append({"op": i, "control": ctrl, "width": len(targets), "wires": targets})
+            i = j
+            continue
+        i += 1
+    return {
+        "criterion": "variation class and value origin at fixed (address, s) across many deltas",
+        "not_the_criterion": "two deltas having 19 or 8 address-constant wires",
+        "LB18_status": "rejected",
+        "T_width_tested": 19,
+        "C2_width_tested": 8,
+        "samples": samples,
+        "fanouts": fanouts,
+        "fanouts_are_not_sliced_to_width_8_or_19": True,
+        "integer_registers": enumerate_integer_registers(records),
+        "cuts": records,
+    }
+
+
 def main():
     circuit = kickmix.Circuit.from_file(ORACLE)
     header, ops = split_ops(circuit)
@@ -414,8 +849,8 @@ def main():
         if not np.array_equal(bits[q].astype(np.uint64), column):
             addr_ok = False
     phase = layout_from_phase(header, ops, angles)
-    horner = horner_address_constants(header, ops)
-    wide = [row for row in horner if len(row["address_constant_qubits"]) in (8, 19) or len(row["address_constant_qubits"]) >= 19]
+    horner_doc = horner_cut_record(header, ops)
+    (ART / "horner_cuts.json").write_text(json.dumps(horner_doc, indent=2) + "\n")
     words = phase["words"]
     lb_rejected = phase["lb_offender"] is not None
     h_confirmed = phase["h_recovered"] == 256
@@ -437,8 +872,10 @@ def main():
         "待证实": {
             "FT": 19,
             "F2": 8,
-            "note": "Horner prefix snapshots did not show an address-constant register whose width is 8 or 19.",
-            "horner_cuts": horner,
+            "T_width": 19,
+            "C2_width": 8,
+            "note": "T width 19 and C2 width 8 stay unconfirmed. The test is variation class and value origin in horner_cuts.json, not a count of address-constant wires across two deltas.",
+            "horner_cuts": "horner_cuts.json",
         },
         "已否定": {
             "LB": 18 if lb_rejected else None,
@@ -469,11 +906,9 @@ def main():
                            "evidence": "LB=18 and G0=1 cannot set a low-phase index above s+15",
                            "counterexample": phase["lb_offender"]},
                     "FT": {"hypothesis": 19, "status": "unconfirmed",
-                           "evidence": "no Horner cut had 19 address-constant qubits",
-                           "cuts": horner},
+                           "evidence": "integer_registers.width_19_count in horner_cuts.json; empty means no contiguous variation-class run has length 19."},
                     "F2": {"hypothesis": 8, "status": "unconfirmed",
-                           "evidence": "no Horner cut had 8 address-constant qubits",
-                           "wide_cuts": wide},
+                           "evidence": "Width-8 runs are listed under integer_registers. A run is C2 only when it is also one value origin and address-only."},
                 },
                 "h_recovered": phase["h_recovered"],
                 "words": words,
