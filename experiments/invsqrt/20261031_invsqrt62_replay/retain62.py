@@ -127,6 +127,9 @@ class Values:
         self.fs_of = {}
         self.fs = []
         self.ands = {}
+        self.and_of = {}
+        self.meas_source = {}
+        self._meas = 0
         self.zero = self.vid(frozenset())
         self.one = self.vid(frozenset([-1]))
         self._fresh = 0
@@ -162,10 +165,19 @@ class Values:
             # Qubit singletons use atoms 0..61. AND atoms start at 62.
             atom = 62 + len(self.ands)
             self.ands[key] = atom
+            self.and_of[atom] = key
         return self.vid(frozenset([atom]))
 
     def mux(self, control, a, b):
         return self.xor(b, self.and_(control, self.xor(a, b)))
+
+    def measurement(self, op, bit):
+        """A measurement leaf sourced at one HMR. Not the pre-measurement qubit."""
+        self._meas += 1
+        atom = 5_000_000 + self._meas
+        vid = self.vid(frozenset([atom]))
+        self.meas_source[atom] = {"op": op, "bit": bit, "kind": "HMR"}
+        return vid, atom
 
 
 def break_even_tests(save, frontier_size):
@@ -198,15 +210,29 @@ def break_even_tests(save, frontier_size):
     }
 
 
-def interpret(ops, capture_ccx=None, capture_at=None):
+def interpret(ops, capture_ccx=None, capture_at=None, track=False, entry=None):
     """Boolean interpreter. A non-empty condition stack gates every write.
 
     The active condition is the AND of every pushed bit and any inline `if`.
     PUSH/POP themselves always update the stack. HMR and R are recorded as
     barriers and are not given a classical inverse.
+
+    `track=False` is the retention path: every qubit starts as its own singleton
+    and unseen classical bits are unsourced fresh values. `track=True` is the
+    dataflow path. It does not run unless the caller asks for it.
     """
     values = Values()
-    wire = [values.vid(frozenset([q])) for q in range(62)]
+    if track:
+        wire = []
+        for qubit in range(62):
+            if entry is not None and qubit in entry:
+                wire.append(values.one if entry[qubit] else values.zero)
+            elif qubit <= 21:
+                wire.append(values.vid(frozenset([qubit])))
+            else:
+                wire.append(values.zero)
+    else:
+        wire = [values.vid(frozenset([q])) for q in range(62)]
     condition = []
     bit_values = {}
     snap = {}
@@ -214,12 +240,18 @@ def interpret(ops, capture_ccx=None, capture_at=None):
     ccx_sig = {}
     history = [[] for _ in range(62)]
     barriers = []
+    zpow = []
+    measurement_resets = []
+    unknown_ops = []
     capture_ccx = capture_ccx or set()
     capture_at = capture_at or set()
+    entry_wires = tuple(wire)
 
     def ensure_bit(bit):
         if bit not in bit_values:
-            bit_values[bit] = values.fresh()
+            # Tracking mode starts classical bits at zero. Retention still mints
+            # an unsourced fresh value the first time a bit is mentioned.
+            bit_values[bit] = values.zero if track else values.fresh()
         return bit_values[bit]
 
     def active(parts):
@@ -255,12 +287,12 @@ def interpret(ops, capture_ccx=None, capture_at=None):
                 condition.pop()
         elif kind in ("BIT_STORE0", "BIT_STORE1"):
             bit = int(parts[1][1:])
-            old = bit_values.get(bit, values.fresh())
+            old = ensure_bit(bit)
             stored = values.zero if kind == "BIT_STORE0" else values.one
             bit_values[bit] = when(old, stored, cond)
         elif kind == "BIT_INVERT":
             bit = int(parts[1][1:])
-            old = bit_values.get(bit, values.fresh())
+            old = ensure_bit(bit)
             bit_values[bit] = when(old, values.xor(old, values.one), cond)
         elif kind == "SWAP":
             a, b = qn(parts[1]), qn(parts[2])
@@ -296,6 +328,21 @@ def interpret(ops, capture_ccx=None, capture_at=None):
             t = qn(parts[1])
             old = wire[t]
             write(t, when(old, values.xor(old, values.one), cond))
+        elif kind in ("Z", "CZ", "CCZ", "NEG", "Z_POW"):
+            # These do not change computational-basis values.
+            if track and kind == "Z_POW" and len(parts) > 1 and parts[1].startswith("q"):
+                qubit = qn(parts[1])
+                zpow.append(
+                    {
+                        "op": index,
+                        "wire": parts[1],
+                        "qubit": qubit,
+                        "value_id": wire[qubit],
+                        "angle": parts[2] if len(parts) > 2 else None,
+                        "condition": list(condition),
+                        "active_condition": cond,
+                    }
+                )
         elif kind in ("HMR", "R"):
             barriers.append(
                 {
@@ -308,11 +355,39 @@ def interpret(ops, capture_ccx=None, capture_at=None):
             )
             q = qn(parts[1])
             old = wire[q]
-            write(q, when(old, values.zero, cond))
-            if len(parts) > 2 and parts[2].startswith("b"):
-                bit = int(parts[2][1:])
-                old_bit = bit_values.get(bit, values.fresh())
-                bit_values[bit] = when(old_bit, values.fresh(), cond)
+            if track:
+                bit = None
+                leaf = None
+                atom = None
+                if kind == "HMR" and len(parts) > 2 and parts[2].startswith("b"):
+                    bit = int(parts[2][1:])
+                    leaf, atom = values.measurement(index, bit)
+                    old_bit = bit_values.get(bit, values.zero)
+                    bit_values[bit] = when(old_bit, leaf, cond)
+                measurement_resets.append(
+                    {
+                        "op": index,
+                        "kind": kind,
+                        "line": line,
+                        "qubit": q,
+                        "pre_value": old,
+                        "measurement_bit": bit,
+                        "measurement_leaf": leaf,
+                        "measurement_atom": atom,
+                        "not_boolean_clear": True,
+                        "not_equal_to_pre_value": True,
+                        "condition": list(condition),
+                    }
+                )
+                write(q, when(old, values.zero, cond))
+            else:
+                write(q, when(old, values.zero, cond))
+                if len(parts) > 2 and parts[2].startswith("b"):
+                    bit = int(parts[2][1:])
+                    old_bit = bit_values.get(bit, values.fresh())
+                    bit_values[bit] = when(old_bit, values.fresh(), cond)
+        elif track:
+            unknown_ops.append({"op": index, "line": line})
         if index in capture_at:
             snap[index] = tuple(wire)
             cond_at[index] = list(condition)
@@ -320,6 +395,11 @@ def interpret(ops, capture_ccx=None, capture_at=None):
         "history": history,
         "barriers": barriers,
         "cond_at": cond_at,
+        "entry": entry_wires,
+        "zpow": zpow,
+        "measurement_resets": measurement_resets,
+        "unknown_ops": unknown_ops,
+        "track": track,
     }
 
 
