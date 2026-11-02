@@ -1,0 +1,2043 @@
+{
+  "liveness": {
+    "note": "first-last static; qubit-index reuse after free merges ranges (overestimates during free gaps); allocation track is ground truth for width",
+    "num_qubits_tracked": 159,
+    "peak_composition": {
+      "coef": 33,
+      "lz": 5,
+      "temp": 44,
+      "v": 55,
+      "x": 22
+    },
+    "peak_first_last": 159,
+    "peak_line": 46393,
+    "peak_stage": "F_S6"
+  },
+  "max_allocated_tracked": 134,
+  "num_lines_text": 100641,
+  "ops_total": {
+    "CCX": 12278,
+    "CSWAP": 446,
+    "CX": 41020,
+    "CZ": 6790,
+    "HMR": 6584,
+    "INFO_TAG": 5824,
+    "NEG": 124,
+    "POP_CONDITION": 3148,
+    "PUSH_CONDITION": 3148,
+    "R": 6584,
+    "X": 14104,
+    "Z": 532,
+    "Z_POW": 36
+  },
+  "qubits": 159,
+  "resource_stats": {
+    "num_instructions": 100618,
+    "num_z_pow": 36,
+    "qubits": 159,
+    "sha256": "55b829c9f90f5aab1d61d97688b98a154e206bec2045714176394a089e3f4341",
+    "t_like": 1,
+    "toffoli_like": 12724
+  },
+  "stage_alloc_track": [
+    {
+      "num_allocated": 115,
+      "stage": "F_S1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S2_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S2_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_D_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_D_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_B_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_B_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_A_LOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_A_LOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_A1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J0_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J0_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J2_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J2_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J3_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J3_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J4_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J4_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J5_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J5_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J6_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J6_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J7_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J7_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J8_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J8_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J9_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J9_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J10_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J10_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J11_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J11_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J12_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J12_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J13_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1_J13_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_A1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_A_UNLOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_A_UNLOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S3P_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S3P_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_R_LOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_R_LOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_R1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J0_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J0_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J2_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J2_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J3_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J3_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J4_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J4_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J5_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J5_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J6_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J6_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J7_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J7_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J8_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J8_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J9_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J9_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J10_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J10_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J11_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1_J11_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_R1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_R_UNLOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_R_UNLOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S6_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "F_S6_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S6_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S6_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_R_LOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_R_LOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_R1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J11_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J11_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J10_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J10_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J9_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J9_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J8_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J8_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J7_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J7_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J6_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J6_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J5_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J5_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J4_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J4_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J3_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J3_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J2_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J2_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J0_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R1R_J0_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_R1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_R_UNLOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_R_UNLOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S3P_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S3P_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_A_LOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_A_LOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_A1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J13_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J13_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J12_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J12_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J11_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J11_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J10_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J10_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J9_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J9_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J8_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J8_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J7_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J7_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J6_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J6_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J5_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J5_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J4_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J4_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J3_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J3_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J2_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J2_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J0_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "A1R_J0_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_A1_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_A_UNLOAD_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_A_UNLOAD_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_B_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_B_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_D_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_D_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S2_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S2_EXIT"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S1_ENTER"
+    },
+    {
+      "num_allocated": 115,
+      "stage": "R_S1_EXIT"
+    }
+  ],
+  "stages": [
+    {
+      "distinct_qubits": 51,
+      "end": 7625,
+      "name": "F_S1",
+      "num_instructions_ops": 7517,
+      "num_lines": 7603,
+      "ops": {
+        "CCX": 922,
+        "CX": 85,
+        "CZ": 840,
+        "HMR": 882,
+        "NEG": 40,
+        "POP_CONDITION": 882,
+        "PUSH_CONDITION": 882,
+        "R": 882,
+        "X": 2062,
+        "Z": 40
+      },
+      "start": 23,
+      "toffoli_like": 922
+    },
+    {
+      "distinct_qubits": 27,
+      "end": 7698,
+      "name": "F_S2",
+      "num_instructions_ops": 69,
+      "num_lines": 73,
+      "ops": {
+        "CSWAP": 61,
+        "CX": 8
+      },
+      "start": 7626,
+      "toffoli_like": 61
+    },
+    {
+      "distinct_qubits": 27,
+      "end": 7824,
+      "name": "F_D",
+      "num_instructions_ops": 118,
+      "num_lines": 126,
+      "ops": {
+        "CCX": 12,
+        "CX": 13,
+        "CZ": 11,
+        "HMR": 13,
+        "POP_CONDITION": 12,
+        "PUSH_CONDITION": 12,
+        "R": 13,
+        "X": 31,
+        "Z": 1
+      },
+      "start": 7699,
+      "toffoli_like": 12
+    },
+    {
+      "distinct_qubits": 57,
+      "end": 14344,
+      "name": "F_B",
+      "num_instructions_ops": 6004,
+      "num_lines": 6520,
+      "ops": {
+        "CCX": 254,
+        "CX": 4474,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 7825,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 46,
+      "end": 19309,
+      "name": "F_A_LOAD",
+      "num_instructions_ops": 4449,
+      "num_lines": 4965,
+      "ops": {
+        "CCX": 254,
+        "CX": 2919,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 14345,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 124,
+      "end": 25178,
+      "name": "F_A1",
+      "num_instructions_ops": 5811,
+      "num_lines": 5869,
+      "ops": {
+        "CCX": 1253,
+        "CX": 2604,
+        "CZ": 322,
+        "HMR": 322,
+        "R": 322,
+        "X": 988
+      },
+      "start": 19310,
+      "toffoli_like": 1253
+    },
+    {
+      "distinct_qubits": 112,
+      "end": 19792,
+      "name": "A1_J0",
+      "num_instructions_ops": 478,
+      "num_lines": 482,
+      "ops": {
+        "CCX": 109,
+        "CX": 212,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 88
+      },
+      "start": 19311,
+      "toffoli_like": 109
+    },
+    {
+      "distinct_qubits": 110,
+      "end": 20265,
+      "name": "A1_J1",
+      "num_instructions_ops": 469,
+      "num_lines": 473,
+      "ops": {
+        "CCX": 106,
+        "CX": 208,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 86
+      },
+      "start": 19793,
+      "toffoli_like": 106
+    },
+    {
+      "distinct_qubits": 108,
+      "end": 20729,
+      "name": "A1_J2",
+      "num_instructions_ops": 460,
+      "num_lines": 464,
+      "ops": {
+        "CCX": 103,
+        "CX": 204,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 84
+      },
+      "start": 20266,
+      "toffoli_like": 103
+    },
+    {
+      "distinct_qubits": 106,
+      "end": 21184,
+      "name": "A1_J3",
+      "num_instructions_ops": 451,
+      "num_lines": 455,
+      "ops": {
+        "CCX": 100,
+        "CX": 200,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 82
+      },
+      "start": 20730,
+      "toffoli_like": 100
+    },
+    {
+      "distinct_qubits": 104,
+      "end": 21630,
+      "name": "A1_J4",
+      "num_instructions_ops": 442,
+      "num_lines": 446,
+      "ops": {
+        "CCX": 97,
+        "CX": 196,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 80
+      },
+      "start": 21185,
+      "toffoli_like": 97
+    },
+    {
+      "distinct_qubits": 102,
+      "end": 22067,
+      "name": "A1_J5",
+      "num_instructions_ops": 433,
+      "num_lines": 437,
+      "ops": {
+        "CCX": 94,
+        "CX": 192,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 78
+      },
+      "start": 21631,
+      "toffoli_like": 94
+    },
+    {
+      "distinct_qubits": 100,
+      "end": 22495,
+      "name": "A1_J6",
+      "num_instructions_ops": 424,
+      "num_lines": 428,
+      "ops": {
+        "CCX": 91,
+        "CX": 188,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 76
+      },
+      "start": 22068,
+      "toffoli_like": 91
+    },
+    {
+      "distinct_qubits": 98,
+      "end": 22914,
+      "name": "A1_J7",
+      "num_instructions_ops": 415,
+      "num_lines": 419,
+      "ops": {
+        "CCX": 88,
+        "CX": 184,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 74
+      },
+      "start": 22496,
+      "toffoli_like": 88
+    },
+    {
+      "distinct_qubits": 96,
+      "end": 23324,
+      "name": "A1_J8",
+      "num_instructions_ops": 406,
+      "num_lines": 410,
+      "ops": {
+        "CCX": 85,
+        "CX": 180,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 72
+      },
+      "start": 22915,
+      "toffoli_like": 85
+    },
+    {
+      "distinct_qubits": 94,
+      "end": 23725,
+      "name": "A1_J9",
+      "num_instructions_ops": 397,
+      "num_lines": 401,
+      "ops": {
+        "CCX": 82,
+        "CX": 176,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 70
+      },
+      "start": 23325,
+      "toffoli_like": 82
+    },
+    {
+      "distinct_qubits": 92,
+      "end": 24117,
+      "name": "A1_J10",
+      "num_instructions_ops": 388,
+      "num_lines": 392,
+      "ops": {
+        "CCX": 79,
+        "CX": 172,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 68
+      },
+      "start": 23726,
+      "toffoli_like": 79
+    },
+    {
+      "distinct_qubits": 90,
+      "end": 24500,
+      "name": "A1_J11",
+      "num_instructions_ops": 379,
+      "num_lines": 383,
+      "ops": {
+        "CCX": 76,
+        "CX": 168,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 66
+      },
+      "start": 24118,
+      "toffoli_like": 76
+    },
+    {
+      "distinct_qubits": 88,
+      "end": 24874,
+      "name": "A1_J12",
+      "num_instructions_ops": 370,
+      "num_lines": 374,
+      "ops": {
+        "CCX": 73,
+        "CX": 164,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 64
+      },
+      "start": 24501,
+      "toffoli_like": 73
+    },
+    {
+      "distinct_qubits": 86,
+      "end": 25177,
+      "name": "A1_J13",
+      "num_instructions_ops": 299,
+      "num_lines": 303,
+      "ops": {
+        "CCX": 70,
+        "CX": 160,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 24875,
+      "toffoli_like": 70
+    },
+    {
+      "distinct_qubits": 46,
+      "end": 30143,
+      "name": "F_A_UNLOAD",
+      "num_instructions_ops": 4449,
+      "num_lines": 4965,
+      "ops": {
+        "CCX": 254,
+        "CX": 2919,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 25179,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 55,
+      "end": 31567,
+      "name": "F_S3P",
+      "num_instructions_ops": 1384,
+      "num_lines": 1424,
+      "ops": {
+        "CCX": 302,
+        "CX": 634,
+        "CZ": 112,
+        "HMR": 116,
+        "POP_CONDITION": 28,
+        "PUSH_CONDITION": 28,
+        "R": 116,
+        "X": 44,
+        "Z": 4
+      },
+      "start": 30144,
+      "toffoli_like": 302
+    },
+    {
+      "distinct_qubits": 36,
+      "end": 35227,
+      "name": "F_R_LOAD",
+      "num_instructions_ops": 3144,
+      "num_lines": 3660,
+      "ops": {
+        "CCX": 254,
+        "CX": 1614,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 31568,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 108,
+      "end": 42555,
+      "name": "F_R1",
+      "num_instructions_ops": 7254,
+      "num_lines": 7328,
+      "ops": {
+        "CCX": 1908,
+        "CX": 3534,
+        "CZ": 396,
+        "HMR": 216,
+        "POP_CONDITION": 192,
+        "PUSH_CONDITION": 192,
+        "R": 216,
+        "X": 408,
+        "Z": 192
+      },
+      "start": 35228,
+      "toffoli_like": 1908
+    },
+    {
+      "distinct_qubits": 97,
+      "end": 35877,
+      "name": "R1_J0",
+      "num_instructions_ops": 643,
+      "num_lines": 649,
+      "ops": {
+        "CCX": 170,
+        "CX": 322,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 35229,
+      "toffoli_like": 170
+    },
+    {
+      "distinct_qubits": 96,
+      "end": 36519,
+      "name": "R1_J1",
+      "num_instructions_ops": 636,
+      "num_lines": 642,
+      "ops": {
+        "CCX": 168,
+        "CX": 317,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 35878,
+      "toffoli_like": 168
+    },
+    {
+      "distinct_qubits": 95,
+      "end": 37154,
+      "name": "R1_J2",
+      "num_instructions_ops": 629,
+      "num_lines": 635,
+      "ops": {
+        "CCX": 166,
+        "CX": 312,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 36520,
+      "toffoli_like": 166
+    },
+    {
+      "distinct_qubits": 94,
+      "end": 37782,
+      "name": "R1_J3",
+      "num_instructions_ops": 622,
+      "num_lines": 628,
+      "ops": {
+        "CCX": 164,
+        "CX": 307,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 37155,
+      "toffoli_like": 164
+    },
+    {
+      "distinct_qubits": 93,
+      "end": 38403,
+      "name": "R1_J4",
+      "num_instructions_ops": 615,
+      "num_lines": 621,
+      "ops": {
+        "CCX": 162,
+        "CX": 302,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 37783,
+      "toffoli_like": 162
+    },
+    {
+      "distinct_qubits": 92,
+      "end": 39017,
+      "name": "R1_J5",
+      "num_instructions_ops": 608,
+      "num_lines": 614,
+      "ops": {
+        "CCX": 160,
+        "CX": 297,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 38404,
+      "toffoli_like": 160
+    },
+    {
+      "distinct_qubits": 91,
+      "end": 39624,
+      "name": "R1_J6",
+      "num_instructions_ops": 601,
+      "num_lines": 607,
+      "ops": {
+        "CCX": 158,
+        "CX": 292,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 39018,
+      "toffoli_like": 158
+    },
+    {
+      "distinct_qubits": 90,
+      "end": 40224,
+      "name": "R1_J7",
+      "num_instructions_ops": 594,
+      "num_lines": 600,
+      "ops": {
+        "CCX": 156,
+        "CX": 287,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 39625,
+      "toffoli_like": 156
+    },
+    {
+      "distinct_qubits": 89,
+      "end": 40817,
+      "name": "R1_J8",
+      "num_instructions_ops": 587,
+      "num_lines": 593,
+      "ops": {
+        "CCX": 154,
+        "CX": 282,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 40225,
+      "toffoli_like": 154
+    },
+    {
+      "distinct_qubits": 88,
+      "end": 41403,
+      "name": "R1_J9",
+      "num_instructions_ops": 580,
+      "num_lines": 586,
+      "ops": {
+        "CCX": 152,
+        "CX": 277,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 40818,
+      "toffoli_like": 152
+    },
+    {
+      "distinct_qubits": 87,
+      "end": 41982,
+      "name": "R1_J10",
+      "num_instructions_ops": 573,
+      "num_lines": 579,
+      "ops": {
+        "CCX": 150,
+        "CX": 272,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 41404,
+      "toffoli_like": 150
+    },
+    {
+      "distinct_qubits": 86,
+      "end": 42554,
+      "name": "R1_J11",
+      "num_instructions_ops": 566,
+      "num_lines": 572,
+      "ops": {
+        "CCX": 148,
+        "CX": 267,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 34,
+        "Z": 16
+      },
+      "start": 41983,
+      "toffoli_like": 148
+    },
+    {
+      "distinct_qubits": 36,
+      "end": 46215,
+      "name": "F_R_UNLOAD",
+      "num_instructions_ops": 3144,
+      "num_lines": 3660,
+      "ops": {
+        "CCX": 254,
+        "CX": 1614,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 42556,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 100,
+      "end": 46841,
+      "name": "F_S6",
+      "num_instructions_ops": 606,
+      "num_lines": 626,
+      "ops": {
+        "CCX": 52,
+        "CSWAP": 162,
+        "CX": 92,
+        "CZ": 44,
+        "HMR": 48,
+        "NEG": 2,
+        "POP_CONDITION": 40,
+        "PUSH_CONDITION": 40,
+        "R": 48,
+        "X": 38,
+        "Z": 4,
+        "Z_POW": 36
+      },
+      "start": 46216,
+      "toffoli_like": 214
+    },
+    {
+      "distinct_qubits": 100,
+      "end": 47509,
+      "name": "R_S6",
+      "num_instructions_ops": 642,
+      "num_lines": 668,
+      "ops": {
+        "CCX": 52,
+        "CSWAP": 162,
+        "CX": 92,
+        "CZ": 44,
+        "HMR": 48,
+        "NEG": 2,
+        "POP_CONDITION": 40,
+        "PUSH_CONDITION": 40,
+        "R": 48,
+        "X": 110,
+        "Z": 4
+      },
+      "start": 46842,
+      "toffoli_like": 214
+    },
+    {
+      "distinct_qubits": 36,
+      "end": 51169,
+      "name": "R_R_LOAD",
+      "num_instructions_ops": 3144,
+      "num_lines": 3660,
+      "ops": {
+        "CCX": 254,
+        "CX": 1614,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 47510,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 108,
+      "end": 59037,
+      "name": "R_R1",
+      "num_instructions_ops": 7794,
+      "num_lines": 7868,
+      "ops": {
+        "CCX": 1908,
+        "CX": 3534,
+        "CZ": 396,
+        "HMR": 216,
+        "POP_CONDITION": 192,
+        "PUSH_CONDITION": 192,
+        "R": 216,
+        "X": 948,
+        "Z": 192
+      },
+      "start": 51170,
+      "toffoli_like": 1908
+    },
+    {
+      "distinct_qubits": 86,
+      "end": 51776,
+      "name": "R1R_J11",
+      "num_instructions_ops": 600,
+      "num_lines": 606,
+      "ops": {
+        "CCX": 148,
+        "CX": 267,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 68,
+        "Z": 16
+      },
+      "start": 51171,
+      "toffoli_like": 148
+    },
+    {
+      "distinct_qubits": 87,
+      "end": 52391,
+      "name": "R1R_J10",
+      "num_instructions_ops": 609,
+      "num_lines": 615,
+      "ops": {
+        "CCX": 150,
+        "CX": 272,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 70,
+        "Z": 16
+      },
+      "start": 51777,
+      "toffoli_like": 150
+    },
+    {
+      "distinct_qubits": 88,
+      "end": 53015,
+      "name": "R1R_J9",
+      "num_instructions_ops": 618,
+      "num_lines": 624,
+      "ops": {
+        "CCX": 152,
+        "CX": 277,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 72,
+        "Z": 16
+      },
+      "start": 52392,
+      "toffoli_like": 152
+    },
+    {
+      "distinct_qubits": 89,
+      "end": 53648,
+      "name": "R1R_J8",
+      "num_instructions_ops": 627,
+      "num_lines": 633,
+      "ops": {
+        "CCX": 154,
+        "CX": 282,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 74,
+        "Z": 16
+      },
+      "start": 53016,
+      "toffoli_like": 154
+    },
+    {
+      "distinct_qubits": 90,
+      "end": 54290,
+      "name": "R1R_J7",
+      "num_instructions_ops": 636,
+      "num_lines": 642,
+      "ops": {
+        "CCX": 156,
+        "CX": 287,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 76,
+        "Z": 16
+      },
+      "start": 53649,
+      "toffoli_like": 156
+    },
+    {
+      "distinct_qubits": 91,
+      "end": 54941,
+      "name": "R1R_J6",
+      "num_instructions_ops": 645,
+      "num_lines": 651,
+      "ops": {
+        "CCX": 158,
+        "CX": 292,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 78,
+        "Z": 16
+      },
+      "start": 54291,
+      "toffoli_like": 158
+    },
+    {
+      "distinct_qubits": 92,
+      "end": 55601,
+      "name": "R1R_J5",
+      "num_instructions_ops": 654,
+      "num_lines": 660,
+      "ops": {
+        "CCX": 160,
+        "CX": 297,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 80,
+        "Z": 16
+      },
+      "start": 54942,
+      "toffoli_like": 160
+    },
+    {
+      "distinct_qubits": 93,
+      "end": 56270,
+      "name": "R1R_J4",
+      "num_instructions_ops": 663,
+      "num_lines": 669,
+      "ops": {
+        "CCX": 162,
+        "CX": 302,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 82,
+        "Z": 16
+      },
+      "start": 55602,
+      "toffoli_like": 162
+    },
+    {
+      "distinct_qubits": 94,
+      "end": 56948,
+      "name": "R1R_J3",
+      "num_instructions_ops": 672,
+      "num_lines": 678,
+      "ops": {
+        "CCX": 164,
+        "CX": 307,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 84,
+        "Z": 16
+      },
+      "start": 56271,
+      "toffoli_like": 164
+    },
+    {
+      "distinct_qubits": 95,
+      "end": 57635,
+      "name": "R1R_J2",
+      "num_instructions_ops": 681,
+      "num_lines": 687,
+      "ops": {
+        "CCX": 166,
+        "CX": 312,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 86,
+        "Z": 16
+      },
+      "start": 56949,
+      "toffoli_like": 166
+    },
+    {
+      "distinct_qubits": 96,
+      "end": 58331,
+      "name": "R1R_J1",
+      "num_instructions_ops": 690,
+      "num_lines": 696,
+      "ops": {
+        "CCX": 168,
+        "CX": 317,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 88,
+        "Z": 16
+      },
+      "start": 57636,
+      "toffoli_like": 168
+    },
+    {
+      "distinct_qubits": 97,
+      "end": 59036,
+      "name": "R1R_J0",
+      "num_instructions_ops": 699,
+      "num_lines": 705,
+      "ops": {
+        "CCX": 170,
+        "CX": 322,
+        "CZ": 33,
+        "HMR": 18,
+        "POP_CONDITION": 16,
+        "PUSH_CONDITION": 16,
+        "R": 18,
+        "X": 90,
+        "Z": 16
+      },
+      "start": 58332,
+      "toffoli_like": 170
+    },
+    {
+      "distinct_qubits": 36,
+      "end": 62697,
+      "name": "R_R_UNLOAD",
+      "num_instructions_ops": 3144,
+      "num_lines": 3660,
+      "ops": {
+        "CCX": 254,
+        "CX": 1614,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 59038,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 55,
+      "end": 64355,
+      "name": "R_S3P",
+      "num_instructions_ops": 1618,
+      "num_lines": 1658,
+      "ops": {
+        "CCX": 302,
+        "CX": 634,
+        "CZ": 112,
+        "HMR": 116,
+        "POP_CONDITION": 28,
+        "PUSH_CONDITION": 28,
+        "R": 116,
+        "X": 278,
+        "Z": 4
+      },
+      "start": 62698,
+      "toffoli_like": 302
+    },
+    {
+      "distinct_qubits": 46,
+      "end": 69320,
+      "name": "R_A_LOAD",
+      "num_instructions_ops": 4449,
+      "num_lines": 4965,
+      "ops": {
+        "CCX": 254,
+        "CX": 2919,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 64356,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 124,
+      "end": 74263,
+      "name": "R_A1",
+      "num_instructions_ops": 4885,
+      "num_lines": 4943,
+      "ops": {
+        "CCX": 1253,
+        "CX": 2604,
+        "CZ": 322,
+        "HMR": 322,
+        "R": 322,
+        "X": 62
+      },
+      "start": 69321,
+      "toffoli_like": 1253
+    },
+    {
+      "distinct_qubits": 86,
+      "end": 69686,
+      "name": "A1R_J13",
+      "num_instructions_ops": 361,
+      "num_lines": 365,
+      "ops": {
+        "CCX": 70,
+        "CX": 160,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23,
+        "X": 62
+      },
+      "start": 69322,
+      "toffoli_like": 70
+    },
+    {
+      "distinct_qubits": 88,
+      "end": 69996,
+      "name": "A1R_J12",
+      "num_instructions_ops": 306,
+      "num_lines": 310,
+      "ops": {
+        "CCX": 73,
+        "CX": 164,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 69687,
+      "toffoli_like": 73
+    },
+    {
+      "distinct_qubits": 90,
+      "end": 70313,
+      "name": "A1R_J11",
+      "num_instructions_ops": 313,
+      "num_lines": 317,
+      "ops": {
+        "CCX": 76,
+        "CX": 168,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 69997,
+      "toffoli_like": 76
+    },
+    {
+      "distinct_qubits": 92,
+      "end": 70637,
+      "name": "A1R_J10",
+      "num_instructions_ops": 320,
+      "num_lines": 324,
+      "ops": {
+        "CCX": 79,
+        "CX": 172,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 70314,
+      "toffoli_like": 79
+    },
+    {
+      "distinct_qubits": 94,
+      "end": 70968,
+      "name": "A1R_J9",
+      "num_instructions_ops": 327,
+      "num_lines": 331,
+      "ops": {
+        "CCX": 82,
+        "CX": 176,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 70638,
+      "toffoli_like": 82
+    },
+    {
+      "distinct_qubits": 96,
+      "end": 71306,
+      "name": "A1R_J8",
+      "num_instructions_ops": 334,
+      "num_lines": 338,
+      "ops": {
+        "CCX": 85,
+        "CX": 180,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 70969,
+      "toffoli_like": 85
+    },
+    {
+      "distinct_qubits": 98,
+      "end": 71651,
+      "name": "A1R_J7",
+      "num_instructions_ops": 341,
+      "num_lines": 345,
+      "ops": {
+        "CCX": 88,
+        "CX": 184,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 71307,
+      "toffoli_like": 88
+    },
+    {
+      "distinct_qubits": 100,
+      "end": 72003,
+      "name": "A1R_J6",
+      "num_instructions_ops": 348,
+      "num_lines": 352,
+      "ops": {
+        "CCX": 91,
+        "CX": 188,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 71652,
+      "toffoli_like": 91
+    },
+    {
+      "distinct_qubits": 102,
+      "end": 72362,
+      "name": "A1R_J5",
+      "num_instructions_ops": 355,
+      "num_lines": 359,
+      "ops": {
+        "CCX": 94,
+        "CX": 192,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 72004,
+      "toffoli_like": 94
+    },
+    {
+      "distinct_qubits": 104,
+      "end": 72728,
+      "name": "A1R_J4",
+      "num_instructions_ops": 362,
+      "num_lines": 366,
+      "ops": {
+        "CCX": 97,
+        "CX": 196,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 72363,
+      "toffoli_like": 97
+    },
+    {
+      "distinct_qubits": 106,
+      "end": 73101,
+      "name": "A1R_J3",
+      "num_instructions_ops": 369,
+      "num_lines": 373,
+      "ops": {
+        "CCX": 100,
+        "CX": 200,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 72729,
+      "toffoli_like": 100
+    },
+    {
+      "distinct_qubits": 108,
+      "end": 73481,
+      "name": "A1R_J2",
+      "num_instructions_ops": 376,
+      "num_lines": 380,
+      "ops": {
+        "CCX": 103,
+        "CX": 204,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 73102,
+      "toffoli_like": 103
+    },
+    {
+      "distinct_qubits": 110,
+      "end": 73868,
+      "name": "A1R_J1",
+      "num_instructions_ops": 383,
+      "num_lines": 387,
+      "ops": {
+        "CCX": 106,
+        "CX": 208,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 73482,
+      "toffoli_like": 106
+    },
+    {
+      "distinct_qubits": 112,
+      "end": 74262,
+      "name": "A1R_J0",
+      "num_instructions_ops": 390,
+      "num_lines": 394,
+      "ops": {
+        "CCX": 109,
+        "CX": 212,
+        "CZ": 23,
+        "HMR": 23,
+        "R": 23
+      },
+      "start": 73869,
+      "toffoli_like": 109
+    },
+    {
+      "distinct_qubits": 46,
+      "end": 79228,
+      "name": "R_A_UNLOAD",
+      "num_instructions_ops": 4449,
+      "num_lines": 4965,
+      "ops": {
+        "CCX": 254,
+        "CX": 2919,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 74264,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 57,
+      "end": 85748,
+      "name": "R_B",
+      "num_instructions_ops": 6004,
+      "num_lines": 6520,
+      "ops": {
+        "CCX": 254,
+        "CX": 4474,
+        "CZ": 254,
+        "HMR": 255,
+        "R": 255,
+        "X": 511,
+        "Z": 1
+      },
+      "start": 79229,
+      "toffoli_like": 254
+    },
+    {
+      "distinct_qubits": 26,
+      "end": 85844,
+      "name": "R_D",
+      "num_instructions_ops": 90,
+      "num_lines": 96,
+      "ops": {
+        "CCX": 12,
+        "CX": 13,
+        "CZ": 11,
+        "HMR": 13,
+        "POP_CONDITION": 12,
+        "PUSH_CONDITION": 12,
+        "R": 13,
+        "X": 3,
+        "Z": 1
+      },
+      "start": 85749,
+      "toffoli_like": 12
+    },
+    {
+      "distinct_qubits": 27,
+      "end": 85917,
+      "name": "R_S2",
+      "num_instructions_ops": 69,
+      "num_lines": 73,
+      "ops": {
+        "CSWAP": 61,
+        "CX": 8
+      },
+      "start": 85845,
+      "toffoli_like": 61
+    },
+    {
+      "distinct_qubits": 51,
+      "end": 100640,
+      "name": "R_S1",
+      "num_instructions_ops": 14557,
+      "num_lines": 14723,
+      "ops": {
+        "CCX": 1762,
+        "CX": 85,
+        "CZ": 1640,
+        "HMR": 1722,
+        "NEG": 80,
+        "POP_CONDITION": 1722,
+        "PUSH_CONDITION": 1722,
+        "R": 1722,
+        "X": 4022,
+        "Z": 80
+      },
+      "start": 85918,
+      "toffoli_like": 1762
+    }
+  ]
+}
