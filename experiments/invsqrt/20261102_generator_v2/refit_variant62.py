@@ -43,6 +43,8 @@ CANDS = {
             "kA": 2, "kR": 0, "wA": 20, "wR": 12, "nR": 12, "sA": 2, "sR": 0},
     "BOTH": {"tables": ART / "int_tables_R10_A20_quant.json",
              "kA": 2, "kR": 2, "wA": 20, "wR": 10, "nR": 10, "sA": 2, "sR": 2},
+    "A18": {"tables": ART / "int_tables_R12_A4_quant.json",
+            "kA": 4, "kR": 0, "wA": 18, "wR": 12, "nR": 12, "sA": 4, "sR": 0},
 }
 
 W_X, W_LZ, W_B = W.W_X, W.W_LZ, W.W_B

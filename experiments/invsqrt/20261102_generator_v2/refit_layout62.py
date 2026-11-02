@@ -54,6 +54,9 @@ CANDS = {
     "R10": {"kA": 0, "kR": 2, "kB": 0},
     "A20": {"kA": 2, "kR": 0, "kB": 0},
     "BOTH": {"kA": 2, "kR": 2, "kB": 0},
+    "A18": {"kA": 4, "kR": 0, "kB": 0},
+    "R8": {"kA": 0, "kR": 4, "kB": 0},
+    "DEEP": {"kA": 4, "kR": 4, "kB": 0},
 }
 
 SPEC = official.ProblemSpecInvSqrt.for_n_p(10)
@@ -313,6 +316,10 @@ def main():
         return cmd_fresh_fit()
     if args.refit == "ALL":
         for n in ("R10", "A20", "BOTH"):
+            cmd_refit(n)
+        return
+    if args.refit == "DEEP-ALL":
+        for n in ("A18", "R8", "DEEP"):
             cmd_refit(n)
         return
     if args.refit in CANDS:
