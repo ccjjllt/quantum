@@ -134,7 +134,16 @@ x=1 ... OK / ... / x=3133452 ... OK（16/16，t=8…19 全覆盖）→ DUMP-V PA
 149 @F_S6 为索引复用假象（`width_opt.md §1` 已记），真峰以
 `num_qubits` + 孤立探针为准（R1 149 > A1 142）。
 
-## 5. 下一步
+## 5. 完整官方验证 PASS（2026-11-02，seed 20261031，主线程运行）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_a1split_seed20261031.log`（EXIT=0）：
+
+- `status=PASS`，`verified_shots=200540928`，`num_qubits=149`
+- `score=2714467.643418115`（Q 降了但门涨，总分高于首版 1847344.58——宽换门如实记）
+- `worst_error_over_tolerance=0.6096379373446558` @ x=2506015（与合同一致）
+- `circuit_sha256=0cafa2b7…`（kmb 规范哈希）
+
+## 6. 下一步
 
 1. **R1 次窄化评估**：当前峰值 149 @R1_J0（`_narrow_r1_row` extra34）。
    R1 源 17 低 17 已是单级最优（`2·17=34<45`）；再拆 17→9+8 每级
