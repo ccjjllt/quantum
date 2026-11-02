@@ -158,3 +158,11 @@ uv run python .../prescreen_narrow_v.py --contract-full
 - **下一步**：S1 现仅占 6.3%，主导转为 A1/R1 行与 QROM（B/A/R mini-pass
   各 254×6 + 行）。S1 宽度余量 9Q 可供后续行优化借用（需重测峰值）。
   位宽截短继续禁止；`btol` 全程 inf。
+
+## 完整官方验证 PASS（2026-11-02，主线程，seed 20261031）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_bslz_seed20261031.log`（EXIT=0）：
+`status=PASS`，200,540,928 shots，`score=1307880.5265214771`
+（相对 TH 版 1581912.53 **−17.3%**，与静态 −17.7% 吻合；约为基线 13.0 倍），
+`num_qubits=132`，`toffoli_count=9676`，`worst_error_over_tolerance=0.8712321628530258`
+@ x=1796095（不变），`circuit_sha256=614abf6a…`。
