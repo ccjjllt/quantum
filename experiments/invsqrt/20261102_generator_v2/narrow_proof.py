@@ -916,6 +916,220 @@ def test_a1_twolevel_roundtrip(n0=2, n1=2, nh=2):
     return fails == 0
 
 
+# ---------------------------------------------------------------- binary lz (S1 二分替换，Wx=6 缩比穷举)
+# 全尺寸架构（22 位，5 层切片谓词 + MUX 修正 + 折叠解码直达 lz，
+# narrow_v62.build_bs_fwd/rev）的缩比镜像：x 6 位（定义域 1..63），
+# e=bitlen-1 ∈ 0..5，lz=5-e（3 位）。d1=(x[3:6]==0)；L2 MUX
+# （F: x[5]==0 即 x<32；T: x[1:3]==0 即 x<2）；解码为 (d1,d2) 4 路
+# AND2 + 对位叶重算（(F,T): x[4]==0 判 e=3/4；(T,F): x[2]==0 判 e=1/2；
+# (F,F)/(T,T) 单叶）。全尺寸另有 numpy 4M 全域 + 定向量子抽查（见 bs_lz.md）；
+# AND5（全尺寸解码）与 AND2 同 init_and 链模式，仅元数不同。
+def _bs_mux2(b, s, aT, aF, o):
+    b.ccx(s, aT, o)
+    b.x(s)
+    b.ccx(s, aF, o)
+    b.x(s)
+
+
+def _bs_pred_c(b, x, spec, t):
+    a, bb = spec
+    if bb - a == 1:
+        b.x(t)
+        b.cx(x[a], t)
+    else:
+        b.flip_if_equal(x[a:bb], 0, target=t)
+
+
+def _bs_pred_u(b, x, spec, t):
+    a, bb = spec
+    if bb - a == 1:
+        b.cx(x[a], t)
+        b.x(t)
+    else:
+        b.flip_if_equal(x[a:bb], 0, target=t)
+
+
+def _bs_dec6(b, dd, lz, x):
+    """(d1,d2) 折叠解码：(F,F)->lz0；(T,T)->lz5；(F,T): leaf ~x[4] 判 3/4；
+    (T,F): leaf ~x[2] 判 1/2。self-inverse，复跑即清 lz。"""
+    for path, lzv in (((False, False), 0), ((True, True), 5)):
+        m = b.alloc_qubits(1)
+        if not path[0]:
+            b.x(dd[0])
+        if not path[1]:
+            b.x(dd[1])
+        b.ccx(dd[0], dd[1], m[0])
+        if not path[1]:
+            b.x(dd[1])
+        if not path[0]:
+            b.x(dd[0])
+        for k in range(3):
+            if (lzv >> k) & 1:
+                b.cx(m[0], lz[k])
+        if not path[0]:
+            b.x(dd[0])
+        if not path[1]:
+            b.x(dd[1])
+        b.ccx(dd[0], dd[1], m[0])
+        if not path[1]:
+            b.x(dd[1])
+        if not path[0]:
+            b.x(dd[0])
+        b.free(m)
+    for path, eT in (((False, True), 3), ((True, False), 1)):
+        lzT, lzF = 5 - eT, 5 - (eT + 1)
+        m = b.alloc_qubits(1)
+        if not path[0]:
+            b.x(dd[0])
+        if not path[1]:
+            b.x(dd[1])
+        b.ccx(dd[0], dd[1], m[0])
+        if not path[1]:
+            b.x(dd[1])
+        if not path[0]:
+            b.x(dd[0])
+        t = b.alloc_qubits(1)
+        b.x(t[0])
+        b.cx(x[eT + 1], t[0])
+        for k in range(3):
+            bT = (lzT >> k) & 1
+            bF = (lzF >> k) & 1
+            if bT and bF:
+                b.cx(m[0], lz[k])
+            elif (not bT) and bF:
+                b.cx(m[0], lz[k])
+                b.ccx(m[0], t[0], lz[k])
+            elif bT and (not bF):
+                b.ccx(m[0], t[0], lz[k])
+        b.cx(x[eT + 1], t[0])
+        b.x(t[0])
+        b.free(t)
+        if not path[0]:
+            b.x(dd[0])
+        if not path[1]:
+            b.x(dd[1])
+        b.ccx(dd[0], dd[1], m[0])
+        if not path[1]:
+            b.x(dd[1])
+        if not path[0]:
+            b.x(dd[0])
+        b.free(m)
+
+
+def _bs_fwd6(b, x, lz, d):
+    _bs_levels6(b, x, d)
+    _bs_dec6(b, [d[0], d[1]], lz, x)
+    t0 = b.alloc_qubits(1)
+    t1 = b.alloc_qubits(1)
+    _bs_pred_c(b, x, (5, 6), t0[0])
+    _bs_pred_c(b, x, (1, 3), t1[0])
+    _bs_mux2(b, d[0], t1[0], t0[0], d[1])
+    _bs_pred_u(b, x, (1, 3), t1[0])
+    b.free(t1)
+    _bs_pred_u(b, x, (5, 6), t0[0])
+    b.free(t0)
+    _bs_pred_u(b, x, (3, 6), d[0])
+
+
+def _bs_levels6(b, x, d):
+    _bs_pred_c(b, x, (3, 6), d[0])
+    t0 = b.alloc_qubits(1)
+    t1 = b.alloc_qubits(1)
+    _bs_pred_c(b, x, (5, 6), t0[0])
+    _bs_pred_c(b, x, (1, 3), t1[0])
+    _bs_mux2(b, d[0], t1[0], t0[0], d[1])
+    _bs_pred_u(b, x, (1, 3), t1[0])
+    b.free(t1)
+    _bs_pred_u(b, x, (5, 6), t0[0])
+    b.free(t0)
+
+
+def _bs_rev6(b, x, lz, d):
+    _bs_levels6(b, x, d)
+    _bs_dec6(b, [d[0], d[1]], lz, x)
+    t0 = b.alloc_qubits(1)
+    t1 = b.alloc_qubits(1)
+    _bs_pred_c(b, x, (5, 6), t0[0])
+    _bs_pred_c(b, x, (1, 3), t1[0])
+    _bs_mux2(b, d[0], t1[0], t0[0], d[1])
+    _bs_pred_u(b, x, (1, 3), t1[0])
+    b.free(t1)
+    _bs_pred_u(b, x, (5, 6), t0[0])
+    b.free(t0)
+    _bs_pred_u(b, x, (3, 6), d[0])
+
+
+def test_bs_lz6():
+    """二分 lz 缩比穷举：x=1..63，lz==5-(bitlen-1)，余零（d 保持为路径值）。"""
+    xs = list(range(1, 64))
+    b = km.CircuitBuilder()
+    x = b.create_quantum_register(6, name="x")
+    lz = b.alloc_qubits(3)
+    d = b.alloc_qubits(2)
+    _bs_fwd6(b, x, lz, d)
+    circ = b.finish_circuit()
+    sim = km.Simulator(batch_size=len(xs))
+    sim.use_same_registers_as(circ)
+    for i, xv in enumerate(xs):
+        sim.write_within_shot("x", i, xv)
+    sim.do(circ)
+    fails = total = 0
+    for i, xv in enumerate(xs):
+        total += 1
+        got = 0
+        for k in range(3):
+            if bool(sim.read_across_shots(km.q(6 + k))[i]):
+                got |= (1 << k)
+        want = 5 - (xv.bit_length() - 1)
+        if got != want:
+            print(f"BS6 FAIL x={xv} got={got} want={want}")
+            fails += 1
+    for q in range(11, circ.num_qubits):
+        across = sim.read_across_shots(km.q(q))
+        for i in range(len(xs)):
+            if bool(across[i]):
+                print(f"BS6-SCRATCH FAIL q{q} x={xs[i]}")
+                fails += 1
+                break
+    print(f"bslz6: {total-fails}/{total} ok")
+    return fails == 0
+
+
+def test_bs_roundtrip6():
+    """二分 lz + 归一化往返恒等：fwd → rotl → rotr → rev，x 复原且全零（除 x）。
+    d 在 fwd 后释放重配（镜像生成器 F/R 间 d 不存活），rev 须由 x 重算。"""
+    xs = list(range(1, 64))
+    b = km.CircuitBuilder()
+    x = b.create_quantum_register(6, name="x")
+    lz = b.alloc_qubits(3)
+    d = b.alloc_qubits(2)
+    _bs_fwd6(b, x, lz, d)
+    b.left_rotate(x, lz)
+    b.right_rotate(x, lz)
+    b.free(d)
+    d2 = b.alloc_qubits(2)
+    _bs_rev6(b, x, lz, d2)
+    b.free(d2)
+    circ = b.finish_circuit()
+    sim = km.Simulator(batch_size=len(xs))
+    sim.use_same_registers_as(circ)
+    for i, xv in enumerate(xs):
+        sim.write_within_shot("x", i, xv)
+    sim.do(circ)
+    fails = 0
+    for q in range(circ.num_qubits):
+        across = sim.read_across_shots(km.q(q))
+        for i, xv in enumerate(xs):
+            want = bool((xv >> q) & 1) if q < 6 else False
+            if bool(across[i]) != want:
+                print(f"BS6RT FAIL q{q} x={xv}")
+                fails += 1
+                if fails > 5:
+                    return False
+    print(f"bsroundtrip6: {len(xs)} samples ok")
+    return fails == 0
+
+
 if __name__ == "__main__":
     ok = True
     ok &= test_uncontrolled(3)
@@ -930,4 +1144,6 @@ if __name__ == "__main__":
     ok &= test_a1_twolevel_add(2, 2, 2)
     ok &= test_a1_twolevel_sub(2, 2, 2)
     ok &= test_a1_twolevel_roundtrip(2, 2, 2)
+    ok &= test_bs_lz6()
+    ok &= test_bs_roundtrip6()
     print("NARROW-PROOF " + ("PASS" if ok else "FAIL"))

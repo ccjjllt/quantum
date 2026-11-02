@@ -163,6 +163,202 @@ def mini_pass_off(b, x, lz, table, lo: int, width: int, target) -> None:
     b.free(addr)
 
 
+# ---------------------------------------------------------------- S1 二分 lz（温度计→二分，bs_lz.md）
+# 动机：温度计 F_S1 42 flip / R_S1 82 flip（共 124×21CCX=2684），逆向贵一倍
+# 纯属实现 artifact（rev 逐 i 重算+解散双阈值，正向滑动复用）；遗留估计
+# “二分 31 比较+修正 vs 温度计 84”中 84 还是错的（实 124）。探针实锤：
+# flip_if_less_than(x22, 2^k) 恒 21 CCX（无 2 幂优化，故全宽二分否决）；
+# 切片 flip_if_equal(x[a:b],0) 耗 w CCX（1 位免费）。故 5 层切片谓词 +
+# MUX 修正 + 折叠解码直达 lz：F-first 字典序叶序（内层选择变化最快），
+# L5 不建 MUX 树（10 哑叶剪枝后直接并入解码：16 路 AND4 + 对位叶重算）。
+# 先证后建：numpy 4M 全域 + narrow_proof.py 缩比穷举 + /tmp 全宽定向 PASS。
+_BS_L2 = [((17, 22),), ((5, 11),)]                                  # F T
+_BS_L3 = [((20, 22),), ((14, 17),), ((8, 11),), ((2, 5),)]          # FF FT TF TT
+_BS_L4 = [((21, 22),), ((18, 20),), ((15, 17),), ((12, 14),),
+          ((9, 11),), ((6, 8),), ((3, 5),), ((1, 2),)]
+_BS_TH3 = {(True, True): 2, (True, False): 8, (False, True): 14, (False, False): 20}
+_BS_TH4 = {(True, True, True): 1, (True, True, False): 3, (True, False, True): 6,
+           (True, False, False): 9, (False, True, True): 12, (False, True, False): 15,
+           (False, False, True): 18, (False, False, False): 21}
+
+
+def _bs_decode_entries():
+    """构建时整数推导：e=0..21 代表元走阈值树，得 path4→单叶 e / 对位 (eT,eF).
+
+    纯确定性整数循环（无随机、无 KMB、无拟合表）；对位叶谓词恒为
+    (x[eT+1]==0)（阈值位，1 位重算免费）。numpy 全域已交叉验证。"""
+    groups = {}
+    for e in range(22):
+        x = 1 << e
+        d1 = x < 2**11
+        d2 = (x < 2**5) if d1 else (x < 2**17)
+        d3 = x < 2**_BS_TH3[(d1, d2)]
+        d4 = x < 2**_BS_TH4[(d1, d2, d3)]
+        groups.setdefault((d1, d2, d3, d4), []).append(e)
+    assert len(groups) == 16
+    dec = {}
+    for path, es in groups.items():
+        assert len(es) in (1, 2) and (len(es) == 1 or es[1] - es[0] == 1)
+        if len(es) == 1:
+            dec[path] = ("s", 21 - es[0])
+        else:
+            dec[path] = ("p", 21 - es[0], 21 - es[1], es[0])
+    return dec
+
+
+_BS_DEC = _bs_decode_entries()
+
+
+def _bs_mux2(b, s, aT, aF, o) -> None:
+    """2:1 MUX（o ^= s?a:b，s 保持；对合，复跑即撤销）。"""
+    b.ccx(s, aT, o)
+    b.x(s)
+    b.ccx(s, aF, o)
+    b.x(s)
+
+
+def _bs_pred_c(b, x, spec, t) -> None:
+    """切片零谓词 t ^= (x[a:b]==0)；1 位时退化为 X+CX（0 toff）。"""
+    a, bb = spec
+    if bb - a == 1:
+        b.x(t)
+        b.cx(x[a], t)
+    else:
+        b.flip_if_equal(x[a:bb], 0, target=t)
+
+
+def _bs_pred_u(b, x, spec, t) -> None:
+    a, bb = spec
+    if bb - a == 1:
+        b.cx(x[a], t)
+        b.x(t)
+    else:
+        b.flip_if_equal(x[a:bb], 0, target=t)
+
+
+def _bs_tree_mux(b, x, sels, specs, out) -> None:
+    """keep-all MUX 树：叶谓词全算→逐层 MUX→CX 入 out→严格逆序清零。
+
+    叶序为 F-first 字典序（内层选择变化最快），故相邻配对恒为 [F,T]，
+    复用同一 mux2(s, T=cur[i+1], F=cur[i])。自逆块，rev 复用同一函数。"""
+    leaves = []
+    for (spec,) in specs:
+        t = b.alloc_qubits(1)
+        _bs_pred_c(b, x, spec, t[0])
+        leaves.append(t)
+    layers = [leaves]
+    cur = leaves
+    si = len(sels) - 1
+    while len(cur) > 1:
+        s = sels[si]
+        si -= 1
+        nxt = []
+        for i in range(0, len(cur), 2):
+            m = b.alloc_qubits(1)
+            _bs_mux2(b, s, cur[i + 1][0], cur[i][0], m[0])
+            nxt.append(m)
+        layers.append(nxt)
+        cur = nxt
+    assert len(cur) == 1
+    b.cx(cur[0][0], out)
+    for li in range(len(layers) - 1, 0, -1):
+        s = sels[len(sels) - li]
+        up, lo = layers[li], layers[li - 1]
+        for k in range(len(up)):
+            _bs_mux2(b, s, lo[2 * k + 1][0], lo[2 * k][0], up[k][0])
+        for m in up:
+            b.free(m)
+    for (spec,), t in zip(reversed(specs), reversed(leaves)):
+        _bs_pred_u(b, x, spec, t[0])
+        b.free(t)
+
+
+def _bs_and4_c(b, dd, path, ts, m) -> None:
+    fx = [k for k in range(4) if not path[k]]
+    for k in fx:
+        b.x(dd[k])
+    b.init_and(dd[0], dd[1], ts[0])
+    b.init_and(dd[2], dd[3], ts[1])
+    b.init_and(ts[0], ts[1], m[0])
+
+
+def _bs_and4_u(b, dd, path, ts, m) -> None:
+    fx = [k for k in range(4) if not path[k]]
+    b.del_and(ts[0], ts[1], m[0])
+    b.del_and(dd[2], dd[3], ts[1])
+    b.del_and(dd[0], dd[1], ts[0])
+    for k in fx:
+        b.x(dd[k])
+
+
+def _bs_decode_fwd(b, dd, lz, x) -> None:
+    """折叠解码（L5 层）：16 路 path4→AND4 匹配；单叶直接 CX，对位叶重算
+    1 位阈值并按 (bT,bF) 混合写入。自逆，rev 复用同一函数清 lz。"""
+    for path, info in _BS_DEC.items():
+        m = b.alloc_qubits(1)
+        ts = b.alloc_qubits(2)
+        _bs_and4_c(b, dd, path, ts, m)
+        if info[0] == "s":
+            for k in range(W.W_LZ):
+                if (info[1] >> k) & 1:
+                    b.cx(m[0], lz[k])
+        else:
+            _, lzT, lzF, eT = info
+            t = b.alloc_qubits(1)
+            b.x(t[0])
+            b.cx(x[eT + 1], t[0])
+            for k in range(W.W_LZ):
+                bT = (lzT >> k) & 1
+                bF = (lzF >> k) & 1
+                if bT and bF:
+                    b.cx(m[0], lz[k])
+                elif (not bT) and bF:
+                    b.cx(m[0], lz[k])
+                    b.ccx(m[0], t[0], lz[k])
+                elif bT and (not bF):
+                    b.ccx(m[0], t[0], lz[k])
+            b.cx(x[eT + 1], t[0])
+            b.x(t[0])
+            b.free(t)
+        _bs_and4_u(b, dd, path, ts, m)
+        b.free(ts)
+        b.free(m)
+
+
+def _bs_levels_fwd(b, x, dd) -> None:
+    """d1..d4 由 x 重算（正逆共用；逆向先重算再解码清 lz）。"""
+    _bs_pred_c(b, x, (11, 22), dd[0])
+    _bs_tree_mux(b, x, [dd[0]], _BS_L2, dd[1])
+    _bs_tree_mux(b, x, [dd[0], dd[1]], _BS_L3, dd[2])
+    _bs_tree_mux(b, x, [dd[0], dd[1], dd[2]], _BS_L4, dd[3])
+
+
+def _bs_levels_rev(b, x, dd) -> None:
+    """d4..d1 倒序清零（严格镜像）。"""
+    _bs_tree_mux(b, x, [dd[0], dd[1], dd[2]], _BS_L4, dd[3])
+    _bs_tree_mux(b, x, [dd[0], dd[1]], _BS_L3, dd[2])
+    _bs_tree_mux(b, x, [dd[0]], _BS_L2, dd[1])
+    _bs_pred_u(b, x, (11, 22), dd[0])
+
+
+def build_bs_fwd(b, x, lz, d) -> None:
+    """S1 二分正向：x≥1 → lz=22-bit_length(x)。d 纯暂存（进零出零，Bennett
+    compute-copy-uncompute；F/R 间 d 不存活，rev 由 x 重算，对称等价）。"""
+    dd = [d[i] for i in range(5)]
+    _bs_levels_fwd(b, x, dd)
+    _bs_decode_fwd(b, dd[:4], lz, x)
+    _bs_levels_rev(b, x, dd)
+
+
+def build_bs_rev(b, x, lz, d) -> None:
+    """S1 二分逆向：与正向同序列（levels 自逆、解码自逆；正向已清 d，
+    此处重算 d→解码清 lz→再清 d）。与温度计 rev 重算阈值同模式。"""
+    dd = [d[i] for i in range(5)]
+    _bs_levels_fwd(b, x, dd)
+    _bs_decode_fwd(b, dd[:4], lz, x)
+    _bs_levels_rev(b, x, dd)
+
+
 # ---------------------------------------------------------------- A1/R1 窄行（低位省略）
 # TH 收窄行内核：Q._qa1_* 的 TH 部分替换（其余逐行照抄，HMR 结构不动）。
 # 加行：Trem+=c2 后 c3=c2&(Trem_new==0)，CARRY+=c3；减行：c3=c2&(Trem_old==0)
@@ -527,11 +723,9 @@ def build_forward_nv(b, tables, regs) -> None:
     vn = regs["vn"]
     carry = regs["carry"]
     b.info_tag("STAGE:F_S1_ENTER")
-    e = b.alloc_qubits(2)
-    h = b.alloc_qubits(1)
-    W.build_lz_norm(b, x, lz, e, h)
-    b.free(e)
-    b.free(h)
+    d5 = b.alloc_qubits(5)
+    build_bs_fwd(b, x, lz, d5)
+    b.free(d5)
     b.info_tag("STAGE:F_S1_EXIT")
     b.info_tag("STAGE:F_S2_ENTER")
     W.build_normalize(b, x, lz)
@@ -612,11 +806,9 @@ def build_reverse_nv(b, tables, regs) -> None:
     W.build_normalize_rev(b, x, lz)
     b.info_tag("STAGE:R_S2_EXIT")
     b.info_tag("STAGE:R_S1_ENTER")
-    e = b.alloc_qubits(2)
-    h = b.alloc_qubits(1)
-    W.build_lz_norm_rev(b, x, lz, e, h)
-    b.free(e)
-    b.free(h)
+    d5 = b.alloc_qubits(5)
+    build_bs_rev(b, x, lz, d5)
+    b.free(d5)
     b.info_tag("STAGE:R_S1_EXIT")
 
 

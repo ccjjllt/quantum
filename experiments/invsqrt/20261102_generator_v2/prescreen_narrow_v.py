@@ -42,7 +42,7 @@ import width_opt62 as W  # noqa: E402
 SAMPLES = [1, 2, 3, 8, 31, 32, 63, 128, 161, 888, 2047, 2048,
            2097151, 2097152, 2506015, 3133452]
 
-REC_SHA = "e036965d725fbe195605f1306cc6435f24dabf36008703a53fbb9537a36cac8d"
+REC_SHA = "813ba1adcb90a19611b9bf4c1f4dd174800f9c6aefb3da3e7d5829e7b7f4aeb8"
 
 X_MAX = 3_133_452
 
@@ -136,11 +136,9 @@ def dump_v() -> int:
     regs = NV.create_regs_nv(b)
     x, lz, coef, vn = (regs[k] for k in ("x", "lz", "coef", "vn"))
     carry = regs["carry"]
-    e = b.alloc_qubits(2)
-    h = b.alloc_qubits(1)
-    W.build_lz_norm(b, x, lz, e, h)
-    b.free(e)
-    b.free(h)
+    d5 = b.alloc_qubits(5)
+    NV.build_bs_fwd(b, x, lz, d5)
+    b.free(d5)
     W.build_normalize(b, x, lz)
     b.isub(8192, target=x[0:W.W_DELTA])
     NV.mini_pass_off(b, x, lz, tables.B, NV.B_LO, NV.W_VN - 1, vn[0:NV.W_VN - 1])
