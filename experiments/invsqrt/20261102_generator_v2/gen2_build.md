@@ -79,6 +79,9 @@ INFO_TAG 5624`；`toffoli_like=11320`，`num_z_pow=36`。（2026-11-02 主线程
   `contract62.model_phase` 差值全为 0；vs 官方 `reference_values` 余量全 >0，
   最小余量 271129065 units（x=2506015）与合同全域最坏点一致）。
 - `--dump-v`（诊断）：16 样本前向 V 与模型逐位一致（含 t=8…19 全覆盖）。
+  更正（2026-11-02，见 `a1narrow.md` §4）：基线 `prescreen_gen2.py` 的 dump-v
+  按名读匿名 scratch，实际不可运行——该行当时无可运行证据；窄线已用逐索引
+  重组读路径重跑 `DUMP-V PASS 16/16`（`dumpv_rerun.log`），V 正确性以此为准。
 
 ## 5. 首版修过的两个真 bug（证据链）
 

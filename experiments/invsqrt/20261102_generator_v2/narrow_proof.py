@@ -261,10 +261,163 @@ def test_split_row_reverse(noff=2, nlow=2, nhigh=3):
     return fails == 0
 
 
+def test_a1_split_sub(noff=3, nlow=3, nhigh=2):
+    """A1-shape narrow subtract: source len == nlow (A1: 22/22 scaled to 3/3).
+
+    Forward narrow-sub (copy; flip-set-cout; uncopy; high-isub; copy;
+    UMAinv; CX-clear; MAJinv; uncopy) vs integer oracle
+    (tv - (sv if ctl)) mod 2^ntgt. A1 rows J0..J12 are this shape."""
+    fails = total = 0
+    ntgt = nlow + nhigh
+    for ctl in (0, 1):
+        for sv in range(2**noff):
+            for tv in range(2**ntgt):
+                total += 1
+                b = km.CircuitBuilder()
+                S = b.create_quantum_register(noff, name="s")
+                T = b.create_quantum_register(ntgt, name="t")
+                C = b.create_quantum_register(1, name="c")
+                Cp = b.alloc_qubits(noff)
+                carry = b.alloc_qubits(1)
+                cout = b.alloc_qubits(1)
+                for i in range(noff):
+                    if (sv >> i) & 1:
+                        b.x(S[i])
+                for i in range(ntgt):
+                    if (tv >> i) & 1:
+                        b.x(T[i])
+                if ctl:
+                    b.x(C[0])
+                Tlow = T[0:nlow]
+                Thigh = T[nlow:ntgt]
+                for i in range(noff):
+                    b.ccx(C[0], S[i], Cp[i])
+                b.flip_if_less_than(Tlow, Cp, target=cout[0])
+                for i in reversed(range(noff)):
+                    b.ccx(C[0], S[i], Cp[i])
+                b.free(Cp)
+                b.isub(cout, target=Thigh)
+                Cp2 = b.alloc_qubits(noff)
+                for i in range(noff):
+                    b.ccx(C[0], S[i], Cp2[i])
+                for i in range(noff):
+                    uma_inv(b, Cp2[i], Tlow[i], carry[0])
+                b.cx(carry[0], cout[0])
+                for i in reversed(range(noff)):
+                    maj_inv(b, Cp2[i], Tlow[i], carry[0])
+                for i in reversed(range(noff)):
+                    b.ccx(C[0], S[i], Cp2[i])
+                b.free(Cp2)
+                b.free(carry)
+                b.free(cout)
+                circ = b.finish_circuit()
+                sim = km.Simulator(batch_size=1)
+                sim.use_same_registers_as(circ)
+                sim.do(circ)
+                gotT = sim.read_within_shot("t", 0, out=int)
+                wantT = (tv - (sv if ctl else 0)) % (2**ntgt)
+                if gotT != wantT:
+                    print(f"A1SUB FAIL ctl={ctl} s={sv} t={tv} got={gotT} want={wantT}")
+                    fails += 1
+                    if fails > 5:
+                        return False
+    print(f"a1sub noff={noff} nlow={nlow} nhigh={nhigh}: {total-fails}/{total} ok")
+    return fails == 0
+
+
+def test_a1_split_sub_roundtrip(noff=3, nlow=3, nhigh=2):
+    """A1 narrow-sub followed by narrow-add-back in one circuit == identity.
+
+    Proves the A1 reverse row (add-pattern) exactly inverts the forward
+    sub row. Scratch freed on both halves; T must return to tv."""
+    fails = total = 0
+    ntgt = nlow + nhigh
+    for ctl in (0, 1):
+        for sv in range(2**noff):
+            for tv in range(2**ntgt):
+                total += 1
+                b = km.CircuitBuilder()
+                S = b.create_quantum_register(noff, name="s")
+                T = b.create_quantum_register(ntgt, name="t")
+                C = b.create_quantum_register(1, name="c")
+                for i in range(noff):
+                    if (sv >> i) & 1:
+                        b.x(S[i])
+                for i in range(ntgt):
+                    if (tv >> i) & 1:
+                        b.x(T[i])
+                if ctl:
+                    b.x(C[0])
+                Tlow = T[0:nlow]
+                Thigh = T[nlow:ntgt]
+                # --- forward sub half ---
+                Cp = b.alloc_qubits(noff)
+                carry = b.alloc_qubits(1)
+                cout = b.alloc_qubits(1)
+                for i in range(noff):
+                    b.ccx(C[0], S[i], Cp[i])
+                b.flip_if_less_than(Tlow, Cp, target=cout[0])
+                for i in reversed(range(noff)):
+                    b.ccx(C[0], S[i], Cp[i])
+                b.free(Cp)
+                b.isub(cout, target=Thigh)
+                Cp2 = b.alloc_qubits(noff)
+                for i in range(noff):
+                    b.ccx(C[0], S[i], Cp2[i])
+                for i in range(noff):
+                    uma_inv(b, Cp2[i], Tlow[i], carry[0])
+                b.cx(carry[0], cout[0])
+                for i in reversed(range(noff)):
+                    maj_inv(b, Cp2[i], Tlow[i], carry[0])
+                for i in reversed(range(noff)):
+                    b.ccx(C[0], S[i], Cp2[i])
+                b.free(Cp2)
+                b.free(carry)
+                b.free(cout)
+                # --- reverse add-back half (add pattern) ---
+                Cp3 = b.alloc_qubits(noff)
+                carry3 = b.alloc_qubits(1)
+                cout3 = b.alloc_qubits(1)
+                for i in range(noff):
+                    b.ccx(C[0], S[i], Cp3[i])
+                for i in range(noff):
+                    maj(b, Cp3[i], Tlow[i], carry3[0])
+                b.cx(carry3[0], cout3[0])
+                for i in reversed(range(noff)):
+                    uma(b, Cp3[i], Tlow[i], carry3[0])
+                for i in reversed(range(noff)):
+                    b.ccx(C[0], S[i], Cp3[i])
+                b.free(Cp3)
+                b.free(carry3)
+                b.iadd(cout3, target=Thigh)
+                Cp4 = b.alloc_qubits(noff)
+                for i in range(noff):
+                    b.ccx(C[0], S[i], Cp4[i])
+                b.flip_if_less_than(Tlow, Cp4, target=cout3[0])
+                for i in reversed(range(noff)):
+                    b.ccx(C[0], S[i], Cp4[i])
+                b.free(Cp4)
+                b.free(cout3)
+                circ = b.finish_circuit()
+                sim = km.Simulator(batch_size=1)
+                sim.use_same_registers_as(circ)
+                sim.do(circ)
+                gotT = sim.read_within_shot("t", 0, out=int)
+                if gotT != tv:
+                    print(f"A1RT FAIL ctl={ctl} s={sv} t={tv} got={gotT}")
+                    fails += 1
+                    if fails > 5:
+                        return False
+    print(f"a1roundtrip noff={noff} nlow={nlow} nhigh={nhigh}: {total-fails}/{total} ok")
+    return fails == 0
+
+
 if __name__ == "__main__":
     ok = True
     ok &= test_uncontrolled(3)
     ok &= test_controlled_via_copy(3)
     ok &= test_split_row(2, 2, 3)
     ok &= test_split_row_reverse(2, 2, 3)
+    ok &= test_a1_split_sub(3, 3, 2)
+    ok &= test_a1_split_sub_roundtrip(3, 3, 2)
     print("NARROW-PROOF " + ("PASS" if ok else "FAIL"))

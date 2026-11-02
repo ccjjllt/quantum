@@ -154,10 +154,20 @@ def dump_v() -> int:
     for i, xx in enumerate(SAMPLES):
         sim.write_within_shot("x", i, xx)
     sim.do(circ)
+    # NOTE (2026-11-02 bugfix): v/lz/coef are anonymous scratch (create_regs
+    # allocs them), so read_within_shot("v") raises IndexError. V stably sits
+    # at q60..q114 (x22 + lz5 + coef33 allocated first, v never freed here);
+    # reconstruct the int from per-index across-shots reads (same API as
+    # prescreen_b). Circuit untouched, read path only.
+    V_BASE = G.W_X + G.W_LZ + G.W_B
     fails = 0
     for i, xx in enumerate(SAMPLES):
         V, t, P = C62.model_phase(xx, B, A, R)
-        gotV = sim.read_within_shot("v", i, out=int)
+        gotV = 0
+        for k in range(G.W_V):
+            across = sim.read_across_shots(km.q(V_BASE + k))
+            if bool(across[i]):
+                gotV |= (1 << k)
         status = "OK" if gotV == V else "FAIL"
         if gotV != V:
             fails += 1
