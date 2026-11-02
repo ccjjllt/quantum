@@ -1,43 +1,43 @@
 {
   "liveness": {
     "note": "first-last static; qubit-index reuse after free merges ranges (overestimates during free gaps); allocation track is ground truth for width",
-    "num_qubits_tracked": 159,
+    "num_qubits_tracked": 149,
     "peak_composition": {
       "coef": 33,
       "lz": 5,
-      "temp": 44,
+      "temp": 34,
       "v": 55,
       "x": 22
     },
-    "peak_first_last": 159,
-    "peak_line": 46393,
+    "peak_first_last": 149,
+    "peak_line": 58131,
     "peak_stage": "F_S6"
   },
   "max_allocated_tracked": 134,
-  "num_lines_text": 101223,
+  "num_lines_text": 124435,
   "ops_total": {
-    "CCX": 12352,
+    "CCX": 17546,
     "CSWAP": 446,
-    "CX": 41022,
-    "CZ": 6852,
-    "HMR": 6650,
-    "INFO_TAG": 5842,
+    "CX": 48876,
+    "CZ": 8728,
+    "HMR": 7826,
+    "INFO_TAG": 6122,
     "NEG": 128,
-    "POP_CONDITION": 3212,
-    "PUSH_CONDITION": 3212,
-    "R": 6650,
-    "X": 14260,
-    "Z": 538,
+    "POP_CONDITION": 4052,
+    "PUSH_CONDITION": 4052,
+    "R": 7826,
+    "X": 17340,
+    "Z": 1434,
     "Z_POW": 36
   },
-  "qubits": 159,
+  "qubits": 149,
   "resource_stats": {
-    "num_instructions": 101200,
+    "num_instructions": 124412,
     "num_z_pow": 36,
-    "qubits": 159,
-    "sha256": "a0992bc03b93e432f56d45bb85c094814e095d2064554852d1ee680fd5a370d0",
+    "qubits": 149,
+    "sha256": "4d43d989b9f9520fec11991b90f7bd511aa76a6df7bfd3a60822ed755bfe8efd",
     "t_like": 1,
-    "toffoli_like": 12798
+    "toffoli_like": 17992
   },
   "stage_alloc_track": [
     {
@@ -741,262 +741,308 @@
       "toffoli_like": 254
     },
     {
-      "distinct_qubits": 124,
-      "end": 25178,
+      "distinct_qubits": 107,
+      "end": 36916,
       "name": "F_A1",
-      "num_instructions_ops": 5811,
-      "num_lines": 5869,
+      "num_instructions_ops": 17409,
+      "num_lines": 17607,
       "ops": {
-        "CCX": 1253,
-        "CX": 2604,
-        "CZ": 322,
-        "HMR": 322,
-        "R": 322,
-        "X": 988
+        "CCX": 3982,
+        "CX": 6531,
+        "CZ": 1260,
+        "HMR": 910,
+        "POP_CONDITION": 420,
+        "PUSH_CONDITION": 420,
+        "R": 910,
+        "X": 2528,
+        "Z": 448
       },
       "start": 19310,
-      "toffoli_like": 1253
-    },
-    {
-      "distinct_qubits": 112,
-      "end": 19792,
-      "name": "A1_J0",
-      "num_instructions_ops": 478,
-      "num_lines": 482,
-      "ops": {
-        "CCX": 109,
-        "CX": 212,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 88
-      },
-      "start": 19311,
-      "toffoli_like": 109
-    },
-    {
-      "distinct_qubits": 110,
-      "end": 20265,
-      "name": "A1_J1",
-      "num_instructions_ops": 469,
-      "num_lines": 473,
-      "ops": {
-        "CCX": 106,
-        "CX": 208,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 86
-      },
-      "start": 19793,
-      "toffoli_like": 106
-    },
-    {
-      "distinct_qubits": 108,
-      "end": 20729,
-      "name": "A1_J2",
-      "num_instructions_ops": 460,
-      "num_lines": 464,
-      "ops": {
-        "CCX": 103,
-        "CX": 204,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 84
-      },
-      "start": 20266,
-      "toffoli_like": 103
-    },
-    {
-      "distinct_qubits": 106,
-      "end": 21184,
-      "name": "A1_J3",
-      "num_instructions_ops": 451,
-      "num_lines": 455,
-      "ops": {
-        "CCX": 100,
-        "CX": 200,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 82
-      },
-      "start": 20730,
-      "toffoli_like": 100
-    },
-    {
-      "distinct_qubits": 104,
-      "end": 21630,
-      "name": "A1_J4",
-      "num_instructions_ops": 442,
-      "num_lines": 446,
-      "ops": {
-        "CCX": 97,
-        "CX": 196,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 80
-      },
-      "start": 21185,
-      "toffoli_like": 97
-    },
-    {
-      "distinct_qubits": 102,
-      "end": 22067,
-      "name": "A1_J5",
-      "num_instructions_ops": 433,
-      "num_lines": 437,
-      "ops": {
-        "CCX": 94,
-        "CX": 192,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 78
-      },
-      "start": 21631,
-      "toffoli_like": 94
-    },
-    {
-      "distinct_qubits": 100,
-      "end": 22495,
-      "name": "A1_J6",
-      "num_instructions_ops": 424,
-      "num_lines": 428,
-      "ops": {
-        "CCX": 91,
-        "CX": 188,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 76
-      },
-      "start": 22068,
-      "toffoli_like": 91
-    },
-    {
-      "distinct_qubits": 98,
-      "end": 22914,
-      "name": "A1_J7",
-      "num_instructions_ops": 415,
-      "num_lines": 419,
-      "ops": {
-        "CCX": 88,
-        "CX": 184,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 74
-      },
-      "start": 22496,
-      "toffoli_like": 88
-    },
-    {
-      "distinct_qubits": 96,
-      "end": 23324,
-      "name": "A1_J8",
-      "num_instructions_ops": 406,
-      "num_lines": 410,
-      "ops": {
-        "CCX": 85,
-        "CX": 180,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 72
-      },
-      "start": 22915,
-      "toffoli_like": 85
+      "toffoli_like": 3982
     },
     {
       "distinct_qubits": 94,
-      "end": 23725,
-      "name": "A1_J9",
-      "num_instructions_ops": 397,
-      "num_lines": 401,
+      "end": 20632,
+      "name": "A1_J0",
+      "num_instructions_ops": 1308,
+      "num_lines": 1322,
       "ops": {
-        "CCX": 82,
-        "CX": 176,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 70
+        "CCX": 299,
+        "CX": 499,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 198,
+        "Z": 32
       },
-      "start": 23325,
-      "toffoli_like": 82
+      "start": 19311,
+      "toffoli_like": 299
     },
     {
       "distinct_qubits": 92,
-      "end": 24117,
-      "name": "A1_J10",
-      "num_instructions_ops": 388,
-      "num_lines": 392,
+      "end": 21945,
+      "name": "A1_J1",
+      "num_instructions_ops": 1299,
+      "num_lines": 1313,
       "ops": {
-        "CCX": 79,
-        "CX": 172,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 68
+        "CCX": 297,
+        "CX": 494,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 196,
+        "Z": 32
       },
-      "start": 23726,
-      "toffoli_like": 79
+      "start": 20633,
+      "toffoli_like": 297
     },
     {
       "distinct_qubits": 90,
-      "end": 24500,
-      "name": "A1_J11",
-      "num_instructions_ops": 379,
-      "num_lines": 383,
+      "end": 23249,
+      "name": "A1_J2",
+      "num_instructions_ops": 1290,
+      "num_lines": 1304,
       "ops": {
-        "CCX": 76,
-        "CX": 168,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 66
+        "CCX": 295,
+        "CX": 489,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 194,
+        "Z": 32
       },
-      "start": 24118,
-      "toffoli_like": 76
+      "start": 21946,
+      "toffoli_like": 295
+    },
+    {
+      "distinct_qubits": 89,
+      "end": 24544,
+      "name": "A1_J3",
+      "num_instructions_ops": 1281,
+      "num_lines": 1295,
+      "ops": {
+        "CCX": 293,
+        "CX": 484,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 192,
+        "Z": 32
+      },
+      "start": 23250,
+      "toffoli_like": 293
     },
     {
       "distinct_qubits": 88,
-      "end": 24874,
-      "name": "A1_J12",
-      "num_instructions_ops": 370,
-      "num_lines": 374,
+      "end": 25830,
+      "name": "A1_J4",
+      "num_instructions_ops": 1272,
+      "num_lines": 1286,
       "ops": {
-        "CCX": 73,
-        "CX": 164,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 64
+        "CCX": 291,
+        "CX": 479,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 190,
+        "Z": 32
       },
-      "start": 24501,
-      "toffoli_like": 73
+      "start": 24545,
+      "toffoli_like": 291
+    },
+    {
+      "distinct_qubits": 87,
+      "end": 27107,
+      "name": "A1_J5",
+      "num_instructions_ops": 1263,
+      "num_lines": 1277,
+      "ops": {
+        "CCX": 289,
+        "CX": 474,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 188,
+        "Z": 32
+      },
+      "start": 25831,
+      "toffoli_like": 289
     },
     {
       "distinct_qubits": 86,
-      "end": 25177,
-      "name": "A1_J13",
-      "num_instructions_ops": 299,
-      "num_lines": 303,
+      "end": 28375,
+      "name": "A1_J6",
+      "num_instructions_ops": 1254,
+      "num_lines": 1268,
       "ops": {
-        "CCX": 70,
-        "CX": 160,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
+        "CCX": 287,
+        "CX": 469,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 186,
+        "Z": 32
       },
-      "start": 24875,
-      "toffoli_like": 70
+      "start": 27108,
+      "toffoli_like": 287
+    },
+    {
+      "distinct_qubits": 85,
+      "end": 29634,
+      "name": "A1_J7",
+      "num_instructions_ops": 1245,
+      "num_lines": 1259,
+      "ops": {
+        "CCX": 285,
+        "CX": 464,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 184,
+        "Z": 32
+      },
+      "start": 28376,
+      "toffoli_like": 285
+    },
+    {
+      "distinct_qubits": 84,
+      "end": 30884,
+      "name": "A1_J8",
+      "num_instructions_ops": 1236,
+      "num_lines": 1250,
+      "ops": {
+        "CCX": 283,
+        "CX": 459,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 182,
+        "Z": 32
+      },
+      "start": 29635,
+      "toffoli_like": 283
+    },
+    {
+      "distinct_qubits": 83,
+      "end": 32125,
+      "name": "A1_J9",
+      "num_instructions_ops": 1227,
+      "num_lines": 1241,
+      "ops": {
+        "CCX": 281,
+        "CX": 454,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 180,
+        "Z": 32
+      },
+      "start": 30885,
+      "toffoli_like": 281
+    },
+    {
+      "distinct_qubits": 82,
+      "end": 33357,
+      "name": "A1_J10",
+      "num_instructions_ops": 1218,
+      "num_lines": 1232,
+      "ops": {
+        "CCX": 279,
+        "CX": 449,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 178,
+        "Z": 32
+      },
+      "start": 32126,
+      "toffoli_like": 279
+    },
+    {
+      "distinct_qubits": 81,
+      "end": 34580,
+      "name": "A1_J11",
+      "num_instructions_ops": 1209,
+      "num_lines": 1223,
+      "ops": {
+        "CCX": 277,
+        "CX": 444,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 176,
+        "Z": 32
+      },
+      "start": 33358,
+      "toffoli_like": 277
+    },
+    {
+      "distinct_qubits": 80,
+      "end": 35794,
+      "name": "A1_J12",
+      "num_instructions_ops": 1200,
+      "num_lines": 1214,
+      "ops": {
+        "CCX": 275,
+        "CX": 439,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 174,
+        "Z": 32
+      },
+      "start": 34581,
+      "toffoli_like": 275
+    },
+    {
+      "distinct_qubits": 79,
+      "end": 36915,
+      "name": "A1_J13",
+      "num_instructions_ops": 1107,
+      "num_lines": 1121,
+      "ops": {
+        "CCX": 251,
+        "CX": 434,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 35795,
+      "toffoli_like": 251
     },
     {
       "distinct_qubits": 46,
-      "end": 30143,
+      "end": 41881,
       "name": "F_A_UNLOAD",
       "num_instructions_ops": 4449,
       "num_lines": 4965,
@@ -1009,12 +1055,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 25179,
+      "start": 36917,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 55,
-      "end": 31567,
+      "end": 43305,
       "name": "F_S3P",
       "num_instructions_ops": 1384,
       "num_lines": 1424,
@@ -1029,12 +1075,12 @@
         "X": 44,
         "Z": 4
       },
-      "start": 30144,
+      "start": 41882,
       "toffoli_like": 302
     },
     {
       "distinct_qubits": 36,
-      "end": 35227,
+      "end": 46965,
       "name": "F_R_LOAD",
       "num_instructions_ops": 3144,
       "num_lines": 3660,
@@ -1047,12 +1093,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 31568,
+      "start": 43306,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 108,
-      "end": 42555,
+      "end": 54293,
       "name": "F_R1",
       "num_instructions_ops": 7254,
       "num_lines": 7328,
@@ -1067,12 +1113,12 @@
         "X": 408,
         "Z": 192
       },
-      "start": 35228,
+      "start": 46966,
       "toffoli_like": 1908
     },
     {
       "distinct_qubits": 97,
-      "end": 35877,
+      "end": 47615,
       "name": "R1_J0",
       "num_instructions_ops": 643,
       "num_lines": 649,
@@ -1087,12 +1133,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 35229,
+      "start": 46967,
       "toffoli_like": 170
     },
     {
       "distinct_qubits": 96,
-      "end": 36519,
+      "end": 48257,
       "name": "R1_J1",
       "num_instructions_ops": 636,
       "num_lines": 642,
@@ -1107,12 +1153,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 35878,
+      "start": 47616,
       "toffoli_like": 168
     },
     {
       "distinct_qubits": 95,
-      "end": 37154,
+      "end": 48892,
       "name": "R1_J2",
       "num_instructions_ops": 629,
       "num_lines": 635,
@@ -1127,12 +1173,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 36520,
+      "start": 48258,
       "toffoli_like": 166
     },
     {
       "distinct_qubits": 94,
-      "end": 37782,
+      "end": 49520,
       "name": "R1_J3",
       "num_instructions_ops": 622,
       "num_lines": 628,
@@ -1147,12 +1193,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 37155,
+      "start": 48893,
       "toffoli_like": 164
     },
     {
       "distinct_qubits": 93,
-      "end": 38403,
+      "end": 50141,
       "name": "R1_J4",
       "num_instructions_ops": 615,
       "num_lines": 621,
@@ -1167,12 +1213,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 37783,
+      "start": 49521,
       "toffoli_like": 162
     },
     {
       "distinct_qubits": 92,
-      "end": 39017,
+      "end": 50755,
       "name": "R1_J5",
       "num_instructions_ops": 608,
       "num_lines": 614,
@@ -1187,12 +1233,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 38404,
+      "start": 50142,
       "toffoli_like": 160
     },
     {
       "distinct_qubits": 91,
-      "end": 39624,
+      "end": 51362,
       "name": "R1_J6",
       "num_instructions_ops": 601,
       "num_lines": 607,
@@ -1207,12 +1253,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 39018,
+      "start": 50756,
       "toffoli_like": 158
     },
     {
       "distinct_qubits": 90,
-      "end": 40224,
+      "end": 51962,
       "name": "R1_J7",
       "num_instructions_ops": 594,
       "num_lines": 600,
@@ -1227,12 +1273,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 39625,
+      "start": 51363,
       "toffoli_like": 156
     },
     {
       "distinct_qubits": 89,
-      "end": 40817,
+      "end": 52555,
       "name": "R1_J8",
       "num_instructions_ops": 587,
       "num_lines": 593,
@@ -1247,12 +1293,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 40225,
+      "start": 51963,
       "toffoli_like": 154
     },
     {
       "distinct_qubits": 88,
-      "end": 41403,
+      "end": 53141,
       "name": "R1_J9",
       "num_instructions_ops": 580,
       "num_lines": 586,
@@ -1267,12 +1313,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 40818,
+      "start": 52556,
       "toffoli_like": 152
     },
     {
       "distinct_qubits": 87,
-      "end": 41982,
+      "end": 53720,
       "name": "R1_J10",
       "num_instructions_ops": 573,
       "num_lines": 579,
@@ -1287,12 +1333,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 41404,
+      "start": 53142,
       "toffoli_like": 150
     },
     {
       "distinct_qubits": 86,
-      "end": 42554,
+      "end": 54292,
       "name": "R1_J11",
       "num_instructions_ops": 566,
       "num_lines": 572,
@@ -1307,12 +1353,12 @@
         "X": 34,
         "Z": 16
       },
-      "start": 41983,
+      "start": 53721,
       "toffoli_like": 148
     },
     {
       "distinct_qubits": 36,
-      "end": 46215,
+      "end": 57953,
       "name": "F_R_UNLOAD",
       "num_instructions_ops": 3144,
       "num_lines": 3660,
@@ -1325,12 +1371,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 42556,
+      "start": 54294,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 84,
-      "end": 47131,
+      "end": 58869,
       "name": "F_S6",
       "num_instructions_ops": 888,
       "num_lines": 916,
@@ -1348,12 +1394,12 @@
         "Z": 7,
         "Z_POW": 36
       },
-      "start": 46216,
+      "start": 57954,
       "toffoli_like": 251
     },
     {
       "distinct_qubits": 84,
-      "end": 48091,
+      "end": 59829,
       "name": "R_S6",
       "num_instructions_ops": 924,
       "num_lines": 960,
@@ -1370,12 +1416,12 @@
         "X": 188,
         "Z": 7
       },
-      "start": 47132,
+      "start": 58870,
       "toffoli_like": 251
     },
     {
       "distinct_qubits": 36,
-      "end": 51751,
+      "end": 63489,
       "name": "R_R_LOAD",
       "num_instructions_ops": 3144,
       "num_lines": 3660,
@@ -1388,12 +1434,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 48092,
+      "start": 59830,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 108,
-      "end": 59619,
+      "end": 71357,
       "name": "R_R1",
       "num_instructions_ops": 7794,
       "num_lines": 7868,
@@ -1408,12 +1454,12 @@
         "X": 948,
         "Z": 192
       },
-      "start": 51752,
+      "start": 63490,
       "toffoli_like": 1908
     },
     {
       "distinct_qubits": 86,
-      "end": 52358,
+      "end": 64096,
       "name": "R1R_J11",
       "num_instructions_ops": 600,
       "num_lines": 606,
@@ -1428,12 +1474,12 @@
         "X": 68,
         "Z": 16
       },
-      "start": 51753,
+      "start": 63491,
       "toffoli_like": 148
     },
     {
       "distinct_qubits": 87,
-      "end": 52973,
+      "end": 64711,
       "name": "R1R_J10",
       "num_instructions_ops": 609,
       "num_lines": 615,
@@ -1448,12 +1494,12 @@
         "X": 70,
         "Z": 16
       },
-      "start": 52359,
+      "start": 64097,
       "toffoli_like": 150
     },
     {
       "distinct_qubits": 88,
-      "end": 53597,
+      "end": 65335,
       "name": "R1R_J9",
       "num_instructions_ops": 618,
       "num_lines": 624,
@@ -1468,12 +1514,12 @@
         "X": 72,
         "Z": 16
       },
-      "start": 52974,
+      "start": 64712,
       "toffoli_like": 152
     },
     {
       "distinct_qubits": 89,
-      "end": 54230,
+      "end": 65968,
       "name": "R1R_J8",
       "num_instructions_ops": 627,
       "num_lines": 633,
@@ -1488,12 +1534,12 @@
         "X": 74,
         "Z": 16
       },
-      "start": 53598,
+      "start": 65336,
       "toffoli_like": 154
     },
     {
       "distinct_qubits": 90,
-      "end": 54872,
+      "end": 66610,
       "name": "R1R_J7",
       "num_instructions_ops": 636,
       "num_lines": 642,
@@ -1508,12 +1554,12 @@
         "X": 76,
         "Z": 16
       },
-      "start": 54231,
+      "start": 65969,
       "toffoli_like": 156
     },
     {
       "distinct_qubits": 91,
-      "end": 55523,
+      "end": 67261,
       "name": "R1R_J6",
       "num_instructions_ops": 645,
       "num_lines": 651,
@@ -1528,12 +1574,12 @@
         "X": 78,
         "Z": 16
       },
-      "start": 54873,
+      "start": 66611,
       "toffoli_like": 158
     },
     {
       "distinct_qubits": 92,
-      "end": 56183,
+      "end": 67921,
       "name": "R1R_J5",
       "num_instructions_ops": 654,
       "num_lines": 660,
@@ -1548,12 +1594,12 @@
         "X": 80,
         "Z": 16
       },
-      "start": 55524,
+      "start": 67262,
       "toffoli_like": 160
     },
     {
       "distinct_qubits": 93,
-      "end": 56852,
+      "end": 68590,
       "name": "R1R_J4",
       "num_instructions_ops": 663,
       "num_lines": 669,
@@ -1568,12 +1614,12 @@
         "X": 82,
         "Z": 16
       },
-      "start": 56184,
+      "start": 67922,
       "toffoli_like": 162
     },
     {
       "distinct_qubits": 94,
-      "end": 57530,
+      "end": 69268,
       "name": "R1R_J3",
       "num_instructions_ops": 672,
       "num_lines": 678,
@@ -1588,12 +1634,12 @@
         "X": 84,
         "Z": 16
       },
-      "start": 56853,
+      "start": 68591,
       "toffoli_like": 164
     },
     {
       "distinct_qubits": 95,
-      "end": 58217,
+      "end": 69955,
       "name": "R1R_J2",
       "num_instructions_ops": 681,
       "num_lines": 687,
@@ -1608,12 +1654,12 @@
         "X": 86,
         "Z": 16
       },
-      "start": 57531,
+      "start": 69269,
       "toffoli_like": 166
     },
     {
       "distinct_qubits": 96,
-      "end": 58913,
+      "end": 70651,
       "name": "R1R_J1",
       "num_instructions_ops": 690,
       "num_lines": 696,
@@ -1628,12 +1674,12 @@
         "X": 88,
         "Z": 16
       },
-      "start": 58218,
+      "start": 69956,
       "toffoli_like": 168
     },
     {
       "distinct_qubits": 97,
-      "end": 59618,
+      "end": 71356,
       "name": "R1R_J0",
       "num_instructions_ops": 699,
       "num_lines": 705,
@@ -1648,12 +1694,12 @@
         "X": 90,
         "Z": 16
       },
-      "start": 58914,
+      "start": 70652,
       "toffoli_like": 170
     },
     {
       "distinct_qubits": 36,
-      "end": 63279,
+      "end": 75017,
       "name": "R_R_UNLOAD",
       "num_instructions_ops": 3144,
       "num_lines": 3660,
@@ -1666,12 +1712,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 59620,
+      "start": 71358,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 55,
-      "end": 64937,
+      "end": 76675,
       "name": "R_S3P",
       "num_instructions_ops": 1618,
       "num_lines": 1658,
@@ -1686,12 +1732,12 @@
         "X": 278,
         "Z": 4
       },
-      "start": 63280,
+      "start": 75018,
       "toffoli_like": 302
     },
     {
       "distinct_qubits": 46,
-      "end": 69902,
+      "end": 81640,
       "name": "R_A_LOAD",
       "num_instructions_ops": 4449,
       "num_lines": 4965,
@@ -1704,254 +1750,312 @@
         "X": 511,
         "Z": 1
       },
-      "start": 64938,
+      "start": 76676,
       "toffoli_like": 254
     },
     {
-      "distinct_qubits": 124,
-      "end": 74845,
+      "distinct_qubits": 107,
+      "end": 98057,
       "name": "R_A1",
-      "num_instructions_ops": 4885,
-      "num_lines": 4943,
+      "num_instructions_ops": 16219,
+      "num_lines": 16417,
       "ops": {
-        "CCX": 1253,
-        "CX": 2604,
-        "CZ": 322,
-        "HMR": 322,
-        "R": 322,
-        "X": 62
+        "CCX": 3718,
+        "CX": 6531,
+        "CZ": 1260,
+        "HMR": 910,
+        "POP_CONDITION": 420,
+        "PUSH_CONDITION": 420,
+        "R": 910,
+        "X": 1602,
+        "Z": 448
       },
-      "start": 69903,
-      "toffoli_like": 1253
+      "start": 81641,
+      "toffoli_like": 3718
+    },
+    {
+      "distinct_qubits": 79,
+      "end": 82846,
+      "name": "A1R_J13",
+      "num_instructions_ops": 1191,
+      "num_lines": 1205,
+      "ops": {
+        "CCX": 273,
+        "CX": 434,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 172,
+        "Z": 32
+      },
+      "start": 81642,
+      "toffoli_like": 273
+    },
+    {
+      "distinct_qubits": 80,
+      "end": 83974,
+      "name": "A1R_J12",
+      "num_instructions_ops": 1114,
+      "num_lines": 1128,
+      "ops": {
+        "CCX": 253,
+        "CX": 439,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 82847,
+      "toffoli_like": 253
+    },
+    {
+      "distinct_qubits": 81,
+      "end": 85109,
+      "name": "A1R_J11",
+      "num_instructions_ops": 1121,
+      "num_lines": 1135,
+      "ops": {
+        "CCX": 255,
+        "CX": 444,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 83975,
+      "toffoli_like": 255
+    },
+    {
+      "distinct_qubits": 82,
+      "end": 86251,
+      "name": "A1R_J10",
+      "num_instructions_ops": 1128,
+      "num_lines": 1142,
+      "ops": {
+        "CCX": 257,
+        "CX": 449,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 85110,
+      "toffoli_like": 257
+    },
+    {
+      "distinct_qubits": 83,
+      "end": 87400,
+      "name": "A1R_J9",
+      "num_instructions_ops": 1135,
+      "num_lines": 1149,
+      "ops": {
+        "CCX": 259,
+        "CX": 454,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 86252,
+      "toffoli_like": 259
+    },
+    {
+      "distinct_qubits": 84,
+      "end": 88556,
+      "name": "A1R_J8",
+      "num_instructions_ops": 1142,
+      "num_lines": 1156,
+      "ops": {
+        "CCX": 261,
+        "CX": 459,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 87401,
+      "toffoli_like": 261
+    },
+    {
+      "distinct_qubits": 85,
+      "end": 89719,
+      "name": "A1R_J7",
+      "num_instructions_ops": 1149,
+      "num_lines": 1163,
+      "ops": {
+        "CCX": 263,
+        "CX": 464,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 88557,
+      "toffoli_like": 263
     },
     {
       "distinct_qubits": 86,
-      "end": 70268,
-      "name": "A1R_J13",
-      "num_instructions_ops": 361,
-      "num_lines": 365,
+      "end": 90889,
+      "name": "A1R_J6",
+      "num_instructions_ops": 1156,
+      "num_lines": 1170,
       "ops": {
-        "CCX": 70,
-        "CX": 160,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23,
-        "X": 62
+        "CCX": 265,
+        "CX": 469,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
       },
-      "start": 69904,
-      "toffoli_like": 70
+      "start": 89720,
+      "toffoli_like": 265
+    },
+    {
+      "distinct_qubits": 87,
+      "end": 92066,
+      "name": "A1R_J5",
+      "num_instructions_ops": 1163,
+      "num_lines": 1177,
+      "ops": {
+        "CCX": 267,
+        "CX": 474,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 90890,
+      "toffoli_like": 267
     },
     {
       "distinct_qubits": 88,
-      "end": 70578,
-      "name": "A1R_J12",
-      "num_instructions_ops": 306,
-      "num_lines": 310,
+      "end": 93250,
+      "name": "A1R_J4",
+      "num_instructions_ops": 1170,
+      "num_lines": 1184,
       "ops": {
-        "CCX": 73,
-        "CX": 164,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
+        "CCX": 269,
+        "CX": 479,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
       },
-      "start": 70269,
-      "toffoli_like": 73
+      "start": 92067,
+      "toffoli_like": 269
+    },
+    {
+      "distinct_qubits": 89,
+      "end": 94441,
+      "name": "A1R_J3",
+      "num_instructions_ops": 1177,
+      "num_lines": 1191,
+      "ops": {
+        "CCX": 271,
+        "CX": 484,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
+      },
+      "start": 93251,
+      "toffoli_like": 271
     },
     {
       "distinct_qubits": 90,
-      "end": 70895,
-      "name": "A1R_J11",
-      "num_instructions_ops": 313,
-      "num_lines": 317,
+      "end": 95639,
+      "name": "A1R_J2",
+      "num_instructions_ops": 1184,
+      "num_lines": 1198,
       "ops": {
-        "CCX": 76,
-        "CX": 168,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
+        "CCX": 273,
+        "CX": 489,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
       },
-      "start": 70579,
-      "toffoli_like": 76
+      "start": 94442,
+      "toffoli_like": 273
     },
     {
       "distinct_qubits": 92,
-      "end": 71219,
-      "name": "A1R_J10",
-      "num_instructions_ops": 320,
-      "num_lines": 324,
+      "end": 96844,
+      "name": "A1R_J1",
+      "num_instructions_ops": 1191,
+      "num_lines": 1205,
       "ops": {
-        "CCX": 79,
-        "CX": 172,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
+        "CCX": 275,
+        "CX": 494,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
       },
-      "start": 70896,
-      "toffoli_like": 79
+      "start": 95640,
+      "toffoli_like": 275
     },
     {
       "distinct_qubits": 94,
-      "end": 71550,
-      "name": "A1R_J9",
-      "num_instructions_ops": 327,
-      "num_lines": 331,
-      "ops": {
-        "CCX": 82,
-        "CX": 176,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 71220,
-      "toffoli_like": 82
-    },
-    {
-      "distinct_qubits": 96,
-      "end": 71888,
-      "name": "A1R_J8",
-      "num_instructions_ops": 334,
-      "num_lines": 338,
-      "ops": {
-        "CCX": 85,
-        "CX": 180,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 71551,
-      "toffoli_like": 85
-    },
-    {
-      "distinct_qubits": 98,
-      "end": 72233,
-      "name": "A1R_J7",
-      "num_instructions_ops": 341,
-      "num_lines": 345,
-      "ops": {
-        "CCX": 88,
-        "CX": 184,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 71889,
-      "toffoli_like": 88
-    },
-    {
-      "distinct_qubits": 100,
-      "end": 72585,
-      "name": "A1R_J6",
-      "num_instructions_ops": 348,
-      "num_lines": 352,
-      "ops": {
-        "CCX": 91,
-        "CX": 188,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 72234,
-      "toffoli_like": 91
-    },
-    {
-      "distinct_qubits": 102,
-      "end": 72944,
-      "name": "A1R_J5",
-      "num_instructions_ops": 355,
-      "num_lines": 359,
-      "ops": {
-        "CCX": 94,
-        "CX": 192,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 72586,
-      "toffoli_like": 94
-    },
-    {
-      "distinct_qubits": 104,
-      "end": 73310,
-      "name": "A1R_J4",
-      "num_instructions_ops": 362,
-      "num_lines": 366,
-      "ops": {
-        "CCX": 97,
-        "CX": 196,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 72945,
-      "toffoli_like": 97
-    },
-    {
-      "distinct_qubits": 106,
-      "end": 73683,
-      "name": "A1R_J3",
-      "num_instructions_ops": 369,
-      "num_lines": 373,
-      "ops": {
-        "CCX": 100,
-        "CX": 200,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 73311,
-      "toffoli_like": 100
-    },
-    {
-      "distinct_qubits": 108,
-      "end": 74063,
-      "name": "A1R_J2",
-      "num_instructions_ops": 376,
-      "num_lines": 380,
-      "ops": {
-        "CCX": 103,
-        "CX": 204,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 73684,
-      "toffoli_like": 103
-    },
-    {
-      "distinct_qubits": 110,
-      "end": 74450,
-      "name": "A1R_J1",
-      "num_instructions_ops": 383,
-      "num_lines": 387,
-      "ops": {
-        "CCX": 106,
-        "CX": 208,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
-      },
-      "start": 74064,
-      "toffoli_like": 106
-    },
-    {
-      "distinct_qubits": 112,
-      "end": 74844,
+      "end": 98056,
       "name": "A1R_J0",
-      "num_instructions_ops": 390,
-      "num_lines": 394,
+      "num_instructions_ops": 1198,
+      "num_lines": 1212,
       "ops": {
-        "CCX": 109,
-        "CX": 212,
-        "CZ": 23,
-        "HMR": 23,
-        "R": 23
+        "CCX": 277,
+        "CX": 499,
+        "CZ": 90,
+        "HMR": 65,
+        "POP_CONDITION": 30,
+        "PUSH_CONDITION": 30,
+        "R": 65,
+        "X": 110,
+        "Z": 32
       },
-      "start": 74451,
-      "toffoli_like": 109
+      "start": 96845,
+      "toffoli_like": 277
     },
     {
       "distinct_qubits": 46,
-      "end": 79810,
+      "end": 103022,
       "name": "R_A_UNLOAD",
       "num_instructions_ops": 4449,
       "num_lines": 4965,
@@ -1964,12 +2068,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 74846,
+      "start": 98058,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 57,
-      "end": 86330,
+      "end": 109542,
       "name": "R_B",
       "num_instructions_ops": 6004,
       "num_lines": 6520,
@@ -1982,12 +2086,12 @@
         "X": 511,
         "Z": 1
       },
-      "start": 79811,
+      "start": 103023,
       "toffoli_like": 254
     },
     {
       "distinct_qubits": 26,
-      "end": 86426,
+      "end": 109638,
       "name": "R_D",
       "num_instructions_ops": 90,
       "num_lines": 96,
@@ -2002,12 +2106,12 @@
         "X": 3,
         "Z": 1
       },
-      "start": 86331,
+      "start": 109543,
       "toffoli_like": 12
     },
     {
       "distinct_qubits": 27,
-      "end": 86499,
+      "end": 109711,
       "name": "R_S2",
       "num_instructions_ops": 69,
       "num_lines": 73,
@@ -2015,12 +2119,12 @@
         "CSWAP": 61,
         "CX": 8
       },
-      "start": 86427,
+      "start": 109639,
       "toffoli_like": 61
     },
     {
       "distinct_qubits": 51,
-      "end": 101222,
+      "end": 124434,
       "name": "R_S1",
       "num_instructions_ops": 14557,
       "num_lines": 14723,
@@ -2036,7 +2140,7 @@
         "X": 4022,
         "Z": 80
       },
-      "start": 86500,
+      "start": 109712,
       "toffoli_like": 1762
     }
   ]

@@ -553,6 +553,369 @@ def test_s6_split_roundtrip(n=6, k=3):
     return fails == 0
 
 
+def test_a1_twolevel_add(n0=2, n1=2, nh=2):
+    """Two-level ADD (A1R-shape, 11+11 scaled to n0+n1): T += ctl?S.
+
+    Low Cuccaro n0 -> c1; mid generic n1 + single-bit c1; c2 from new
+    values c2=(T1new<Cp1)|(c1&(T1new==Cp1)) via < + equal flips (11-bit
+    scratch only); high generic; clears via recomputation (T0/T1 untouched
+    by later stages). Exhaustive vs integer oracle."""
+    nsrc = n0 + n1
+    ntgt = n0 + n1 + nh
+    fails = total = 0
+    for ctl in (0, 1):
+        for sv in range(2**nsrc):
+            for tv in range(2**ntgt):
+                total += 1
+                b = km.CircuitBuilder()
+                S = b.create_quantum_register(nsrc, name="s")
+                T = b.create_quantum_register(ntgt, name="t")
+                C = b.create_quantum_register(1, name="c")
+                for i in range(nsrc):
+                    if (sv >> i) & 1:
+                        b.x(S[i])
+                for i in range(ntgt):
+                    if (tv >> i) & 1:
+                        b.x(T[i])
+                if ctl:
+                    b.x(C[0])
+                ctlq = C[0]
+                S0 = S[0:n0]; S1 = S[n0:nsrc]
+                T0 = T[0:n0]; T1 = T[n0:n0+n1]; TH = T[n0+n1:ntgt]
+                Cp0 = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1); c1 = b.alloc_qubits(1)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0[i])
+                for i in range(n0):
+                    maj(b, Cp0[i], T0[i], ca0[0])
+                b.cx(ca0[0], c1[0])
+                for i in reversed(range(n0)):
+                    uma(b, Cp0[i], T0[i], ca0[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0[i])
+                b.free(Cp0); b.free(ca0)
+                Cp1 = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1[i])
+                b.iadd(Cp1, target=T1)
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1[i])
+                b.free(Cp1)
+                b.iadd(c1, target=T1)
+                CpB = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], CpB[i])
+                lt = b.alloc_qubits(1); eq = b.alloc_qubits(1)
+                b.flip_if_less_than(T1, CpB, target=lt[0])
+                b.flip_if_equal(T1, CpB, target=eq[0])
+                s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+                b.ccx(c1[0], eq[0], s[0])
+                b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], CpB[i])
+                b.free(CpB)
+                b.iadd(c2, target=TH)
+                b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+                b.ccx(c1[0], eq[0], s[0]); b.free(s)
+                CpC = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], CpC[i])
+                b.flip_if_equal(T1, CpC, target=eq[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], CpC[i])
+                b.free(CpC); b.free(eq)
+                CpD = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], CpD[i])
+                b.flip_if_less_than(T1, CpD, target=lt[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], CpD[i])
+                b.free(CpD); b.free(lt)
+                Cp0B = b.alloc_qubits(n0)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0B[i])
+                b.flip_if_less_than(T0, Cp0B, target=c1[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0B[i])
+                b.free(Cp0B); b.free(c1)
+                circ = b.finish_circuit()
+                sim = km.Simulator(batch_size=1)
+                sim.use_same_registers_as(circ)
+                sim.do(circ)
+                gotT = sim.read_within_shot("t", 0, out=int)
+                wantT = (tv + (sv if ctl else 0)) % (2**ntgt)
+                if gotT != wantT:
+                    print(f"A1TW-ADD FAIL ctl={ctl} s={sv} t={tv} got={gotT} want={wantT}")
+                    fails += 1
+                    if fails > 5:
+                        return False
+    print(f"a1two-add {n0}+{n1}+{nh}: {total-fails}/{total} ok")
+    return fails == 0
+
+
+def test_a1_twolevel_sub(n0=2, n1=2, nh=2):
+    """Two-level SUB (A1-shape, strict inverse of two-level ADD).
+
+    Sets c1/lt/eq/s/c2 from OLD values (borrow b2=(Told<Cp)|(c1&(Told==Cp))),
+    high isub, clears eq/lt before T1 changes (T1 still old), mid isubs,
+    low Cuccaro-inverse restores T0 and clears c1 via carry. Vs oracle."""
+    nsrc = n0 + n1
+    ntgt = n0 + n1 + nh
+    fails = total = 0
+    for ctl in (0, 1):
+        for sv in range(2**nsrc):
+            for tv in range(2**ntgt):
+                total += 1
+                b = km.CircuitBuilder()
+                S = b.create_quantum_register(nsrc, name="s")
+                T = b.create_quantum_register(ntgt, name="t")
+                C = b.create_quantum_register(1, name="c")
+                for i in range(nsrc):
+                    if (sv >> i) & 1:
+                        b.x(S[i])
+                for i in range(ntgt):
+                    if (tv >> i) & 1:
+                        b.x(T[i])
+                if ctl:
+                    b.x(C[0])
+                ctlq = C[0]
+                S0 = S[0:n0]; S1 = S[n0:nsrc]
+                T0 = T[0:n0]; T1 = T[n0:n0+n1]; TH = T[n0+n1:ntgt]
+                c1 = b.alloc_qubits(1)
+                Cp0a = b.alloc_qubits(n0)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0a[i])
+                b.flip_if_less_than(T0, Cp0a, target=c1[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0a[i])
+                b.free(Cp0a)
+                lt = b.alloc_qubits(1)
+                Cp1a = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1a[i])
+                b.flip_if_less_than(T1, Cp1a, target=lt[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1a[i])
+                b.free(Cp1a)
+                eq = b.alloc_qubits(1)
+                Cp1b = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1b[i])
+                b.flip_if_equal(T1, Cp1b, target=eq[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1b[i])
+                b.free(Cp1b)
+                s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+                b.ccx(c1[0], eq[0], s[0])
+                b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+                b.isub(c2, target=TH)
+                b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+                b.ccx(c1[0], eq[0], s[0]); b.free(s)
+                Cp1c = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1c[i])
+                b.flip_if_equal(T1, Cp1c, target=eq[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1c[i])
+                b.free(Cp1c); b.free(eq)
+                Cp1d = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1d[i])
+                b.flip_if_less_than(T1, Cp1d, target=lt[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1d[i])
+                b.free(Cp1d); b.free(lt)
+                b.isub(c1, target=T1)
+                Cp1e = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1e[i])
+                b.isub(Cp1e, target=T1)
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1e[i])
+                b.free(Cp1e)
+                Cp0b = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0b[i])
+                for i in range(n0):
+                    uma_inv(b, Cp0b[i], T0[i], ca0[0])
+                b.cx(ca0[0], c1[0])
+                for i in reversed(range(n0)):
+                    maj_inv(b, Cp0b[i], T0[i], ca0[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0b[i])
+                b.free(Cp0b); b.free(ca0); b.free(c1)
+                circ = b.finish_circuit()
+                sim = km.Simulator(batch_size=1)
+                sim.use_same_registers_as(circ)
+                sim.do(circ)
+                gotT = sim.read_within_shot("t", 0, out=int)
+                wantT = (tv - (sv if ctl else 0)) % (2**ntgt)
+                if gotT != wantT:
+                    print(f"A1TW-SUB FAIL ctl={ctl} s={sv} t={tv} got={gotT} want={wantT}")
+                    fails += 1
+                    if fails > 5:
+                        return False
+    print(f"a1two-sub {n0}+{n1}+{nh}: {total-fails}/{total} ok")
+    return fails == 0
+
+
+def test_a1_twolevel_roundtrip(n0=2, n1=2, nh=2):
+    """Two-level ADD followed by two-level SUB in one circuit == identity."""
+    nsrc = n0 + n1
+    ntgt = n0 + n1 + nh
+    fails = total = 0
+    for ctl in (0, 1):
+        for sv in range(2**nsrc):
+            for tv in range(2**ntgt):
+                total += 1
+                b = km.CircuitBuilder()
+                S = b.create_quantum_register(nsrc, name="s")
+                T = b.create_quantum_register(ntgt, name="t")
+                C = b.create_quantum_register(1, name="c")
+                for i in range(nsrc):
+                    if (sv >> i) & 1:
+                        b.x(S[i])
+                for i in range(ntgt):
+                    if (tv >> i) & 1:
+                        b.x(T[i])
+                if ctl:
+                    b.x(C[0])
+                ctlq = C[0]
+                S0 = S[0:n0]; S1 = S[n0:nsrc]
+                T0 = T[0:n0]; T1 = T[n0:n0+n1]; TH = T[n0+n1:ntgt]
+                # --- ADD half (same as test_a1_twolevel_add body) ---
+                Cp0 = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1); c1 = b.alloc_qubits(1)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0[i])
+                for i in range(n0):
+                    maj(b, Cp0[i], T0[i], ca0[0])
+                b.cx(ca0[0], c1[0])
+                for i in reversed(range(n0)):
+                    uma(b, Cp0[i], T0[i], ca0[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0[i])
+                b.free(Cp0); b.free(ca0)
+                Cp1 = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1[i])
+                b.iadd(Cp1, target=T1)
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1[i])
+                b.free(Cp1)
+                b.iadd(c1, target=T1)
+                CpB = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], CpB[i])
+                lt = b.alloc_qubits(1); eq = b.alloc_qubits(1)
+                b.flip_if_less_than(T1, CpB, target=lt[0])
+                b.flip_if_equal(T1, CpB, target=eq[0])
+                s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+                b.ccx(c1[0], eq[0], s[0])
+                b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], CpB[i])
+                b.free(CpB)
+                b.iadd(c2, target=TH)
+                b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+                b.ccx(c1[0], eq[0], s[0]); b.free(s)
+                CpC = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], CpC[i])
+                b.flip_if_equal(T1, CpC, target=eq[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], CpC[i])
+                b.free(CpC); b.free(eq)
+                CpD = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], CpD[i])
+                b.flip_if_less_than(T1, CpD, target=lt[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], CpD[i])
+                b.free(CpD); b.free(lt)
+                Cp0B = b.alloc_qubits(n0)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0B[i])
+                b.flip_if_less_than(T0, Cp0B, target=c1[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0B[i])
+                b.free(Cp0B); b.free(c1)
+                # --- SUB half (same as test_a1_twolevel_sub body, fresh scratch) ---
+                c1b = b.alloc_qubits(1)
+                Cp0a = b.alloc_qubits(n0)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0a[i])
+                b.flip_if_less_than(T0, Cp0a, target=c1b[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0a[i])
+                b.free(Cp0a)
+                ltb = b.alloc_qubits(1)
+                Cp1a = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1a[i])
+                b.flip_if_less_than(T1, Cp1a, target=ltb[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1a[i])
+                b.free(Cp1a)
+                eqb = b.alloc_qubits(1)
+                Cp1b = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1b[i])
+                b.flip_if_equal(T1, Cp1b, target=eqb[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1b[i])
+                b.free(Cp1b)
+                sb = b.alloc_qubits(1); c2b = b.alloc_qubits(1)
+                b.ccx(c1b[0], eqb[0], sb[0])
+                b.cx(ltb[0], c2b[0]); b.cx(sb[0], c2b[0])
+                b.isub(c2b, target=TH)
+                b.cx(sb[0], c2b[0]); b.cx(ltb[0], c2b[0]); b.free(c2b)
+                b.ccx(c1b[0], eqb[0], sb[0]); b.free(sb)
+                Cp1c = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1c[i])
+                b.flip_if_equal(T1, Cp1c, target=eqb[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1c[i])
+                b.free(Cp1c); b.free(eqb)
+                Cp1d = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1d[i])
+                b.flip_if_less_than(T1, Cp1d, target=ltb[0])
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1d[i])
+                b.free(Cp1d); b.free(ltb)
+                b.isub(c1b, target=T1)
+                Cp1e = b.alloc_qubits(n1)
+                for i in range(n1):
+                    b.ccx(ctlq, S1[i], Cp1e[i])
+                b.isub(Cp1e, target=T1)
+                for i in reversed(range(n1)):
+                    b.ccx(ctlq, S1[i], Cp1e[i])
+                b.free(Cp1e)
+                Cp0b = b.alloc_qubits(n0); ca0b = b.alloc_qubits(1)
+                for i in range(n0):
+                    b.ccx(ctlq, S0[i], Cp0b[i])
+                for i in range(n0):
+                    uma_inv(b, Cp0b[i], T0[i], ca0b[0])
+                b.cx(ca0b[0], c1b[0])
+                for i in reversed(range(n0)):
+                    maj_inv(b, Cp0b[i], T0[i], ca0b[0])
+                for i in reversed(range(n0)):
+                    b.ccx(ctlq, S0[i], Cp0b[i])
+                b.free(Cp0b); b.free(ca0b); b.free(c1b)
+                circ = b.finish_circuit()
+                sim = km.Simulator(batch_size=1)
+                sim.use_same_registers_as(circ)
+                sim.do(circ)
+                gotT = sim.read_within_shot("t", 0, out=int)
+                if gotT != tv:
+                    print(f"A1TW-RT FAIL ctl={ctl} s={sv} t={tv} got={gotT}")
+                    fails += 1
+                    if fails > 5:
+                        return False
+    print(f"a1two-roundtrip {n0}+{n1}+{nh}: {total-fails}/{total} ok")
+    return fails == 0
+
+
 if __name__ == "__main__":
     ok = True
     ok &= test_uncontrolled(3)
@@ -564,4 +927,7 @@ if __name__ == "__main__":
     ok &= test_s6_split_inc(6, 3)
     ok &= test_s6_split_dec(6, 3)
     ok &= test_s6_split_roundtrip(6, 3)
+    ok &= test_a1_twolevel_add(2, 2, 2)
+    ok &= test_a1_twolevel_sub(2, 2, 2)
+    ok &= test_a1_twolevel_roundtrip(2, 2, 2)
     print("NARROW-PROOF " + ("PASS" if ok else "FAIL"))

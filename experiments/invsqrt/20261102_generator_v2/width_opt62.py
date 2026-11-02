@@ -319,30 +319,178 @@ def mini_pass(b, x, lz, table: tuple[int, ...], width: int, target) -> None:
 
 
 # ---------------------------------------------------------------- S5：V 组装
+# 窄两级分裂（A1 专用，22→11+11 + 高通用，进位跨级正确性见 narrow_proof.py）。
+# 宽度优先：通用 c-isub22→44 暂存 44（峰 159 @A1_J0）；两级每行新暂存峰值 27
+# （低 Cuccaro11 13 / 中通用 22 / c2 计算 24 / 高通用 22+6=27~28；全局 115+27=142，
+# 孤立探针实测 extra27，≤30 门限通过，见 a1split.md）。
+# 正确性：c2=(T1<Cp1)|(c1&(T1==Cp1))（新值对 ADD、旧值对 SUB 均成立，2+2+2 穷举
+# 2048/2048×3 PASS）；flip_if_equal 单次 11 暂存（不用双 <）；SUB 为 ADD 严格逆
+# （逆序逆操作，roundtrip 恒等）。门数如实涨（每行约 +168 toff，见成本表）。
+# 只换 A1（含正逆镜像），R1/S6/QROM/窗口/恢复钩子不动。
+A1_N0 = 11
+A1_N1 = 11
+
+
+def _narrow_a1_add_fwd(b, S, Tslice, ctl) -> None:
+    """单行窄加（两级）：Tslice += (ctl?S:0)，S 22 位，Tslice len>=22。
+    T0/T1 各 11，TH=剩余。高通用；c2 经 <+equal 重算；峰值 27（全局 142）。"""
+    n0, n1 = A1_N0, A1_N1
+    S0 = S[0:n0]; S1 = S[n0:n0 + n1]
+    T0 = Tslice[0:n0]; T1 = Tslice[n0:n0 + n1]; TH = Tslice[n0 + n1:]
+    Cp0 = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1); c1 = b.alloc_qubits(1)
+    for i in range(n0):
+        b.ccx(ctl, S0[i], Cp0[i])
+    for i in range(n0):
+        _narrow_maj(b, Cp0[i], T0[i], ca0[0])
+    b.cx(ca0[0], c1[0])
+    for i in reversed(range(n0)):
+        _narrow_uma(b, Cp0[i], T0[i], ca0[0])
+    for i in reversed(range(n0)):
+        b.ccx(ctl, S0[i], Cp0[i])
+    b.free(Cp0); b.free(ca0)
+    Cp1 = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], Cp1[i])
+    b.iadd(Cp1, target=T1)
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], Cp1[i])
+    b.free(Cp1)
+    b.iadd(c1, target=T1)
+    CpB = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], CpB[i])
+    lt = b.alloc_qubits(1); eq = b.alloc_qubits(1)
+    b.flip_if_less_than(T1, CpB, target=lt[0])
+    b.flip_if_equal(T1, CpB, target=eq[0])
+    s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+    b.ccx(c1[0], eq[0], s[0])
+    b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], CpB[i])
+    b.free(CpB)
+    b.iadd(c2, target=TH)
+    b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+    b.ccx(c1[0], eq[0], s[0]); b.free(s)
+    CpC = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], CpC[i])
+    b.flip_if_equal(T1, CpC, target=eq[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], CpC[i])
+    b.free(CpC); b.free(eq)
+    CpD = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], CpD[i])
+    b.flip_if_less_than(T1, CpD, target=lt[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], CpD[i])
+    b.free(CpD); b.free(lt)
+    Cp0B = b.alloc_qubits(n0)
+    for i in range(n0):
+        b.ccx(ctl, S0[i], Cp0B[i])
+    b.flip_if_less_than(T0, Cp0B, target=c1[0])
+    for i in reversed(range(n0)):
+        b.ccx(ctl, S0[i], Cp0B[i])
+    b.free(Cp0B); b.free(c1)
+
+
+def _narrow_a1_sub_fwd(b, S, Tslice, ctl) -> None:
+    """单行窄减（两级，ADD 严格逆）：Tslice -= (ctl?S:0)。峰值同 27。"""
+    n0, n1 = A1_N0, A1_N1
+    S0 = S[0:n0]; S1 = S[n0:n0 + n1]
+    T0 = Tslice[0:n0]; T1 = Tslice[n0:n0 + n1]; TH = Tslice[n0 + n1:]
+    c1 = b.alloc_qubits(1)
+    Cp0a = b.alloc_qubits(n0)
+    for i in range(n0):
+        b.ccx(ctl, S0[i], Cp0a[i])
+    b.flip_if_less_than(T0, Cp0a, target=c1[0])
+    for i in reversed(range(n0)):
+        b.ccx(ctl, S0[i], Cp0a[i])
+    b.free(Cp0a)
+    lt = b.alloc_qubits(1)
+    Cp1a = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], Cp1a[i])
+    b.flip_if_less_than(T1, Cp1a, target=lt[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], Cp1a[i])
+    b.free(Cp1a)
+    eq = b.alloc_qubits(1)
+    Cp1b = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], Cp1b[i])
+    b.flip_if_equal(T1, Cp1b, target=eq[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], Cp1b[i])
+    b.free(Cp1b)
+    s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+    b.ccx(c1[0], eq[0], s[0])
+    b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+    b.isub(c2, target=TH)
+    b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+    b.ccx(c1[0], eq[0], s[0]); b.free(s)
+    Cp1c = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], Cp1c[i])
+    b.flip_if_equal(T1, Cp1c, target=eq[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], Cp1c[i])
+    b.free(Cp1c); b.free(eq)
+    Cp1d = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], Cp1d[i])
+    b.flip_if_less_than(T1, Cp1d, target=lt[0])
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], Cp1d[i])
+    b.free(Cp1d); b.free(lt)
+    b.isub(c1, target=T1)
+    Cp1e = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.ccx(ctl, S1[i], Cp1e[i])
+    b.isub(Cp1e, target=T1)
+    for i in reversed(range(n1)):
+        b.ccx(ctl, S1[i], Cp1e[i])
+    b.free(Cp1e)
+    Cp0b = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1)
+    for i in range(n0):
+        b.ccx(ctl, S0[i], Cp0b[i])
+    for i in range(n0):
+        _narrow_uma_inv(b, Cp0b[i], T0[i], ca0[0])
+    b.cx(ca0[0], c1[0])
+    for i in reversed(range(n0)):
+        _narrow_maj_inv(b, Cp0b[i], T0[i], ca0[0])
+    for i in reversed(range(n0)):
+        b.ccx(ctl, S0[i], Cp0b[i])
+    b.free(Cp0b); b.free(ca0); b.free(c1)
+
+
 def build_a1(b, x, coef, v) -> None:
     """A1：V -= 2·A·D：对 D 的 14 个二补码位 j，V -= (A<<(j+1)) if D_j。
 
     行目标止于 bit45（V[j+1:45)）：精确性由 V<2^45 保证——slice 加法
     (T+a) mod 2^len 恰为真和 mod 2^len，而真和 <2^45 故窗口内精确、
     V[45:55) 恒零。MSB 行（j=13）变加。D 为 x 低 14 线原地值。
+
+    窄化（2026-11-02）：通用 `isub/iadd`（暂存 44）→ 两级分裂
+    `_narrow_a1_sub/add_fwd`（22→11+11+高通用，行峰值 142）。R1/S6 不动。
     """
     for j in range(13):
         b.info_tag(f"STAGE:A1_J{j}_ENTER")
-        b.isub(coef[0:W_A], target=v[j + 1:W_VHI], control=x[j])
+        _narrow_a1_sub_fwd(b, coef[0:W_A], v[j + 1:W_VHI], x[j])
         b.info_tag(f"STAGE:A1_J{j}_EXIT")
     b.info_tag("STAGE:A1_J13_ENTER")
-    b.iadd(coef[0:W_A], target=v[W_D:W_VHI], control=x[13])
+    _narrow_a1_add_fwd(b, coef[0:W_A], v[W_D:W_VHI], x[13])
     b.info_tag("STAGE:A1_J13_EXIT")
 
 
 def build_a1_rev(b, x, coef, v) -> None:
-    """A1 镜像（逆序、加减互换）。"""
+    """A1 镜像（逆序、加减互换；窄化镜像，见 build_a1 注）。"""
     b.info_tag("STAGE:A1R_J13_ENTER")
-    b.isub(coef[0:W_A], target=v[W_D:W_VHI], control=x[13])
+    _narrow_a1_sub_fwd(b, coef[0:W_A], v[W_D:W_VHI], x[13])
     b.info_tag("STAGE:A1R_J13_EXIT")
     for j in reversed(range(13)):
         b.info_tag(f"STAGE:A1R_J{j}_ENTER")
-        b.iadd(coef[0:W_A], target=v[j + 1:W_VHI], control=x[j])
+        _narrow_a1_add_fwd(b, coef[0:W_A], v[j + 1:W_VHI], x[j])
         b.info_tag(f"STAGE:A1R_J{j}_EXIT")
 
 
