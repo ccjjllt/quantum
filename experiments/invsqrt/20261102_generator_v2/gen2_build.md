@@ -53,7 +53,7 @@ D7 B 直装 V（省 B1 加法器）；kickmix 原语暂存实测 `≈len(target)
 
 ## 3. 资源（`gen2_stats.json`，静态门计数）
 
-`qubits=160`，`num_instructions=94442`，`sha256=2296e16c…89115d4`，
+`qubits=160`，`num_instructions=94442`，`sha256=4fe00ee7…4155cdd2`，
 `int_tables_sha256=5db0c303…`。
 `ops: CCX 10874 / CSWAP 446 / CX 38368 / CZ 6430 / R 6584 / HMR 6584 /
 X 13696 / Z 148(+NEG 124) / Z_POW 36 / PUSH/POP_CONDITION 2764 /
@@ -68,7 +68,7 @@ INFO_TAG 5624`；`toffoli_like=11320`，`num_z_pow=36`。（2026-11-02 主线程
 ## 4. 预筛结果（手动运行命令 + 输出）
 
 - `uv run python experiments/invsqrt/20261102_generator_v2/generator62_v2.py`
-  → double-build SHA 一致（`2296e16c…`），写
+  → double-build SHA 一致（`4fe00ee7…`），写
   `artifacts/20261102_generator_v2/invsqrt/gen2_invsqrt.kmb`（kmb 回读 SHA 一致）
   + `gen2_stats.json`。S0 断言通过，Q≤160 断言通过（恰 160）。
 - `prescreen_gen2.py --a` → PRESCREEN-A PASS（重建双 SHA = 记录值）。
@@ -90,6 +90,10 @@ INFO_TAG 5624`；`toffoli_like=11320`，`num_z_pow=36`。（2026-11-02 主线程
   （总相位恒为偶整数），`--c` 初版全 FAIL 而余量全 >0。修：逆向只逆数据。
   `round_phase.md`“Z_POW 对角自逆”说法删除；正向数据通路相位中性由
   fwd-only 电路精确验证（相位 = P/2^35 半 turns，分毫不差）。
+
+寄存器 schema 修正（2026-11-02）：官方 `validate_registers` 只允许单个 `x` 寄存器；
+`create_regs` 改为 lz/coef/v 走 `alloc_qubits`（分配顺序不变）。门数/宽度不变，
+SHA 变为 `4fe00ee7…`（`prescreen_gen2.py` 的 REC_SHA 已同步）；A/B/C 在新电路上全部重跑 PASS。
 
 ## 6. 已知缺口与下一步（钩子不动）
 

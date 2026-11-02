@@ -396,11 +396,12 @@ def build_shift_round_phase_rev(b, lz, v, coef) -> None:
 
 # ---------------------------------------------------------------- S7/S8 调度
 def create_regs(b):
-    """固定顺序建具名寄存器（x, lz, coef, v），固定长；addr 按 mini 现配。"""
+    """固定顺序分配：唯一的具名寄存器是 x（官方 schema 只允许 ['x']）；
+    lz/coef/v 经 alloc_qubits 分配为匿名 scratch（顺序固定，确定性不变）。"""
     x = b.create_quantum_register(W_X, name="x")
-    lz = b.create_quantum_register(W_LZ, name="lz")
-    coef = b.create_quantum_register(W_B, name="coef")
-    v = b.create_quantum_register(W_V, name="v")
+    lz = b.alloc_qubits(W_LZ)
+    coef = b.alloc_qubits(W_B)
+    v = b.alloc_qubits(W_V)
     return {"x": x, "lz": lz, "coef": coef, "v": v}
 
 
