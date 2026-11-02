@@ -159,3 +159,11 @@ REC_SHA 同步：`prescreen_narrow_v.py` REC_SHA=`e036965d…`。
    score 未必跟进；若送验，预期 ~158w（−2%）量级，需主线程确认是否值得花
    200M-shot。
 4. 远目标仍远（相对 BOTH −26% 左右，非量级解），如实记。
+
+## 完整官方验证 PASS（2026-11-02，主线程，seed 20261031）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_th_seed20261031.log`（EXIT=0）：
+`status=PASS`，200,540,928 shots，`score=1581912.5265214771`
+（相对窄 V 1609096.90 **−1.7%**；约为基线 15.7 倍），`num_qubits=132`，
+`worst_error_over_tolerance=0.8712321628530258` @ x=1796095（不变），
+`circuit_sha256=c1d58ae6…`。
