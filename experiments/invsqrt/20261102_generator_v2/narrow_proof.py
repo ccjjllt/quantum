@@ -412,6 +412,147 @@ def test_a1_split_sub_roundtrip(noff=3, nlow=3, nhigh=2):
     return fails == 0
 
 
+def test_s6_split_inc(n=6, k=3):
+    """S6-shape narrow constant increment: 36-bit controlled +1 split k/(n-k).
+
+    Forward narrow-inc (low generic iadd; flip cout=(low_new==0);
+    CCX gated=c&cout; high generic iadd; uncompute) vs integer oracle
+    (tv + ctl) mod 2^n. Small-case (6/3) exhaustive."""
+    fails = total = 0
+    for ctl in (0, 1):
+        for tv in range(2**n):
+            total += 1
+            b = km.CircuitBuilder()
+            T = b.create_quantum_register(n, name="t")
+            C = b.create_quantum_register(1, name="c")
+            for i in range(n):
+                if (tv >> i) & 1:
+                    b.x(T[i])
+            if ctl:
+                b.x(C[0])
+            Tlow = T[0:k]
+            Thigh = T[k:n]
+            b.iadd(1, target=Tlow, control=C[0])
+            cout = b.alloc_qubits(1)
+            gated = b.alloc_qubits(1)
+            b.flip_if_less_than(Tlow, 1, target=cout[0])
+            b.ccx(C[0], cout[0], gated[0])
+            b.iadd(1, target=Thigh, control=gated[0])
+            b.ccx(C[0], cout[0], gated[0])
+            b.flip_if_less_than(Tlow, 1, target=cout[0])
+            b.free(gated)
+            b.free(cout)
+            circ = b.finish_circuit()
+            sim = km.Simulator(batch_size=1)
+            sim.use_same_registers_as(circ)
+            sim.do(circ)
+            gotT = sim.read_within_shot("t", 0, out=int)
+            wantT = (tv + ctl) % (2**n)
+            if gotT != wantT:
+                print(f"S6INC FAIL ctl={ctl} t={tv} got={gotT} want={wantT}")
+                fails += 1
+                if fails > 5:
+                    return False
+    print(f"s6inc n={n} k={k}: {total-fails}/{total} ok")
+    return fails == 0
+
+
+def test_s6_split_dec(n=6, k=3):
+    """S6 narrow decrement (forward-inc strict inverse) vs oracle.
+
+    From sum state s0=(tv+ctl) mod 2^n: recompute cout/gated from
+    sum-low, high isub, clear carry, low isub. Expect tv."""
+    fails = total = 0
+    for ctl in (0, 1):
+        for tv in range(2**n):
+            total += 1
+            s0 = (tv + ctl) % (2**n)
+            b = km.CircuitBuilder()
+            T = b.create_quantum_register(n, name="t")
+            C = b.create_quantum_register(1, name="c")
+            for i in range(n):
+                if (s0 >> i) & 1:
+                    b.x(T[i])
+            if ctl:
+                b.x(C[0])
+            Tlow = T[0:k]
+            Thigh = T[k:n]
+            cout = b.alloc_qubits(1)
+            gated = b.alloc_qubits(1)
+            b.flip_if_less_than(Tlow, 1, target=cout[0])
+            b.ccx(C[0], cout[0], gated[0])
+            b.isub(1, target=Thigh, control=gated[0])
+            b.ccx(C[0], cout[0], gated[0])
+            b.flip_if_less_than(Tlow, 1, target=cout[0])
+            b.free(gated)
+            b.free(cout)
+            b.isub(1, target=Tlow, control=C[0])
+            circ = b.finish_circuit()
+            sim = km.Simulator(batch_size=1)
+            sim.use_same_registers_as(circ)
+            sim.do(circ)
+            gotT = sim.read_within_shot("t", 0, out=int)
+            if gotT != tv:
+                print(f"S6DEC FAIL ctl={ctl} t={tv} sum={s0} got={gotT}")
+                fails += 1
+                if fails > 5:
+                    return False
+    print(f"s6dec n={n} k={k}: {total-fails}/{total} ok")
+    return fails == 0
+
+
+def test_s6_split_roundtrip(n=6, k=3):
+    """S6 narrow-inc followed by narrow-dec in one circuit == identity."""
+    fails = total = 0
+    for ctl in (0, 1):
+        for tv in range(2**n):
+            total += 1
+            b = km.CircuitBuilder()
+            T = b.create_quantum_register(n, name="t")
+            C = b.create_quantum_register(1, name="c")
+            for i in range(n):
+                if (tv >> i) & 1:
+                    b.x(T[i])
+            if ctl:
+                b.x(C[0])
+            Tlow = T[0:k]
+            Thigh = T[k:n]
+            # --- inc half ---
+            b.iadd(1, target=Tlow, control=C[0])
+            cout = b.alloc_qubits(1)
+            gated = b.alloc_qubits(1)
+            b.flip_if_less_than(Tlow, 1, target=cout[0])
+            b.ccx(C[0], cout[0], gated[0])
+            b.iadd(1, target=Thigh, control=gated[0])
+            b.ccx(C[0], cout[0], gated[0])
+            b.flip_if_less_than(Tlow, 1, target=cout[0])
+            b.free(gated)
+            b.free(cout)
+            # --- dec half ---
+            cout2 = b.alloc_qubits(1)
+            gated2 = b.alloc_qubits(1)
+            b.flip_if_less_than(Tlow, 1, target=cout2[0])
+            b.ccx(C[0], cout2[0], gated2[0])
+            b.isub(1, target=Thigh, control=gated2[0])
+            b.ccx(C[0], cout2[0], gated2[0])
+            b.flip_if_less_than(Tlow, 1, target=cout2[0])
+            b.free(gated2)
+            b.free(cout2)
+            b.isub(1, target=Tlow, control=C[0])
+            circ = b.finish_circuit()
+            sim = km.Simulator(batch_size=1)
+            sim.use_same_registers_as(circ)
+            sim.do(circ)
+            gotT = sim.read_within_shot("t", 0, out=int)
+            if gotT != tv:
+                print(f"S6RT FAIL ctl={ctl} t={tv} got={gotT}")
+                fails += 1
+                if fails > 5:
+                    return False
+    print(f"s6roundtrip n={n} k={k}: {total-fails}/{total} ok")
+    return fails == 0
+
+
 if __name__ == "__main__":
     ok = True
     ok &= test_uncontrolled(3)
@@ -420,4 +561,7 @@ if __name__ == "__main__":
     ok &= test_split_row_reverse(2, 2, 3)
     ok &= test_a1_split_sub(3, 3, 2)
     ok &= test_a1_split_sub_roundtrip(3, 3, 2)
+    ok &= test_s6_split_inc(6, 3)
+    ok &= test_s6_split_dec(6, 3)
+    ok &= test_s6_split_roundtrip(6, 3)
     print("NARROW-PROOF " + ("PASS" if ok else "FAIL"))

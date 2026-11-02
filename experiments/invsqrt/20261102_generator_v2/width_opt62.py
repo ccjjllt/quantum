@@ -469,6 +469,51 @@ def build_r1_rev(b, coef, v) -> None:
 
 
 # ---------------------------------------------------------------- S6：移位/舍入/相位
+# 窄常数增量（S6 专用，36 位分 18/18 + flip 进位链）。
+# 宽度优先：通用受控经典 +1 暂存 35（峰 150，全局次峰）；窄写法每行新暂存峰值 19
+# （低通用 17 / flip 17 / 高通用 17 串行复用 workspace，显式 cout1+gated1=2，
+# 17+2=19 <35；全局 115+19=134，见 s6narrow.md 探针表）。
+# 正确性：gated=c&(low_new==0)=c&(low_old==all1)（c=0 时 low_new==0 误触发被 CCX 门掉；
+# c=1 时 low_new==0 当且仅当 low_old==all1）；flip/CCX 均自逆，逆向为严格逆序。
+# 门数如实涨（每行约 +37 toff：双通用 19+19 + flip 17x2 + CCXx2，正逆；小例 6/3 穷举见 narrow_proof.py）。
+# 只换 S6 正/逆的常数增量行（含正逆镜像），A1/查表/窗口/恢复钩子不动（下一步）。
+def _narrow_s6_inc_fwd(b, T, ctl) -> None:
+    """单行窄常数增量正向：T += (ctl?1:0)，T 36 位分低 18/高 18。"""
+    Tlow = T[0:W_P // 2]
+    Thigh = T[W_P // 2:]
+    # 低：通用受控 +1（暂存 17；cout/gated 尚未分配，峰值 115+17=132）
+    b.iadd(1, target=Tlow, control=ctl)
+    # 进位：flip 求 (low_new==0) → CCX 门控得真进位（暂存 17+2=19，峰值 134）
+    cout = b.alloc_qubits(1)
+    gated = b.alloc_qubits(1)
+    b.flip_if_less_than(Tlow, 1, target=cout[0])
+    b.ccx(ctl, cout[0], gated[0])
+    # 高：通用受控 +1（workspace 复用，峰值 134）→ 清进位（自逆）
+    b.iadd(1, target=Thigh, control=gated[0])
+    b.ccx(ctl, cout[0], gated[0])
+    b.flip_if_less_than(Tlow, 1, target=cout[0])
+    b.free(gated)
+    b.free(cout)
+
+
+def _narrow_s6_inc_rev(b, T, ctl) -> None:
+    """单行窄常数减量（正向窄增量的严格逆：重算进位→高减→清进位→低减）。"""
+    Tlow = T[0:W_P // 2]
+    Thigh = T[W_P // 2:]
+    # 逆序之逆首步：重算进位（T 仍为和态，cout=(low_sum==0) 精确重建真进位）
+    cout = b.alloc_qubits(1)
+    gated = b.alloc_qubits(1)
+    b.flip_if_less_than(Tlow, 1, target=cout[0])
+    b.ccx(ctl, cout[0], gated[0])
+    # 高减 → 清进位 → 低减
+    b.isub(1, target=Thigh, control=gated[0])
+    b.ccx(ctl, cout[0], gated[0])
+    b.flip_if_less_than(Tlow, 1, target=cout[0])
+    b.free(gated)
+    b.free(cout)
+    b.isub(1, target=Tlow, control=ctl)
+
+
 def build_shift_round_phase(b, lz, v, coef) -> None:
     """S6 正向：t=8+(11-s-p) 全 5 位 → barrel → V[54] 受控加一 → 36×z_pow。
 
@@ -476,6 +521,9 @@ def build_shift_round_phase(b, lz, v, coef) -> None:
     （t+36≤55 无回绕），舍入位（旧 V[t-1]）恒在 V[54]。
     相位口径（半 turn，gadget 已用 read_shot_phase 自检）：
       z_pow(V[k], Fraction(2^k, 2^35))，Σ = P/2^35 半 turns = P/2^36 turns。
+
+    窄化（2026-11-02）：通用 `iadd(1)→V[0:36)`（暂存 35）→ `_narrow_s6_inc_fwd`
+    （分 18/18 + flip 进位，行峰值 134）。A1 不动。
     """
     t = coef[0:5]
     b.iadd(11, target=t)
@@ -483,7 +531,7 @@ def build_shift_round_phase(b, lz, v, coef) -> None:
     b.isub(lz[0:1], target=t)
     b.iadd(8, target=t)
     b.right_rotate(v, t)
-    b.iadd(1, target=v[0:W_P], control=v[W_V - 1])
+    _narrow_s6_inc_fwd(b, v[0:W_P], v[W_V - 1])
     for k in range(W_P):
         b.z_pow(v[k], Fraction(2**k, 2**35))
 
@@ -496,9 +544,12 @@ def build_shift_round_phase_rev(b, lz, v, coef) -> None:
     同指数→相位加倍，负指数→相位抵消（首版实测：总相位恒为偶整数）。
     正确调度：正向施加 36×z_pow 后，逆向只 uncompute 数据。
     round_phase.md 的“Z_POW 对角自逆”说法删除（无论同/负指数都不该重放）。
+
+    窄化（2026-11-02）：通用 `isub(1)→V[0:36)` → `_narrow_s6_inc_rev`
+    （正向窄增量的严格逆：重算进位→高减→清进位→低减，峰值同 134）。
     """
     t = coef[0:5]
-    b.isub(1, target=v[0:W_P], control=v[W_V - 1])
+    _narrow_s6_inc_rev(b, v[0:W_P], v[W_V - 1])
     b.left_rotate(v, t)
     b.isub(8, target=t)
     b.iadd(lz[0:1], target=t)
