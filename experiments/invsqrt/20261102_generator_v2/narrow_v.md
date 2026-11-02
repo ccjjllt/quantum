@@ -113,7 +113,16 @@ uv run python .../prescreen_narrow_v.py --dump-v
 完整输出：`narrow_v_contract.log`、`narrow_v_prescreen.log`。
 16 样本同各线：`1,2,3,8,31,32,63,128,161,888,2047,2048,2097151,2097152,2506015,3133452`。
 
-## 5. 下一步
+## 5. 完整官方验证 PASS（2026-11-02，主线程，seed 20261031）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_narrowv_seed20261031.log`（EXIT=0）：
+`status=PASS`，200,540,928 shots，`score=1609096.898135439`
+（相对 BOTH 2141088.03 **−24.8%**；约为基线 16.0 倍），`num_qubits=134`，
+`toffoli_equivalent=12008.19`，`worst_error_over_tolerance=0.8712321628530258`
+@ x=1796095（与合同 maxrel 0.8712 一致，最坏点迁移已预期），
+`circuit_sha256=0ca2760a…`。
+
+## 6. 下一步
 
 1. 送完整官方验证（200M-shot，门禁外，需主线程确认；余量最坏点已迁，
    送验前重看 min_margin 105M 是否够厚）。
