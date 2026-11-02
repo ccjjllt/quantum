@@ -163,6 +163,53 @@ def mini_pass_off(b, x, lz, table, lo: int, width: int, target) -> None:
     b.free(addr)
 
 
+# ---------------------------------------------------------------- B+A 联合解码（joint_decode.md）
+# 配对：正向 F_B（Vn零初态直装）+ F_A_LOAD（coef零初态装载）共享一次
+# unary decode；逆向 R_A_UNLOAD（coef回零）+ R_B（Vn回零）共享一次。
+# 前提（任一不成立即否决该配对）：
+#   J1 零初态（正向）：联合点前 coef 全零（S1/S2/D 皆不碰 coef）且
+#      Vn 全零（vd 新分配，行尚未作用）。XOR 即整数加仅在零初态成立
+#      （小例 nonzero-init 反例：init=31, tab=8 时 XOR=23≠ADDmod=7）。
+#   J2 目标独立：Vn=vd[16:46) 与 coef 分属不同寄存器，无交叠；
+#      同 match 下两组 CX 可任意序（均为对合且目标不交）。
+#   J3 逆向自洽：联合点前 coef 恰为 A 表值（R_A_LOAD 后 A1_rev 只读 coef，
+#      不写），Vn 恰为 B>>4（A1_rev 精确撤销 A1 贡献）；回放即双归零。
+#      x/lz 自洽：D 恢复在联合之后，S2_rev/S1_rev 亦在后，故 addr 重算值
+#      与正向同（A1/square/R1/S6 皆只读 x/lz，不写）。
+# 否决记录：F_A_UNLOAD 不参与（A1 在中间，vn 已脏）；R_R 对不参与
+#   （square-2 在中间，coef 已脏）。只做 B+A 这一对。
+# 先证后建：/tmp joint_proof.py（4位地址16项穷举）JOINT-PROOF PASS：
+#   joint==seq==table 32/32，roundtrip归零 ok，seq 28toff→joint 14toff。
+def qrom_sweep_joint_ba(b, it, b_table, a_table, vn_tgt, coef_tgt) -> None:
+    """单 decode 下双 pattern：B[lo:lo+29)→vn_tgt，A[0:20)→coef_tgt.
+
+    同 match_qubit，两目标独立（J2），CX 均自逆；重放即联合卸载（J3）。
+    """
+    assert len(vn_tgt) == W_VN - 1 and len(coef_tgt) == W_A
+    assert B_LO + (W_VN - 1) == W_B, "B 切片须恰为 B[4:33)"
+    for v in range(256):
+        it.move_to(v)
+        m = it.match_qubit
+        bv = b_table[v]
+        for j in range(W_VN - 1):
+            if (bv >> (B_LO + j)) & 1:
+                b.cx(m, vn_tgt[j])
+        av = a_table[v]
+        for j in range(W_A):
+            if (av >> j) & 1:
+                b.cx(m, coef_tgt[j])
+
+
+def joint_pass_ba(b, x, lz, b_table, a_table, vn_tgt, coef_tgt) -> None:
+    """B+A 联合 mini-pass（装载与卸载同体，CX 自逆，重跑即另一向）."""
+    addr = b.alloc_qubits(W.W_ADDR)
+    W.build_addr(b, x, lz, addr)
+    with b.unary_iteration(addr, range(256)) as it:
+        qrom_sweep_joint_ba(b, it, b_table, a_table, vn_tgt, coef_tgt)
+    W.build_addr(b, x, lz, addr)
+    b.free(addr)
+
+
 # ---------------------------------------------------------------- S1 二分 lz（温度计→二分，bs_lz.md）
 # 动机：温度计 F_S1 42 flip / R_S1 82 flip（共 124×21CCX=2684），逆向贵一倍
 # 纯属实现 artifact（rev 逐 i 重算+解散双阈值，正向滑动复用）；遗留估计
@@ -733,12 +780,9 @@ def build_forward_nv(b, tables, regs) -> None:
     b.info_tag("STAGE:F_D_ENTER")
     b.isub(8192, target=x[0:W.W_DELTA])
     b.info_tag("STAGE:F_D_EXIT")
-    b.info_tag("STAGE:F_B_ENTER")
-    mini_pass_off(b, x, lz, tables.B, B_LO, W_VN - 1, vn[0:W_VN - 1])
-    b.info_tag("STAGE:F_B_EXIT")
-    b.info_tag("STAGE:F_A_LOAD_ENTER")
-    W.mini_pass(b, x, lz, tables.A, W_A, coef[0:W_A])
-    b.info_tag("STAGE:F_A_LOAD_EXIT")
+    b.info_tag("STAGE:F_BA_JOINT_ENTER")
+    joint_pass_ba(b, x, lz, tables.B, tables.A, vn[0:W_VN - 1], coef[0:W_A])
+    b.info_tag("STAGE:F_BA_JOINT_EXIT")
     b.info_tag("STAGE:F_A1_ENTER")
     build_a1_nv(b, x, coef, vn, carry)
     b.info_tag("STAGE:F_A1_EXIT")
@@ -793,12 +837,9 @@ def build_reverse_nv(b, tables, regs) -> None:
     b.info_tag("STAGE:R_A1_ENTER")
     build_a1_nv_rev(b, x, coef, vn, carry)
     b.info_tag("STAGE:R_A1_EXIT")
-    b.info_tag("STAGE:R_A_UNLOAD_ENTER")
-    W.mini_pass(b, x, lz, tables.A, W_A, coef[0:W_A])
-    b.info_tag("STAGE:R_A_UNLOAD_EXIT")
-    b.info_tag("STAGE:R_B_ENTER")
-    mini_pass_off(b, x, lz, tables.B, B_LO, W_VN - 1, vn[0:W_VN - 1])
-    b.info_tag("STAGE:R_B_EXIT")
+    b.info_tag("STAGE:R_AB_JOINT_ENTER")
+    joint_pass_ba(b, x, lz, tables.B, tables.A, vn[0:W_VN - 1], coef[0:W_A])
+    b.info_tag("STAGE:R_AB_JOINT_EXIT")
     b.info_tag("STAGE:R_D_ENTER")
     b.iadd(8192, target=x[0:W.W_DELTA])
     b.info_tag("STAGE:R_D_EXIT")

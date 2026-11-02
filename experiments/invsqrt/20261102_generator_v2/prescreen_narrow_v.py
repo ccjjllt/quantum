@@ -42,7 +42,7 @@ import width_opt62 as W  # noqa: E402
 SAMPLES = [1, 2, 3, 8, 31, 32, 63, 128, 161, 888, 2047, 2048,
            2097151, 2097152, 2506015, 3133452]
 
-REC_SHA = "813ba1adcb90a19611b9bf4c1f4dd174800f9c6aefb3da3e7d5829e7b7f4aeb8"
+REC_SHA = "6f6a144d1115bef0f3c6546c77c22bd803556c34dbd26830d0d57fd32fd9dc3f"
 
 X_MAX = 3_133_452
 
@@ -141,8 +141,7 @@ def dump_v() -> int:
     b.free(d5)
     W.build_normalize(b, x, lz)
     b.isub(8192, target=x[0:W.W_DELTA])
-    NV.mini_pass_off(b, x, lz, tables.B, NV.B_LO, NV.W_VN - 1, vn[0:NV.W_VN - 1])
-    W.mini_pass(b, x, lz, tables.A, NV.W_A, coef[0:NV.W_A])
+    NV.joint_pass_ba(b, x, lz, tables.B, tables.A, vn[0:NV.W_VN - 1], coef[0:NV.W_A])
     NV.build_a1_nv(b, x, coef, vn, carry)
     W.mini_pass(b, x, lz, tables.A, NV.W_A, coef[0:NV.W_A])
     W.build_square2(b, x, coef)
