@@ -280,8 +280,6 @@ def fit_segment(V_rep, Phi_rep, b0r, mr, rr, cap_b0, cap_m, cap_r):
                 if q not in used:
                     for s in (1, -1):
                         cands.append(cur + [(q, s)])
-                        break
-                    break
             for c in cands:
                 if len(c) > (cap_b0, cap_m, cap_r)[ci]:
                     continue
