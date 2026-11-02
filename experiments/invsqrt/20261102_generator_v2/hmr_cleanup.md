@@ -208,4 +208,9 @@ x 恢复 + scratch 归零 + dphase=0 全 `bad=0 PASS`。`narrow_proof.py` 原证
 `uv run python experiments/invsqrt/20261102_generator_v2/prescreen_width_opt.py --a/--b/--c/--dump-v`（§4）、
 `uv run python experiments/invsqrt/20261102_generator_v2/narrow_proof.py`（§4）、
 `uv run python experiments/invsqrt/20261102_generator_v2/width_liveness.py`（§4–§5）。
-官方 200M-shot 验证：未跑（仍为门禁，不在本轮触发）。
+官方 200M-shot 验证：**PASS**（2026-11-02，主线程运行，seed 20261031）：
+`artifacts/20261102_generator_v2/invsqrt/verify_hmr_seed20261031.log`（EXIT=0）——
+`score=2290413.643418115`（相对 A1 分裂版 2714467.64 **−15.6%**，与静态预测 −15.8% 吻合；
+约为基线 100568.50 的 22.8 倍），`toffoli_equivalent=15371.90`，`num_qubits=149`，
+`worst_error_over_tolerance=0.6096379373446558` @ x=2506015（合同点不变），
+`circuit_sha256=0b4ce332…`。
