@@ -95,7 +95,19 @@ INFO_TAG 5624`；`toffoli_like=11320`，`num_z_pow=36`。（2026-11-02 主线程
 `create_regs` 改为 lz/coef/v 走 `alloc_qubits`（分配顺序不变）。门数/宽度不变，
 SHA 变为 `4fe00ee7…`（`prescreen_gen2.py` 的 REC_SHA 已同步）；A/B/C 在新电路上全部重跑 PASS。
 
-## 6. 已知缺口与下一步（钩子不动）
+## 6. 首次完整官方验证 PASS（2026-11-02，seed 20261031）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_gen2_seed20261031.log`（EXIT=0）：
+
+- `status=PASS`，`verified_shots=200540928`，`num_qubits=160`
+- `score=1847344.5835362307`（约为基线 100568.4992 的 18.4 倍——首版只求正确，不计增益）
+- `toffoli_equivalent=11545.90`（静态 11320 + 旋转合成），`rotation_count=33`
+- `worst_error_over_tolerance=0.6096379373446558` @ x=2506015——与合同全域最坏点逐位一致
+- `circuit_sha256=b9655a26…`（kmb 规范哈希；与构建期文本 SHA 口径不同，各记各的）
+
+零官方 shots 缺口已消除。这是独立生成器的首个完整官方 PASS。
+
+## 7. 已知缺口与下一步（钩子不动）
 
 - 官方 verifier **0 shots**（本阶段止于 directed 样本模拟；不跑 200M-shot）。
 - Q 余量 0（160/160）：kickmix 通用 ripple 按 `len(target)` 吃暂存是主因；
