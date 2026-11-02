@@ -47,3 +47,11 @@ REC_SHA=`da9d9491…`（`prescreen_refit.py` 内；旧 `0075e006…` 仍是基�
 
 送 BOTH 完整官方验证（门禁内；Q 同 149、toff −6.6%，score 必降）。
 再往后：位宽再压（A18/R8？需余量核算）或 square/比较器窄化；CSD 稀疏性（bind 237→190 回收）是拟合侧优化，与布局无关。
+
+## 6. 完整官方验证 PASS（2026-11-02，主线程，seed 20261031）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_both_seed20261031.log`（EXIT=0）：
+`status=PASS`，200,540,928 shots，`score=2141088.0272226366`
+（相对 HMR 版 2290413.64 **−6.5%**，与静态 −6.6% 吻合；约为基线 21.3 倍），
+`num_qubits=149`，`worst_error_over_tolerance=0.6168267677893498` @ x=2114367
+（与合同一致），`circuit_sha256=ca11e021…`。
