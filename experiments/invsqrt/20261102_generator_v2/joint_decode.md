@@ -128,3 +128,11 @@ uv run python .../prescreen_narrow_v.py --contract-full
   square-2 逆）皆目标脏，不并。R 表 12 位分包线已由 `window_qrom.md §3` 否决，不重开。
 - 若官方 score 口径下 HMR/R 权重稀释 toff 收益，回退只需把两处联合 pass
   换回双 mini-pass（STAGE 名 revert，REC_SHA 回 `813ba1ad…`），diff 局部。
+
+## 完整官方验证 PASS（2026-11-02，主线程，seed 20261031）
+
+`artifacts/20261102_generator_v2/invsqrt/verify_joint_seed20261031.log`（EXIT=0）：
+`status=PASS`，200,540,928 shots，`score=1240824.5265214771`
+（相对二分 lz 版 1307880.53 **−5.1%**，与静态 −5.25% 吻合；约为基线 12.3 倍），
+`num_qubits=132`，`toffoli_count=9168`，`worst_error_over_tolerance=0.8712321628530258`
+@ x=1796095（不变），`circuit_sha256=c258ec72…`。
