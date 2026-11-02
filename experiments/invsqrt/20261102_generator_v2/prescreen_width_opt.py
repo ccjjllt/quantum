@@ -38,7 +38,7 @@ import contract62 as C62  # noqa: E402
 SAMPLES = [1, 2, 3, 8, 31, 32, 63, 128, 161, 888, 2047, 2048,
            2097151, 2097152, 2506015, 3133452]
 
-REC_SHA = "4d43d989b9f9520fec11991b90f7bd511aa76a6df7bfd3a60822ed755bfe8efd"
+REC_SHA = "0075e006a67e30a54ad82083cd1a19434bfa85e026f4182788beea9feb80235d"
 
 
 def prescreen_a() -> int:

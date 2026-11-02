@@ -333,134 +333,138 @@ A1_N1 = 11
 
 def _narrow_a1_add_fwd(b, S, Tslice, ctl) -> None:
     """单行窄加（两级）：Tslice += (ctl?S:0)，S 22 位，Tslice len>=22。
-    T0/T1 各 11，TH=剩余。高通用；c2 经 <+equal 重算；峰值 27（全局 142）。"""
+    T0/T1 各 11，TH=剩余。高通用；c2 经 <+equal 重算；峰值 27（全局 142）。
+
+    HMR（2026-11-02）：全部 copy 对（含 s=`c1&eq`）`CCX×2` → `init_and + del_and`
+    （HMR+CZ 修正，s 的 CZ 作用于 temps 且 LIFO 先清，证明见 hmr_cleanup.md §3；
+    NEG=0）。量子宽度不变，行 toff 约 −73/行（A1_J0 299→约226，实测见 §4）。"""
     n0, n1 = A1_N0, A1_N1
     S0 = S[0:n0]; S1 = S[n0:n0 + n1]
     T0 = Tslice[0:n0]; T1 = Tslice[n0:n0 + n1]; TH = Tslice[n0 + n1:]
     Cp0 = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1); c1 = b.alloc_qubits(1)
     for i in range(n0):
-        b.ccx(ctl, S0[i], Cp0[i])
+        b.init_and(ctl, S0[i], Cp0[i])
     for i in range(n0):
         _narrow_maj(b, Cp0[i], T0[i], ca0[0])
     b.cx(ca0[0], c1[0])
     for i in reversed(range(n0)):
         _narrow_uma(b, Cp0[i], T0[i], ca0[0])
     for i in reversed(range(n0)):
-        b.ccx(ctl, S0[i], Cp0[i])
+        b.del_and(ctl, S0[i], Cp0[i])
     b.free(Cp0); b.free(ca0)
     Cp1 = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], Cp1[i])
+        b.init_and(ctl, S1[i], Cp1[i])
     b.iadd(Cp1, target=T1)
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], Cp1[i])
+        b.del_and(ctl, S1[i], Cp1[i])
     b.free(Cp1)
     b.iadd(c1, target=T1)
     CpB = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], CpB[i])
+        b.init_and(ctl, S1[i], CpB[i])
     lt = b.alloc_qubits(1); eq = b.alloc_qubits(1)
     b.flip_if_less_than(T1, CpB, target=lt[0])
     b.flip_if_equal(T1, CpB, target=eq[0])
     s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
-    b.ccx(c1[0], eq[0], s[0])
+    b.init_and(c1[0], eq[0], s[0])
     b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], CpB[i])
+        b.del_and(ctl, S1[i], CpB[i])
     b.free(CpB)
     b.iadd(c2, target=TH)
     b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
-    b.ccx(c1[0], eq[0], s[0]); b.free(s)
+    b.del_and(c1[0], eq[0], s[0]); b.free(s)
     CpC = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], CpC[i])
+        b.init_and(ctl, S1[i], CpC[i])
     b.flip_if_equal(T1, CpC, target=eq[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], CpC[i])
+        b.del_and(ctl, S1[i], CpC[i])
     b.free(CpC); b.free(eq)
     CpD = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], CpD[i])
+        b.init_and(ctl, S1[i], CpD[i])
     b.flip_if_less_than(T1, CpD, target=lt[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], CpD[i])
+        b.del_and(ctl, S1[i], CpD[i])
     b.free(CpD); b.free(lt)
     Cp0B = b.alloc_qubits(n0)
     for i in range(n0):
-        b.ccx(ctl, S0[i], Cp0B[i])
+        b.init_and(ctl, S0[i], Cp0B[i])
     b.flip_if_less_than(T0, Cp0B, target=c1[0])
     for i in reversed(range(n0)):
-        b.ccx(ctl, S0[i], Cp0B[i])
+        b.del_and(ctl, S0[i], Cp0B[i])
     b.free(Cp0B); b.free(c1)
 
 
 def _narrow_a1_sub_fwd(b, S, Tslice, ctl) -> None:
-    """单行窄减（两级，ADD 严格逆）：Tslice -= (ctl?S:0)。峰值同 27。"""
+    """单行窄减（两级，ADD 严格逆）：Tslice -= (ctl?S:0)。峰值同 27；copy 对同 HMR（见 add 注）。"""
     n0, n1 = A1_N0, A1_N1
     S0 = S[0:n0]; S1 = S[n0:n0 + n1]
     T0 = Tslice[0:n0]; T1 = Tslice[n0:n0 + n1]; TH = Tslice[n0 + n1:]
     c1 = b.alloc_qubits(1)
     Cp0a = b.alloc_qubits(n0)
     for i in range(n0):
-        b.ccx(ctl, S0[i], Cp0a[i])
+        b.init_and(ctl, S0[i], Cp0a[i])
     b.flip_if_less_than(T0, Cp0a, target=c1[0])
     for i in reversed(range(n0)):
-        b.ccx(ctl, S0[i], Cp0a[i])
+        b.del_and(ctl, S0[i], Cp0a[i])
     b.free(Cp0a)
     lt = b.alloc_qubits(1)
     Cp1a = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], Cp1a[i])
+        b.init_and(ctl, S1[i], Cp1a[i])
     b.flip_if_less_than(T1, Cp1a, target=lt[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], Cp1a[i])
+        b.del_and(ctl, S1[i], Cp1a[i])
     b.free(Cp1a)
     eq = b.alloc_qubits(1)
     Cp1b = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], Cp1b[i])
+        b.init_and(ctl, S1[i], Cp1b[i])
     b.flip_if_equal(T1, Cp1b, target=eq[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], Cp1b[i])
+        b.del_and(ctl, S1[i], Cp1b[i])
     b.free(Cp1b)
     s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
-    b.ccx(c1[0], eq[0], s[0])
+    b.init_and(c1[0], eq[0], s[0])
     b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
     b.isub(c2, target=TH)
     b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
-    b.ccx(c1[0], eq[0], s[0]); b.free(s)
+    b.del_and(c1[0], eq[0], s[0]); b.free(s)
     Cp1c = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], Cp1c[i])
+        b.init_and(ctl, S1[i], Cp1c[i])
     b.flip_if_equal(T1, Cp1c, target=eq[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], Cp1c[i])
+        b.del_and(ctl, S1[i], Cp1c[i])
     b.free(Cp1c); b.free(eq)
     Cp1d = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], Cp1d[i])
+        b.init_and(ctl, S1[i], Cp1d[i])
     b.flip_if_less_than(T1, Cp1d, target=lt[0])
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], Cp1d[i])
+        b.del_and(ctl, S1[i], Cp1d[i])
     b.free(Cp1d); b.free(lt)
     b.isub(c1, target=T1)
     Cp1e = b.alloc_qubits(n1)
     for i in range(n1):
-        b.ccx(ctl, S1[i], Cp1e[i])
+        b.init_and(ctl, S1[i], Cp1e[i])
     b.isub(Cp1e, target=T1)
     for i in reversed(range(n1)):
-        b.ccx(ctl, S1[i], Cp1e[i])
+        b.del_and(ctl, S1[i], Cp1e[i])
     b.free(Cp1e)
     Cp0b = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1)
     for i in range(n0):
-        b.ccx(ctl, S0[i], Cp0b[i])
+        b.init_and(ctl, S0[i], Cp0b[i])
     for i in range(n0):
         _narrow_uma_inv(b, Cp0b[i], T0[i], ca0[0])
     b.cx(ca0[0], c1[0])
     for i in reversed(range(n0)):
         _narrow_maj_inv(b, Cp0b[i], T0[i], ca0[0])
     for i in reversed(range(n0)):
-        b.ccx(ctl, S0[i], Cp0b[i])
+        b.del_and(ctl, S0[i], Cp0b[i])
     b.free(Cp0b); b.free(ca0); b.free(c1)
 
 
@@ -528,7 +532,11 @@ def _narrow_uma_inv(b, a, bb, c) -> None:
 
 
 def _narrow_r1_row_fwd(b, S, Tslice, ctl) -> None:
-    """单行窄加：Tslice += (ctl?S:0)，S 17 位，Tslice len>=17。低 17 Cuccaro，高通用 1 位加。"""
+    """单行窄加：Tslice += (ctl?S:0)，S 17 位，Tslice len>=17。低 17 Cuccaro，高通用 1 位加。
+
+    HMR（2026-11-02）：copy 对 `CCX×2` → `init_and + del_and`（HMR+CZ 修正，
+    证明见 hmr_cleanup.md §2；小例穷举 + 全电路 B/C 多种子 PASS；NEG=0）。
+    量子宽度不变（同 temps，现配现释；经典位由 builder 复用 b0），行 toff 170→136。"""
     Tlow = Tslice[0:W_S]
     Thigh = Tslice[W_S:]
     # 低：copy → MAJ → cout → UMA → uncopy（carry/cout 外留 cout）
@@ -536,14 +544,14 @@ def _narrow_r1_row_fwd(b, S, Tslice, ctl) -> None:
     carry = b.alloc_qubits(1)
     cout = b.alloc_qubits(1)
     for i in range(W_S):
-        b.ccx(ctl, S[i], Cp[i])
+        b.init_and(ctl, S[i], Cp[i])
     for i in range(W_S):
         _narrow_maj(b, Cp[i], Tlow[i], carry[0])
     b.cx(carry[0], cout[0])
     for i in reversed(range(W_S)):
         _narrow_uma(b, Cp[i], Tlow[i], carry[0])
     for i in reversed(range(W_S)):
-        b.ccx(ctl, S[i], Cp[i])
+        b.del_and(ctl, S[i], Cp[i])
     b.free(Cp)
     b.free(carry)
     # 高：cout（1 位）进 Thigh（通用，暂存=len(Thigh)<=28；copy 已释，峰值 115+1+28=144）
@@ -551,26 +559,26 @@ def _narrow_r1_row_fwd(b, S, Tslice, ctl) -> None:
     # 清 cout：重算 copy → flip（cout^=(Tlow<C)，恒清零，暂存 16；峰值 115+17+1+16=149）
     Cp2 = b.alloc_qubits(W_S)
     for i in range(W_S):
-        b.ccx(ctl, S[i], Cp2[i])
+        b.init_and(ctl, S[i], Cp2[i])
     b.flip_if_less_than(Tlow, Cp2, target=cout[0])
     for i in reversed(range(W_S)):
-        b.ccx(ctl, S[i], Cp2[i])
+        b.del_and(ctl, S[i], Cp2[i])
     b.free(Cp2)
     b.free(cout)
 
 
 def _narrow_r1_row_rev(b, S, Tslice, ctl) -> None:
-    """单行窄减（正向窄加的严格逆，顺序倒置、加减互换；峰值同 149）。"""
+    """单行窄减（正向窄加的严格逆，顺序倒置、加减互换；峰值同 149；copy 对同 HMR，见 fwd 注）。"""
     Tlow = Tslice[0:W_S]
     Thigh = Tslice[W_S:]
     # 逆序之逆首步：重算 copy → flip 置 cout（T 仍为和态，cout=(Tlow<C) 精确重建进位）
     cout = b.alloc_qubits(1)
     Cp = b.alloc_qubits(W_S)
     for i in range(W_S):
-        b.ccx(ctl, S[i], Cp[i])
+        b.init_and(ctl, S[i], Cp[i])
     b.flip_if_less_than(Tlow, Cp, target=cout[0])
     for i in reversed(range(W_S)):
-        b.ccx(ctl, S[i], Cp[i])
+        b.del_and(ctl, S[i], Cp[i])
     b.free(Cp)
     # 高减
     b.isub(cout, target=Thigh)
@@ -578,14 +586,14 @@ def _narrow_r1_row_rev(b, S, Tslice, ctl) -> None:
     Cp2 = b.alloc_qubits(W_S)
     carry = b.alloc_qubits(1)
     for i in range(W_S):
-        b.ccx(ctl, S[i], Cp2[i])
+        b.init_and(ctl, S[i], Cp2[i])
     for i in range(W_S):
         _narrow_uma_inv(b, Cp2[i], Tlow[i], carry[0])
     b.cx(carry[0], cout[0])
     for i in reversed(range(W_S)):
         _narrow_maj_inv(b, Cp2[i], Tlow[i], carry[0])
     for i in reversed(range(W_S)):
-        b.ccx(ctl, S[i], Cp2[i])
+        b.del_and(ctl, S[i], Cp2[i])
     b.free(Cp2)
     b.free(carry)
     b.free(cout)
