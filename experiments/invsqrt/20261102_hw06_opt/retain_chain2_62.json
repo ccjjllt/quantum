@@ -1,0 +1,268 @@
+{
+  "chain": {
+    "src": [
+      25599,
+      25644
+    ],
+    "copy": [
+      28838,
+      28883
+    ],
+    "exact_text_repeat": true,
+    "length_ops": 46,
+    "copy_toffoli_like": 13,
+    "copy_conditional_toffoli": [],
+    "hmr_in_copy": [
+      [
+        28865,
+        "HMR q21 b341"
+      ],
+      [
+        28878,
+        "HMR q41 b341"
+      ]
+    ],
+    "conditional_phase_in_copy": [
+      [
+        28866,
+        "CZ q40 q16 if b341"
+      ],
+      [
+        28879,
+        "CZ q21 q47 if b341"
+      ],
+      [
+        28881,
+        "CZ q41 q47 if b341"
+      ]
+    ],
+    "unconditional_phase_in_copy": [
+      [
+        28838,
+        "NEG"
+      ],
+      [
+        28839,
+        "Z q4"
+      ],
+      [
+        28840,
+        "Z q51"
+      ],
+      [
+        28841,
+        "CZ q4 q51"
+      ],
+      [
+        28842,
+        "CZ q58 q50"
+      ]
+    ],
+    "copy_stack_pushpop": [
+      [
+        28843,
+        "POP_CONDITION"
+      ]
+    ],
+    "copy_stack_net": -1,
+    "copy_stack_min_depth": -1,
+    "copy_stack_balanced_empty": false,
+    "span_ops": 3193,
+    "span_hmr_r": 46,
+    "frontier": [
+      21,
+      40,
+      57
+    ],
+    "value_signature_equal": false,
+    "first_signature_diff": {
+      "src_op": 25605,
+      "src_line": "CCX q40 q16 q21",
+      "copy_op": 28844,
+      "copy_line": "CCX q40 q16 q21",
+      "src_key": [
+        [
+          13619,
+          12846
+        ],
+        0,
+        [],
+        null
+      ],
+      "copy_key": [
+        [
+          18173,
+          18146
+        ],
+        0,
+        [],
+        null
+      ]
+    },
+    "value_proof_probe": {
+      "compared": "src_ctrl0 vs copy_ctrl0",
+      "free_vars": 48,
+      "method": "truth-table",
+      "verdict": "deferred",
+      "reason": "48 free vars: unproven, no rewrite"
+    },
+    "zero_before_copy": [
+      {
+        "qubit": 21,
+        "copy_before": 0,
+        "is_zero": true
+      },
+      {
+        "qubit": 40,
+        "copy_before": 18173,
+        "is_zero": false
+      },
+      {
+        "qubit": 57,
+        "copy_before": 18171,
+        "is_zero": false
+      }
+    ],
+    "zero_holds": false,
+    "cond_env": {
+      "src_before": [
+        "b457"
+      ],
+      "src_after": [],
+      "copy_before": [
+        "b458"
+      ],
+      "copy_after": []
+    },
+    "cond_env_same": false,
+    "lifetime": {
+      "21": {
+        "unoverwritten": false,
+        "reasons": [
+          "intermediate_value_before_copy"
+        ]
+      },
+      "40": {
+        "unoverwritten": false,
+        "reasons": [
+          "not_cleared_to_zero_before_copy",
+          "intermediate_value_before_copy"
+        ]
+      },
+      "57": {
+        "unoverwritten": false,
+        "reasons": [
+          "not_cleared_to_zero_before_copy",
+          "intermediate_value_before_copy"
+        ]
+      }
+    },
+    "r_zone_overlap": false,
+    "wires_never_mentioned_in_span": [
+      1,
+      5,
+      6,
+      8,
+      9,
+      11,
+      12,
+      13,
+      15,
+      24,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      42,
+      43,
+      44,
+      49,
+      53,
+      59,
+      60
+    ],
+    "borrowable_zero_wires": []
+  },
+  "slices": {
+    "21": {
+      "ops": [
+        28870
+      ],
+      "n_ops": 1,
+      "ccx": 1,
+      "lines": [
+        "CCX q4 q51 q21"
+      ]
+    },
+    "40": {
+      "ops": [
+        28872
+      ],
+      "n_ops": 1,
+      "ccx": 1,
+      "lines": [
+        "CCX q48 q57 q40"
+      ]
+    },
+    "57": {
+      "ops": [
+        28875
+      ],
+      "n_ops": 1,
+      "ccx": 1,
+      "lines": [
+        "CCX q56 q41 q57"
+      ]
+    }
+  },
+  "C_official": 1622.0725677419355,
+  "threshold_lines_readme_C_units": {
+    "62Q": 81.1,
+    "63Q": 105.56,
+    "64Q": 129.26
+  },
+  "cost_table": [
+    {
+      "retained": 0,
+      "mode": "pay-copy",
+      "delta_C": 0.0,
+      "Q": 62,
+      "delta_score": 0.0,
+      "proof": "baseline"
+    },
+    {
+      "retained": "all",
+      "mode": "fantasy-delete-13",
+      "delta_C": -13.0,
+      "Q": 62,
+      "delta_score": -806.0,
+      "cleanup": "zero (unrealistic upper bound)",
+      "proof": "INAPPLICABLE(value-signature-unequal,nonzero-before-copy,hmr-in-copy,cond-env-differ)"
+    },
+    {
+      "retained": 1,
+      "mode": "coherent-per-slice",
+      "delta_C": -1.0,
+      "Q": 63,
+      "delta_score": 1559.07,
+      "cleanup": "bennett-uncompute",
+      "proof": "INAPPLICABLE(same value failures; shown for scale only)"
+    },
+    {
+      "retained": 1,
+      "mode": "measured-per-slice",
+      "delta_C": -1.0,
+      "Q": 62,
+      "delta_score": -62.0,
+      "cleanup": "HMR+classical+clifford-corrections",
+      "proof": "TO-PROVE(correction-coverage)+INAPPLICABLE(value failures)"
+    }
+  ],
+  "fantasy_gross_C": -13.0,
+  "needed_5pct_dscore_62Q": -5028.43,
+  "verdict": "VETO on this chain (largest exact repeat, 13 CCX): value FAIL (signature unequal at first CCX; q40/q57 nonzero before copy; all lifetimes fail); phase/measurement FAIL (2x HMR + 3x conditional CZ + unbalanced POP in copy; cond env b457 vs b458); cost FAIL (fantasy -13 C = -806 score, ~6.2x short of 62Q 5% line). No rewrite proposed; no saving claimed."
+}
