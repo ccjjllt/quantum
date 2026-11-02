@@ -1,6 +1,7 @@
 # §4 舍入与相位：变量 t 移位 + 舍入 + 36 位相位 + 全逆转调度
 
-合同（待主线程验证）：`e=(lz>>1)+p−11`，`t=8−e ∈ 8…19`；
+合同（主线程已验证通过，`contract_full.log` CONTRACT FULL PASS）：
+`e=(lz>>1)+p−11`，`t=8−e ∈ 8…19`；
 `P=RH(V/2^t) mod 2^36`；`phase=P/2^36` turns。
 
 ## 1. t 的实现选择：常数 8 + 4 位 barrel（首版）
