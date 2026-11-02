@@ -69,7 +69,15 @@ V_LO = 16
 W_VN = 30
 V_TOP = V_LO + W_VN  # 46（逻辑顶；V<2^45 故 Vn[29]=V[45]恒零）
 B_LO = 4  # B 直装位偏移（V[16:45)=B[4:33)，29 位进 Vn[0:29)）
-Q_CAP = 134  # 实测峰值（2026-11-02，double-build 确认；初值 160 已收紧）
+# TH 收窄（2026-11-02，th_narrow.md）：行低 20 位全算（Vn[0:20)=V[16:36)），
+# 高 Vn[20:30) 每行不碰；每行终进位 c3（0/1，减为 borrow 量）进 2 位有符号
+# CARRY（two's complement，整数证据全域 C∈{-1,0,1}，前缀亦然）；最后一次
+# 合并 High+=CARRY_unsigned，sign 时 High-=4（符号扩展）。删的是 36..44
+# 全加器链，carry 本身不可删（th_carry_proof.py 小例 PASS 后进生成器）。
+K_SPLIT = 20
+W_CARRY = 2
+CARRY_CORR = 4  # 1<<W_CARRY（High 长 10，4%1024≠0，修正激活）
+Q_CAP = 132  # 实测峰值（TH 收窄后，double-build 确认；窄 V 初值 134）
 
 TABLES_PATH = ART / "int_tables_R10_A20_quant.json"
 OUT_KMB = ART / "narrow_v62.kmb"
@@ -156,11 +164,168 @@ def mini_pass_off(b, x, lz, table, lo: int, width: int, target) -> None:
 
 
 # ---------------------------------------------------------------- A1/R1 窄行（低位省略）
-def build_a1_nv(b, x, coef, vn) -> None:
-    """A1 窄 V 版：行 j 减 Ahi 高位（drop 低 16-o 位）进 Vn[0:30)；MSB 加全 Ahi.
+# TH 收窄行内核：Q._qa1_* 的 TH 部分替换（其余逐行照抄，HMR 结构不动）。
+# 加行：Trem+=c2 后 c3=c2&(Trem_new==0)，CARRY+=c3；减行：c3=c2&(Trem_old==0)
+# 先算，CARRY-=c3，再 Trem-=c2。rem 空（MSB，n0+n1==20）时 c3=c2 直进 CARRY。
+# 正确性：th_carry_proof.py（整数 + 量子小例 + 修正激活 + roundtrip）PASS。
+def _tha1_add_fwd(b, S, Tslice, ctl, n0, n1, carry) -> None:
+    S0 = S[0:n0]; S1 = S[n0:n0 + n1]
+    T0 = Tslice[0:n0]; T1 = Tslice[n0:n0 + n1]
+    Trem = Tslice[n0 + n1:K_SPLIT]
+    Cp0 = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1); c1 = b.alloc_qubits(1)
+    for i in range(n0):
+        b.init_and(ctl, S0[i], Cp0[i])
+    for i in range(n0):
+        W._narrow_maj(b, Cp0[i], T0[i], ca0[0])
+    b.cx(ca0[0], c1[0])
+    for i in reversed(range(n0)):
+        W._narrow_uma(b, Cp0[i], T0[i], ca0[0])
+    for i in reversed(range(n0)):
+        b.del_and(ctl, S0[i], Cp0[i])
+    b.free(Cp0); b.free(ca0)
+    Cp1 = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], Cp1[i])
+    b.iadd(Cp1, target=T1)
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], Cp1[i])
+    b.free(Cp1)
+    b.iadd(c1, target=T1)
+    CpB = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], CpB[i])
+    lt = b.alloc_qubits(1); eq = b.alloc_qubits(1)
+    b.flip_if_less_than(T1, CpB, target=lt[0])
+    b.flip_if_equal(T1, CpB, target=eq[0])
+    s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+    b.init_and(c1[0], eq[0], s[0])
+    b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], CpB[i])
+    b.free(CpB)
+    # TH 收窄替换（原 b.iadd(c2→TH)，TH=Tslice[n0+n1:] 全长）：
+    if len(Trem) == 0:
+        b.iadd(c2, target=carry)
+    else:
+        b.iadd(c2, target=Trem)
+        tmp = b.alloc_qubits(1)
+        b.flip_if_less_than(Trem, 1, target=tmp[0])
+        c3 = b.alloc_qubits(1)
+        b.init_and(c2[0], tmp[0], c3[0])
+        b.iadd(c3, target=carry)
+        b.del_and(c2[0], tmp[0], c3[0]); b.free(c3)
+        b.flip_if_less_than(Trem, 1, target=tmp[0]); b.free(tmp)
+    b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+    b.del_and(c1[0], eq[0], s[0]); b.free(s)
+    CpC = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], CpC[i])
+    b.flip_if_equal(T1, CpC, target=eq[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], CpC[i])
+    b.free(CpC); b.free(eq)
+    CpD = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], CpD[i])
+    b.flip_if_less_than(T1, CpD, target=lt[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], CpD[i])
+    b.free(CpD); b.free(lt)
+    Cp0B = b.alloc_qubits(n0)
+    for i in range(n0):
+        b.init_and(ctl, S0[i], Cp0B[i])
+    b.flip_if_less_than(T0, Cp0B, target=c1[0])
+    for i in reversed(range(n0)):
+        b.del_and(ctl, S0[i], Cp0B[i])
+    b.free(Cp0B); b.free(c1)
 
-    两级内核复用 Q._qa1_*（n0'/n1' 按截短后位宽 w'=wA-drop 取半；
-    HMR init_and/del_and 结构在内核内部原样保留）。
+
+def _tha1_sub_fwd(b, S, Tslice, ctl, n0, n1, carry) -> None:
+    S0 = S[0:n0]; S1 = S[n0:n0 + n1]
+    T0 = Tslice[0:n0]; T1 = Tslice[n0:n0 + n1]
+    Trem = Tslice[n0 + n1:K_SPLIT]
+    c1 = b.alloc_qubits(1)
+    Cp0a = b.alloc_qubits(n0)
+    for i in range(n0):
+        b.init_and(ctl, S0[i], Cp0a[i])
+    b.flip_if_less_than(T0, Cp0a, target=c1[0])
+    for i in reversed(range(n0)):
+        b.del_and(ctl, S0[i], Cp0a[i])
+    b.free(Cp0a)
+    lt = b.alloc_qubits(1)
+    Cp1a = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], Cp1a[i])
+    b.flip_if_less_than(T1, Cp1a, target=lt[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], Cp1a[i])
+    b.free(Cp1a)
+    eq = b.alloc_qubits(1)
+    Cp1b = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], Cp1b[i])
+    b.flip_if_equal(T1, Cp1b, target=eq[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], Cp1b[i])
+    b.free(Cp1b)
+    s = b.alloc_qubits(1); c2 = b.alloc_qubits(1)
+    b.init_and(c1[0], eq[0], s[0])
+    b.cx(lt[0], c2[0]); b.cx(s[0], c2[0])
+    # TH 收窄替换（原 b.isub(c2→TH）)：
+    if len(Trem) == 0:
+        b.isub(c2, target=carry)
+    else:
+        tmp = b.alloc_qubits(1)
+        b.flip_if_less_than(Trem, 1, target=tmp[0])
+        c3 = b.alloc_qubits(1)
+        b.init_and(c2[0], tmp[0], c3[0])
+        b.isub(c3, target=carry)
+        b.del_and(c2[0], tmp[0], c3[0]); b.free(c3)
+        b.flip_if_less_than(Trem, 1, target=tmp[0]); b.free(tmp)
+        b.isub(c2, target=Trem)
+    b.cx(s[0], c2[0]); b.cx(lt[0], c2[0]); b.free(c2)
+    b.del_and(c1[0], eq[0], s[0]); b.free(s)
+    Cp1c = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], Cp1c[i])
+    b.flip_if_equal(T1, Cp1c, target=eq[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], Cp1c[i])
+    b.free(Cp1c); b.free(eq)
+    Cp1d = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], Cp1d[i])
+    b.flip_if_less_than(T1, Cp1d, target=lt[0])
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], Cp1d[i])
+    b.free(Cp1d); b.free(lt)
+    b.isub(c1, target=T1)
+    Cp1e = b.alloc_qubits(n1)
+    for i in range(n1):
+        b.init_and(ctl, S1[i], Cp1e[i])
+    b.isub(Cp1e, target=T1)
+    for i in reversed(range(n1)):
+        b.del_and(ctl, S1[i], Cp1e[i])
+    b.free(Cp1e)
+    Cp0b = b.alloc_qubits(n0); ca0 = b.alloc_qubits(1)
+    for i in range(n0):
+        b.init_and(ctl, S0[i], Cp0b[i])
+    for i in range(n0):
+        W._narrow_uma_inv(b, Cp0b[i], T0[i], ca0[0])
+    b.cx(ca0[0], c1[0])
+    for i in reversed(range(n0)):
+        W._narrow_maj_inv(b, Cp0b[i], T0[i], ca0[0])
+    for i in reversed(range(n0)):
+        b.del_and(ctl, S0[i], Cp0b[i])
+    b.free(Cp0b); b.free(ca0); b.free(c1)
+
+
+def build_a1_nv(b, x, coef, vn, carry) -> None:
+    """A1 窄 V + TH 收窄版：行 j 减 Ahi 高位进 Vn[0:20)；终进位 c3 进 CARRY.
+
+    两级内核为 _tha1_*（Q._qa1_* 的 TH 收窄版，n0'/n1' 按截短后位宽取半；
+    HMR init_and/del_and 在内核内部原样保留；高 Vn[20:30) 本阶段不碰，
+    最后一次合并进 High）。
     """
     for j in range(13):
         o = j + 1 + S_A
@@ -169,18 +334,18 @@ def build_a1_nv(b, x, coef, vn) -> None:
         wp = W_A - drop
         n0, n1 = wp // 2, wp - wp // 2
         b.info_tag(f"STAGE:A1_J{j}_ENTER")
-        Q._qa1_sub_fwd(b, coef[drop:drop + wp], vn[0:W_VN], x[j], n0, n1)
+        _tha1_sub_fwd(b, coef[drop:drop + wp], vn[0:W_VN], x[j], n0, n1, carry)
         b.info_tag(f"STAGE:A1_J{j}_EXIT")
     b.info_tag("STAGE:A1_J13_ENTER")
     n0, n1 = W_A // 2, W_A - W_A // 2
-    Q._qa1_add_fwd(b, coef[0:W_A], vn[0:W_VN], x[13], n0, n1)
+    _tha1_add_fwd(b, coef[0:W_A], vn[0:W_VN], x[13], n0, n1, carry)
     b.info_tag("STAGE:A1_J13_EXIT")
 
 
-def build_a1_nv_rev(b, x, coef, vn) -> None:
+def build_a1_nv_rev(b, x, coef, vn, carry) -> None:
     b.info_tag("STAGE:A1R_J13_ENTER")
     n0, n1 = W_A // 2, W_A - W_A // 2
-    Q._qa1_sub_fwd(b, coef[0:W_A], vn[0:W_VN], x[13], n0, n1)
+    _tha1_sub_fwd(b, coef[0:W_A], vn[0:W_VN], x[13], n0, n1, carry)
     b.info_tag("STAGE:A1R_J13_EXIT")
     for j in reversed(range(13)):
         o = j + 1 + S_A
@@ -189,32 +354,40 @@ def build_a1_nv_rev(b, x, coef, vn) -> None:
         wp = W_A - drop
         n0, n1 = wp // 2, wp - wp // 2
         b.info_tag(f"STAGE:A1R_J{j}_ENTER")
-        Q._qa1_add_fwd(b, coef[drop:drop + wp], vn[0:W_VN], x[j], n0, n1)
+        _tha1_add_fwd(b, coef[drop:drop + wp], vn[0:W_VN], x[j], n0, n1, carry)
         b.info_tag(f"STAGE:A1R_J{j}_EXIT")
 
 
-def _nvr1_row_fwd(b, S, Tslice, ctl, nS: int) -> None:
-    """单行窄加通用化（W._narrow_r1_row_fwd 的 nS 参数版，S 取 coef 高 wp 位）.
+def _nvr1_row_fwd(b, S, Tslice, ctl, nS: int, carry) -> None:
+    """单行窄加通用化 + TH 收窄（W._narrow_r1_row_fwd 的 nS 参数版 + TH 收窄）.
 
-    HMR：copy 对 init_and/del_and（HMR+CZ 修正，见 hmr_cleanup.md §2；NEG=0）。
+    低 nS 位 Cuccaro（HMR init_and/del_and 原样）；余 Trem=Tslice[nS:20)
+    单比特传播；终进位 c3=cout&(Trem_new==0) 进 CARRY；高 Tslice[20:] 不碰。
     """
     Tlow = Tslice[0:nS]
-    Thigh = Tslice[nS:]
+    Trem = Tslice[nS:K_SPLIT]
     Cp = b.alloc_qubits(nS)
-    carry = b.alloc_qubits(1)
+    carry0 = b.alloc_qubits(1)
     cout = b.alloc_qubits(1)
     for i in range(nS):
         b.init_and(ctl, S[i], Cp[i])
     for i in range(nS):
-        W._narrow_maj(b, Cp[i], Tlow[i], carry[0])
-    b.cx(carry[0], cout[0])
+        W._narrow_maj(b, Cp[i], Tlow[i], carry0[0])
+    b.cx(carry0[0], cout[0])
     for i in reversed(range(nS)):
-        W._narrow_uma(b, Cp[i], Tlow[i], carry[0])
+        W._narrow_uma(b, Cp[i], Tlow[i], carry0[0])
     for i in reversed(range(nS)):
         b.del_and(ctl, S[i], Cp[i])
     b.free(Cp)
-    b.free(carry)
-    b.iadd(cout, target=Thigh)
+    b.free(carry0)
+    b.iadd(cout, target=Trem)
+    tmp = b.alloc_qubits(1)
+    b.flip_if_less_than(Trem, 1, target=tmp[0])
+    c3 = b.alloc_qubits(1)
+    b.init_and(cout[0], tmp[0], c3[0])
+    b.iadd(c3, target=carry)
+    b.del_and(cout[0], tmp[0], c3[0]); b.free(c3)
+    b.flip_if_less_than(Trem, 1, target=tmp[0]); b.free(tmp)
     Cp2 = b.alloc_qubits(nS)
     for i in range(nS):
         b.init_and(ctl, S[i], Cp2[i])
@@ -225,10 +398,10 @@ def _nvr1_row_fwd(b, S, Tslice, ctl, nS: int) -> None:
     b.free(cout)
 
 
-def _nvr1_row_rev(b, S, Tslice, ctl, nS: int) -> None:
-    """单行窄减（正向的严格逆；copy 对同 HMR）。"""
+def _nvr1_row_rev(b, S, Tslice, ctl, nS: int, carry) -> None:
+    """单行窄减（正向 TH 收窄版的严格逆；copy 对同 HMR）。"""
     Tlow = Tslice[0:nS]
-    Thigh = Tslice[nS:]
+    Trem = Tslice[nS:K_SPLIT]
     cout = b.alloc_qubits(1)
     Cp = b.alloc_qubits(nS)
     for i in range(nS):
@@ -237,44 +410,66 @@ def _nvr1_row_rev(b, S, Tslice, ctl, nS: int) -> None:
     for i in reversed(range(nS)):
         b.del_and(ctl, S[i], Cp[i])
     b.free(Cp)
-    b.isub(cout, target=Thigh)
+    tmp = b.alloc_qubits(1)
+    b.flip_if_less_than(Trem, 1, target=tmp[0])
+    c3 = b.alloc_qubits(1)
+    b.init_and(cout[0], tmp[0], c3[0])
+    b.isub(c3, target=carry)
+    b.del_and(cout[0], tmp[0], c3[0]); b.free(c3)
+    b.flip_if_less_than(Trem, 1, target=tmp[0]); b.free(tmp)
+    b.isub(cout, target=Trem)
     Cp2 = b.alloc_qubits(nS)
-    carry = b.alloc_qubits(1)
+    carry0 = b.alloc_qubits(1)
     for i in range(nS):
         b.init_and(ctl, S[i], Cp2[i])
     for i in range(nS):
-        W._narrow_uma_inv(b, Cp2[i], Tlow[i], carry[0])
-    b.cx(carry[0], cout[0])
+        W._narrow_uma_inv(b, Cp2[i], Tlow[i], carry0[0])
+    b.cx(carry0[0], cout[0])
     for i in reversed(range(nS)):
-        W._narrow_maj_inv(b, Cp2[i], Tlow[i], carry[0])
+        W._narrow_maj_inv(b, Cp2[i], Tlow[i], carry0[0])
     for i in reversed(range(nS)):
         b.del_and(ctl, S[i], Cp2[i])
     b.free(Cp2)
-    b.free(carry)
+    b.free(carry0)
     b.free(cout)
 
 
-def build_r1_nv(b, coef, vn) -> None:
-    """R1 窄 V 版：行 j 加 S 高位（drop 低 16-o 位，S=coef[16+drop:33)）进 Vn[0:30)."""
+def build_r1_nv(b, coef, vn, carry) -> None:
+    """R1 窄 V + TH 收窄版：行 j 加 S 高位进 Vn[0:20)；终进位进 CARRY."""
     for j in range(N_R):
         o = j + S_R
         assert o < V_LO
         drop = V_LO - o
         wp = W_S - drop
         b.info_tag(f"STAGE:R1_J{j}_ENTER")
-        _nvr1_row_fwd(b, coef[S_OFF + drop:S_OFF + W_S], vn[0:W_VN], coef[j], wp)
+        _nvr1_row_fwd(b, coef[S_OFF + drop:S_OFF + W_S], vn[0:W_VN], coef[j], wp, carry)
         b.info_tag(f"STAGE:R1_J{j}_EXIT")
 
 
-def build_r1_nv_rev(b, coef, vn) -> None:
+def build_r1_nv_rev(b, coef, vn, carry) -> None:
     for j in reversed(range(N_R)):
         o = j + S_R
         assert o < V_LO
         drop = V_LO - o
         wp = W_S - drop
         b.info_tag(f"STAGE:R1R_J{j}_ENTER")
-        _nvr1_row_rev(b, coef[S_OFF + drop:S_OFF + W_S], vn[0:W_VN], coef[j], wp)
+        _nvr1_row_rev(b, coef[S_OFF + drop:S_OFF + W_S], vn[0:W_VN], coef[j], wp, carry)
         b.info_tag(f"STAGE:R1R_J{j}_EXIT")
+
+
+# ---------------------------------------------------------------- TH 合并（一次）
+def merge_carry_fwd(b, vn, carry) -> None:
+    """合并：High(Vn[20:30)) += CARRY_unsigned；sign 时 High -= 4."""
+    High = vn[K_SPLIT:W_VN]
+    b.iadd(carry, target=High)
+    b.isub(CARRY_CORR, target=High, control=carry[1])
+
+
+def merge_carry_rev(b, vn, carry) -> None:
+    """合并之逆（严格逆序）：sign 时 High += 4；High -= CARRY_unsigned."""
+    High = vn[K_SPLIT:W_VN]
+    b.iadd(CARRY_CORR, target=High, control=carry[1])
+    b.isub(carry, target=High)
 
 
 # ---------------------------------------------------------------- S6（别名 barrel）
@@ -320,7 +515,8 @@ def create_regs_nv(b):
     lz = b.alloc_qubits(W_LZ)
     coef = b.alloc_qubits(W_B)
     vd = b.alloc_qubits(V_TOP)
-    regs = {"x": x, "lz": lz, "coef": coef, "vd": vd}
+    carry = b.alloc_qubits(W_CARRY)
+    regs = {"x": x, "lz": lz, "coef": coef, "vd": vd, "carry": carry}
     regs["vn"] = vd[V_LO:V_TOP]
     return regs
 
@@ -329,6 +525,7 @@ def build_forward_nv(b, tables, regs) -> None:
     assert_tables_nv(tables)
     x, lz, coef, vd = (regs[k] for k in ("x", "lz", "coef", "vd"))
     vn = regs["vn"]
+    carry = regs["carry"]
     b.info_tag("STAGE:F_S1_ENTER")
     e = b.alloc_qubits(2)
     h = b.alloc_qubits(1)
@@ -349,7 +546,7 @@ def build_forward_nv(b, tables, regs) -> None:
     W.mini_pass(b, x, lz, tables.A, W_A, coef[0:W_A])
     b.info_tag("STAGE:F_A_LOAD_EXIT")
     b.info_tag("STAGE:F_A1_ENTER")
-    build_a1_nv(b, x, coef, vn)
+    build_a1_nv(b, x, coef, vn, carry)
     b.info_tag("STAGE:F_A1_EXIT")
     b.info_tag("STAGE:F_A_UNLOAD_ENTER")
     W.mini_pass(b, x, lz, tables.A, W_A, coef[0:W_A])
@@ -361,11 +558,14 @@ def build_forward_nv(b, tables, regs) -> None:
     W.mini_pass(b, x, lz, tables.R, W_R, coef[0:W_R])
     b.info_tag("STAGE:F_R_LOAD_EXIT")
     b.info_tag("STAGE:F_R1_ENTER")
-    build_r1_nv(b, coef, vn)
+    build_r1_nv(b, coef, vn, carry)
     b.info_tag("STAGE:F_R1_EXIT")
     b.info_tag("STAGE:F_R_UNLOAD_ENTER")
     W.mini_pass(b, x, lz, tables.R, W_R, coef[0:W_R])
     b.info_tag("STAGE:F_R_UNLOAD_EXIT")
+    b.info_tag("STAGE:F_TH_MERGE_ENTER")
+    merge_carry_fwd(b, vn, carry)
+    b.info_tag("STAGE:F_TH_MERGE_EXIT")
     b.info_tag("STAGE:F_S6_ENTER")
     build_s6_nv(b, lz, vd, coef)
     b.info_tag("STAGE:F_S6_EXIT")
@@ -374,14 +574,18 @@ def build_forward_nv(b, tables, regs) -> None:
 def build_reverse_nv(b, tables, regs) -> None:
     x, lz, coef, vd = (regs[k] for k in ("x", "lz", "coef", "vd"))
     vn = regs["vn"]
+    carry = regs["carry"]
     b.info_tag("STAGE:R_S6_ENTER")
     build_s6_nv_rev(b, lz, vd, coef)
     b.info_tag("STAGE:R_S6_EXIT")
+    b.info_tag("STAGE:R_TH_MERGE_ENTER")
+    merge_carry_rev(b, vn, carry)
+    b.info_tag("STAGE:R_TH_MERGE_EXIT")
     b.info_tag("STAGE:R_R_LOAD_ENTER")
     W.mini_pass(b, x, lz, tables.R, W_R, coef[0:W_R])
     b.info_tag("STAGE:R_R_LOAD_EXIT")
     b.info_tag("STAGE:R_R1_ENTER")
-    build_r1_nv_rev(b, coef, vn)
+    build_r1_nv_rev(b, coef, vn, carry)
     b.info_tag("STAGE:R_R1_EXIT")
     b.info_tag("STAGE:R_R_UNLOAD_ENTER")
     W.mini_pass(b, x, lz, tables.R, W_R, coef[0:W_R])
@@ -393,7 +597,7 @@ def build_reverse_nv(b, tables, regs) -> None:
     W.mini_pass(b, x, lz, tables.A, W_A, coef[0:W_A])
     b.info_tag("STAGE:R_A_LOAD_EXIT")
     b.info_tag("STAGE:R_A1_ENTER")
-    build_a1_nv_rev(b, x, coef, vn)
+    build_a1_nv_rev(b, x, coef, vn, carry)
     b.info_tag("STAGE:R_A1_EXIT")
     b.info_tag("STAGE:R_A_UNLOAD_ENTER")
     W.mini_pass(b, x, lz, tables.A, W_A, coef[0:W_A])

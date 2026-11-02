@@ -42,7 +42,7 @@ import width_opt62 as W  # noqa: E402
 SAMPLES = [1, 2, 3, 8, 31, 32, 63, 128, 161, 888, 2047, 2048,
            2097151, 2097152, 2506015, 3133452]
 
-REC_SHA = "c1116ede9cdd4f05cefb778963ef487e482646ce0bc5587ec43c9e0ef51f96ca"
+REC_SHA = "e036965d725fbe195605f1306cc6435f24dabf36008703a53fbb9537a36cac8d"
 
 X_MAX = 3_133_452
 
@@ -135,6 +135,7 @@ def dump_v() -> int:
     b = km.CircuitBuilder()
     regs = NV.create_regs_nv(b)
     x, lz, coef, vn = (regs[k] for k in ("x", "lz", "coef", "vn"))
+    carry = regs["carry"]
     e = b.alloc_qubits(2)
     h = b.alloc_qubits(1)
     W.build_lz_norm(b, x, lz, e, h)
@@ -144,12 +145,13 @@ def dump_v() -> int:
     b.isub(8192, target=x[0:W.W_DELTA])
     NV.mini_pass_off(b, x, lz, tables.B, NV.B_LO, NV.W_VN - 1, vn[0:NV.W_VN - 1])
     W.mini_pass(b, x, lz, tables.A, NV.W_A, coef[0:NV.W_A])
-    NV.build_a1_nv(b, x, coef, vn)
+    NV.build_a1_nv(b, x, coef, vn, carry)
     W.mini_pass(b, x, lz, tables.A, NV.W_A, coef[0:NV.W_A])
     W.build_square2(b, x, coef)
     W.mini_pass(b, x, lz, tables.R, NV.W_R, coef[0:NV.W_R])
-    NV.build_r1_nv(b, coef, vn)
+    NV.build_r1_nv(b, coef, vn, carry)
     W.mini_pass(b, x, lz, tables.R, NV.W_R, coef[0:NV.W_R])
+    NV.merge_carry_fwd(b, vn, carry)
     circ = b.finish_circuit()
     sim = km.Simulator(batch_size=len(SAMPLES))
     sim.use_same_registers_as(circ)
