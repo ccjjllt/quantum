@@ -57,6 +57,7 @@ CANDS = {
     "A18": {"kA": 4, "kR": 0, "kB": 0},
     "R8": {"kA": 0, "kR": 4, "kB": 0},
     "DEEP": {"kA": 4, "kR": 4, "kB": 0},
+    "A20R8": {"kA": 2, "kR": 4, "kB": 0},
 }
 
 SPEC = official.ProblemSpecInvSqrt.for_n_p(10)

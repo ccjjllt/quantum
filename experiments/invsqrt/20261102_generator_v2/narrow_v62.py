@@ -61,6 +61,20 @@ CAND = "BOTH"
 CFG = Q.CANDS[CAND]
 W_A, W_R, N_R, S_A, S_R = CFG["wA"], CFG["wR"], CFG["nR"], CFG["sA"], CFG["sR"]
 
+
+def set_cand(name: str) -> None:
+    """Rebind module globals to another CANDS entry (call before building).
+
+    All builders resolve W_A/W_R/N_R/S_A/S_R/CAND at call time from module
+    globals, so rebinding is exact. nv_model_phase resolves None defaults
+    at call time for the same reason (no def-time capture)."""
+    global CAND, CFG, W_A, W_R, N_R, S_A, S_R
+    if name not in Q.CANDS:
+        raise KeyError(f"unknown cand {name}")
+    CAND = name
+    CFG = Q.CANDS[name]
+    W_A, W_R, N_R, S_A, S_R = CFG["wA"], CFG["wR"], CFG["nR"], CFG["sA"], CFG["sR"]
+
 W_X, W_LZ, W_B = W.W_X, W.W_LZ, W.W_B
 W_D, W_U, W_S, S_OFF = W.W_D, W.W_U, W.W_S, W.S_OFF
 W_P = W.W_P
@@ -83,7 +97,8 @@ TABLES_PATH = ART / "int_tables_R10_A20_quant.json"
 OUT_KMB = ART / "narrow_v62.kmb"
 OUT_STATS = ART / "narrow_v62_stats.json"
 
-assert S_A == 2 and S_R == 2 and W_A == 20 and W_R == 10 and N_R == 10
+# Placement/shape consistency is enforced per-cand by assert_tables_nv below
+# (BOTH: sA=2/sR=2/wA=20/wR=10/nR=10; A20R8: sA=2/sR=4/wA=20/wR=8/nR=8).
 
 
 def assert_tables_nv(tables: W.CoefTables) -> None:
@@ -105,7 +120,15 @@ def load_tables():
     return Q.load_qtables(CAND)
 
 
-def nv_model_phase(x: int, B, Ah, Rh, sA=S_A, sR=S_R, wA=W_A, nR=N_R):
+def nv_model_phase(x: int, B, Ah, Rh, sA=None, sR=None, wA=None, nR=None):
+    if sA is None:
+        sA = S_A
+    if sR is None:
+        sR = S_R
+    if wA is None:
+        wA = W_A
+    if nR is None:
+        nR = N_R
     """窄 V 整数 oracle：逐行低位省略的截短累加（与电路逐行对应）.
 
     Vn 单位（=逻辑>>16）：B 取 B>>4；A 行减 Ahi>>(16-o)；MSB 加全 Ahi；
@@ -868,7 +891,8 @@ def circuit_sha_nv(circuit) -> str:
     return hashlib.sha256(str(circuit).encode()).hexdigest()
 
 
-def main() -> None:
+def main(cand: str = "BOTH") -> None:
+    set_cand(cand)
     tables = load_tables()
     assert_tables_nv(tables)
     c1 = build_circuit_nv(tables)
@@ -876,8 +900,10 @@ def main() -> None:
     assert str(c1) == str(c2), "两次构建逐指令不一致"
     sha = circuit_sha_nv(c1)
     print("sha256:", sha, "qubits:", c1.num_qubits)
-    OUT_KMB.parent.mkdir(parents=True, exist_ok=True)
-    c1.to_file(OUT_KMB, format="kmb")
+    out_kmb = ART / f"narrow_v62_{cand.lower()}.kmb"
+    out_stats = ART / f"narrow_v62_{cand.lower()}_stats.json"
+    out_kmb.parent.mkdir(parents=True, exist_ok=True)
+    c1.to_file(out_kmb, format="kmb")
     stats = W.resource_stats(c1)
     stats["int_tables_sha256"] = hashlib.sha256(
         json.dumps(
@@ -886,10 +912,14 @@ def main() -> None:
         ).encode()
     ).hexdigest()
     stats["cand"] = CAND
-    OUT_STATS.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n")
-    print("wrote", OUT_KMB, "and", OUT_STATS)
+    out_stats.write_text(json.dumps(stats, indent=2, sort_keys=True) + "\n")
+    print("wrote", out_kmb, "and", out_stats)
     print(json.dumps(stats, indent=2, sort_keys=True)[:2000])
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    _ap = argparse.ArgumentParser()
+    _ap.add_argument("--cand", default="BOTH")
+    main(cand=_ap.parse_args().cand)

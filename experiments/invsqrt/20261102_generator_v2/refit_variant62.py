@@ -54,6 +54,8 @@ CANDS = {
             "kA": 4, "kR": 0, "wA": 18, "wR": 12, "nR": 12, "sA": 4, "sR": 0},
     "R8I": {"tables": ART / "int_tables_R8_idesc2.json",
             "kA": 0, "kR": 4, "wA": 22, "wR": 8, "nR": 8, "sA": 0, "sR": 4},
+    "A20R8": {"tables": ART / "int_tables_A20R8_idesc.json",
+            "kA": 2, "kR": 4, "wA": 20, "wR": 8, "nR": 8, "sA": 2, "sR": 4},
 }
 
 W_X, W_LZ, W_B = W.W_X, W.W_LZ, W.W_B

@@ -43,6 +43,14 @@ SAMPLES = [1, 2, 3, 8, 31, 32, 63, 128, 161, 888, 2047, 2048,
            2097151, 2097152, 2506015, 3133452]
 
 REC_SHA = "6f6a144d1115bef0f3c6546c77c22bd803556c34dbd26830d0d57fd32fd9dc3f"
+REC_BY_CAND = {
+    "BOTH": "6f6a144d1115bef0f3c6546c77c22bd803556c34dbd26830d0d57fd32fd9dc3f",
+    "A20R8": "936db2b8858382347e79c68810310a8ba3563a80b8c88cdd7641487c41eb41a8",
+}
+
+
+def rec_sha() -> str:
+    return REC_BY_CAND.get(NV.CAND, REC_SHA)
 
 X_MAX = 3_133_452
 
@@ -52,8 +60,8 @@ def prescreen_a() -> int:
     c1 = NV.build_circuit_nv(tables)
     c2 = NV.build_circuit_nv(tables)
     s1, s2 = NV.circuit_sha_nv(c1), NV.circuit_sha_nv(c2)
-    ok = (str(c1) == str(c2)) and (s1 == s2 == REC_SHA)
-    print(f"sha1={s1}\nsha2={s2}\nrecorded={REC_SHA}")
+    ok = (str(c1) == str(c2)) and (s1 == s2 == rec_sha())
+    print(f"sha1={s1}\nsha2={s2}\nrecorded={rec_sha()}")
     print("PRESCREEN-A " + ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 
@@ -256,7 +264,9 @@ def main() -> int:
     ap.add_argument("--c", action="store_true")
     ap.add_argument("--dump-v", action="store_true")
     ap.add_argument("--contract-full", action="store_true")
+    ap.add_argument("--cand", default="BOTH")
     args = ap.parse_args()
+    NV.set_cand(args.cand)
     rc = 0
     if args.contract_full:
         rc |= contract_full()

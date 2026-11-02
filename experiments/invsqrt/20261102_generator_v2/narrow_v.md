@@ -133,3 +133,18 @@ uv run python .../prescreen_narrow_v.py --dump-v
    常驻 16Q 是 barrel 精确性的代价，动它需先改 S6 结构（mux 方案已论证否决，
    见 §2 失败记录的反向教训——复杂度换 6Q 不值）。
 4. 远目标仍远（Q×toff −25%，非量级解），如实记。
+
+## 7. A20R8 × 窄 V 组合否决（2026-11-02，主线程）
+
+动机：A20R8 宽 V 版已验证（R8I PASS），窄 V 容器在 BOTH 上成功，组合预期再 −3.4%。
+工作：`narrow_v62.py` 加 CAND 参数化（`set_cand` + 调用时解析 + 逐候选输出；
+BOTH 默认行为不变），`refit_variant62.py` 加 A20R8 条目；A20R8 窄 V 构建成功
+（Q132，toff 8854，SHA `936db2b8…`）。
+
+否决证据：
+- `--contract-full`：fails=528，maxrel=1.318 → FAIL。
+- 排除法定位：drop-16 在 A20R8 表上依然成立（`drop_a20r8.log`：drop≤16 maxrel
+  恒 0.8945，零失败）→ Vn 容器无辜；行级截断（K_SPLIT 行起点、TH carry 合并）
+  在新表误差画像（基线 0.8945，仅 0.105 余量）下不迁移。
+- 不做候选专属截断重调（投入/−3.4% 不成比例，且每表一套截断是维护泥潭）；
+  组合关闭，无电路落盘（构建产物未写 kmb），BOTH 窄 V 联合版仍是最佳线。
