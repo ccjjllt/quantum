@@ -43,6 +43,13 @@ CANDS = {
             "kA": 2, "kR": 0, "wA": 20, "wR": 12, "nR": 12, "sA": 2, "sR": 0},
     "BOTH": {"tables": ART / "int_tables_R10_A20_quant.json",
              "kA": 2, "kR": 2, "wA": 20, "wR": 10, "nR": 10, "sA": 2, "sR": 2},
+    # BOTH_SPARSE (2026-11-02, csd_sparse.md): same widths/shifts as BOTH,
+    # only table VALUES sparser (pop 7804->6485, -1319 bits). Builders are
+    # fully generic over (wA,wR,nR,sA,sR), so a CANDS entry suffices; no new
+    # builder code, no new file (a copy would duplicate ~360 lines for zero
+    # structural change). Existing cands untouched (separate table files).
+    "BOTH_SPARSE": {"tables": ART / "int_tables_R10_A20_sparse62.json",
+             "kA": 2, "kR": 2, "wA": 20, "wR": 10, "nR": 10, "sA": 2, "sR": 2},
     "A18": {"tables": ART / "int_tables_R12_A4_quant.json",
             "kA": 4, "kR": 0, "wA": 18, "wR": 12, "nR": 12, "sA": 4, "sR": 0},
 }

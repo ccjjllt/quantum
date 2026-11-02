@@ -116,7 +116,7 @@ def sparser_neighbors(v: int, w: int):
                   if 0 <= u < (1 << w) and pop(u) < pv)
 
 
-def cmd_search(budget_add=0.02, write=True) -> int:
+def cmd_search(budget_add=0.02, write=True, table_order=(0, 1, 2)) -> int:
     t0 = time.time()
     doc, Bs, As, Rs = load_base()
     base_maxrel = float(doc["contract"]["maxrel"])
@@ -144,7 +144,7 @@ def cmd_search(budget_add=0.02, write=True) -> int:
                                        S["sA"], S["sR"], S["sB"], tgt, tol)
             cur_pop = pop(Bs[aa]) + pop(As[aa]) + pop(Rs[aa])
             addr_moved = False
-            for ti in range(3):
+            for ti in table_order:
                 tbl = tables[ti]
                 old = int(tbl[aa])
                 cands = sparser_neighbors(old, widths[ti])
@@ -174,8 +174,12 @@ def cmd_search(budget_add=0.02, write=True) -> int:
         if moved == 0:
             break
     new_pop = pop_table(Bs) + pop_table(As) + pop_table(Rs)
+    pops = tuple(pop_table(t) for t in (Bs, As, Rs))
+    qrom_cx = 2 * pops[0] + 4 * pops[1] + 4 * pops[2]
     print(f"[sparse] pop {base_pop} -> {new_pop} "
           f"(saved={base_pop-new_pop}) addrs_touched={improved_addrs}")
+    print(f"[sparse] per-table pop B/A/R={pops[0]}/{pops[1]}/{pops[2]} "
+          f"true QROM CX=2B+4A+4R={qrom_cx}")
     if new_pop >= base_pop:
         print("[sparse] NO sparser table found -> VETO integration")
         return 1
@@ -193,13 +197,16 @@ def cmd_search(budget_add=0.02, write=True) -> int:
            "Bs": [int(v) for v in Bs], "As": [int(v) for v in As],
            "Rs": [int(v) for v in Rs],
            "base_maxrel": base_maxrel, "budget": budget,
-           "budget_add": budget_add,
+           "budget_add": budget_add, "table_order": list(table_order),
            "base_pop": base_pop, "new_pop": new_pop,
            "saved_bits": base_pop - new_pop,
            "contract": r, "seconds": round(time.time() - t0, 1)}
     if write:
         CAND_TABLES.write_text(json.dumps(out) + "\n")
-    print(f"[sparse] wrote {CAND_TABLES} saved_bits={base_pop - new_pop}")
+        print(f"[sparse] wrote {CAND_TABLES} saved_bits={base_pop - new_pop}")
+    else:
+        print(f"[sparse] no-write mode: candidate NOT persisted "
+              f"(saved_bits={base_pop - new_pop})")
     return 0
 
 
@@ -224,14 +231,18 @@ def main() -> int:
     ap.add_argument("--recount", action="store_true")
     ap.add_argument("--search", action="store_true")
     ap.add_argument("--budget-add", type=float, default=0.02)
+    ap.add_argument("--order", default="BAR",
+                    help="table processing order, e.g. BAR or RAB")
     ap.add_argument("--no-write", action="store_true")
     ap.add_argument("--verify-cand", action="store_true")
     args = ap.parse_args()
     if args.recount:
         return cmd_recount()
     if args.search:
+        idx = {"B": 0, "A": 1, "R": 2}
         return cmd_search(budget_add=args.budget_add,
-                          write=not args.no_write)
+                          write=not args.no_write,
+                          table_order=tuple(idx[ch] for ch in args.order))
     if args.verify_cand:
         return cmd_verify_cand()
     ap.print_help()
