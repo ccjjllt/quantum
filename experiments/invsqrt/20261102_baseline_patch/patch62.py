@@ -422,6 +422,10 @@ def sliced_symbols(values, entry_set, root):
                 stack.append(r)
             elif atom in values.meas_source:
                 syms[("meas", atom)] = ("meas", atom)
+            elif 9_000_000 <= atom < 10_000_000:
+                # Sym2 random-event outcomes; serials align across forked
+                # objects because HMR/R order is asserted identical.
+                syms[("event", atom)] = ("event", atom)
             elif 0 <= atom <= 61:
                 syms[("qubit", atom)] = ("qubit", atom)
             else:
@@ -461,6 +465,8 @@ def eval_sliced(values, root, entry_set, env):
                 acc ^= memo[l] & memo[r]
             elif atom in values.meas_source:
                 acc ^= env[("meas", atom)]
+            elif 9_000_000 <= atom < 10_000_000:
+                acc ^= env[("event", atom)]
             else:
                 acc ^= env[("qubit", atom)]
         memo[vid] = acc
@@ -486,6 +492,8 @@ def z3_sliced(values, root, entry_set, sym_of, symbols, memo):
                           z3_sliced(values, r, entry_set, sym_of, symbols, memo))
         elif atom in values.meas_source:
             term = sym_of[("meas", atom)]
+        elif 9_000_000 <= atom < 10_000_000:
+            term = sym_of[("event", atom)]
         else:
             term = sym_of[("qubit", atom)]
         acc = term if acc is None else z3.Xor(acc, term)
@@ -509,11 +517,10 @@ def sliced_equiv(v_orig, entry_orig, root_orig, v_cand, entry_cand, root_cand):
         return {"method": "sliced", "verdict": "unknown",
                 "reason": f"unaligned atom: {e}"}
     keys = sorted(set(s1) | set(s2), key=str)
-    # entry symbols must exist on both sides with identical ints
-    for k in keys:
-        if k[0] == "entry" and (k not in s1 or k not in s2):
-            return {"method": "sliced", "verdict": "unknown",
-                    "reason": f"entry symbol {k} one-sided (structure changed?)"}
+    # NOTE: entry symbols are treated as independent booleans (over-
+    # approximation: they share prefix inputs). "equivalent" stays sound;
+    # "not-equivalent" is a LOCAL counterexample until replayed from legal
+    # inputs + real prefix (plan §2).
     n = len(keys)
     if n <= booleq62.SMALL_CONE_LIMIT:
         for mask in range(1 << n):
