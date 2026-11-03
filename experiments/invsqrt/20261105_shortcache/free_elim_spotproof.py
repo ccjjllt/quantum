@@ -22,14 +22,14 @@ def load():
     lines=buf.getvalue().splitlines()
     return [l for l in lines if not l.startswith(("APPEND","REGISTER"))]
 
-def prove_gate(ops,op,replacement,timeout_ms=60000):
+def prove_gate(ops,op,replacement,timeout_ms=60000,lo=1,hi=3133452):
     import z3
     start=time.monotonic()
     s=z3.Solver(); s.set(timeout=timeout_ms)
     q=[z3.Bool(f'x{j}') for j in range(22)]+[z3.BoolVal(False)]*40
     bits={}; stack=[]; serial=0
     xv=z3.Sum([z3.If(q[j],1<<j,0) for j in range(22)])
-    s.add(xv>=1,xv<=3133452)
+    s.add(xv>=lo,xv<=hi)
     def fresh(expr):
         nonlocal serial
         ex=z3.simplify(expr)
