@@ -113,3 +113,21 @@
   唯一掩码亦无用（同样是稀有相关模式）。R41活跃期载体线相关的
   live-wire候选为0。w==控制的implication形亦全DIFF。
 - 本方向（单行CCX→CX替换）证据穷尽：83/83 DIFF，可停。
+
+## 追补3（载体穷尽：全51 ancilla覆盖 + N-phase不可达 + 闲置统计）
+
+- 全51 ancilla clean区间（HMR/R-seeded，119651个）对731 cross spans：
+  仅7个有单线全覆盖（46.5M簇，q854+q879），**SAT全REFUTED**；
+  其余724个无任何单线载体。2-phase链同样仅此7个。
+- L1覆盖检查：550/735有载体起点，但到L2的handoff图不连通。
+- 全文件51M+ untouched区间（平均长度~1行！）：电路密度极高，
+  长闲置线极其稀有；已发现的长闲置线（y1跨度26条362条等）值全live。
+- preserve-dance（借live线+死线保值）：死线为0，无可用d。
+- 同target对消：5个cross对同target，但目标在跨度内均被读写数千次，
+  不满足零触碰条件。方向关闭。
+- triple-zero unsynthesis簇（51180484起连续11个）：抽查3个全FIRES。
+- R41-era载体线的live-wire匹配：0（R41活跃期无额外复用）。
+- 非控制+唯一+非scan活线：全文件仅3个，全DIFF。
+- 结论：6个已证等式在二进制层面不可货币化（无1-phase/2-phase/N-phase
+  载体、无死线、无活线、无同target对消）；需生成器级载体分配。
+  本轮新增可复用脚本：wireprove/batch_wire（单行替换证明器）。
