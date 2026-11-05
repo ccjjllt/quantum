@@ -1,12 +1,17 @@
 # invsqrt 有效研究入口
 
-当前最佳本地候选：`artifacts/20261104_reaudit/cross_hmr/public62_nofallback_cross_hmr.kmb`，
+2026-11-05 已转向 Maoxin V2 的公开 62Q 基线，作者完整验证成本约 **97921.54**。
+本地无回退选择器已在新前缀完成独立证明和三 seed 样本对照，精确期望节省 `262143/262144 C`，
+对应期望成本减少 **61.99976**，并非每个 shot 固定少一门；新候选尚未运行完整官方验证、未提交。
+方法、证据边界与后续方向见[Maoxin V2 研究](20261105_maoxin_v2/README.md)。
+
+此前已完成完整官方本地验证的候选：`artifacts/20261104_reaudit/cross_hmr/public62_nofallback_cross_hmr.kmb`，
 SHA `aac6ce1048f55ec961329f44082d88f4afa11d013ca13f062f5cac23b4c861c3`。
 **62Q、41个一般旋转，两次完整官方本地PASS：98123.1389 / 98123.1073**。
 该候选未提交Kaggle。[已提交的公开组合回执](../../submissions/20261104_heliosli_v5/README.md)
 属于独立组合，提交57980157实际Public Score为24.54651。
 
-## 当前生成和证明链
+## 旧基线的生成和证明链
 
 1. [公开输入与版本](20261104_public_refresh/README.md)：固定Kirill V5，成本约98309.14。
 2. [无回退选择器迁移](20261104_public62_optimization/README.md)：生成`5541151c…`，
@@ -24,9 +29,9 @@ SHA `aac6ce1048f55ec961329f44082d88f4afa11d013ca13f062f5cac23b4c861c3`。
 - [Stage1无回退选择器](20261104_stage1_nofallback/README.md)：相对旧joint-tail增加0.125C收益；
   当前使用上面的公开基线迁移实现。
 
-## 继续研究的范围
+## 此前窗口研究的范围
 
-保留`20261104_reaudit/census_cross_hmr.py`及28个互不重叠窗口的实际指令，
+针对旧 `aac6ce…` 基线，保留`20261104_reaudit/census_cross_hmr.py`及28个互不重叠窗口的实际指令，
 用于HMR两侧联合改写：24个无条件窗口优先，另4个带固定守卫。
 它们只是研究候选，尚无新增已证收益。逐段保持所有边界输出相同的压缩路线已收官。
 
