@@ -46,7 +46,6 @@
 - 结论：6 等式需生成器级载体分配；二进制补丁路关闭。
 
 ## 同轮关闭的方向（证据，无需重做）
-
 - R=reset 语义探针：`X;R→0`，`R|0>→0`（kickmix Simulator 实测）。
 - clean-control 门：HMR-clean 控制的 CCX/CSWAP/CCZ，全文件 0。
 - 首触控制门：ancilla 首触即作控制（初态|0>恒等删除），0。
@@ -77,3 +76,28 @@
 - masks：`simB2/simZ2/simS2_prod.pkl`；候选：`cross2.json`（731 cross-pair），
   `ds2.json`，`zero3.json`（4495）。
 - 独立 env：`$TMPDIR/satenv`（uv venv，python-sat + ortools）。
+
+## 追补（同分支后续推进，所有二进制变现路已穷尽）
+
+- 活线替换（`CCX c d u`→`CX w u`，w为终点时刻持有该乘积的线）：
+  全文件流式掩码匹配找到 4833 候选 + 25 跨对终点候选；
+  SAT逐一证伪 55 个（8+17+10+20，皆DIFF，锥unfrozen，0.0~95秒），
+  含1799 unique-mask与20跨阶段 diverse 样本。循环行进结构导致
+  系统性假阳性；已证6等式的终点均无活线持有（6/6零匹配）。方向关闭。
+- MBU（uncompute-form `CCX a b t,t==a*b`→`HMR+CZ`）：10693候选中
+  经R-reset语义过滤，真uncompute（product!=0）为 0——全部是
+  `R t`清零+Rare不触发乘积的假象。方向关闭。
+- scan尾剪枝：loop体每22 CCX含124 X翻转+R/HMR，状态恒变，
+  无收敛可能；以22为精确周期（44275=2012×22+11，无break）。
+  方向关闭（推理+体组成证据）。
+- 宽度：891 qubit全被使用（最闲q23也有32248触碰）；降宽需重调度，
+  ablokced（并行线程方向，不重复）。
+- R-clean控制：reset语义修正后重查（HMR/R-clean+SWAP传播），全文件0。
+- 常1控制：675终点快照无恒1线；全1乘积0。方向关闭。
+- 官方验证器本地可跑：ProblemSpecDQI(m=4095,n=70,degree=12,r=2016)，
+  基准电路512 shots得value 0/512 phase 0/512（assertion系shot数不足
+  致bound不达标，非电路问题）；后续补丁用同命令+小shot数做
+  differential gate（以0/0为通过标准），再跑全量102400。
+- R语义补记：`R`除reset-to-0外还带随机outcome（影响phase_flipped，
+  不影响值逻辑）；`HMR`/`R` outcome由seed确定，验证器可复现。
+  本管线的值证明不受影响；补丁必须走官方验证器（已就绪）。

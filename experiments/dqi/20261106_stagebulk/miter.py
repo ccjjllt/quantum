@@ -12,7 +12,7 @@ def parse(line):
     if op in ('PUSH_CONDITION','POP_CONDITION','INFO_TAG'): return (op,line.strip())
     return ('OTHER',op)
 
-def build_cone(win, w0, l1, l2, t1, t2, max_ccx=40000, max_tot=120000):
+def build_cone(win, w0, l1, l2, t1, t2, max_ccx=40000, max_tot=120000, extra=()):
     """win: list of lines for [w0,l2]. Returns (rel, conds_map, frozen, bottom)."""
     conds=[()]*len(win); stack=[]
     for wi,ln in enumerate(win):
@@ -24,7 +24,7 @@ def build_cone(win, w0, l1, l2, t1, t2, max_ccx=40000, max_tot=120000):
             if stack: stack.pop()
             conds[wi]=tuple(stack)
         else: conds[wi]=tuple(stack)
-    needed=set([t2]); rel={}; bottom=False; frozen=False
+    needed=set([t2]+list(extra)); rel={}; bottom=False; frozen=False
     for ln in range(l2,w0-1,-1):
         wi=ln-w0
         if wi<0 or wi>=len(win): bottom=True; break
