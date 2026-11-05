@@ -101,3 +101,15 @@
 - R语义补记：`R`除reset-to-0外还带随机outcome（影响phase_flipped，
   不影响值逻辑）；`HMR`/`R` outcome由seed确定，验证器可复现。
   本管线的值证明不受影响；补丁必须走官方验证器（已就绪）。
+
+## 追补2（活线替换穷尽：83 SAT全DIFF，无WIREQ）
+
+- 全文件流式活线匹配（sparse 2000 shots，每CCX对891线）得4833候选；
+  SAT逐一验证 83 个：wbatch 8 + wbatch2 17 + wbatch3 10 + wbatch4 20
+  （跨阶段diverse）+ wbatch5 25（非scan unique）+ wbatch6 3
+  （非控制+唯一+非scan，全文件仅3个），**全部DIFF**（锥unfrozen，
+  genuine refutation，0.0~233秒/个）。
+- 机制：循环行进结构使不同线值在样本上高度相关但函数不等；
+  唯一掩码亦无用（同样是稀有相关模式）。R41活跃期载体线相关的
+  live-wire候选为0。w==控制的implication形亦全DIFF。
+- 本方向（单行CCX→CX替换）证据穷尽：83/83 DIFF，可停。
