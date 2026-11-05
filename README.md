@@ -2,6 +2,8 @@
 
 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
 
+当前分支 `codex/dqi-research` 的新增研究集中于 **DQI**；Maoxin V2 的乘积缓存、成本与正确性诊断及后续方向见[本轮研究](experiments/dqi/20261105_maoxin_v2/README.md)。invsqrt 与化学的新研究分别放在 `invsqrt-generator-rebuild`、`codex/dfthcsos-research`，共同历史记录保留作参考。
+
 工作约定：先做能回答研究问题的最小实验；不写测试文件，不配置 CI、自动测试或合并门控。需要检查时手动执行命令，记录结果即可。官方 verifier 是测量正确性与成本的研究工具，保留原版；初始化仓库不代表已经完成全量验证。
 
 ## 环境
