@@ -12,6 +12,15 @@
 - 凭据、Kaggle token、下载签名链接及大体积数据不得进入 Git。
 - 不自动提交 Kaggle、发布数据、推送代码或创建远程仓库。
 
+## 分支与工作区职责
+
+- 主仓库根目录 `main`：公开优秀方案的来源、固定版本、比较与组合治理，以及 submission 打包和提交回执。
+- `.worktree/invsqrt/` / `codex/invsqrt-research`：invsqrt 算法、电路和资源研究。
+- `.worktree/dfthcsos/` / `codex/dfthcsos-research`：化学 / dfthcsos 研究。
+- `.worktree/dqi/` / `codex/dqi-research`：DQI 研究。
+- 新实验、候选和验证证据只写入对应研究工作区。共同历史保留作参考；采用研究成果时，在 main 记录选定产物、来源及验证范围，不整支混入研究过程。
+- 官方数据、原始公开包与已有环境可从 main 只读复用；研究输出写在各自工作区的 `artifacts/`，最终提交包和回执留在 main 的 `submissions/`。需要变更依赖时使用独立环境，避免修改其他工作区共用的环境。
+
 ## 环境
 
 使用 Python 3.12 与 `uv`。依赖由 `pyproject.toml` 和 `uv.lock` 管理；环境初始化使用 `uv sync`。
