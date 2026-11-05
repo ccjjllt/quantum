@@ -131,3 +131,28 @@
 - 结论：6个已证等式在二进制层面不可货币化（无1-phase/2-phase/N-phase
   载体、无死线、无活线、无同target对消）；需生成器级载体分配。
   本轮新增可复用脚本：wireprove/batch_wire（单行替换证明器）。
+
+## 追补2（载体全图 + 活线穷尽：109 DIFF + carriercover全51 ancilla）
+
+- 全51 ancilla clean区间（119651个）对731 cross跨度：
+  仅7个有单线全覆盖（46.5M簇，q854+q879），**全SAT REFUTED**；
+  其余724个无1-phase；2-phase（handoff图）同样仅此7个；
+  550跨度虽有起点载体但到不了L2。N-phase不可达已证。
+- 活线替换累计：wbatch(8)+wbatch2(17)+wbatch3(10)+wbatch4(20)+
+  wbatch5(25)+wbatch6(3)+wbatch7(25)+wbatch8(6)+hard(1)+散点≈116，
+  **全DIFF，0 WIREQ**。含：全文件仅存的3个非控制+唯一+非scan、
+  synthesis q887族、全阶段diverse集。机制：循环行进导致系统性假阳性。
+- MBU真uncompute（prod!=0）：0（10693全系R-reset假象）。
+- R-clean控制：0；常1控制：0（全文件无恒1线）；死线：0。
+- 相同目标对消：5对，目标在跨度内均被读写数千次。关闭。
+- triple-zero unsynthesis簇：3/3 FIRES；R41-era活线：0候选。
+- q863 23.5M clean区间（横贯scan）已确认，但其中无三分布一致对
+  （dense∩sparse=0，scan mask全系退化）；extract/convert长区间内
+  亦无cross对。载体与等式空间零交集。
+- t1-clean过滤：55 cross对L1目标干净但跨度内全被重写。
+  preserve舞弊需死线，不存在。
+- 官方验证器本地可跑（基准0/512通过）；但无补丁可喂。
+- 结论：6已证等式在二进制层面不可货币化；活线/恒零/MBU/镜像/
+  剪枝/稀有分支/死线/载体方向全部关闭且有证据。剩余771 cross对
+  与数千live-wire候选经carrier覆盖分析已证无patch路径，
+  无需逐一SAT（coverall：仅7有载体且已REFUTED）。
