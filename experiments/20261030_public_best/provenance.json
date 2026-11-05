@@ -1,0 +1,67 @@
+{
+  "retrieved_at": "2026-10-30T22:20:12.916388+08:00",
+  "selection": "Strongest complete downloadable portfolio found in this search; not a claim of global optimality or a verified leaderboard score",
+  "search_scope": "Kaggle ScoreDescending first 30 and DateRun first 40; latest source and saved logs of leading complete public portfolios",
+  "notebook": {
+    "url": "https://www.kaggle.com/code/heliosli/the-dataset-is-public-now-enjoy",
+    "version": 26,
+    "session_id": 363902440
+  },
+  "dataset": {
+    "url": "https://www.kaggle.com/datasets/heliosli/qcc-circuits-live/versions/24",
+    "version": 24,
+    "portfolio": "v45_oz",
+    "archive_sha256": "9fef328075c75ee4afc2e4b5b1940363da9623f3cb6f1403e94174826d9d0bcb",
+    "manifest_sha256": "bfa613d6e10f600c499d0b594c7ef750dde390d6da708129db1c2a36dc72680e"
+  },
+  "published_verification": {
+    "scope": "Upstream saved notebook log, all three unmodified official verifiers at default shot counts; not executed locally here",
+    "salt": "notebook-verification",
+    "gm_displayed": 23.0355,
+    "invsqrt_cost_displayed": 100941,
+    "dqi_cost_displayed": 408399000000.0,
+    "dfthcsos_cost_displayed": 337992000.0,
+    "log": "artifacts/20261030_public_best/heliosli_v26_session_log.json"
+  },
+  "local_verification": {
+    "dfthcsos": "Full default official local verifier PASS, 78080 shots, salt notebook-verification",
+    "invsqrt": "Release and archive SHA-256 match only; full local verifier not run",
+    "dqi": "Release and archive SHA-256 match only; full local verifier not run",
+    "versions": {
+      "kickmix": "1.0.0",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1"
+    },
+    "verifier_sha256": "0775be7a528922367caebe9e4d051d6199811f1aefeaa4b793eaaa4621b8ec9d"
+  },
+  "reproduction": {
+    "assembler": "experiments/20261030_public_best/assemble_release.py",
+    "command": "uv run python experiments/20261030_public_best/assemble_release.py artifacts/20261030_public_best/release artifacts/20261030_public_best/candidate",
+    "packaging": "ZIP_DEFLATED level 6, sorted relative paths, 18 members",
+    "scope": "Byte-identical assembly from published compiled circuits; full algorithmic generators for all upstream components have not been obtained",
+    "upstream_source": "artifacts/20261030_public_best/heliosli_v26.ipynb",
+    "credits": "artifacts/20261030_public_best/release/CREDITS.md",
+    "license": "artifacts/20261030_public_best/release/LICENSE.md"
+  },
+  "package": {
+    "file": "submissions/20261030_public_best/submission.zip",
+    "bytes": 28504283,
+    "sha256": "2f9faa35faf20d5000f67250fdb2e7a12c9364b12b5ac52e57e666bdbc4f9250",
+    "compression_level": 6,
+    "archive_members": 18,
+    "all_member_hashes_match_release": true,
+    "mtime": 1793369901
+  },
+  "submission": {
+    "id": 57808271,
+    "status": "Successfully submitted; awaiting scoring",
+    "submitted_at": "2026-10-30T22:29:42.087+08:00",
+    "url": "https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation/submissions",
+    "file": "submissions/20261030_public_best/submission.zip",
+    "description": "Public portfolio: Heliosli v26 / qcc-circuits-live v24 / v45_oz; unchanged 18 files; SHA-256 checked; local dfthcsos PASS.",
+    "upload_check": "artifacts/20261030_public_best/upload_check.json",
+    "prior_request": "Rejected before acceptance because the remote file name was not submission.zip; one accepted submission only",
+    "last_checked_at": "2026-10-30T22:32:08.481655+08:00",
+    "latest_response_file": "artifacts/20261030_public_best/kaggle_submission.json"
+  }
+}

@@ -12,6 +12,9 @@
 
 实验目录使用 `experiments/<task>/YYYYMMDD_short-name/`，例如 `experiments/dqi/20261030_public_audit/`。小型源码和研究记录放在对应目录中，同一次跨任务研究在三个子任务下分别记录，避免额外的重复汇总目录和总表。大电路、权重、运行日志放到 `artifacts/<实验名>/<task>/`，最终 ZIP 放到 `submissions/`。不要将 Kaggle token 写入源码、笔记或结果。
 
+实际提交的回执与最终ZIP同放在 `submissions/<提交名>/`；任务研究记录仍在这里。
+invsqrt当前有效研究和已删除无收益实验的结论见[invsqrt入口](invsqrt/README.md)。
+
 记录日期使用北京时间；资源成本、改善倍数和验证结果未测则明确写明。引用结果时附上对应产物路径、工具版本、salt 或 seed，必要时加 hash 和运行耗时。
 
 所有检查都手动发起。记录应如实区分“生成完成”“静态统计”“本地 verifier PASS”和“线上提交成绩”。只运行一项或缩小规模时，写明范围；不将快速探索结果标成完整验证通过。

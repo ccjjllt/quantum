@@ -1,5 +1,7 @@
 # 62Q invsqrt 研究价值与公开前沿复核
 
+> 本文是固定公开输入及其当时比较结果的历史记录；当前候选与成本见[invsqrt入口](../README.md)。
+
 本次通过 Kaggle MCP 读取比赛信息、排行榜、公开 notebook/source/output、讨论帖与自己的提交状态。
 没有提交 Kaggle、发布或运行远程 notebook，没有修改现有候选和官方验证器。
 公开源、版本快照及验证产物在 `artifacts/20261104_public_refresh/`。

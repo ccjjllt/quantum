@@ -17,6 +17,10 @@ __pycache__/
 !/artifacts/.gitkeep
 /submissions/*
 !/submissions/.gitkeep
+# Keep the submission receipt in Git; the ZIP and other large files stay local.
+!/submissions/20261104_heliosli_v5/
+/submissions/20261104_heliosli_v5/*
+!/submissions/20261104_heliosli_v5/README.md
 /experiments/runs/
 
 # Credentials and short-lived download links.

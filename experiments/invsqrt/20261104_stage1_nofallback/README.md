@@ -1,5 +1,8 @@
 # Stage1 无回退选择器（2026-11-04 实测）
 
+> 保留有效历史方法及其证明。当前实现使用[公开基线迁移版](../20261104_public62_optimization/README.md)，
+> 当前最佳候选见[invsqrt入口](../README.md)。
+
 基线：`joint_tail_combined.kmb`（`04ea98e7…`，本地成本约100502.64）。
 候选：`artifacts/20261104_stage1_nofallback/invsqrt/stage1_nofallback.kmb`（`80ba3fef…`，62Q，49096 ops，全部68 Z_POW不变）。
 
@@ -24,5 +27,6 @@
 ## 结论
 
 第一阶段交付完成：相对新基线新增`0.125C`（约7.75成本），累计相对原公开基线`1.187496C`。
-新增`2C`研究目标未达成（尚缺约1.875C）。第二阶段进行中，见副线记录。
+该轮新增`2C`研究目标未达成。无收益Stage2副线已收官并清理，结论见
+[清理记录](../20261104_cleanup/README.md)；后续跨HMR的2C收益单独记录。
 未提交Kaggle，未推送代码，未覆盖历史基线。

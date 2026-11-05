@@ -22,7 +22,13 @@ uv sync
 
 按本次明确提交指令，已于北京时间 2026-10-30 22:29 向 Kaggle 提交一次，编号 `57808271`；平台状态为 `COMPLETE`，Public Score 为 **23.00037**。提交包为 `submissions/20261030_public_best/submission.zip`，平台返回记录保存在 `artifacts/20261030_public_best/kaggle_submission.json`。
 
-该组合的后续审计分别保存在 [invsqrt](experiments/invsqrt/20261030_public_audit/)、[dqi](experiments/dqi/20261030_public_audit/) 和 [dfthcsos](experiments/dfthcsos/20261030_public_audit/)：已完成三项定向诊断和成本分析，记录了 DQI 的低权重错误、化学的结构与成本阶梯、invsqrt 的恢复成本；尚未生成更优候选。
+该组合的后续审计记录了 DQI 的低权重错误、化学的结构与成本阶梯、invsqrt 的恢复成本。
+[invsqrt有效研究入口](experiments/invsqrt/README.md)现已整理为当前62Q生成/证明链及有效历史方法；
+其余审计见[dqi](experiments/dqi/20261030_public_audit/)和[dfthcsos](experiments/dfthcsos/20261030_public_audit/)。
+
+2026-11-04最新已完成公开组合提交为[Heliosli V5](submissions/20261104_heliosli_v5/README.md)，
+提交57980157，实际Public Score **24.54651**。本地另有62Q invsqrt候选，双seed完整官方
+成本约**98123.14**，尚未提交；其本地结果与上述组合榜分分别记录。
 
 已手动检查三个脚本及官方 CLI 的帮助入口，读取真实 invsqrt/ANGLE 基线的静态资源，并将完整参考提交打包为 `submissions/baseline.zip`（13 个文件）。这只确认环境、读取与打包可用，不代表全量评分通过。
 
@@ -33,7 +39,7 @@ data/competition/     官方数据、参考电路和原版 verifiers（不入 Gi
 docs/research-map.md  比赛契约、公开方案与讨论索引
 experiments/          研究记录、小型探索脚本和笔记
 artifacts/            生成电路、中间产物和手动验证结果（不入 Git）
-submissions/          打包的提交文件（不入 Git）
+submissions/          提交ZIP（不入Git）及对应README回执
 scripts/             查看电路、手动验证和打包的便利入口
 ```
 
