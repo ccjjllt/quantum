@@ -17,9 +17,17 @@ __pycache__/
 !/artifacts/.gitkeep
 /submissions/*
 !/submissions/.gitkeep
+!/submissions/*/
+/submissions/*/*
+!/submissions/*/README.md
 /experiments/runs/
 
 # Credentials and short-lived download links.
 kaggle.json
 access_token*
 *download-url*
+
+# Local research worktrees and shared environment links.
+/.worktree/
+/.venv
+/.uv-cache

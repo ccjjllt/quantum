@@ -1,88 +1,87 @@
-# Quantum circuit compilation research
+# Quantum circuit compilation：公开方案与 submission 治理
 
-[Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
+本仓库用于 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation)。
+根工作区使用 **main**，负责公开优秀方案的来源与版本管理、比较选择、组合装配、submission 和提交回执。
+三个研究分支分别推进算法、电路与资源成本研究。
 
-工作约定：先做能回答研究问题的最小实验；不写测试文件，不配置 CI、自动测试或合并门控。需要检查时手动执行命令，记录结果即可。官方 verifier 是测量正确性与成本的研究工具，保留原版；初始化仓库不代表已经完成全量验证。
+## 分支与本地工作区
 
-## 环境
+| 职责 | 分支 | 本地目录 | 当前研究入口 |
+|---|---|---|---|
+| 公开方案治理与 submission | `main` | 仓库根目录 | 本页及 `submissions/` |
+| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | [Maoxin V2 研究](.worktree/invsqrt/experiments/invsqrt/20261105_maoxin_v2/README.md) |
+| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | [Maoxin V2 研究](.worktree/dfthcsos/experiments/dfthcsos/20261105_maoxin_v2/README.md) |
+| DQI | `codex/dqi-research` | `.worktree/dqi/` | [Maoxin V2 研究](.worktree/dqi/experiments/dqi/20261105_maoxin_v2/README.md) |
 
-使用 Python 3.12 和 [uv](https://docs.astral.sh/uv/)。在仓库根目录执行：
+工作区链接用于本机浏览，`.worktree/` 不进入 Git。三条研究线保留共同历史，新增研究只写入各自工作区。
+官方数据、原始公开包和已有 Python 环境可只读共用；每条研究线的候选和日志写入自己的 `artifacts/`。
+采用研究成果时，main 记录实际选定的产物、来源、参数和验证范围，不整支混入研究过程。
 
-```bash
+## 已有提交记录
+
+以下来自本地保存的回执，不是实时状态查询。作者成绩、本地验证结果和本账号成绩分别记录。
+
+| 日期（北京时间） | 采用方案 | 本账号提交 ID | 已记录的本账号 Public Score |
+|---|---|---:|---|
+| 2026-10-30 | Heliosli v26 / dataset v24 / v45_oz | 57808271 | 23.00037，COMPLETE |
+| 2026-11-01 | Hedge Wizardry notebook v5 / HW-06 | 57876561 | 23.83790，后续回执已确认 |
+| 2026-11-04 | [Heliosli V5 原始组合](submissions/20261104_heliosli_v5/README.md) | 57980157 | 24.54651，COMPLETE |
+| 2026-11-05 | [Maoxin V2 原始组合](submissions/20261105_maoxin_v2/README.md) | 58014726 | 已成功创建提交；依用户要求停止监控，后续分数未查询 |
+
+当前采用的公开来源为 [Maoxin V2 / run365853243](https://www.kaggle.com/code/maoxin123/lb-24-786-pi-gauge-loaders-transferred-weights?scriptVersionId=365853243)。
+作者提交58010361的 Public Score **24.78590** 已在此前通过 Kaggle MCP 核实；它不是本账号58014726的成绩。
+原始 ZIP 位于 `submissions/20261105_maoxin_v2/submission.zip`，本次没有重打包、混入研究补丁、匹配哈希或本机全量验证。
+来源快照和解压的共享原始输入位于 `artifacts/20261105_maoxin_v2/{source,release}/`。
+
+历史组合与证据：
+
+- `artifacts/20261030_public_best/`：v45_oz 公开输入、归属、首次提交记录；化学在本机完成默认规模官方验证，成本337,991,954.0482345。
+- `experiments/20261030_public_best/`：该历史公开组合的来源清单与装配代码，保留原路径便于复现。
+- `artifacts/20261101_public_hw06/`：HW-06 来源及提交记录，本机未全量复跑。
+- `artifacts/20261104_submission_refresh/`：Heliosli V5 固定版本、作者日志和平台回执。
+- `artifacts/20261105_submission_maoxin_v2/`：Maoxin V2 本次提交的机器可读回执。
+
+## main 的治理约定
+
+1. 对公开方案记录作者、固定版本、生成/组合方法和原始产物。公开成绩是带日期的比较依据，不是不可突破的上限。
+2. 明确区分来源文件可用、静态资源、局部诊断、完整官方本地验证和实际 Kaggle 分数。未执行的检查不写成通过。
+3. 原始提交 ZIP 与回执一起放在 `submissions/<日期_方案>/`；README 可进入 Git，ZIP、大文件、凭据和签名 URL 不进入 Git。
+4. 研究候选的采用是单独的组合决定；在 main 记录选定版本与证据，不覆盖原始公开文件。
+5. 不自动提交 Kaggle、发布数据或推送代码。打包不触发验证或上传；验证和提交均按明确任务手动发起。
+
+历史哈希记录保留其原有验证范围，不意味着以后每次提交必须重复匹配哈希。
+本次 Maoxin 提交按用户要求跳过该步骤，详细范围见回执。
+
+## 环境与目录
+
+使用 Python 3.12 和 `uv`，依赖由 `pyproject.toml`、`uv.lock` 管理：
+
+```sh
 uv sync
 ```
 
-需要 Jupyter 时再安装可选依赖：`uv sync --extra notebooks`。
-
-本地使用适配当前系统的 `kickmix` 包。比赛附带的 `kickmix.so` 面向 Kaggle 镜像，不能直接当作 macOS 动态库使用。固定依赖版本见 `uv.lock`；与线上评测比较时，同时记录所用 kickmix 和官方 verifier 版本。
-
-2026-10-30 初始化已完成 Python 3.12.13 环境与依赖安装，当前使用 `kickmix 1.0.0`。官方参考基线尚未运行三项全量本地验证。
-
-同日已引入 Heliosli notebook v26 / dataset v24 的公开组合 `v45_oz`，18 个候选文件和 ZIP 成员均与公开清单的 SHA-256 一致。化学任务已通过默认规模官方本地验证（78,080 shots，salt `notebook-verification`），成本 `337,991,954.0482345`；提交前 invsqrt、DQI 本机仅检查文件完整性，后续完成了局部诊断。作者保存的三项完整验证日志给出本地 GM `23.0355`，与我们的线上分数分开记录。组件来源保存在 `artifacts/20261030_public_best/release/CREDITS.md`，实验结果分别保存在各子任务目录。
-
-按本次明确提交指令，已于北京时间 2026-10-30 22:29 向 Kaggle 提交一次，编号 `57808271`；平台状态为 `COMPLETE`，Public Score 为 **23.00037**。提交包为 `submissions/20261030_public_best/submission.zip`，平台返回记录保存在 `artifacts/20261030_public_best/kaggle_submission.json`。
-
-2026-11-01 按用户新的明确提交指令，原样采用 Hedge Wizardry notebook v5 的公开组合（Ehan 62Q invsqrt、HW-06 892Q DQI、C40 化学混合加载器），本机核对 ZIP CRC 及 18 个成员哈希后，于北京时间 23:41 提交一次，编号 `57876561`，等待线上评分。作者在 Kaggle 上使用官方 verifier 和 kickmix fork 0.3.1 的完整验证记录给出本地 GM **23.837909266369813**；本机没有重跑官方验证。提交包为 `submissions/20261101_public_hw06/submission.zip`，来源、校验及平台记录保存在 `artifacts/20261101_public_hw06/`，三个子任务分别记录于各自的 `20261101_public_hw06/` 实验目录。
-
-该组合的后续审计分别保存在 [invsqrt](experiments/invsqrt/20261030_public_audit/)、[dqi](experiments/dqi/20261030_public_audit/) 和 [dfthcsos](experiments/dfthcsos/20261030_public_audit/)：已完成三项定向诊断和成本分析，记录了 DQI 的低权重错误、化学的结构与成本阶梯、invsqrt 的恢复成本；尚未生成更优候选。
-
-已手动检查三个脚本及官方 CLI 的帮助入口，读取真实 invsqrt/ANGLE 基线的静态资源，并将完整参考提交打包为 `submissions/baseline.zip`（13 个文件）。这只确认环境、读取与打包可用，不代表全量评分通过。
-
-## 目录
+macOS 使用 PyPI 原生 kickmix，不导入比赛数据包面向 Kaggle Linux 的 `kickmix.so`。
+已有本地环境为 Python 3.12.13 / kickmix1.0.0；安装完成不代表全量验证通过。
 
 ```text
-data/competition/     官方数据、参考电路和原版 verifiers（不入 Git）
-docs/research-map.md  比赛契约、公开方案与讨论索引
-experiments/          研究记录、小型探索脚本和笔记
-artifacts/            生成电路、中间产物和手动验证结果（不入 Git）
-submissions/          打包的提交文件（不入 Git）
-scripts/             查看电路、手动验证和打包的便利入口
+.worktree/            三个独立研究工作区（不入 Git）
+data/competition/     官方原始数据和未修改的验证器（不入 Git）
+docs/research-map.md  比赛契约与公开资料的带日期快照
+references/          来源清单
+experiments/          main 的历史记录与公开组合装配；新算法研究在研究分支
+artifacts/            main 的公开输入、来源快照与提交证据（不入 Git）
+submissions/          最终 ZIP（不入 Git）及 README 回执
+scripts/             静态查看、手动验证和打包入口
 ```
 
-官方数据目录应包含 `sample_submission/`、`verifiers/`、`kickmix/` 和比赛论文。数据来源为 [Kaggle Data](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation/data)。额外的 [化学 Starter Kit](https://www.kaggle.com/datasets/sohier/verifiable-circuit-compilation-starter-kit) 用于训练分解和生成 ANGLE 电路，按研究需要另行获取。
+已有官方34个文件的来源清单见 [competition-manifest.json](references/competition-manifest.json)。
+比赛契约、评分口径和历史讨论见 [研究地图](docs/research-map.md)；它注明快照日期，不代表实时公开前沿。
 
-初始化已获取全部 34 个官方文件（约 1.04 GB）；文件来源和逐文件 SHA-256 见 [competition-manifest.json](references/competition-manifest.json)。
+main 可手动装配已经选定的三任务组合：
 
-## 开始一次实验
-
-先查看基线电路，再挑一个子任务和一个改动。静态资源统计不等于完整评分。
-
-```bash
-uv run python scripts/inspect_circuit.py data/competition/sample_submission/invsqrt.kmb
+```sh
+uv run python scripts/package_submission.py artifacts/candidate --output submissions/selected_release/submission.zip
 ```
 
-需要官方检查时，手动运行对应命令。三项独立执行，完整验证可能耗时较长；不在安装、导入或打包时自动触发。
-
-```bash
-uv run python scripts/manual_verify.py invsqrt data/competition/sample_submission/invsqrt.kmb --salt research-001
-uv run python scripts/manual_verify.py dqi data/competition/sample_submission/dqi.kmb --salt research-001
-uv run python scripts/manual_verify.py dfthcsos data/competition/sample_submission/dfthcsos --salt research-001
-```
-
-把自己的完整候选放到 `artifacts/candidate/`，保留以下结构。只研究一个任务时，其余任务可以沿用基线。
-
-```text
-artifacts/candidate/
-├── invsqrt.kmb
-├── dqi.kmb
-└── dfthcsos/
-    ├── submission.npz
-    ├── angle_k_0.kmb
-    └── ...
-```
-
-文本 `.kmx` 也可使用，每个电路只保留一种格式。打包由自己触发：
-
-```bash
-uv run python scripts/package_submission.py artifacts/candidate --output submissions/submission.zip
-```
-
-打包不等于验证通过，也不会向 Kaggle 提交。比赛接口要求上传文件名恰好为 `submission.zip`；区分多个版本时使用不同的父目录。实验结论保存在对应子任务的实验目录，记录约定见 [experiments/README.md](experiments/README.md)。本地 verifier 的结果、作者自报的 LB 和实际线上评分分开记录。
-
-## 研究入口
-
-- `invsqrt`：近似与精度分配、相位融合、寄存器生命周期和反计算。
-- `dqi`：解码器算法、有限域算术、流式原位实现，以及 `Q² × 门数 × 失败惩罚` 的权衡。
-- `dfthcsos`：量化感知分解、系数重拟合、Givens 树和多字 QROM。
-
-具体任务契约、已有方案和主办方澄清放在 [研究地图](docs/research-map.md)。公开成绩是带日期的研究线索，不视为不可突破的上限。
+候选目录需含 `invsqrt.kmb`、`dqi.kmb` 和完整 `dfthcsos/`；每个电路也可用唯一的 `.kmx` 格式。
+比赛上传文件名必须为 `submission.zip`。该命令只打包，不运行官方验证器，也不向 Kaggle 提交。

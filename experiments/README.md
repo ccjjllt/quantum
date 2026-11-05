@@ -1,5 +1,7 @@
 # 实验记录
 
+main 保留历史实验和公开组合装配记录。新增 invsqrt、化学、DQI 研究分别在 `.worktree/invsqrt`、`.worktree/dfthcsos`、`.worktree/dqi` 的对应 `codex/` 分支开展；提交包与回执由 main 管理。
+
 这里按 `invsqrt`、`dqi`、`dfthcsos` 分别保存研究笔记、小型探索脚本和结果。先完成实验，再决定是否值得抽成公共代码；不为一次性探索搭建测试或门控体系。
 
 每次研究只需留下：
