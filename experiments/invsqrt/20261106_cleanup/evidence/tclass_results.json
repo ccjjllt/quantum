@@ -1,0 +1,198 @@
+[
+ {
+  "op": 15614,
+  "line": "Z_POW q28 0.25",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error -1.250e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 31019,
+  "line": "Z_POW q51 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=51: phase error 1.250e-01 turns exceeds tolerance 8.346e-09."
+ },
+ {
+  "op": 31020,
+  "line": "Z_POW q46 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 1.250e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 31022,
+  "line": "Z_POW q46 0.25 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error -1.250e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 31171,
+  "line": "Z_POW q51 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 1.250e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 31172,
+  "line": "Z_POW q46 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 1.250e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 31174,
+  "line": "Z_POW q46 0.25 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error -1.250e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 31316,
+  "line": "Z_POW q51 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=13: phase error 1.250e-01 turns exceeds tolerance 1.653e-08."
+ },
+ {
+  "op": 31317,
+  "line": "Z_POW q46 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=10: phase error 1.250e-01 turns exceeds tolerance 1.885e-08."
+ },
+ {
+  "op": 31319,
+  "line": "Z_POW q46 0.25 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error -1.250e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 31477,
+  "line": "Z_POW q51 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 1.250e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 31478,
+  "line": "Z_POW q46 1.75 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 1.250e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 31480,
+  "line": "Z_POW q46 0.25 if b414",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error -1.250e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 33049,
+  "line": "Z_POW q57 1.75 if b418",
+  "status": "PASS",
+  "score": 97859.62141456606,
+  "err": ""
+ },
+ {
+  "op": 33050,
+  "line": "Z_POW q16 1.75 if b418",
+  "status": "PASS",
+  "score": 97859.62357763077,
+  "err": ""
+ },
+ {
+  "op": 33052,
+  "line": "Z_POW q16 0.25 if b418",
+  "status": "PASS",
+  "score": 97859.55957159905,
+  "err": ""
+ },
+ {
+  "op": 33336,
+  "line": "Z_POW q57 1.75 if b418",
+  "status": "PASS",
+  "score": 97859.61642976316,
+  "err": ""
+ },
+ {
+  "op": 33337,
+  "line": "Z_POW q16 1.75 if b418",
+  "status": "PASS",
+  "score": 97859.60364954906,
+  "err": ""
+ },
+ {
+  "op": 33339,
+  "line": "Z_POW q16 0.25 if b418",
+  "status": "PASS",
+  "score": 97859.58579054625,
+  "err": ""
+ },
+ {
+  "op": 33628,
+  "line": "Z_POW q15 1.75 if b308",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=6: phase error 1.250e-01 turns exceeds tolerance 2.433e-08."
+ },
+ {
+  "op": 33629,
+  "line": "Z_POW q48 1.75 if b308",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 1.250e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 33631,
+  "line": "Z_POW q48 0.25 if b308",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=6: phase error -1.250e-01 turns exceeds tolerance 2.433e-08."
+ },
+ {
+  "op": 38036,
+  "line": "Z_POW q60 1.75 if b413",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=206: phase error 1.250e-01 turns exceeds tolerance 4.153e-09."
+ },
+ {
+  "op": 38037,
+  "line": "Z_POW q38 1.75 if b413",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 1.250e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 38039,
+  "line": "Z_POW q38 0.25 if b413",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error -1.250e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 38284,
+  "line": "Z_POW q30 1.75 if b413",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=50: phase error 1.250e-01 turns exceeds tolerance 8.429e-09."
+ },
+ {
+  "op": 38285,
+  "line": "Z_POW q38 1.75 if b413",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 1.250e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 38287,
+  "line": "Z_POW q38 0.25 if b413",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error -1.250e-01 turns exceeds tolerance 3.441e-08."
+ }
+]

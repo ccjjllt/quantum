@@ -1,0 +1,674 @@
+[
+ {
+  "op": 49606,
+  "line": "CCX q23 q0 q14",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49607,
+  "line": "CCX q23 q1 q15",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49612,
+  "line": "CCX q14 q15 q16",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49617,
+  "line": "CSWAP q16 q2 q23",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49624,
+  "line": "CCX q15 q3 q16",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49636,
+  "line": "CSWAP q15 q61 q28",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49637,
+  "line": "CSWAP q15 q27 q40",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49642,
+  "line": "CSWAP q15 q9 q11",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49643,
+  "line": "CSWAP q15 q8 q12",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49644,
+  "line": "CSWAP q15 q7 q13",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49645,
+  "line": "CSWAP q15 q6 q57",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49646,
+  "line": "CSWAP q15 q5 q50",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49647,
+  "line": "CSWAP q15 q4 q27",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49648,
+  "line": "CSWAP q15 q3 q61",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49649,
+  "line": "CSWAP q15 q2 q51",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49650,
+  "line": "CSWAP q15 q1 q28",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49651,
+  "line": "CSWAP q15 q0 q40",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49655,
+  "line": "CSWAP q18 q50 q28",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49656,
+  "line": "CSWAP q18 q57 q40",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49657,
+  "line": "CSWAP q18 q13 q41",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49658,
+  "line": "CSWAP q18 q5 q7",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49659,
+  "line": "CSWAP q18 q4 q8",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49660,
+  "line": "CSWAP q18 q3 q9",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49661,
+  "line": "CSWAP q18 q2 q10",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49662,
+  "line": "CSWAP q18 q1 q11",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49663,
+  "line": "CSWAP q18 q0 q12",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49666,
+  "line": "CSWAP q14 q57 q27",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49667,
+  "line": "CSWAP q14 q13 q61",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49668,
+  "line": "CSWAP q14 q12 q51",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49669,
+  "line": "CSWAP q14 q11 q28",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49670,
+  "line": "CSWAP q14 q10 q40",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49671,
+  "line": "CSWAP q14 q9 q41",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49672,
+  "line": "CSWAP q14 q3 q5",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49673,
+  "line": "CSWAP q14 q2 q6",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49674,
+  "line": "CSWAP q14 q1 q7",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49675,
+  "line": "CSWAP q14 q0 q8",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49678,
+  "line": "CSWAP q16 q13 q50",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49679,
+  "line": "CSWAP q16 q12 q27",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49680,
+  "line": "CSWAP q16 q11 q61",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49681,
+  "line": "CSWAP q16 q10 q51",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49682,
+  "line": "CSWAP q16 q9 q28",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49683,
+  "line": "CSWAP q16 q8 q40",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49684,
+  "line": "CSWAP q16 q7 q41",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49685,
+  "line": "CSWAP q16 q2 q4",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49686,
+  "line": "CSWAP q16 q1 q5",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49687,
+  "line": "CSWAP q16 q0 q6",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49689,
+  "line": "CSWAP q19 q13 q57",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49690,
+  "line": "CSWAP q19 q12 q50",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49691,
+  "line": "CSWAP q19 q11 q27",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49692,
+  "line": "CSWAP q19 q10 q61",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49693,
+  "line": "CSWAP q19 q9 q51",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49694,
+  "line": "CSWAP q19 q8 q28",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49695,
+  "line": "CSWAP q19 q7 q40",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49706,
+  "line": "CSWAP q19 q2 q3",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49707,
+  "line": "CSWAP q19 q1 q4",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49708,
+  "line": "CSWAP q19 q0 q5",
+  "status": "FAIL",
+  "score": null,
+  "err": "x was not restored."
+ },
+ {
+  "op": 49742,
+  "line": "CCX q14 q15 q31",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=6: phase error 5.000e-01 turns exceeds tolerance 2.433e-08."
+ },
+ {
+  "op": 49751,
+  "line": "CCX q16 q18 q22",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=23: phase error -5.000e-01 turns exceeds tolerance 1.243e-08."
+ },
+ {
+  "op": 49755,
+  "line": "CCX q16 q14 q24",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=4: phase error 5.000e-01 turns exceeds tolerance 2.980e-08."
+ },
+ {
+  "op": 49759,
+  "line": "CCX q16 q15 q30",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=31: phase error 5.000e-01 turns exceeds tolerance 1.071e-08."
+ },
+ {
+  "op": 49775,
+  "line": "CCZ q16 q3 q2 if b8400",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 5.000e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 49777,
+  "line": "CCZ q15 q5 q4 if b8401",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=4: phase error 5.000e-01 turns exceeds tolerance 2.980e-08."
+ },
+ {
+  "op": 49779,
+  "line": "CCZ q30 q7 q6 if b8402",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=6: phase error 5.000e-01 turns exceeds tolerance 2.433e-08."
+ },
+ {
+  "op": 49781,
+  "line": "CCZ q14 q9 q8 if b8403",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 5.000e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 49783,
+  "line": "CCZ q24 q11 q10 if b8404",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 5.000e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 49785,
+  "line": "CCZ q18 q13 q12 if b8405",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 5.000e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 49787,
+  "line": "CCZ q22 q50 q57 if b8406",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 5.000e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 49789,
+  "line": "CCZ q17 q61 q27 if b8407",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 5.000e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 49791,
+  "line": "CCZ q19 q28 q51 if b8408",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 5.000e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 49857,
+  "line": "CCX q17 q61 q21",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=5: phase error 5.000e-01 turns exceeds tolerance 2.666e-08."
+ },
+ {
+  "op": 49859,
+  "line": "CCX q18 q13 q23",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=18: phase error 5.000e-01 turns exceeds tolerance 1.405e-08."
+ },
+ {
+  "op": 49861,
+  "line": "CCX q23 q12 q24",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=20: phase error 5.000e-01 turns exceeds tolerance 1.333e-08."
+ },
+ {
+  "op": 49865,
+  "line": "CCX q14 q9 q29",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 5.000e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 49867,
+  "line": "CCX q15 q5 q31",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=10: phase error 5.000e-01 turns exceeds tolerance 1.885e-08."
+ },
+ {
+  "op": 49875,
+  "line": "CCX q31 q4 q32",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 5.000e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 49876,
+  "line": "CCZ q32 q3 q2",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 5.000e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 49884,
+  "line": "CCX q29 q8 q32",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=9: phase error 5.000e-01 turns exceeds tolerance 1.987e-08."
+ },
+ {
+  "op": 49885,
+  "line": "CCZ q32 q7 q6",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 5.000e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 49892,
+  "line": "CCZ q24 q11 q10 if b8149",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 5.000e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 49899,
+  "line": "CCX q21 q27 q32",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=19: phase error 5.000e-01 turns exceeds tolerance 1.367e-08."
+ },
+ {
+  "op": 49900,
+  "line": "CCZ q32 q50 q57",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 5.000e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 49907,
+  "line": "CCZ q19 q28 q51 if b8155",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=1: phase error 5.000e-01 turns exceeds tolerance 5.960e-08."
+ },
+ {
+  "op": 49945,
+  "line": "CCX q15 q5 q32",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=27: phase error -5.000e-01 turns exceeds tolerance 1.147e-08."
+ },
+ {
+  "op": 49946,
+  "line": "CCX q32 q4 q19",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=7: phase error -5.000e-01 turns exceeds tolerance 2.253e-08."
+ },
+ {
+  "op": 49947,
+  "line": "CCZ q19 q3 q2",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 5.000e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 49966,
+  "line": "CCX q18 q13 q32",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=53: phase error 5.000e-01 turns exceeds tolerance 8.187e-09."
+ },
+ {
+  "op": 49967,
+  "line": "CCX q32 q12 q19",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 5.000e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 49977,
+  "line": "CCX q19 q11 q20",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=63: phase error -5.000e-01 turns exceeds tolerance 7.509e-09."
+ },
+ {
+  "op": 49979,
+  "line": "CCX q20 q10 q21",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=2: phase error 5.000e-01 turns exceeds tolerance 4.215e-08."
+ },
+ {
+  "op": 49980,
+  "line": "CCX q21 q9 q22",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=6: phase error 5.000e-01 turns exceeds tolerance 2.433e-08."
+ },
+ {
+  "op": 49981,
+  "line": "CCX q22 q8 q33",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=4: phase error 5.000e-01 turns exceeds tolerance 2.980e-08."
+ },
+ {
+  "op": 49982,
+  "line": "CCZ q33 q7 q6",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=3: phase error 5.000e-01 turns exceeds tolerance 3.441e-08."
+ },
+ {
+  "op": 50011,
+  "line": "CCX q17 q61 q32",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=7: phase error -5.000e-01 turns exceeds tolerance 2.253e-08."
+ },
+ {
+  "op": 50012,
+  "line": "CCX q32 q27 q19",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=4: phase error 5.000e-01 turns exceeds tolerance 2.980e-08."
+ },
+ {
+  "op": 50013,
+  "line": "CCZ q19 q50 q57",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=4: phase error 5.000e-01 turns exceeds tolerance 2.980e-08."
+ },
+ {
+  "op": 50030,
+  "line": "CCZ q14 q28 q51 if b8285",
+  "status": "FAIL",
+  "score": null,
+  "err": "x=524294: phase error 5.000e-01 turns exceeds tolerance 8.232e-11."
+ }
+]
