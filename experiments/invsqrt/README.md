@@ -37,6 +37,12 @@ scratch 线**没有一条**能整体移出，最小阻塞集是 13 条"累加器
 两条都**没有生成候选 KMB，也没有新增已验证收益**。当前 62Q 基线仍是已知最便宜，
 下一步若继续，只能是改变表示/调度的 61Q 或新的算术架构，而不是现有门序列的局部改写。
 
+2026-11-07 又用 Kaggle 匿名数据集 API 复核了公开 KMB 镜像
+（[记录](20261106_public_kbm_scan/README.md)）：`manwithacat/vqcc-apache-public-circuits`
+的 52 个公开 invsqrt **没有 61Q**；62Q 公开文件的静态付费门最低为 1,475/1,476，
+本地 nofallback 为 1,457。2026-11-06 新增的 `heliosli/qcc-circuits-live`、
+`yoyobar` 与 `isabe11am00re` 文件也都是 62Q、1,475 静态付费，未低于本地基线。
+
 此前Maoxin V2无回退候选已经完整官方本地PASS，成本约 **97859.63**；
 旧报告上部“尚未全量”是历史阶段，已由main保留的 `submissions/20261106_nofallback_invsqrt/verify_all.log`
 覆盖。旧生成证明链和候选仍保留，不将其约1C增量重复算到Syed新基线上。
