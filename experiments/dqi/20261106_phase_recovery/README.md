@@ -199,6 +199,22 @@ depth 16: beams 40 best score 3
 这是**启发式搜索**，不是 UNSAT 证明：文献的 24 项构造对应另一个 S；完整判定
 需要 SAT/CP-SAT 或 tensor-rank-toolkit。18 项仍是一个未解决的新张量秩问题。
 
+### 3.9 完整 SAT/CP-SAT 搜索跑到了时间上限（UNKNOWN，非证书）
+
+本轮实际跑了两个完整编码的判定器（脚本已提交）：
+
+- `gf8_cpsat.py`（OR-Tools CP-SAT，255 个 `x_u`、2,040 个 `y_{u,k}`、
+  512 条 slice-bit 奇偶约束、`sum x = k`）：
+  - k=18：600 秒，702 万 conflicts，1.02 亿 branches，**UNKNOWN**。
+  - k=24：300 秒，464 万 conflicts，**UNKNOWN**。
+- `gf8_sat.py`（PySAT/cadical195，CNF + 顺序基数编码，XOR 用 Tseitin 链）：
+  - k=24：超过 900 秒仍无结果，被超时终止。
+
+这些是**搜索时间上限**，不是 UNSAT 证书；不能据此声称 18 项不存在。要拿到
+证书需要更长时间/更大机器，或 `tensor-rank-toolkit` + Givaro 的完备判定
+（本机没有 cmake/pkg-config/Givaro，brew 也没有 givaro formula）。
+
+
 
 
 ## 4. 与既有结论的关系
