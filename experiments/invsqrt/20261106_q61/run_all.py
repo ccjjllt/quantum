@@ -37,6 +37,11 @@ STEPS = [
     ("park_missing.py", []),
     ("park_rebuild_screen.py", []),
     ("final_table.py", []),
+    ("commute_exact.py", []),
+    ("commute_blockers.py", []),
+    ("commute_v4.py", []),
+    ("commute_summary.py", []),
+    ("validate_reorder.py", []),
 ]
 
 
