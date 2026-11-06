@@ -62,6 +62,15 @@ python experiments/dqi/20261106_leo_merge/merge_public.py base.kmx leo.kmx merge
 - `artifacts/20261106_leo_merge/dqi_merged_b99bf233.kmb`（本地，不in git）
 - `artifacts/20261106_leo_merge/diffhunks.json`：98 个 hunk 全文（审计用）
 - 基线 R41 补丁文本即 hunk 中 `a0 <= 50732751` 的 `a` 侧。
+- 基线电路：`artifacts/20261105_maoxin_v2/release/dqi.kmb`（指向主仓库的
+  只读共享输入，sha `fd0ef09e`）。
+
+## 与其它记录的关系
+
+DQI 二进制层面其余全部方向（peephole/模板/死门/恒零/MBU/活线/载体/
+宽度/分支/镜像/QQ-51T 等）均已实证关闭，结论与证据数字集中记录在
+`experiments/dqi/20261106_closed/README.md`（对应脚本与中间产物已删除）。
+
 
 ## 判定与边界
 
