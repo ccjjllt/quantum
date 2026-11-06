@@ -178,5 +178,3 @@ verified_shots 200540928  用时 95 s
   `20261101_public_hw06`、`20261104_public_refresh`、`20261104_submission_refresh`）
   **未删除**：它们指向 main 的 artifacts，属于 main 治理范围，删除会连带 main；
   在本 worktree 中它们只占 0 字节。
-- 同目录的 `experiments/invsqrt/CLOSED_RESEARCH.md`（2026-11-06 08:54，由并行会话写入）
-  未改动，作为简版索引保留；本目录 README 是本次清理的权威记录。
