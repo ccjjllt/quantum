@@ -210,6 +210,17 @@ depth 16: beams 40 best score 3
 - `gf8_sat.py`（PySAT/cadical195，CNF + 顺序基数编码，XOR 用 Tseitin 链）：
   - k=24：超过 900 秒仍无结果，被超时终止。
 
+**4 小时后台复跑**（2026-11-06→07）：`gf8_cpsat.py 18 14400` 返回
+`UNKNOWN`，14,694 秒，91,668,329 conflicts，1,428,767,368 branches。
+仍不是 UNSAT 证书。
+
+`tensor-rank-toolkit` 的完备判定尝试被**工具链/网络**阻塞：
+`docker build -f Containerfile` 在 `FROM ubuntu:24.04` 处因 Docker Hub
+`auth.docker.io` 超时失败；本机没有 cmake/pkg-config/Givaro，brew 无 givaro
+formula，也没有 conda/mamba。因此 `decide-rank --target 18` 还没有实际跑起来。
+要完成它，需要能访问 Docker Hub/Givaro 的网络、预构建的 toolkit 镜像，或更大机器。
+
+
 这些是**搜索时间上限**，不是 UNSAT 证书；不能据此声称 18 项不存在。要拿到
 证书需要更长时间/更大机器，或 `tensor-rank-toolkit` + Givaro 的完备判定
 （本机没有 cmake/pkg-config/Givaro，brew 也没有 givaro formula）。
