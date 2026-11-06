@@ -9,9 +9,9 @@
 | 职责 | 分支 | 本地目录 | 当前研究入口 |
 |---|---|---|---|
 | 公开方案治理与 submission | `main` | 仓库根目录 | 本页及 `submissions/` |
-| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | [Maoxin V2 研究](.worktree/invsqrt/experiments/invsqrt/20261105_maoxin_v2/README.md) |
-| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | [Maoxin V2 研究](.worktree/dfthcsos/experiments/dfthcsos/20261105_maoxin_v2/README.md) |
-| DQI | `codex/dqi-research` | `.worktree/dqi/` | [Maoxin V2 研究](.worktree/dqi/experiments/dqi/20261105_maoxin_v2/README.md) |
+| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | [Syed V9 研究](.worktree/invsqrt/experiments/invsqrt/20261106_syed_v9/README.md) |
+| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | [Syed V9 研究](.worktree/dfthcsos/experiments/dfthcsos/20261106_syed_v9/README.md) |
+| DQI | `codex/dqi-research` | `.worktree/dqi/` | [Syed V9 研究](.worktree/dqi/experiments/dqi/20261106_syed_v9/README.md) |
 
 工作区链接用于本机浏览，`.worktree/` 不进入 Git。三条研究线保留共同历史，新增研究只写入各自工作区。
 官方数据、原始公开包和已有 Python 环境可只读共用；每条研究线的候选和日志写入自己的 `artifacts/`。
@@ -26,12 +26,16 @@
 | 2026-10-30 | Heliosli v26 / dataset v24 / v45_oz | 57808271 | 23.00037，COMPLETE |
 | 2026-11-01 | Hedge Wizardry notebook v5 / HW-06 | 57876561 | 23.83790，后续回执已确认 |
 | 2026-11-04 | [Heliosli V5 原始组合](submissions/20261104_heliosli_v5/README.md) | 57980157 | 24.54651，COMPLETE |
-| 2026-11-05 | [Maoxin V2 原始组合](submissions/20261105_maoxin_v2/README.md) | 58014726 | 已成功创建提交；依用户要求停止监控，后续分数未查询 |
+| 2026-11-05 | [Maoxin V2 原始组合](submissions/20261105_maoxin_v2/README.md) | 58014726 | 24.78590，创建新提交前的去重读取确认COMPLETE |
+| 2026-11-06 | [Syed V9 固定数据集组合](submissions/20261106_syed_v9/README.md) | 58041132 | 已创建，未持续监控分数 |
 
-当前采用的公开来源为 [Maoxin V2 / run365853243](https://www.kaggle.com/code/maoxin123/lb-24-786-pi-gauge-loaders-transferred-weights?scriptVersionId=365853243)。
-作者提交58010361的 Public Score **24.78590** 已在此前通过 Kaggle MCP 核实；它不是本账号58014726的成绩。
-原始 ZIP 位于 `submissions/20261105_maoxin_v2/submission.zip`，本次没有重打包、混入研究补丁、匹配哈希或本机全量验证。
-来源快照和解压的共享原始输入位于 `artifacts/20261105_maoxin_v2/{source,release}/`。
+当前公开比较基线为 **[Syed V9 / run366109544](https://www.kaggle.com/code/syed3000/vqcc-own-circuit-portfolio-notebook?scriptVersionId=366109544)**，
+固定数据集版本9；机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
+作者公开提交58039042得分24.94081，不是本账号58041132的成绩。
+共享原始电路在 `artifacts/20261106_syed_v9/release/`，来源快照在相邻 `source/`。
+本次保持18个文件内容，仅将原ZIP_STORED改为ZIP_DEFLATED以减少传输，没有混入研究补丁。
+提交前未做哈希匹配或全量本地验证；后续研究检查分别记在三个分支。
+旧Maoxin V2和基于它的无回退组合保留为历史对照，不能把旧增益直接累加到Syed。
 
 历史组合与证据：
 

@@ -1,0 +1,55 @@
+{
+  "name": "Syed V9",
+  "adopted_date_beijing": "2026-11-06",
+  "competition": "google-verifiable-quantum-circuit-compilation",
+  "notebook": {
+    "ref": "syed3000/vqcc-own-circuit-portfolio-notebook",
+    "version": 9,
+    "run_id": 366109544,
+    "url": "https://www.kaggle.com/code/syed3000/vqcc-own-circuit-portfolio-notebook?scriptVersionId=366109544"
+  },
+  "dataset": {
+    "ref": "syed3000/vqcc-own-circuit-portfolio",
+    "version": 9,
+    "url": "https://www.kaggle.com/datasets/syed3000/vqcc-own-circuit-portfolio/versions/9"
+  },
+  "author_public_submission": {
+    "id": 58039042,
+    "score": 24.94081,
+    "evidence": "Kaggle MCP list_team_public_submissions"
+  },
+  "our_submission": {
+    "id": 58041132,
+    "creation_confirmed": true,
+    "score_not_polled": true,
+    "receipt": "submissions/20261106_syed_v9/README.md"
+  },
+  "release_path": "artifacts/20261106_syed_v9/release",
+  "source_path": "artifacts/20261106_syed_v9/source",
+  "previous_baseline": "Maoxin V2 / run365853243",
+  "components_author_report": {
+    "invsqrt": {
+      "Q": 62,
+      "cost_approx": 97747.22
+    },
+    "dqi": {
+      "Q": 892,
+      "mean_toffoli_approx": 395394,
+      "cost_approx": 374772000000.0,
+      "qualification": "Approximate decoder; cost depends on failures and sampling."
+    },
+    "dfthcsos": {
+      "shape": [
+        8,
+        143,
+        44
+      ],
+      "Q": 427,
+      "T": 14966,
+      "lambda_eff_approx": 46.8937,
+      "cost_approx": 299673103
+    }
+  },
+  "verification_scope": "Public compiled files; source V9 notebook packages only. No local full verifier before submission. Subsequent lane-local audits/candidate evaluations are recorded separately. No hash matching.",
+  "reproduction": "Download pinned dataset V9; map flattened __ to /; retain18 file contents; ZIP_DEFLATED level6 changes packaging only. No research patch included."
+}
