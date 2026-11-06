@@ -143,6 +143,7 @@ V6版本注记称k17恢复，**V9实际诊断的w17仍全部失败**。不据注
 .venv/bin/python experiments/dqi/20261106_syed_v9/trace_context.py
 .venv/bin/python experiments/dqi/20261106_syed_v9/probe_dqi.py
 .venv/bin/python experiments/dqi/20261106_syed_v9/extra_wire_probe.py
+.venv/bin/python experiments/dqi/20261106_syed_v9/failure_budget.py
 ```
 
 脚本仅做显式调用的静态/局部研究。没有自动全量验证、测试/CI、Kaggle提交、推送，
