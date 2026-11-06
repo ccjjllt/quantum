@@ -2,7 +2,7 @@
 
 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
 
-当前分支 `codex/dqi-research` 的新增研究集中于 **DQI**；Maoxin V2 的乘积缓存、成本与正确性诊断及后续方向见[本轮研究](experiments/dqi/20261105_maoxin_v2/README.md)。invsqrt 与化学的新研究分别放在 `codex/invsqrt-research`、`codex/dfthcsos-research`，共同历史记录保留作参考。
+当前分支 `codex/dqi-research` 的新增研究集中于 **DQI**。当前公开比较基线已更新为 **Syed V9 / 892Q**，迁移检查与下一步方向见[Syed V9研究](experiments/dqi/20261106_syed_v9/README.md)。旧fd0ef+Leo −42门结果保留为历史方法，尚未迁入新基线。
 
 本工作区位于主仓库的 `.worktree/dqi/`。根目录 `main` 负责公开方案治理与 submission；本分支继续推进本方向研究。共享输入只读使用，新增产物写入本工作区。
 
