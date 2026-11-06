@@ -1,22 +1,26 @@
 # invsqrt 有效研究入口
 
-2026-11-05 已转向 Maoxin V2 的公开 62Q 基线，作者完整验证成本约 **97921.54**。
-本地无回退选择器已在新前缀完成独立证明和三 seed 样本对照，精确期望节省 `262143/262144 C`，
-对应期望成本减少 **61.99976**，并非每个 shot 固定少一门；新候选尚未运行完整官方验证、未提交。
-方法、证据边界与后续方向见[Maoxin V2 研究](20261105_maoxin_v2/README.md)。
+当前公开比较基线为 **Syed V9 / run366109544**，作者报告约 **97747.22**，
+实际62Q、46,844操作、1,475静态Toffoli-like。
+本轮重新证明旧无回退方法仍可迁移，但Syed已压缩第二选择器，
+所以净增量为 **393215/524288 C≈0.75C**，期望成本减少 **46.49988**，不是旧约1C。
 
-此前已完成完整官方本地验证的候选：`artifacts/20261104_reaudit/cross_hmr/public62_nofallback_cross_hmr.kmb`，
-SHA `aac6ce1048f55ec961329f44082d88f4afa11d013ca13f062f5cac23b4c861c3`。
-**62Q、41个一般旋转，两次完整官方本地PASS：98123.1389 / 98123.1073**。
-该候选未提交Kaggle。[已提交的公开组合回执](../../submissions/20261104_heliosli_v5/README.md)
-属于独立组合，提交57980157实际Public Score为24.54651。
+新候选 `artifacts/20261106_syed_v9/invsqrt/syed_v9_nofallback.kmb` 已生成。
+新前缀、压缩选择器、三分支相位/恢复与计费证明通过，3×21,760输入原生对照通过；
+一次完整官方本地验证 **PASS，200,540,928 shots，成本97,700.776777236**。
+详细证据见[本轮Syed研究](20261106_syed_v9/README.md)及原始日志。
+本分支新候选未提交Kaggle。
+
+此前Maoxin V2无回退候选已经完整官方本地PASS，成本约 **97859.63**；
+旧报告上部“尚未全量”是历史阶段，已由main保留的 `submissions/20261106_nofallback_invsqrt/verify_all.log`
+覆盖。旧生成证明链和候选仍保留，不将其约1C增量重复算到Syed新基线上。
 
 ## 旧基线的生成和证明链
 
 1. [公开输入与版本](20261104_public_refresh/README.md)：固定Kirill V5，成本约98309.14。
 2. [无回退选择器迁移](20261104_public62_optimization/README.md)：生成`5541151c…`，
    精确省`262143/262144 C`，成本约98247.14。
-3. [跨HMR联合改写](20261104_reaudit/README.md)：生成当前`aac6ce…`，再省2C/124成本；
+3. [跨HMR联合改写](20261104_reaudit/README.md)：生成历史`aac6ce…`，再省2C/124成本；
    对最新公开`15118bfa…`仍额外省约1C，等价和计费均已独立证明。
 
 这条链使用固定公开KMB及显式补丁生成，不宣称从数学函数独立综合。
@@ -46,10 +50,11 @@ SHA `aac6ce1048f55ec961329f44082d88f4afa11d013ca13f062f5cac23b4c861c3`。
 [`20261106_cleanup/README.md`](20261106_cleanup/README.md)，并删除对应 42 个目录、约 124 MB。
 
 - 清理后保留的收益链：`20261104_public_refresh` → `20261104_public62_optimization`
- → `20261104_reaudit` → `20261105_maoxin_v2`（当前最佳，完整验证 PASS）。
+ → `20261104_reaudit` → `20261105_maoxin_v2`（当时最佳，完整验证 PASS）。
 - 清理后复验：`maoxin_v2_nofallback.kmb`（SHA `49009f89…`）完整官方验证 **PASS**，
   score 97859.62816338046（同 salt 噪声带内），toffoli 1280.6655，worst 0.99932377@161。
-- 保留高频判据：score 噪声地板 ≈ 0.05 C（同一候选换 salt 即可漂移）；真实收益下限
- = 1 计费门（4 C）或 1 旋转（7.19 C）。
+- 计费口径更正：`C=Toffoli-like+T/4+一般旋转合成成本`，`score=Q*C`。
+  条件门的期望收益可以是分数，旧“至少1门/4C”和“任何更小增量均为噪声”不能作下界。
+  有限样本的salt波动与精确期望计费应分开记录。
 - 删除账本：[`20261106_cleanup/deleted_files.json`](20261106_cleanup/deleted_files.json)
  （逐目录大小；逐文件 SHA-256 因删除脚本中途中止未记录，已在账本中注明）。

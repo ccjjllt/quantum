@@ -2,7 +2,7 @@
 
 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
 
-当前分支 `codex/invsqrt-research` 的新增研究集中于 **invsqrt**；Maoxin V2 方法、局部候选与后续方向见[本轮研究](experiments/invsqrt/20261105_maoxin_v2/README.md)。化学与 DQI 的新研究分别放在独立分支 `codex/dfthcsos-research`、`codex/dqi-research`，共同历史记录保留作参考。
+当前分支 `codex/invsqrt-research` 的新增研究集中于 **invsqrt**；Syed V9 基线、无回退迁移及验证范围见[本轮研究](experiments/invsqrt/20261106_syed_v9/README.md)。化学与 DQI 的新研究分别放在独立分支 `codex/dfthcsos-research`、`codex/dqi-research`，共同历史记录保留作参考。
 
 本工作区位于主仓库的 `.worktree/invsqrt/`。根目录 `main` 负责公开方案治理与 submission；本分支继续推进本方向研究。共享输入只读使用，新增产物写入本工作区。
 
