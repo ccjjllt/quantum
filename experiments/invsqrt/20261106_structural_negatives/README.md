@@ -7,7 +7,8 @@
 
 ## 1. 三个大 X/CX/CCX 块的 AND 数不可由线性共享降低
 
-脚本：[block_rank.py](block_rank.py)，结果：`artifacts/20261106_structural_negatives/block_rank.json`。
+脚本：[block_rank.py](block_rank.py) 与 [random_rank.py](random_rank.py)，结果：
+`artifacts/20261106_structural_negatives/block_rank.json`、`random_rank.json`。
 
 对每个块，把所有 CCX 的乘积函数收集起来，分别计算：
 
@@ -67,6 +68,7 @@
 
 ```sh
 .venv/bin/python experiments/invsqrt/20261106_structural_negatives/block_rank.py
+.venv/bin/python experiments/invsqrt/20261106_structural_negatives/random_rank.py
 .venv/bin/python experiments/invsqrt/20261106_deferred_fredkin/deferred_fredkin.py --group 0
 .venv/bin/python experiments/invsqrt/20261106_cache_search/wire_bit_search.py
 .venv/bin/python experiments/invsqrt/20261106_cache_search/control_span_search.py
