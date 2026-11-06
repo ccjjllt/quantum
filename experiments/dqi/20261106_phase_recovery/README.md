@@ -214,6 +214,25 @@ depth 16: beams 40 best score 3
 证书需要更长时间/更大机器，或 `tensor-rank-toolkit` + Givaro 的完备判定
 （本机没有 cmake/pkg-config/Givaro，brew 也没有 givaro formula）。
 
+### 3.10 42 对 99-CCX 重复的 MBU 检查：目标是 syndrome，不是 ancilla
+
+`dup99_check.py` 对第一对精确重复（第一段 57,512,697–57,519,075）逐门跟踪
+"目标是否已知为零"和"上一写者"：
+
+```text
+segment [57512697, 57519075]
+ccx 98
+zero_at_first_write 0
+same_control_previous 0
+targets q144 q145 q146 q147 q148 q149 q151
+```
+
+目标 q144–q151 落在 **q0–q839 的 syndrome 区**，不是 ancilla；它们在输入时就是
+未知的 syndrome 值。MBU（HMR + CZ）会测掉并重置 syndrome，破坏契约；要保留
+syndrome 就必须另存 12 位副本（+Q）或换不同的恢复调度。**不增 Q 的测量式擦除
+不成立**，42 对重复的 4,158 T 不能按这个方式变现。该路线关闭。
+
+
 
 
 
