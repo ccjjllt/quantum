@@ -204,3 +204,28 @@ start 33.303 mHa
 当前证据不支持它能稳定降到 20 mHa 再 shrink 到收益形状。
 
 因此本轮不再把 CPU 时间投入到同一 8-bit 训练路线的 grow/shrink。
+
+## 10. Compact-seed 长预拟合：17k 次后仍 35.3 mHa
+
+按评审建议，换用 Lera compact seed（NumPy 版 `df_init.seed`，
+R6/B143/C59 初始 510.63 mHa）做连续 L-BFGS：
+
+```text
+start 510.631 mHa
+1,000 iter:  97.718 mHa
+5,000 iter:  50.074 mHa
+9,000 iter:  41.724 mHa
+13,000 iter: 37.631 mHa
+17,000 iter: 35.305 mHa  (进程停止)
+```
+
+下降在 13k 后明显变慢（约 0.0005 mHa/iter）。按此趋势，20k 约
+33–34 mHa，240k 也未必能稳定到 20 mHa 以下；而 240k 在本机
+CPU（约 3.7 it/s）需要约 **18 小时**。Lera 公开的 240k 预拟合是
+在 A100 上、且形状为 (9,180,90) 的更大容量结构；R6/B143/C59
+的 B/C 更紧，不能直接套用其收敛结论。
+
+至此，四条合法训练路线（V9 合并、eigen、cluster、compact seed）
+在 R6/B143/C59 上都停在 33–37 mHa（compact 17k 为 35.3），
+离 20 mHa 门限 13 mHa 以上。没有一条能在本机 CPU 预算内完成
+quantize.py → refine.py → build.py → 官方 78,080-shot 验证。
