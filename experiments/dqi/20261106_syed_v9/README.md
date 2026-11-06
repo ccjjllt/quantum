@@ -4,6 +4,9 @@
 固定输入为主仓库下载的 Syed notebook V9 / run366109544 原始 DQI，
 本工作区只读链接 `artifacts/20261106_syed_v9/release/dqi.kmb`。
 
+同日后续：[高收益方向交叉研究](../20261106_high_return_research/README.md)补充了精确阶段计数、实际二次核ANF、近期论文适配及旧C1源bundle。
+本文件的阶段SVG估计已被后续精确静态计数确认；Syed V9精确生成器仍缺失，但“公开旧源不可得”不再作为普遍前提。
+
 ## 结论
 
 **Syed V9 已优于旧 fd0ef+Leo 合并候选；原 −42 不能直接作为补丁搬过去。**
