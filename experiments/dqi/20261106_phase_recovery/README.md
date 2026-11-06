@@ -181,6 +181,25 @@ wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全�
 复现：`.venv/bin/python experiments/dqi/20261106_phase_recovery/gf8_reduce.py`
 产物：`artifacts/20261106_phase_recovery/gf8_reduced.json`。
 
+### 3.8 GF(2^8) 对称 18 项 beam search（不完整）
+
+`gf8_symmetric_search.py` 在 `Sym_8/W`（28 维商空间）上做宽度 40、深度 16 的
+beam search：对每个 class 子空间 S，取所有 class 落在 S 的池矩阵，检查它们是否
+张满 preimage（目标 rank = 8 + dim S）。结果：
+
+```text
+W rank 8
+quotient dim 28
+depth 16: beams 40 best score 3
+{"k": null, "note": "no filling class subspace up to dim 16"}
+```
+
+在搜索到的 beam 里，dim=16 时池矩阵 rank 只有 19，而填满 preimage 需要 24；
+没有找到 18 项（dim=10, rank=18）或 24 项（dim=16, rank=24）的 filling S。
+这是**启发式搜索**，不是 UNSAT 证明：文献的 24 项构造对应另一个 S；完整判定
+需要 SAT/CP-SAT 或 tensor-rank-toolkit。18 项仍是一个未解决的新张量秩问题。
+
+
 
 ## 4. 与既有结论的关系
 
