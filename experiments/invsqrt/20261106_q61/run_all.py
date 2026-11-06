@@ -42,6 +42,12 @@ STEPS = [
     ("commute_v4.py", []),
     ("commute_summary.py", []),
     ("validate_reorder.py", []),
+    ("nonlinear_rebuild.py", ["16750:zero", "16887:zero", "18483:zero"]),
+    ("verify_products.py", []),
+    ("cubic_check.py", []),
+    ("quadratic_rank.py", []),
+    ("rebuild_blocks.py", []),
+    ("nonlinear_summary.py", []),
 ]
 
 
