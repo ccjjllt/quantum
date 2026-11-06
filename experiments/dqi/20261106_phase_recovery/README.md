@@ -169,6 +169,19 @@ wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全�
 （k=8 塔 120），18 项会是一个新的张量秩结果，需要专门的对称分解/SAT 搜索。
 本轮没有构造出这样的分解；这是唯一还需要新数学结果的方向。
 
+### 3.7 GF(2^8) 27 项塔不可约，删项得不到 18
+
+`gf8_reduce.py` 从 `extension_tensor(8,4,2,tensor4())` 的 27 项出发，按 2,000 个
+随机顺序逐项尝试删除，每次都用 bit 级 slice space `W` 检查 `W ⊆ span`。
+结果：**任何一项都不能删**，每次都回到 27 项。这 27 项是一个极小分解；
+它不能通过删项得到 24 项（文献最好已知）或 18 项。24 项是另一个子空间的
+不同构造；18 项会是一个**新的对称张量秩结果**，需要真正的 SAT/对称分解搜索，
+不是删项或换基能得到。
+
+复现：`.venv/bin/python experiments/dqi/20261106_phase_recovery/gf8_reduce.py`
+产物：`artifacts/20261106_phase_recovery/gf8_reduced.json`。
+
+
 ## 4. 与既有结论的关系
 
 - 否定了“保留 syndrome 经典副本 + reset 其余线路即可省恢复段”的想法：本机
