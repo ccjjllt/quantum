@@ -225,6 +225,24 @@ formula，也没有 conda/mamba。因此 `decide-rank --target 18` 还没有实�
 证书需要更长时间/更大机器，或 `tensor-rank-toolkit` + Givaro 的完备判定
 （本机没有 cmake/pkg-config/Givaro，brew 也没有 givaro formula）。
 
+### 3.11 GF(2^8) rank-18 已被证明不可能（证书）
+
+原生 Givaro/CMake 构建成功后，用 `decide-rank` 对 8×8×8 张量做目标 18 判定：
+
+```text
+$ decide-rank gf8.tensor --target 18 --anchor map -s auto --node-limit 5000000 --threads 8
+  rank bound: rank is at least 19
+  NO: there is no algorithm with 18 products, which the polynomial bounds already refute.
+exit 1
+```
+
+- 这是**已证明的 rank ≥ 19**（多项式界/rank-sum），不是超时；18 项 GF(2^8) 不存在。
+- 因此 **5×18=90 的 k=8 塔不可能**，GF(2^8) 18 项这条 ≤90 路径**关闭**。
+- `minimise-rank --steps 1/2`：64 / 39 个乘积，rank bound 19，gap 20；19 是**一般张量**的下界，塔需要的是**对称** 19 项（对称最好已知 24），一般 19 项不能直接用于 `extension_tensor`。
+- PySAT 18 的 200M 搜索已停止（目标已被证明不存在）。
+
+原生构建的 macOS 补丁（临时前缀，不入库）：GMP `--enable-cxx`；Givaro `-Wno-invalid-specialization`；Givaro `random-integer.h` 的 `bool_constant`、`rfiddling.h` 的 `rint<K>::maxFFLAS`；toolkit `sms_file.cpp` 的 `Givaro::Integer` cast。CMake 用了一个最小 `pkg-config` shim 提供 Givaro 的 flags。
+
 ### 3.10 42 对 99-CCX 重复的 MBU 检查：目标是 syndrome，不是 ancilla
 
 `dup99_check.py` 对第一对精确重复（第一段 57,512,697–57,519,075）逐门跟踪
