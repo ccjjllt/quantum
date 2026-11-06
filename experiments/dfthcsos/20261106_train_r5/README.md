@@ -229,3 +229,20 @@ CPU（约 3.7 it/s）需要约 **18 小时**。Lera 公开的 240k 预拟合是
 在 R6/B143/C59 上都停在 33–37 mHa（compact 17k 为 35.3），
 离 20 mHa 门限 13 mHa 以上。没有一条能在本机 CPU 预算内完成
 quantize.py → refine.py → build.py → 官方 78,080-shot 验证。
+
+## 11. Grow-then-50k 的后续：6x180x90 到 25.80 mHa
+
+上一节 2k 时的 grow-then-refit 只到 32.62 mHa，但继续跑到 50k
+（约 3.7 小时）后实际到达：
+
+```text
+start 33.303 mHa
+2,000 iter:  32.616 mHa
+50,000 iter: 25.800 mHa
+```
+
+这是目前合法（128Q）形状上最低的连续误差，但 6x180x90 的 T 比
+当前更大，本身没有资源收益；它只能作为继续 shrink 到
+R6/B143/C59 的更好 seed（25.8 而不是 29–37）。下一步用细粒度
+curriculum（180x90→170x85→160x80→150x75→143x59）尝试把它带到
+20 mHa 以下。
