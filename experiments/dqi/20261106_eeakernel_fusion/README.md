@@ -1,42 +1,45 @@
-# convert/unconvert 融合分析（2026-11-06）：边界联合冗余检验
+# Q889 六峰宽度审计：全电路后向存活分析（2026-11-06）
 
 ## 假设
 
-相邻 EEA 块（norm→scalar→products）若在边界处重复计算，
-删多余门即省。先做精确 ANF 删1/删2检验（无采样）；
-含 R/HMR 的 span 超出经典精确范围，明确标出，不硬算。
+若存在 ≥2 个从不参与任何可观测行为（HMR coin、CZ/Z/R 相位/旋转、
+经可逆门传导到上述者）的 qubit，则可删除其全部写入门并缩减分配，
+Q 891→889，T 不变 → 约 +0.15% GM（确定性增益，无需改算法）。
 
 ## 改动
 
-- 只读：kmx 流式提取边界 span；ANF 精确比对（全输入恒等）。
-- norm 模板（首实例，纯 CX+CCX，217 ops/22线）：
-  单删 15/15 必需，C(15,2)=105 对删 0 冗余。
-  见 `artifacts/20261106_eeakernel_fusion/norm_redundancy.json`。
-- products 模板：单删 25/25 必需，双删 C(25,2)=300 为 0，
-  三删 2300 为 0，四删 12650 为 0，有界 2→1（7窄对）为 0
-  （14个原始命中已证伪为平凡自替换，见 eeakernel_rewrite/README）。
-- 边界 span 审计：norm→scalar 间隙纯 CX（24条）；
-  scalar→products 间隙含 HMR×4 + CZ×28 + SWAP×13（309 CX），
-  scalar 块内含 R×6 + HMR×6 + CZ×81 + Z×21 ——
-  凡涉及 scalar 的联合检验超出经典精确范围（R 产生叠加，
-  HMR 坍缩），需量子验证（官方 verifier 打补丁电路）或 Z3，
-  本轮不做，明确记为 open。
+- 58208707 ops 单遍后向扫描（int bitmask 实现，C 速度），
+  修正版条件 USE 规则：
+  CCX(a,b,t)：t live 才加 {a,b}；CX：b live 才加 a；
+  X：恒等（不增不减）；HMR：恒加（coin 恒为输出）；
+  SWAP/CSWAP：条件添加；CZ/Z/R/CCZ/未知：恒加涉及线（保守，保正确性）；
+  BIT/NEG/PUSH/POP/INFO：忽略。
+- 旧版（无条件 USE）有两个 bug，已废弃，以本版为准。
+
+## 观察（2026-11-06已执行）
+
+- `true_peak_live = 891`（58M 中的 op 52139640 处首次达到），
+  `n_ever_live = 891`，`never_live_wires = []`。
+- 首末触及区间：最小跨度 55M/58M ops，中位数 ~全电路，born-late 和
+  die-early（按中点计）均为 0——没有任何线可被复用槽容纳。
+  （`artifacts/20261106_eeakernel_rewrite/intervals.json`）
+- 结论：无可证明死线。Q889 不能靠删线/重排实现；
+  需要算法级改动（不同分解/编码）或重综合。
+- 附带：全操作类型普查确认分析无遗漏
+  （CX 52M/CCX 382636/CZ 812714/HMR 79416/R 55876/X 250k/
+  SWAP 1.6M/CSWAP 13064/CCZ 1477/NEG 554/BIT/PUSH/POP）。
 
 ## 证据
 
-- `artifacts/20261106_eeakernel_fusion/boundary_audit.json` +
-  `boundary.log`：三间隙审计（norm→scalar：24 CX纯净，可经典精确；
-  scalar→products：309 CX+13 SWAP+4 HMR+28 CZ，不可经典精确；
-  products→norm2：16588 ops含112 CCX+43 HMR，非局部边界）+
-  norm 模板（15门单删0冗余，105对0冗余）。
-- `experiments/dqi/20261106_eeakernel_fusion/boundary_fusion.py`
-  （间隙审计 + norm 模板精确删除）。
-- `experiments/dqi/20261106_eeakernel_rewrite/` 全套精确否定证据链。
+- `artifacts/20261106_eeakernel_rewrite/liveness3.json`
+  （peak/ever-live/never-live 列表 + 方法注记）。
+- 脚本 `liveness3.py`（条件 USE；旧版 `liveness*.py` 已废弃，
+  勿用——首版 R/W 语义错误，曾给出相同的 891 数值但理由错误）。
 
-## 判定
+## 下一步
 
-- 纯经典 EEA 核（products+norm）在删1/删2（products 扩至删4与有界2→1）
-  意义下精确最小；跨块边界融合因 scalar 含 R/HMR 而无法用经典 ANF 判定，
-  需升级验证手段（官方 verifier / Z3）。
-- 本轮仍无实质收益。P2 剩余：scalar 块的量子感知重写（大投入），
-  或 convert/unconvert 级数据流融合设计。
+- DQI 可证明方向已穷尽（peephole 零对消 / 模板删1删2全零 /
+  QQ 移植三重证伪 / 融合对偶实例证伪 / 死线零 / 峰值=分配）。
+  剩余全部需要：(a) 上游 refitter/源生成器（缺失），
+  (b) scalar 量子感知重写 + 官方验证循环（大投入），
+  (c) 接受当前最优，转向 invsqrt/dfthcsos 或提交。

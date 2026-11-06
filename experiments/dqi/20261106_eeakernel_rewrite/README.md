@@ -45,13 +45,31 @@ EEA 重复内核（`inverse12` 三件套各169调用，`multiply v`×12，
 - 精确删除 ladder（删 k 重算全 ANF 比对，非采样）：
   1-gate：25/25 必需；2-gate C(25,2)=300：0；3-gate C(25,3)=2300：0；
   4-gate C(25,4)=12650：0（10.2秒）。
+- norm 模板（15 CCX，纯 CX+CCX）：单删 0 冗余，
+  双删 C(15,2)=105 为 0，三删 C(15,3)=455 为 0
+  （`../20261106_eeakernel_fusion/norm_redundancy.json`、
+  `template_triples_norm.json`）。
+- `multiply v` 模板（99 CCX，纯 CX+CCX，20→7 接口）：
+  单删 0 冗余，双删 C(99,2)=4851 为 0（169.7秒）。
+  见 `multiplyv_redundancy.json`。
+- `multiply v` 三删（C(99,3)=156849）已全量完成：156849/156849，
+  0 冗余 0 blowup（`multiplyv_triples.json`，12 片累积，后台 nice 运行；
+  `multiplyv_triples.py`）。
+- `full_head_product` 三模板（126/168/210 CCX，纯 CX+CCX+SWAP）：
+  单删全部 0 冗余（`fhp_redundancy.json`）；双删三模板全量完成
+  （fhp126 7875 / fhp168 14028 / fhp210 21945，全部 0 冗余 0 blowup，
+  `fhp_pairs.json`，fhp210 因单轮超时分 4 片累积完成）。
+- `full_head_product` fhp126 三删（C(126,3)=325500）已全量完成：
+  325500/325500，0 冗余 0 blowup（`fhp_triples.json`，10 片累积，含后台
+  nice 运行；`fhp_triples.py`）。
 - 有界 2→1 替换（7 个窄差异对 × 对内+差异线三元组 × 2 插入位，
   `tried 2460`）：14 个原始命中经核查**全部是平凡自替换**
   （`ins=j` 分支实际测的是 1→1 恒等：被换门与候选门逐字相同，
   如 `q840 q880 q870`；实验设计 bug，已修正口径并保留原始记录
   `template_2to1_raw.json`）。**真实 2→1：0。**
-- 结论：该模板在删1~4门、2→1 局部替换意义下精确最小；
-  125 单项式由 25 门高度共享已是紧的。
+- 结论：products/norm/multiplyv/fhp126-168-210 模板在删1（fhp/norm/products/multiplyv）、
+  删2（products/norm/multiplyv/fhp全模板）、删3（products/norm/fhp126/multiplyv）
+  删4（products/norm）及有界 2→1意义下精确最小；125 单项式由 25 门高度共享已是紧的。
   进一步压缩需 3→2/更大联合重综合（非删除型）或跨实例数据流融合。
 
 ## 下一步
