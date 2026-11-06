@@ -1,0 +1,176 @@
+# DQI 相位截断与源码级重算调度研究（2026-11-06）
+
+分支 `codex/dqi-research`。固定基线：Syed V9 / 892Q，静态 395,679 T，普通 4096-shot
+官方本地验证 0 value / 0 phase，meanT 395,394.99，R(0)=1.19126046，
+成本 **3.747724e11**。本记录区分：官方 4096-shot 本地验证、静态计数、源码重建；
+没有 Kaggle 提交或榜分。
+
+## 结论
+
+**没有找到能击败 V9 的新候选；V9 在这条公开源码线上处于局部最优。**
+两个大方向被定量关闭：
+
+1. **截断恢复段（相位捷径）不成立。** 扫描/转换/合成结束处的全局相位与目标相位
+   约一半 shot 不符，只有跑完 `unextract` 才精确；恢复段不能靠“保留 syndrome 的
+   经典副本 + 直接 reset”替代。
+2. **公开源码重建的 883Q–898Q 变体都比 V9 差 8%–16%。** V9 的 18% T 优势来自
+   Syed 的生成器（测量式擦除/条件化 clean AND），公开 bundle 中没有该入口。
+
+唯一可量化的剩余对象是 `unextract` 里 210 个额外的 99-CCX 乘法核（20,790 T），
+但它们是不同乘积而非重复；12Q 缓存在 Q²T 下约 10,700 T，需省 >15,600 T 才净赚，
+实测精确重复池只有 4,158 T。**当前宽度下缓存/保留不划算。**
+
+## 1. 相位截断实验
+
+`phase_probe.py` 把 58,286,875 行的 `.kmx` 在顶层阶段边界切开，用同一批官方分布
+shots（256）和同一 simulator seed 比较全局相位。前缀越短，恢复段越不完整：
+
+| 截断点 | 静态 T | meanT | 相位不符 shots | syndrome 改变 | 非 syndrome 非零 |
+|---|---:|---:|---:|---:|---:|
+| scan 结束 | 195,766 | 195,755.47 | 129/256 | 256/256 | 256/256 |
+| unconvert 结束 | 258,324 | 258,233.94 | 128/256 | 256/256 | 256/256 |
+| unsynthesis 结束 | 298,776 | 298,685.94 | 140/256 | 256/256 | 119/256 |
+| 完整 | 395,679 | 395,394.42 | **0/256** | 0/256 | 0/256 |
+
+`phase_bisect.py` 又在 `unextract` 内取 11 个条件栈深度 0 的切点（12%–99%）：
+相位不符始终在 50–76/128，直到 `unextract` 结束才变为 0/128。原因不是“最后一段
+集中付相位”，而是反向的 MBU/相位债要在各自节点恢复后才关闭；截断会留下未关闭的
+CZ/CCZ 修正。
+
+结论：不能把 syndrome 先测/存、直接 reset 其余线路来省掉恢复段；也说明相位与
+恢复调度是耦合的，不能分开记账。
+
+复现：
+
+```sh
+.venv/bin/python experiments/dqi/20261106_phase_recovery/phase_probe.py --shots 256
+.venv/bin/python experiments/dqi/20261106_phase_recovery/phase_bisect.py --shots 128
+```
+
+产物：`artifacts/20261106_phase_recovery/phase_probe.json`、`phase_bisect_128.json`。
+
+## 2. 公开源码重建：都输给 V9
+
+从已恢复的 bundle 实际构建并跑官方 4096-shot 本地验证（非全量，非榜分）：
+
+| 候选 / 入口 | Q | 静态 T | meanT (4096) | 4096-shot 结果 | 相对 V9 成本 |
+|---|---:|---:|---:|---|---:|
+| **Syed V9** | 892 | 395,679 | 395,394.99 | PASS 0/0 | **1.0000** |
+| yoyobar 891Q (`993c7038`) | 891 | 397,191 | 396,918.49 | 作者全量 0/0 | 1.0016（+0.16%） |
+| prior backhalf (889Q) | 889 | 459,792 | 434,588.50 | PASS 0/0 | 1.0917（+9.2%） |
+| SomeJoint 898 overlay | 897 | 454,252 | 440,396.92 | PASS 0/0 | 1.1263（+12.6%） |
+| decoderkit baseline | 883 | 483,503 | 467,388.48 | PASS 0/0 | 1.1584（+15.8%） |
+| Pro q18 hybrid6 | 893 | 482,802 | 未跑 4096 | — | ≥1.19（静态） |
+| `decode_q8q9` base | 889 | 486,571 | 未跑 4096 | — | ≥1.13（静态） |
+
+要点：
+
+- **V9 在每个阶段都优于 yoyobar 891Q**：extract 59,169 vs 59,595，convert 60,687 vs
+  60,796，unconvert 62,558 vs 62,711，unsynthesis 40,452 vs 40,553，unextract
+  96,903 vs 97,624。891Q 的宽度优势（−1Q ≈ 0.22%）抵不过 +1,512 T，且没有可拼接的
+  更便宜阶段。
+- 889Q/898Q 源码候选的静态 T 高 15%–22%；即使有 3%–5.5% 的条件跳过量，meanT 仍
+  高 10%–16%。Q 的平方收益不足以补偿 T。
+- `prior backhalf` 和 `somejoint898` 都 PASS 4096-shot，说明源码链本身是正确的，
+  只是成本更差；这排除了“源码重建有隐藏错误导致 T 偏高”的解释。
+
+复现命令：
+
+```sh
+# 先按 build_dqi_macos.py 的注释解包 bundle 到 artifacts/20261106_phase_recovery/old_build
+.venv/bin/python experiments/dqi/20261106_phase_recovery/build_kit.py artifacts/20261106_phase_recovery/kit_baseline/dqi.kmb
+.venv/bin/python experiments/dqi/20261106_phase_recovery/build_898.py artifacts/20261106_phase_recovery/somejoint898/dqi.kmb
+.venv/bin/python experiments/dqi/20261106_phase_recovery/build_prior_backhalf.py artifacts/20261106_phase_recovery/prior_backhalf/dqi.kmb
+.venv/bin/python data/competition/verifiers/dqi/verify_submission_dqi.py <candidate>.kmb --num-shots 4096 --max-workers 4
+```
+
+产物：各候选目录下的 `dqi.kmb`、`.build.json`、`verify_4096.json`。
+
+## 3. `unextract` 多出的 35,347 CCX 是什么
+
+wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全文）：
+
+| 组成 | CCX | 占 +35,347 |
+|---|---:|---:|
+| 额外 99-CCX 乘法核（extract 104 → unextract 314） | +20,790 | 58.8% |
+| 其他同形段（97×42-CCX + 42×2-CCX） | +4,158 | 11.8% |
+| extract 中不存在的新形状段 | +18,252 | 51.6% |
+| extract 有、unextract 不重复的段 | −7,853 | −22.2% |
+| 净差 | +35,347 | 100% |
+
+- 210 个额外 99-CCX 核中只有 42 个是精确 compute/uncompute 对（4,200 CCX）；
+  其余是不同乘积，不能局部对消。
+- 42 对之间有 ~50k 次操作触碰其 72 线支撑，删除会破坏语义。
+- 12Q 产品缓存在 Q=892 下约 10,700 T，需省 >15,600 T 才净赚；实测重复池
+  4,158 T，不够。
+- 相位/掩码耦合的新形状段 17,664 CCX 含 HMR/CZ/CCZ/条件经典操作；要变现必须先
+  证明 mask 相位与 syndrome 恢复，静态分析不足。
+
+结论：**恢复段的额外工作主要是“不同乘积的重算”，不是可删冗余；在固定 892Q 下，
+缓存/保留不划算，重算调度已接近该宽度的局部最优。**
+
+## 3.5 命名算术核的秩下界：总额也不到 5,000 T
+
+`subagents/REPORT.md` 第 3–7 节对五个命名核做了精确 ANF 与秩/子空间枚举
+（`inverse12 norm` 还做了全部 4,096 输入的值等价验证，0 失配）：
+
+| 核 | 现在 CCX/调用 | 调用 | 现在 T | 秩下界 | 下界 T | 最大可省 |
+|---|---:|---:|---:|---:|---:|---:|
+| inverse12 norm | 15 | 163 | 2,445 | 11（已排除 ≤13 对称解） | 1,793 | 652 |
+| inverse12 products | 25 | 163 | 4,075 | 12 | 1,956 | 2,119 |
+| inverse12 scalar | 18 | 163 | 2,934 | — | — | 未分析 |
+| inverse24 norm | 42 | 23 | 966 | 21 | 483 | 483 |
+| inverse24 products | 70 | 23 | 1,610 | 24 | 552 | 1,058 |
+| multiply v（仅命名实例） | 99 | 6 | 594 | 24 | 144 | 450 |
+| **五核合计** | | | **9,690** | | **4,764** | **4,762** |
+
+（`subagents/savings.json` 的旧表用 norm LB=10 得 4,925；第 4.1 节的精确
+枚举把一般下界修正为 11，故此处以 4,762 为准。）
+
+
+- `inverse12 norm` 的 63 个对称 rank-1 生成元在 `Sym_6/W` 中类别全不同；精确
+  子空间搜索排除 `k≤13` 的对称解，一般 `k=14` 的 CP-SAT 在时限内未返回
+  （inconclusive，不是 UNSAT）。下界从 10 修正为 11。
+- `inverse12 products` 的 12 个输出切片 rank 均为 6（polar rank 12），
+  当前基下二次图非二部；最大 ceiling 2,119 T，但没有构造出 12 项分解。
+- 即使把五个核都做到下界，也只有 **4,925 T = 1.25% meanT**，仍低于 5,000 T
+  门槛。要超过门槛必须动 `inverse12 scalar`、未命名窗口、uncompute 副本或宽度。
+
+## 4. 与既有结论的关系
+
+- 否定了“保留 syndrome 经典副本 + reset 其余线路即可省恢复段”的想法：本机
+  `R`/`HMR` 的随机相位与 MBU 相位债要求逐节点关闭，截断后相位错约一半。
+- 确认 V9 的 892Q 优于 891Q、877Q、883Q、889Q、893Q、897Q 的公开/重建变体；
+  与 20261106_syed_v9 的旧结论一致，并给出这些变体的实际 meanT/成本。
+- 没有重开已关闭的删门/载体/宽度方向；本轮新增的是“恢复段重算”的定量账。
+
+## 5. 下一步（按收益/证据排序）
+
+1. **99-CCX 乘法核是唯一大额对象。** 它不止 `multiply v` 的 6 个命名实例：
+   形状差分显示 extract 104 个、unextract 314 个，共 **418 次 = 41,382 T**。
+   源码已确认它就是 `exp/mul99/kernels.py` 的 `tensor99`：
+   **GF(2^24) 在 GF(2^4) 上的 6 次扩域，11 个求值点 × GF(2^4) 的 rank 9 = 99**。
+   同一 `extension_tensor` 的其它子域塔更差：k=6,d=4 → 126；k=8,d=3 → 135；
+   k=12,d=2 → 126；k=3,d=8 需要 15 个 GF(8) 求值点，超过域大小 8，构造无效。
+   因此 99 是这些塔里最好的；要再降需要一般的双线性 rank-47 构造或线性基变换，
+   当前没有完成。若每次从 99 降到 90，省 3,762 T（约 0.95% 成本 / GM +0.32%）。
+2. **只在能拿到 Syed V9 精确生成器时**再投入生成器级重算调度；否则二进制层
+   已无 ≥5k T 的可证改写。
+3. 若坚持本地源码线，目标是**同时**降低所有阶段的 892Q 峰值（12Q 级），
+   并证明 T 增幅 <2.7%；单阶段窄化不计分。
+4. 相位截断方向关闭；除非能证明某段的相位债在截断点已全部关闭。
+5. `inverse12 scalar`（2,934 T）含 R/HMR 与相位修正，不是纯值映射；如果能把
+   它的相位部分改成 `gf2_phase_by_product` 的免费形式，是剩余的小额确定收益，
+   但需要逐实例证明 ABI。
+
+完整证据：`subagents/REPORT.md` 第 3–7 节（含 ANF、秩枚举、SAT 编码与
+`verify_window.py` 全输入验证）。
+
+## 验证范围
+
+- 官方 `verify_submission_dqi.py` 只跑 4096 shots（16×256），默认 salt；PASS 指
+  4096-shot 0/0，不等于 102,400-shot 全量，也不是 Kaggle 榜分。
+- 静态 T 来自 `operation_statistics()`；meanT 来自 4096-shot 实际执行计数。
+- 源码重建用本机 kickmix 1.0.0 (module 0.1)，bundle SHA 与源文件 SHA 均已核对；
+  `build_dqi_macos.py` 只移除 macOS 不可用的 psutil 监控/affinity，未改算法。
+- 没有修改官方 verifier、共享数据或环境；没有新增依赖、测试/CI。
