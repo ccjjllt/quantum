@@ -52,8 +52,8 @@
         "psd_mHa": 10.267,
         "Q": 426,
         "T": 13683,
-        "tq_gain_pct": 8.57,
-        "lambda_room_pct": 9.38
+        "tq_gain_pct": 8.79,
+        "lambda_room_pct": 9.63
       },
       {
         "R": 4,
@@ -64,8 +64,8 @@
         "psd_mHa": 9.687,
         "Q": 426,
         "T": 13722,
-        "tq_gain_pct": 8.31,
-        "lambda_room_pct": 9.07
+        "tq_gain_pct": 8.53,
+        "lambda_room_pct": 9.32
       },
       {
         "R": 5,
