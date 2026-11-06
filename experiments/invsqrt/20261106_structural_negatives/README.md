@@ -47,9 +47,10 @@
 - [../20261106_cache_search/control_span_search.py](../20261106_cache_search/control_span_search.py)：
   没有控制线落在现有测量位的 GF(2) 张成里；
 - [../20261106_guard_search/guard_search.py](../20261106_guard_search/guard_search.py)：
-  4,000 个样本上找到 31 个“稳定”的守卫候选，但全域 3,133,452 个 x 检查全部出现
-  少量反例（每个门约 50–1,000 个 x），因此全部无效。典型的前三个候选在三个独立分支上
-  的反例数为 266–406；样本法不能代替全域检查。
+  4,000 个样本上找到 31 个“稳定”的守卫候选；
+  [../20261106_guard_search/guard_full_domain.py](../20261106_guard_search/guard_full_domain.py)
+  在全域 3,133,452 个 x 上逐一检查：**0/31 干净，最少反例 59 个 x**（典型 50–1,000 个）。
+  样本法不能代替全域检查。
 
 ## 4. 稀有门单删全部失败
 
@@ -73,6 +74,7 @@
 .venv/bin/python experiments/invsqrt/20261106_cache_search/wire_bit_search.py
 .venv/bin/python experiments/invsqrt/20261106_cache_search/control_span_search.py
 .venv/bin/python experiments/invsqrt/20261106_guard_search/guard_search.py
+.venv/bin/python experiments/invsqrt/20261106_guard_search/guard_full_domain.py
 .venv/bin/python experiments/invsqrt/20261106_rare_gate_scan/rare_delete_scan.py
 ```
 
