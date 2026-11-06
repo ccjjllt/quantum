@@ -1,6 +1,12 @@
 # invsqrt：分段多项式相位表示的成本模型（32 / 64 / 16 段）
 
 日期：2026-11-06。工作区 `.worktree/invsqrt`，分支 `codex/invsqrt-research`。
+
+> **2026-11-07 更正：** 后续 `20261107_newton_goldschmidt/` 对 `kernels.py::multiplier()`
+> 做了 256 例穷举模拟，发现它实际计算的是 `(A·U) mod 2^w_acc` 的低位回绕，
+> 不是高半部分。因此本文的 Horner/乘法门数是**下界**，不是合法乘法构造；
+> 真实成本只会更高。分段三次族的结论（远高于预算）不受影响，反而更强。
+
 基线固定为 `artifacts/20261106_syed_v9/invsqrt/syed_v9_nofallback.kmb`，
 SHA-256 `48db715f9b3b941cea1dec915938a0421467271bc3b62b382e5c792383810feb`。
 本轮只做**数值扫描 + 官方构造原语的实测门数 + 解析成本账本**；
