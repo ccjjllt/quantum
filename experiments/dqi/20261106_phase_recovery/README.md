@@ -275,7 +275,8 @@ syndrome 就必须另存 12 位副本（+Q）或换不同的恢复调度。**不
   目前唯一的硬证书；19 项的一般张量判定正在用 toolkit 的
   `decide-rank --target 19 --anchor map --node-limit 50000000` 跑；
   第一次带 `--symmetry auto` 被拒绝（8×8 map 约 2.86e37 个 automorphisms），
-  改用 `--symmetry none` 重跑。
+  改用 `--symmetry none` 重跑；50,000,000 nodes / 1,901 秒后
+  **GAVE UP（node limit）**，没有决定，exit 3。
 
 ## 4. 与既有结论的关系
 
