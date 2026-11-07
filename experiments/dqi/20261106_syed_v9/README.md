@@ -137,17 +137,8 @@ V6版本注记称k17恢复，**V9实际诊断的w17仍全部失败**。不据注
 
 ## 手动复现
 
-在本工作区使用Python3.12/native kickmix1.0.0：
-
-```sh
-.venv/bin/python experiments/dqi/20261106_syed_v9/inspect_migration.py
-.venv/bin/python experiments/dqi/20261106_syed_v9/match_commuted.py
-.venv/bin/python experiments/dqi/20261106_syed_v9/paid_topology.py
-.venv/bin/python experiments/dqi/20261106_syed_v9/trace_context.py
-.venv/bin/python experiments/dqi/20261106_syed_v9/probe_dqi.py
-.venv/bin/python experiments/dqi/20261106_syed_v9/extra_wire_probe.py
-.venv/bin/python experiments/dqi/20261106_syed_v9/failure_budget.py
-```
+> 2026-11-07 清理：本目录的 7 个探针脚本已删除（旧 −42 迁移检查已关闭），
+> 可按 git 历史 `90afd5a` 回溯。数字结论保留。
 
 脚本仅做显式调用的静态/局部研究。没有自动全量验证、测试/CI、Kaggle提交、推送，
 没有改动共享公开输入。原−42候选保留为历史方法，不作为Syed新基线的额外收益。

@@ -22,7 +22,7 @@
 两个重要修正：公开旧源并非普遍不可得；此前q26“只有3个Python文件”的记录遗漏了文件。
 此外HW-22已公开与旧−42合并候选相同的电路标识，该候选应作为公开组合的本地重现与方法验证，不能宣称独占原创。
 最新Syed V9的完整生成器仍未取得；找到的是可研究的旧C1源链和独立算法生成器。
-来源、版本、许可、静态闭包审计见 [公开实现](PUBLIC_IMPLEMENTATIONS.md)。
+来源、版本、许可、静态闭包审计见已删除的公开实现报告（清理前为 PUBLIC_IMPLEMENTATIONS.md，见 git 历史 `90afd5a`）。
 
 ## 1. 官方成本与输入约束
 
@@ -92,7 +92,7 @@ inverse12 scalar含R/HMR与相位修正，故没有用纯值ANF假装证明它�
 自写解释器验证全部36输出ANF等于 `(a,b,c+a*b)`，域多项式`t^12+t^3+1`：
 **42 CCX、308 CX、36线、0辅助线、0输出失配**。这是覆盖2^36基态的代数验证，非枚举或采样。
 该核与Syed的25门products并非同一接口；换域基与嵌入当前程序都尚未完成。
-来源版本、MIT许可及其它论文适配条件见 [文献报告](LITERATURE.md)。
+来源版本、MIT许可及其它论文适配条件见已删除的文献报告（清理前为 LITERATURE.md，见 git 历史 `90afd5a`）。
 
 ## 3. 高收益要达到什么尺度
 
@@ -125,7 +125,7 @@ inverse12 scalar含R/HMR与相位修正，故没有用纯值ANF假装证明它�
 - 原始q26完整列表25个Python文件，metadata还指向qcc-dqi-898；另有含248文件的旧C1可复现bundle。
   它们重开生成器级研究，但不是Syed V9生成器。源闭包静态审计不代表本机已构建或验证。
 
-更多来源与版本比较见 [公开实现报告](PUBLIC_IMPLEMENTATIONS.md)；算法推导与失败预算见 [算法报告](ALGORITHMS.md)。
+更多来源与版本比较、算法推导与失败预算见已删除的公开实现/算法报告（清理前为 PUBLIC_IMPLEMENTATIONS.md / ALGORITHMS.md，见 git 历史 `90afd5a`）。
 
 ## 5. 失败预算与停止投入的方向
 
@@ -139,16 +139,9 @@ inverse12 scalar含R/HMR与相位修正，故没有用纯值ANF假装证明它�
 
 ## 6. 可复现命令、产物与验证范围
 
-在当前DQI工作区，用现有Python3.12/native kickmix1.0.0只读环境手动执行：
-
-```sh
-.venv/bin/python experiments/dqi/20261106_high_return_research/resource_frontier.py
-.venv/bin/python experiments/dqi/20261106_high_return_research/stage_census.py
-.venv/bin/python experiments/dqi/20261106_high_return_research/kernel_structure.py
-.venv/bin/python experiments/dqi/20261106_high_return_research/verify_gf12_anf.py
-.venv/bin/python experiments/dqi/20261106_high_return_research/failure_scenarios.py
-.venv/bin/python experiments/dqi/20261106_high_return_research/audit_public_sources.py
-```
+> 2026-11-07 清理：本目录的 6 个复现脚本及 ALGORITHMS/LITERATURE/
+> PUBLIC_IMPLEMENTATIONS 三份明细文档已删除（无收益方向只留概况），
+> 可按 git 历史 `90afd5a` 回溯。下述数字结论保留，命令不再可直接运行。
 
 实际结果保存于 `artifacts/20261106_high_return_research/`：resource_frontier、stage_census、kernels/structure、
 literature/gf12_anf_evidence、algorithms/budgets，以及public来源和静态源审计。

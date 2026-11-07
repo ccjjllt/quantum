@@ -40,7 +40,11 @@ CZ/CCZ 修正。
 结论：不能把 syndrome 先测/存、直接 reset 其余线路来省掉恢复段；也说明相位与
 恢复调度是耦合的，不能分开记账。
 
-复现：
+> 2026-11-07 清理：本目录全部脚本及 `subagents/` 明细已删除（无收益方向只留概况），
+> 可按 git 历史 `90afd5a` 回溯。下述数字结论保留，命令不再可直接运行。
+> 重建候选的 `.kmb` 大文件已删除，`.build.json`/`verify_4096.json` 保留。
+
+复现（已清理，命令仅存档）：
 
 ```sh
 .venv/bin/python experiments/dqi/20261106_phase_recovery/phase_probe.py --shots 256
@@ -74,7 +78,7 @@ CZ/CCZ 修正。
 - `prior backhalf` 和 `somejoint898` 都 PASS 4096-shot，说明源码链本身是正确的，
   只是成本更差；这排除了“源码重建有隐藏错误导致 T 偏高”的解释。
 
-复现命令：
+复现命令（已清理，命令仅存档；候选 `.kmb` 已删除，`.build.json`/`verify_4096.json` 保留）：
 
 ```sh
 # 先按 build_dqi_macos.py 的注释解包 bundle 到 artifacts/20261106_phase_recovery/old_build
@@ -84,11 +88,11 @@ CZ/CCZ 修正。
 .venv/bin/python data/competition/verifiers/dqi/verify_submission_dqi.py <candidate>.kmb --num-shots 4096 --max-workers 4
 ```
 
-产物：各候选目录下的 `dqi.kmb`、`.build.json`、`verify_4096.json`。
+产物：各候选目录下的 `.build.json`、`verify_4096.json`（`dqi.kmb` 大文件已删除）。
 
 ## 3. `unextract` 多出的 35,347 CCX 是什么
 
-wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全文）：
+wire-renaming 不变的 canonical CCX-shape 差分（已删除的子目录报告全文，摘要如下；原文见 git 历史 `90afd5a`）：
 
 | 组成 | CCX | 占 +35,347 |
 |---|---:|---:|
@@ -111,8 +115,8 @@ wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全�
 
 ## 3.5 命名算术核的秩下界：总额也不到 5,000 T
 
-`subagents/REPORT.md` 第 3–7 节对五个命名核做了精确 ANF 与秩/子空间枚举
-（`inverse12 norm` 还做了全部 4,096 输入的值等价验证，0 失配）：
+已删除的子目录报告对五个命名核做了精确 ANF 与秩/子空间枚举
+（`inverse12 norm` 还做了全部 4,096 输入的值等价验证，0 失配），摘要如下：
 
 | 核 | 现在 CCX/调用 | 调用 | 现在 T | 秩下界 | 下界 T | 最大可省 |
 |---|---:|---:|---:|---:|---:|---:|
@@ -124,7 +128,7 @@ wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全�
 | multiply v（仅命名实例） | 99 | 6 | 594 | 24 | 144 | 450 |
 | **五核合计** | | | **9,690** | | **4,764** | **4,762** |
 
-（`subagents/savings.json` 的旧表用 norm LB=10 得 4,925；第 4.1 节的精确
+（已删除的旧表用 norm LB=10 得 4,925；精确
 枚举把一般下界修正为 11，故此处以 4,762 为准。）
 
 
@@ -161,7 +165,7 @@ wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全�
   线性基变换不改变张量秩，只能改变 99 项分解的写法，不能把 99 项变成 ≤90 项。
   另一条路是**非塔**的 GF(2^24) 双线性分解（目前最好已知 99，下界 47）。
 
-复现：`tower_census.py`，产物 `artifacts/20261106_phase_recovery/tower_census.json`。
+复现（已清理，命令仅存档）：`tower_census.py`，产物 `artifacts/20261106_phase_recovery/tower_census.json`。
 
 **未被排除的窄路：** 文献的对称秩表给 `μ^sym_2(8) ∈ [16,24]`、`μ^sym_2(10) ∈ [20,33]`。
 若存在 **18 项 GF(2^8)**（k=8 塔 5×18=90）或 **30 项 GF(2^12)**
@@ -178,7 +182,7 @@ wire-renaming 不变的 canonical CCX-shape 差分（`subagents/REPORT.md` 全�
 不同构造；18 项会是一个**新的对称张量秩结果**，需要真正的 SAT/对称分解搜索，
 不是删项或换基能得到。
 
-复现：`.venv/bin/python experiments/dqi/20261106_phase_recovery/gf8_reduce.py`
+复现（已清理，命令仅存档）：`.venv/bin/python experiments/dqi/20261106_phase_recovery/gf8_reduce.py`
 产物：`artifacts/20261106_phase_recovery/gf8_reduced.json`。
 
 ### 3.8 GF(2^8) 对称 18 项 beam search（不完整）
@@ -307,8 +311,8 @@ syndrome 就必须另存 12 位副本（+Q）或换不同的恢复调度。**不
    它的相位部分改成 `gf2_phase_by_product` 的免费形式，是剩余的小额确定收益，
    但需要逐实例证明 ABI。
 
-完整证据：`subagents/REPORT.md` 第 3–7 节（含 ANF、秩枚举、SAT 编码与
-`verify_window.py` 全输入验证）。
+完整证据：已删除的子目录报告第 3–7 节（含 ANF、秩枚举、SAT 编码与全输入验证），
+原文见 git 历史 `90afd5a`，摘要见本文件 §3.5。
 
 ## 验证范围
 

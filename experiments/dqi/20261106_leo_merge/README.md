@@ -55,14 +55,14 @@ unzip -o leoout/submission.zip -d leo_x
 python -c "import kickmix as km; km.Circuit.from_file('leo_x/dqi.kmb',format='kmb').to_file('leo.kmx',format='kmx')"
 python -c "import kickmix as km; km.Circuit.from_file('artifacts/20261105_maoxin_v2/release/dqi.kmb',format='kmb').to_file('base.kmx',format='kmx')"
 # 3) 流式 diff 得 hunk，R41 段（<= 50732751 行）取 base 侧，其余取 Leo 侧
-python experiments/dqi/20261106_leo_merge/merge_public.py base.kmx leo.kmx merged.kmx 50732751
+#    （合并脚本已于 2026-11-07 清理，见 git 历史 90afd5a）
 # 4) kmx -> kmb，并用官方验证器
 ```
 
 ## 产物
 
-- `merge_public.py`：通用 hunk 合并器（本方法可复用于任何同源近邻电路）。
-- `artifacts/20261106_leo_merge/dqi_merged_b99bf233.kmb`（本地，不in git）
+- 合并脚本（已删除，见 git 历史 `90afd5a`）：通用 hunk 合并器。
+- `artifacts/20261106_leo_merge/dqi_merged_b99bf233.kmb`（本地大文件，已删除；验证 JSON 保留）
 - `artifacts/20261106_leo_merge/diffhunks.json`：98 个 hunk 全文（审计用）
 - 基线 R41 补丁文本即 hunk 中 `a0 <= 50732751` 的 `a` 侧。
 - 基线电路：`artifacts/20261105_maoxin_v2/release/dqi.kmb`（指向主仓库的
