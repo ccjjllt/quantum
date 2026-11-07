@@ -3,6 +3,13 @@
 This is a numerical feasibility probe: it changes only W/H2_I (never the
 loaders or words) and reports the official metrics of every intermediate
 point. It does not build a submission or run the official verifier.
+
+NOTE (2026-11-07 cleanup): this script needs the public dfthc_refit 1.7.0
+snapshot at artifacts/20261106_high_yield/public/dfthc_refit_1.7.0, which was
+removed as closed-research cleanup (it produced no further gain after the C44
+micro-gain below). To rerun, re-download manwithacat/dfthc-refit V5 and unpack
+release 1.7.0 there. The C44 result itself is already verified and saved under
+artifacts/20261106_high_yield/c44_refit/.
 """
 from __future__ import annotations
 

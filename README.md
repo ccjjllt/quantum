@@ -2,7 +2,7 @@
 
 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
 
-当前分支 `codex/dfthcsos-research` 的新增研究集中于 **化学 / dfthcsos**；当前公开比较基线为 Syed V9。[最新高收益方向研究](experiments/dfthcsos/20261106_high_yield/README.md)已恢复全部15份真实loader计划，测得6925个不改变物理向量的低位自由变量，并筛选R/B/C联合重训目标；尚无新增已验证成本收益。此前实际字恢复、五helper容量及系数探针见[Syed V9局部研究](experiments/dfthcsos/20261106_syed_v9/README.md)。invsqrt 与 DQI 的新研究分别放在 `codex/invsqrt-research`、`codex/dqi-research`，共同历史记录保留作参考。
+当前分支 `codex/dfthcsos-research` 的新增研究集中于 **化学 / dfthcsos**；当前公开比较基线为 Syed V9。唯一已验证的新收益是[C44固定字refit](experiments/dfthcsos/20261106_gain_search/README.md)（本地78,080-shot PASS，168.35分）；无收益研究的概况与失败原因见[已关闭研究汇总](experiments/dfthcsos/CLOSED_RESEARCH.md)，在研的R5/R6训练见[训练记录](experiments/dfthcsos/20261106_train_r5/README.md)。invsqrt 与 DQI 的新研究分别放在 `codex/invsqrt-research`、`codex/dqi-research`，共同历史记录保留作参考。
 
 本工作区位于主仓库的 `.worktree/dfthcsos/`。根目录 `main` 负责公开方案治理与 submission；本分支继续推进本方向研究。共享输入只读使用，新增产物写入本工作区。
 

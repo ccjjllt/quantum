@@ -131,15 +131,14 @@ error_1/error_2 仍是 20.407/21.958 mHa，`dfthc_refit` 的 retraction
 1. **公开 shared planner 重规划**：`plan --planner shared --pad-rows
    --exchange --seeds 0,1,2,3` 在 k4–k8 得到 196–197 products，
    当前是 195；k0–k3 没有返回计划（generic/block 类）。没有严格
-   收益；运行在确认没有槽位低于 195 后停止。日志在
-   `artifacts/20261106_high_yield/replan_search/shared_pad.log`，
-   计划 JSON 在 `.../work/plans/`。
+   收益；运行在确认没有槽位低于 195 后停止。原始日志与计划JSON已随
+   2026-11-07清理删除，结论见`../CLOSED_RESEARCH.md`第C.1条。
 2. **门级 implication 重写**：先用零初态字寄存器分析时，k1–k9
    各有 5 个 CCX、k10–k14 有 1–4 个 CCX 满足“一控制蕴含另一控制”，
    看似能省 56 T/遍。但把每个槽的**真实入批**（batch k-1）写入
    字寄存器后，所有槽的这类 CCX 都变成 0 个；naive 重写还会触发
-   phase/word 检查失败。该“收益”是初始化伪影，已否定。脚本在
-   `experiments/dfthcsos/20261106_gate_implications/rewrite.py`。
+   phase/word 检查失败。该“收益”是初始化伪影，已否定。重写脚本已随
+   2026-11-07清理删除，结论见`../CLOSED_RESEARCH.md`第C.4条。
 3. **低地址位宽 L=32**：cache 从 76 降到 58，但 shared planner 的
    products 从 195 涨到 419（一次 70 秒的实际规划），单遍成本
    477 对 271，明确变差。低地址位宽不能只看 cache。
@@ -150,8 +149,8 @@ error_1/error_2 仍是 20.407/21.958 mHa，`dfthc_refit` 的 retraction
    k12 的搜索在超过 17 分钟后仍未返回，已停止。k10/k11 已足以
    否定“直接零化”作为省门手段。
    因此该自由度只能作为未来联合训练的 don't-care，而不是当前表的
-   直接省门来源。日志与计划在
-   `artifacts/20261106_high_yield/zeroed_plan/`。
+   直接省门来源。对照运行的原始日志已随2026-11-07清理删除，结论见
+   `../CLOSED_RESEARCH.md`第C.2条。
 5. **7-bit 直接舍入**：此前三种舍入均失败（nearest 的
    error_1=2.13 Ha，error_2=0.425 Ha）；7-bit 必须重训练，不能
    把 T/Q 预算当免费压缩。
@@ -188,7 +187,7 @@ kickmix` 的临时环境（torch 2.15.0），未修改共享 `.venv`。
 ```sh
 # C44 refit（固定字，只改 W/H2_I）
 uv run --no-project --with torch --with numpy --with scipy --with kickmix \
-  python experiments/dfthcsos/20261106_c43_refit/refit_probe.py \
+  python experiments/dfthcsos/20261106_gain_search/refit_probe.py \
   artifacts/20261106_high_yield/c44_refit/submission_c44_start.npz \
   artifacts/20261106_high_yield/c44_refit/probe --rounds 5 --max-evals 1200 --threads 6
 
@@ -196,12 +195,13 @@ uv run --no-project --with torch --with numpy --with scipy --with kickmix \
 .venv/bin/python scripts/manual_verify.py dfthcsos \
   artifacts/20261106_high_yield/c44_refit/family --salt local-c44-refit-20261106
 
-# 公开 shared planner（无发射，无官方验证）
-.venv/bin/python artifacts/20261106_high_yield/public/dfthc_refit_1.7.0/dfthc_refit.py \
-  plan /Users/zhaohuaxiang/ccjjllt/quantum/artifacts/20261106_syed_v9/release/dfthcsos \
-  --planner shared --words artifacts/20261106_syed_v9/dfthcsos/recovered_words.npy \
-  --lera-src artifacts/20261106_high_yield/public/lera_v7 --procs 6 \
-  --pad-rows --exchange --seeds 0,1,2,3 --out artifacts/20261106_high_yield/replan_search/shared_pad
+# 公开 shared planner（无发射，无官方验证；历史命令，所用dfthc_refit 1.7.0
+# 快照已随2026-11-07清理删除，可用git show <旧提交>找回，结论见正文§4.1）
+# .venv/bin/python artifacts/20261106_high_yield/public/dfthc_refit_1.7.0/dfthc_refit.py \
+#   plan /Users/zhaohuaxiang/ccjjllt/quantum/artifacts/20261106_syed_v9/release/dfthcsos \
+#   --planner shared --words artifacts/20261106_syed_v9/dfthcsos/recovered_words.npy \
+#   --lera-src artifacts/20261106_high_yield/public/lera_v7 --procs 6 \
+#   --pad-rows --exchange --seeds 0,1,2,3 --out artifacts/20261106_high_yield/replan_search/shared_pad
 ```
 
 本文件中的“官方验证”只指 C44 refit 的本地 PASS；R4/R5 的 T/Q 是官方
