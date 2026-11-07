@@ -265,6 +265,18 @@ syndrome 就必须另存 12 位副本（+Q）或换不同的恢复调度。**不
 
 
 
+### 3.12 GF(2^8) 19 与 GF(2^12) 30 的 CP-SAT：UNKNOWN
+
+- GF(2^8) 19：`gf8_cpsat.py 19 14400` 返回 **UNKNOWN**，14,400.8 秒，
+  98,758,406 conflicts，239,562,461 branches。
+- GF(2^12) 30：`gf12_cpsat.py 30 14400` 返回 **UNKNOWN**，14,400.1 秒，
+  4,419,275 conflicts，989,463,124 branches。
+- 两者都既没找到分解，也没证明不存在。18 项的 **NO**（rank ≥19）是
+  目前唯一的硬证书；19 项的一般张量判定正在用 toolkit 的
+  `decide-rank --target 19 --anchor map --node-limit 50000000` 跑；
+  第一次带 `--symmetry auto` 被拒绝（8×8 map 约 2.86e37 个 automorphisms），
+  改用 `--symmetry none` 重跑。
+
 ## 4. 与既有结论的关系
 
 - 否定了“保留 syndrome 经典副本 + reset 其余线路即可省恢复段”的想法：本机
