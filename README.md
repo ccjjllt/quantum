@@ -2,7 +2,7 @@
 
 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
 
-当前分支 `codex/dfthcsos-research` 的新增研究集中于 **化学 / dfthcsos**；当前公开比较基线为 Syed V9。唯一已验证的新收益是[C44固定字refit](experiments/dfthcsos/20261106_gain_search/README.md)（本地78,080-shot PASS，168.35分）；无收益研究的概况与失败原因见[已关闭研究汇总](experiments/dfthcsos/CLOSED_RESEARCH.md)，在研的R5/R6训练见[训练记录](experiments/dfthcsos/20261106_train_r5/README.md)。invsqrt 与 DQI 的新研究分别放在 `codex/invsqrt-research`、`codex/dqi-research`，共同历史记录保留作参考。
+当前分支 `codex/dfthcsos-research` 的新增研究集中于 **化学 / dfthcsos**；当前公开比较基线已更新为 **Public Frontier 25.14222 / Maoxin123 V2 (`c1321df2`)**（本地78,080-shot PASS，299,657,851.81分）。最新研究见[Public Frontier 谱折点审计与解析切空间重拟合](experiments/dfthcsos/20261108_frontier_refit/README.md)（生成候选 `b9eced3e`，本地78,080-shot PASS，299,657,851.08分，净降0.74分，并证明固定当前角度字的权重微调已触及 KKT 极小值边界）；此前基于 Syed V9 的固定字 refit 见[C44固定字refit](experiments/dfthcsos/20261106_gain_search/README.md)，无收益研究的概况与失败原因见[已关闭研究汇总](experiments/dfthcsos/CLOSED_RESEARCH.md)，在研的R5/R6训练见[训练记录](experiments/dfthcsos/20261106_train_r5/README.md)。invsqrt 与 DQI 的新研究分别放在 `codex/invsqrt-research`、`codex/dqi-research`，共同历史记录保留作参考。
 
 本工作区位于主仓库的 `.worktree/dfthcsos/`。根目录 `main` 负责公开方案治理与 submission；本分支继续推进本方向研究。共享输入只读使用，新增产物写入本工作区。
 
