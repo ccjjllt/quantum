@@ -2,7 +2,7 @@
 
 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation) 的研究工作区。围绕电路表示、可逆算法、精度分配和资源复用迭代方案。
 
-当前分支 `codex/dqi-research` 的新增研究集中于 **DQI**。当前公开比较基线已更新为 **Syed V9 / 892Q**，迁移检查与下一步方向见[Syed V9研究](experiments/dqi/20261106_syed_v9/README.md)。旧fd0ef+Leo −42门结果保留为历史方法，尚未迁入新基线。
+当前分支 `codex/dqi-research` 的新增研究集中于 **DQI**。当前公开比较基线已于 2026-11-08 更新为 **Public Frontier 25.14222 / Isabe11aM00re V12 (`4432ec5f`, 892Q, 395,641 静态 Toffoli-like)**，精确阶段差分（相对 Syed V9 净减 38 门：`unextract -15 CCX`、`unsynthesis -21 CCX, -2 CCZ`）、三步演化谱系与下一步高收益方向见[Public Frontier DQI 阶段差分与演化审计](experiments/dqi/20261108_frontier_audit/README.md)。此前 Syed V9 迁移检查见[Syed V9研究](experiments/dqi/20261106_syed_v9/README.md)，旧fd0ef+Leo −42门结果保留为历史方法。
 
 最新入口：[2026-11-06 高收益方向交叉研究](experiments/dqi/20261106_high_return_research/README.md)。
 本轮精确统计阶段成本、提取实际小核ANF、核查前沿张量综合与公开生成链；优先研究低宽度二次算术核重综合及相位/恢复调度。
