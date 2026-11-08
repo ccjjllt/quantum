@@ -27,15 +27,14 @@
 | 2026-11-01 | Hedge Wizardry notebook v5 / HW-06 | 57876561 | 23.83790，后续回执已确认 |
 | 2026-11-04 | [Heliosli V5 原始组合](submissions/20261104_heliosli_v5/README.md) | 57980157 | 24.54651，COMPLETE |
 | 2026-11-05 | [Maoxin V2 原始组合](submissions/20261105_maoxin_v2/README.md) | 58014726 | 24.78590，创建新提交前的去重读取确认COMPLETE |
-| 2026-11-06 | [Syed V9 固定数据集组合](submissions/20261106_syed_v9/README.md) | 58041132 | 已创建，未持续监控分数 |
+| 2026-11-06 | [Syed V9 固定数据集组合](submissions/20261106_syed_v9/README.md) | 58041132 | 24.94081，2026-11-08提交前去重读取确认COMPLETE |
+| 2026-11-08 | [Public Frontier 25.14222 原始组合](submissions/20261108_public_frontier/README.md) | 58123354 | 已创建，未持续监控分数 |
 
-当前公开比较基线为 **[Syed V9 / run366109544](https://www.kaggle.com/code/syed3000/vqcc-own-circuit-portfolio-notebook?scriptVersionId=366109544)**，
-固定数据集版本9；机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
-作者公开提交58039042得分24.94081，不是本账号58041132的成绩。
-共享原始电路在 `artifacts/20261106_syed_v9/release/`，来源快照在相邻 `source/`。
-本次保持18个文件内容，仅将原ZIP_STORED改为ZIP_DEFLATED以减少传输，没有混入研究补丁。
-提交前未做哈希匹配或全量本地验证；后续研究检查分别记在三个分支。
-旧Maoxin V2和基于它的无回退组合保留为历史对照，不能把旧增益直接累加到Syed。
+当前公开比较基线为 **[Public Frontier 25.14222（Alex V126 / Hosen V7 / Maoxin V2 / Isabe V12）](https://www.kaggle.com/code/alexchilton/24-94-lb-verified-three-task-portfolio?scriptVersionId=366869858)**；机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
+作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
+共享原始电路在 `artifacts/20261108_public_frontier/release/`，来源快照在相邻 `source/`。
+本次直接提交未修改的原始 `submission.zip`（18 个文件 SHA-256 已核对），没有混入本地研究补丁，提交前未在本机重跑全量官方验证。
+上一版 Syed V9（`artifacts/20261106_syed_v9/release/`）保留为历史对照，不能把基于 Syed V9 的旧增量直接累加到新公开前沿上。
 
 历史组合与证据：
 

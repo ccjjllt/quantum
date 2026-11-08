@@ -1,44 +1,59 @@
 {
-  "name": "Syed V9",
-  "adopted_date_beijing": "2026-11-06",
+  "name": "Public Frontier 25.14222 (Alex V126 / Hosen V7 / Maoxin V2 / Isabe V12)",
+  "adopted_date_beijing": "2026-11-08",
   "competition": "google-verifiable-quantum-circuit-compilation",
   "notebook": {
-    "ref": "syed3000/vqcc-own-circuit-portfolio-notebook",
-    "version": 9,
-    "run_id": 366109544,
-    "url": "https://www.kaggle.com/code/syed3000/vqcc-own-circuit-portfolio-notebook?scriptVersionId=366109544"
+    "ref": "alexchilton/24-94-lb-verified-three-task-portfolio",
+    "version": 126,
+    "run_id": 366869858,
+    "url": "https://www.kaggle.com/code/alexchilton/24-94-lb-verified-three-task-portfolio?scriptVersionId=366869858"
   },
-  "dataset": {
-    "ref": "syed3000/vqcc-own-circuit-portfolio",
-    "version": 9,
-    "url": "https://www.kaggle.com/datasets/syed3000/vqcc-own-circuit-portfolio/versions/9"
-  },
+  "companion_notebooks": [
+    {
+      "ref": "hosen42/vqcc-our-submission",
+      "version": 7,
+      "url": "https://www.kaggle.com/code/hosen42/vqcc-our-submission"
+    },
+    {
+      "ref": "maoxin123/lb-25-14-public-frontier-refit-chem-weights",
+      "version": 2,
+      "url": "https://www.kaggle.com/code/maoxin123/lb-25-14-public-frontier-refit-chem-weights"
+    },
+    {
+      "ref": "kirilltym/quantum-circuits-pi-gauge-weight-refinement",
+      "version": 23,
+      "url": "https://www.kaggle.com/code/kirilltym/quantum-circuits-pi-gauge-weight-refinement"
+    }
+  ],
   "author_public_submission": {
-    "id": 58039042,
-    "score": 24.94081,
-    "evidence": "Kaggle MCP list_team_public_submissions"
+    "id": 58121501,
+    "score": 25.14222,
+    "evidence": "Kaggle MCP list_team_public_submissions (also Hack2Publish 58120775 at 25.14222)"
   },
   "our_submission": {
-    "id": 58041132,
+    "id": 58123354,
     "creation_confirmed": true,
     "score_not_polled": true,
-    "receipt": "submissions/20261106_syed_v9/README.md"
+    "receipt": "submissions/20261108_public_frontier/README.md"
   },
-  "release_path": "artifacts/20261106_syed_v9/release",
-  "source_path": "artifacts/20261106_syed_v9/source",
-  "previous_baseline": "Maoxin V2 / run365853243",
+  "release_path": "artifacts/20261108_public_frontier/release",
+  "source_path": "artifacts/20261108_public_frontier/source",
+  "previous_baseline": "Syed V9 / run366109544 (our submission 58041132 confirmed COMPLETE at 24.94081)",
   "components_author_report": {
     "invsqrt": {
+      "sha256": "7c10edbac5835e441fe8f40782bd7dbc7b36834718c3a4e3509607a9d2a454d3",
       "Q": 62,
-      "cost_approx": 97747.22
+      "cost_approx": 95430.78
     },
     "dqi": {
+      "sha256": "4432ec5fd63d7d70aab92d32f719d47539d0ff66ae0cb0b964c914e01fece431",
       "Q": 892,
-      "mean_toffoli_approx": 395394,
-      "cost_approx": 374772000000.0,
+      "static_toffoli_like": 395641,
+      "cost_approx": 374735446628.53,
       "qualification": "Approximate decoder; cost depends on failures and sampling."
     },
     "dfthcsos": {
+      "submission_npz_sha256": "c1321df252e15ccd92f5086048ad6e4c376862bec5a4dd58d603edbbc3623cf1",
       "shape": [
         8,
         143,
@@ -46,10 +61,9 @@
       ],
       "Q": 427,
       "T": 14966,
-      "lambda_eff_approx": 46.8937,
-      "cost_approx": 299673103
+      "lambda_eff_approx": 46.8912755,
+      "cost_approx": 299657851.81
     }
   },
-  "verification_scope": "Public compiled files; source V9 notebook packages only. No local full verifier before submission. Subsequent lane-local audits/candidate evaluations are recorded separately. No hash matching.",
-  "reproduction": "Download pinned dataset V9; map flattened __ to /; retain18 file contents; ZIP_DEFLATED level6 changes packaging only. No research patch included."
+  "verification_scope": "Unchanged public notebook output ZIP; all 18 member SHA-256 hashes verified against upstream notebooks. No local full verifier run before submission. Subsequent lane-local audits and candidate evaluations are recorded in the respective research branches."
 }
