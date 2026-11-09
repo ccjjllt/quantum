@@ -96,3 +96,31 @@ B160/C59（−3.46%）、C70（−1.82%）、B180/C59（−7.92%）本身是负�
   artifacts从未入Git（`.gitignore`），删除不可恢复。
 - 本工作区`experiments/invsqrt/`、`experiments/dqi/`等属共同历史，
   不在本次清理范围。
+
+## 2026-11-09 清理（Public Frontier 时代无收益方向）
+
+基线：`b9eced3e`（λeff 46.891275349493，T/Q=14966/427）。以下 11-08/11-09
+全部方向均 closed、无候选 NPZ、无 shots PASS；详细数字见各目录 README（保留），
+分析脚本与训练探针已删除（快照提交保留历史，见 Git）。
+
+| 实验 | 结论与放弃原因 |
+|---|---|
+| `20261108_frontier_refit`（保留） | KKT 切空间 refit −0.7363 分 PASS；固定 (8,143,44) 已近极限 |
+| `20261109_compact_multikink` | 保守 R5 −0.23%/R4 −1.70%（angles 不变）；W-only 第二折点 +0.17/+18.4；LSB 最小 +3.96uHa（裕度 1.6e5 倍） |
+| `20261109_joint_budget` | W+LSB 联合 Newton 净 +711/+321 分；e2 汇率 −2203/uHa 但剩余裕度仅值 0.05 分 |
+| `20261109_longloss` | Huber 440.80（+258.8）；joint 183.51；L2-2000 步 85.31（+65.31，渐近 63.3）；无 GPU（JAX cpu） |
+| `20261109_ubasis_retrain` | rand 372.99 / dft 593.17 / R4-eigrr 180.11 / 分阶段 297.65；四曲线渐近全 >130 mHa |
+| `20261109_angles_r5` | 新共享 planner 实测 angles 8278（−26），T/Q=14905/427，−0.41%；预算缺口 728 T 未补；短训 182.0 mHa |
+
+删除清单：5 个目录的 `*.py`（`compact_costs`、`multikink_probe`、
+`budget_exchange`、`joint_newton`、`newloss_probe`、`make_alt_seed`、
+`staged_fit`、`build_measure_r5`、`proto_r5`、`variant_init`；含 planner
+构建器，其用途记于此，历史可从快照提交找回）、artifacts 内全部
+`*.npz` 探针输出（`train_r5_*`、`seed_r5_*`、`seed_r4_*` 共 ~13M）、
+`angles_tensor/` 与 `20261109_angles_r5_trials16/`（~11M 新电路）、
+`angle_words_r5.npy`。
+保留：各 README、机器可读小 JSON（`compact_costs`、`multikink_probe`、
+`budget_exchange`、`joint_newton`、`angles_r5_costs`）、训练日志（`.log`）、
+`20261106_high_yield/`（训练栈/种子/输入，全保留作未来训练用）。
+后续唯一切口：R6 表达力（heuristic 已证 +20T，不成立）之外的形状、
+GPU 长训或换优化器（本机 JAX cpu 不可执行）。
