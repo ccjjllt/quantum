@@ -67,3 +67,29 @@
   有限样本的salt波动与精确期望计费应分开记录。
 - 删除账本：[`20261106_cleanup/deleted_files.json`](20261106_cleanup/deleted_files.json)
  （逐目录大小；逐文件 SHA-256 因删除脚本中途中止未记录，已在账本中注明）。
+
+## 2026-11-09 清理（Public Frontier 时代无收益方向）
+
+基线：Public Frontier `7c10edba`（62Q，成本 95,430.78）。以下 11-08/11-09
+全部方向均 closed、无正收益；详细数字见各目录 README（保留），
+分析脚本与候选电路等中间产物已删除（快照提交保留历史，见 Git）。
+
+| 实验 | 结论与放弃原因 |
+|---|---|
+| `20261108_frontier_audit`（保留审计脚本） | 5 步谱系拆解；局部窥孔（单删/辛秩/HMR）已饱和证明 |
+| `20261109_carry_cache_peak` | CARRY 扩展无反计算门；乘积缓存无干净线；62→61Q 233 峰不可行 |
+| `20261109_cache_borrow_mincut` | 同三元组端点乘积全不等；脏借用净 +1~+4；61Q 不可能定理（372/24122 修正） |
+| `20261109_tphase_fusion` | 44 对全阻断；候选 B 验证器 FAIL（x=6 超差 2509×）；CZ 1311 对免费 |
+| `20261109_xreg_resynth` | swap 零差分 PASS（95430.98，Δ+0.20）；rotdrop FAIL（x=644） |
+| `20261109_xreg_bigwin` | 重排序零差分 PASS（95430.97）；段内无等乘积对 |
+| `20261109_dirtyfrag_proof` | 脏恒等式实测 +1/处，旧 `+(k-1)` 少计 1 已纠正；无干净线即亏 |
+| `20261109_verify_swap` | 邻位对易零差分 PASS（95430.94）；Δ0 |
+| `20261109_window_census` | `[28200:36305]` 0/68、`[14215:25300]` 0/25、末三窗 0/7、跨窗 top 全不等；全电路 True+clean+同守卫 0/190 |
+
+删除清单：7 个 `scripts/` 目录、`__pycache__`、空目录
+（`20261109_subagent_research`、`experiments/artifacts`）、
+artifacts 内 4 个候选 kmb（零差分/FAIL，可秒级重建）与验证日志
+（结论已记入各 README；快照提交前已 `git add`，历史可恢复）。
+保留：各 README、证据 JSON（`task1_groups.json`、`result.json`、
+`w28200/w14215_groups.json`、验证器日志拷贝）、审计脚本与 lane README。
+后续唯一切口：换算术族大段重综合（未立项，需投入）。
