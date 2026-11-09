@@ -1,0 +1,3948 @@
+{
+  "window": [
+    14215,
+    25300
+  ],
+  "n_ccx": 350,
+  "groups_k_ge_2": [
+    {
+      "sym": "CCX {q21,q51} q28",
+      "literals": [
+        "CCX q21 q51 q28"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        15954,
+        16061
+      ],
+      "global_idx": [
+        15954,
+        16061
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16061,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 8370
+        }
+      ],
+      "span": [
+        15954,
+        16061
+      ],
+      "span_len": 107,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        30,
+        31,
+        35,
+        36,
+        39,
+        43,
+        45,
+        46,
+        49,
+        53,
+        59,
+        61
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        30,
+        31,
+        35,
+        36,
+        39,
+        43,
+        45,
+        46,
+        49,
+        53,
+        59,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q21,q40} q28",
+      "literals": [
+        "CCX q21 q40 q28"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        15962,
+        16115
+      ],
+      "global_idx": [
+        15962,
+        16115
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16115,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 7818
+        }
+      ],
+      "span": [
+        15962,
+        16115
+      ],
+      "span_len": 153,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        36,
+        43,
+        49,
+        53
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        36,
+        43,
+        49,
+        53
+      ]
+    },
+    {
+      "sym": "CCX {q21,q57} q28",
+      "literals": [
+        "CCX q21 q57 q28"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        15970,
+        16169
+      ],
+      "global_idx": [
+        15970,
+        16169
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16169,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 7480
+        }
+      ],
+      "span": [
+        15970,
+        16169
+      ],
+      "span_len": 199,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ]
+    },
+    {
+      "sym": "CCX {q21,q41} q28",
+      "literals": [
+        "CCX q21 q41 q28"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        15978,
+        16257
+      ],
+      "global_idx": [
+        15978,
+        16257
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16257,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 0
+        }
+      ],
+      "span": [
+        15978,
+        16257
+      ],
+      "span_len": 279,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ]
+    },
+    {
+      "sym": "CCX {q21,q25} q28",
+      "literals": [
+        "CCX q21 q25 q28"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        15987,
+        16262
+      ],
+      "global_idx": [
+        15987,
+        16262
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16262,
+          "controls_equal": true,
+          "target_equal": false,
+          "product_xor_pop": 0
+        }
+      ],
+      "span": [
+        15987,
+        16262
+      ],
+      "span_len": 275,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ]
+    },
+    {
+      "sym": "CCX {q21,q26} q28",
+      "literals": [
+        "CCX q21 q26 q28"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        15996,
+        16267
+      ],
+      "global_idx": [
+        15996,
+        16267
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16267,
+          "controls_equal": true,
+          "target_equal": false,
+          "product_xor_pop": 0
+        }
+      ],
+      "span": [
+        15996,
+        16267
+      ],
+      "span_len": 271,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ]
+    },
+    {
+      "sym": "CCX {q1,q21} q28",
+      "literals": [
+        "CCX q21 q1 q28"
+      ],
+      "same_target": true,
+      "k_window": 5,
+      "window_idx": [
+        16011,
+        16056,
+        16110,
+        16164,
+        16212
+      ],
+      "global_idx": [
+        16011,
+        16056,
+        16110,
+        16164,
+        16212
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16056,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 6998
+        },
+        {
+          "idx": 16110,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 6987
+        },
+        {
+          "idx": 16164,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 6998
+        },
+        {
+          "idx": 16212,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 7001
+        }
+      ],
+      "span": [
+        16011,
+        16212
+      ],
+      "span_len": 201,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43
+      ]
+    },
+    {
+      "sym": "CCX {q16,q32} q1",
+      "literals": [
+        "CCX q32 q16 q1"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        16076,
+        16225
+      ],
+      "global_idx": [
+        16076,
+        16225
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 16225,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 777954
+        }
+      ],
+      "span": [
+        16076,
+        16225
+      ],
+      "span_len": 149,
+      "untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43,
+        54,
+        56
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        43,
+        54,
+        56
+      ]
+    },
+    {
+      "sym": "CCX {q14,q18} q25",
+      "literals": [
+        "CCX q14 q18 q25",
+        "CCX q18 q14 q25"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        16845,
+        17853
+      ],
+      "global_idx": [
+        16845,
+        17853
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 17853,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1261563
+        }
+      ],
+      "span": [
+        16845,
+        17853
+      ],
+      "span_len": 1008,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        23
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        23
+      ]
+    },
+    {
+      "sym": "CCX {q14,q15} q25",
+      "literals": [
+        "CCX q14 q15 q25"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        17691,
+        17768
+      ],
+      "global_idx": [
+        5564,
+        5646,
+        17691,
+        17768
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 17768,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1228799
+        }
+      ],
+      "span": [
+        17691,
+        17768
+      ],
+      "span_len": 77,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        23,
+        25,
+        37,
+        54
+      ],
+      "clean_or_const1": [
+        25
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        23,
+        37,
+        54
+      ]
+    },
+    {
+      "sym": "CCX {q14,q16} q26",
+      "literals": [
+        "CCX q14 q16 q26",
+        "CCX q16 q14 q26"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        18241,
+        18334
+      ],
+      "global_idx": [
+        18241,
+        18334
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 18334,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1403557
+        }
+      ],
+      "span": [
+        18241,
+        18334
+      ],
+      "span_len": 93,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        21,
+        23,
+        24,
+        26,
+        40
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        21,
+        23,
+        24,
+        26,
+        40
+      ]
+    },
+    {
+      "sym": "CCX {q21,q25} q50",
+      "literals": [
+        "CCX q21 q25 q50"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        19204,
+        19217
+      ],
+      "global_idx": [
+        19204,
+        19217
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 19217,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1391290
+        }
+      ],
+      "span": [
+        19204,
+        19217
+      ],
+      "span_len": 13,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        26,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        41,
+        42,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        52,
+        53,
+        54,
+        55,
+        56,
+        58,
+        60,
+        61
+      ],
+      "clean_or_const1": [
+        50
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        26,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        41,
+        42,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        52,
+        53,
+        54,
+        55,
+        56,
+        58,
+        60,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q28,q38} q40",
+      "literals": [
+        "CCX q28 q38 q40"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        21166,
+        21267
+      ],
+      "global_idx": [
+        21166,
+        21267
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 21267,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 495655
+        }
+      ],
+      "span": [
+        21166,
+        21267
+      ],
+      "span_len": 101,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        15,
+        22,
+        23,
+        24,
+        29,
+        30,
+        31,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        52,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "clean_or_const1": [
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        15,
+        22,
+        23,
+        24,
+        29,
+        30,
+        31,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        52,
+        54,
+        55,
+        56,
+        58,
+        59,
+        60
+      ]
+    },
+    {
+      "sym": "CCX {q39,q40} q61",
+      "literals": [
+        "CCX q40 q39 q61"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        21167,
+        21268
+      ],
+      "global_idx": [
+        21167,
+        21268
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 21268,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 266255
+        }
+      ],
+      "span": [
+        21167,
+        21268
+      ],
+      "span_len": 101,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        15,
+        22,
+        23,
+        24,
+        29,
+        30,
+        31,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        52,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ],
+      "clean_or_const1": [
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        15,
+        22,
+        23,
+        24,
+        29,
+        30,
+        31,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        52,
+        54,
+        55,
+        56,
+        58,
+        59,
+        60
+      ]
+    },
+    {
+      "sym": "CCX {q22,q31} q14",
+      "literals": [
+        "CCX q22 q31 q14"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        21792,
+        21942
+      ],
+      "global_idx": [
+        21792,
+        21942
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 21942,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1135955
+        }
+      ],
+      "span": [
+        21792,
+        21942
+      ],
+      "span_len": 150,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        20,
+        23,
+        25,
+        26,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        49,
+        51,
+        53,
+        57,
+        61
+      ],
+      "clean_or_const1": [
+        20,
+        25,
+        26,
+        27,
+        28,
+        40,
+        41,
+        51,
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        23,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        49,
+        53,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q22,q29} q16",
+      "literals": [
+        "CCX q22 q29 q16"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        22232,
+        22313
+      ],
+      "global_idx": [
+        22232,
+        22313
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 22313,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 970766
+        }
+      ],
+      "span": [
+        22232,
+        22313
+      ],
+      "span_len": 81,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        17,
+        18,
+        23,
+        25,
+        26,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        49,
+        51,
+        53,
+        57,
+        61
+      ],
+      "clean_or_const1": [
+        27,
+        28,
+        40,
+        41,
+        51,
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        17,
+        18,
+        23,
+        25,
+        26,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        49,
+        53,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q22,q29} q25",
+      "literals": [
+        "CCX q22 q29 q25"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        22683,
+        22786
+      ],
+      "global_idx": [
+        22683,
+        22786
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 22786,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 992617
+        }
+      ],
+      "span": [
+        22683,
+        22786
+      ],
+      "span_len": 103,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        17,
+        18,
+        23,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        49,
+        51,
+        53,
+        57,
+        61
+      ],
+      "clean_or_const1": [
+        27,
+        28,
+        40,
+        41,
+        51,
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        17,
+        18,
+        23,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        49,
+        53,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q30,q31} q17",
+      "literals": [
+        "CCX q30 q31 q17"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        23209,
+        23346
+      ],
+      "global_idx": [
+        23209,
+        23346
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 23346,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1146873
+        }
+      ],
+      "span": [
+        23209,
+        23346
+      ],
+      "span_len": 137,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        19,
+        23,
+        25,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        49,
+        51,
+        53,
+        57,
+        61
+      ],
+      "clean_or_const1": [
+        27,
+        28,
+        40,
+        41,
+        51,
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        19,
+        23,
+        25,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        49,
+        53,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q22,q29} q17",
+      "literals": [
+        "CCX q22 q29 q17"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        23253,
+        23305
+      ],
+      "global_idx": [
+        23253,
+        23305
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 23305,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 1292979
+        }
+      ],
+      "span": [
+        23253,
+        23305
+      ],
+      "span_len": 52,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        19,
+        23,
+        25,
+        27,
+        28,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        47,
+        49,
+        51,
+        53,
+        57,
+        61
+      ],
+      "clean_or_const1": [
+        27,
+        28,
+        40,
+        41,
+        51,
+        57
+      ],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        18,
+        19,
+        23,
+        25,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        47,
+        49,
+        53,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q19,q61} q25",
+      "literals": [
+        "CCX q61 q19 q25"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        23806,
+        24002
+      ],
+      "global_idx": [
+        23806,
+        24002,
+        30820,
+        31172,
+        31515
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 24002,
+          "controls_equal": false,
+          "target_equal": false,
+          "product_xor_pop": 394591
+        }
+      ],
+      "span": [
+        23806,
+        24002
+      ],
+      "span_len": 196,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        23
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        23
+      ]
+    },
+    {
+      "sym": "CCX {q18,q54} q21",
+      "literals": [
+        "CCX q54 q18 q21"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        23887,
+        24081
+      ],
+      "global_idx": [
+        23887,
+        24081,
+        30703,
+        30933,
+        31052,
+        31287
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 24081,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 1076799
+        }
+      ],
+      "span": [
+        23887,
+        24081
+      ],
+      "span_len": 194,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        23
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        23
+      ]
+    },
+    {
+      "sym": "CCX {q26,q50} q51",
+      "literals": [
+        "CCX q50 q26 q51"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        24000,
+        24191
+      ],
+      "global_idx": [
+        24000,
+        24191
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 24191,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 855477
+        }
+      ],
+      "span": [
+        24000,
+        24191
+      ],
+      "span_len": 191,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        23
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        23
+      ]
+    },
+    {
+      "sym": "CCX {q40,q48} q50",
+      "literals": [
+        "CCX q40 q48 q50"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        24536,
+        24697
+      ],
+      "global_idx": [
+        24536,
+        24697
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 24697,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 821585
+        }
+      ],
+      "span": [
+        24536,
+        24697
+      ],
+      "span_len": 161,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        17,
+        19,
+        20,
+        23,
+        25,
+        26,
+        32,
+        49
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        17,
+        19,
+        20,
+        23,
+        25,
+        26,
+        32,
+        49
+      ]
+    },
+    {
+      "sym": "CCX {q40,q47} q51",
+      "literals": [
+        "CCX q40 q47 q51"
+      ],
+      "same_target": true,
+      "k_window": 3,
+      "window_idx": [
+        24844,
+        24983,
+        25111
+      ],
+      "global_idx": [
+        24844,
+        24983,
+        25111
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 24983,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 819320
+        },
+        {
+          "idx": 25111,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 821441
+        }
+      ],
+      "span": [
+        24844,
+        25111
+      ],
+      "span_len": 267,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        19,
+        20,
+        23,
+        25,
+        26,
+        32,
+        33,
+        34,
+        48,
+        49,
+        56,
+        61
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        19,
+        20,
+        23,
+        25,
+        26,
+        32,
+        33,
+        34,
+        48,
+        49,
+        56,
+        61
+      ]
+    },
+    {
+      "sym": "CCX {q28,q58} q40",
+      "literals": [
+        "CCX q28 q58 q40"
+      ],
+      "same_target": true,
+      "k_window": 2,
+      "window_idx": [
+        24982,
+        25110
+      ],
+      "global_idx": [
+        24982,
+        25110,
+        29143,
+        29339
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 25110,
+          "controls_equal": false,
+          "target_equal": true,
+          "product_xor_pop": 831176
+        }
+      ],
+      "span": [
+        24982,
+        25110
+      ],
+      "span_len": 128,
+      "untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        19,
+        20,
+        23,
+        25,
+        26,
+        32,
+        33,
+        34,
+        48,
+        49,
+        53,
+        56,
+        61
+      ],
+      "clean_or_const1": [],
+      "dirty_untouched": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        19,
+        20,
+        23,
+        25,
+        26,
+        32,
+        33,
+        34,
+        48,
+        49,
+        53,
+        56,
+        61
+      ]
+    }
+  ],
+  "once_in_window_global_dupes": [
+    {
+      "sym": "CCX {q20,q27} q28",
+      "window_idx": 16354,
+      "global_idx": [
+        16354,
+        30817
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30817,
+          "controls_equal": false,
+          "product_xor_pop": 786762
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q15} q20",
+      "window_idx": 17306,
+      "global_idx": [
+        17306,
+        53406
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 53406,
+          "controls_equal": false,
+          "product_xor_pop": 845179
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q15} q26",
+      "window_idx": 18061,
+      "global_idx": [
+        12190,
+        12290,
+        18061
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 12190,
+          "controls_equal": false,
+          "product_xor_pop": 1119572
+        },
+        {
+          "idx": 12290,
+          "controls_equal": false,
+          "product_xor_pop": 1168735
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q15,q16} q26",
+      "window_idx": 18148,
+      "global_idx": [
+        12095,
+        18148
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 12095,
+          "controls_equal": false,
+          "product_xor_pop": 1211064
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q15} q27",
+      "window_idx": 18444,
+      "global_idx": [
+        6570,
+        6663,
+        6752,
+        18444
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 6570,
+          "controls_equal": false,
+          "product_xor_pop": 1332566
+        },
+        {
+          "idx": 6663,
+          "controls_equal": false,
+          "product_xor_pop": 1119575
+        },
+        {
+          "idx": 6752,
+          "controls_equal": false,
+          "product_xor_pop": 1081343
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q15,q16} q27",
+      "window_idx": 18626,
+      "global_idx": [
+        18626,
+        30815
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30815,
+          "controls_equal": false,
+          "product_xor_pop": 1195296
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q18} q41",
+      "window_idx": 18831,
+      "global_idx": [
+        18831,
+        33102,
+        33232
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 33102,
+          "controls_equal": false,
+          "product_xor_pop": 1187722
+        },
+        {
+          "idx": 33232,
+          "controls_equal": false,
+          "product_xor_pop": 1188459
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q16} q41",
+      "window_idx": 18990,
+      "global_idx": [
+        18990,
+        33181
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 33181,
+          "controls_equal": false,
+          "product_xor_pop": 1186372
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q15} q41",
+      "window_idx": 19073,
+      "global_idx": [
+        1102,
+        19073
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 1102,
+          "controls_equal": false,
+          "product_xor_pop": 1118220
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q25,q33} q20",
+      "window_idx": 21533,
+      "global_idx": [
+        21533,
+        35393
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 35393,
+          "controls_equal": false,
+          "product_xor_pop": 800868
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q49,q54} q18",
+      "window_idx": 23696,
+      "global_idx": [
+        23696,
+        31400,
+        31634
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31400,
+          "controls_equal": false,
+          "product_xor_pop": 779757
+        },
+        {
+          "idx": 31634,
+          "controls_equal": false,
+          "product_xor_pop": 775986
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q32} q21",
+      "window_idx": 23699,
+      "global_idx": [
+        23699,
+        31403
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31403,
+          "controls_equal": false,
+          "product_xor_pop": 966439
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q33,q55} q27",
+      "window_idx": 23703,
+      "global_idx": [
+        23703,
+        31407
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31407,
+          "controls_equal": false,
+          "product_xor_pop": 1022497
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q34,q52} q18",
+      "window_idx": 23717,
+      "global_idx": [
+        23717,
+        31422
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31422,
+          "controls_equal": false,
+          "product_xor_pop": 1050552
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q53} q21",
+      "window_idx": 23721,
+      "global_idx": [
+        23721,
+        31426,
+        31603
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31426,
+          "controls_equal": false,
+          "product_xor_pop": 1056404
+        },
+        {
+          "idx": 31603,
+          "controls_equal": false,
+          "product_xor_pop": 1190000
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q35} q28",
+      "window_idx": 23725,
+      "global_idx": [
+        23725,
+        31430
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31430,
+          "controls_equal": false,
+          "product_xor_pop": 1039599
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q36,q45} q40",
+      "window_idx": 23729,
+      "global_idx": [
+        23729,
+        31434
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31434,
+          "controls_equal": false,
+          "product_xor_pop": 1050809
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q37,q46} q21",
+      "window_idx": 23745,
+      "global_idx": [
+        23745,
+        31451,
+        31575
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31451,
+          "controls_equal": false,
+          "product_xor_pop": 1031280
+        },
+        {
+          "idx": 31575,
+          "controls_equal": false,
+          "product_xor_pop": 1165645
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q38} q28",
+      "window_idx": 23749,
+      "global_idx": [
+        23749,
+        31455
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31455,
+          "controls_equal": false,
+          "product_xor_pop": 1014617
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q31,q39} q41",
+      "window_idx": 23753,
+      "global_idx": [
+        23753,
+        31459
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31459,
+          "controls_equal": false,
+          "product_xor_pop": 1060307
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q15,q26} q57",
+      "window_idx": 23803,
+      "global_idx": [
+        23803,
+        31512
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31512,
+          "controls_equal": false,
+          "product_xor_pop": 1201605
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q17,q57} q61",
+      "window_idx": 23805,
+      "global_idx": [
+        23805,
+        30819,
+        31171,
+        31514
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30819,
+          "controls_equal": false,
+          "product_xor_pop": 821132
+        },
+        {
+          "idx": 31171,
+          "controls_equal": false,
+          "product_xor_pop": 839038
+        },
+        {
+          "idx": 31514,
+          "controls_equal": false,
+          "product_xor_pop": 680562
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q12,q49} q18",
+      "window_idx": 23864,
+      "global_idx": [
+        23864,
+        31009
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31009,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q33} q27",
+      "window_idx": 23891,
+      "global_idx": [
+        23891,
+        31056,
+        31291
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31056,
+          "controls_equal": false,
+          "product_xor_pop": 982118
+        },
+        {
+          "idx": 31291,
+          "controls_equal": false,
+          "product_xor_pop": 1080069
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q34,q55} q28",
+      "window_idx": 23895,
+      "global_idx": [
+        23895,
+        31060
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31060,
+          "controls_equal": false,
+          "product_xor_pop": 1029244
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q52,q53} q40",
+      "window_idx": 23899,
+      "global_idx": [
+        23899,
+        31064
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31064,
+          "controls_equal": false,
+          "product_xor_pop": 1054777
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q35} q21",
+      "window_idx": 23920,
+      "global_idx": [
+        23920,
+        31086
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31086,
+          "controls_equal": false,
+          "product_xor_pop": 1043634
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q36} q27",
+      "window_idx": 23924,
+      "global_idx": [
+        23924,
+        31090,
+        31253
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31090,
+          "controls_equal": false,
+          "product_xor_pop": 1044462
+        },
+        {
+          "idx": 31253,
+          "controls_equal": false,
+          "product_xor_pop": 1160130
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q37,q45} q28",
+      "window_idx": 23928,
+      "global_idx": [
+        23928,
+        31094
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31094,
+          "controls_equal": false,
+          "product_xor_pop": 1055798
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q38,q46} q41",
+      "window_idx": 23932,
+      "global_idx": [
+        23932,
+        31098
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31098,
+          "controls_equal": false,
+          "product_xor_pop": 1048869
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q39} q27",
+      "window_idx": 23948,
+      "global_idx": [
+        23948,
+        31115,
+        31225
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31115,
+          "controls_equal": false,
+          "product_xor_pop": 1039780
+        },
+        {
+          "idx": 31225,
+          "controls_equal": false,
+          "product_xor_pop": 1187913
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q31,q42} q28",
+      "window_idx": 23952,
+      "global_idx": [
+        23952,
+        31119
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31119,
+          "controls_equal": false,
+          "product_xor_pop": 1039058
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q58} q50",
+      "window_idx": 23956,
+      "global_idx": [
+        23956,
+        31123
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 31123,
+          "controls_equal": false,
+          "product_xor_pop": 1114819
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q11,q32} q18",
+      "window_idx": 24056,
+      "global_idx": [
+        24056,
+        30658
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30658,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q34} q27",
+      "window_idx": 24085,
+      "global_idx": [
+        24085,
+        30707,
+        30937
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30707,
+          "controls_equal": false,
+          "product_xor_pop": 980361
+        },
+        {
+          "idx": 30937,
+          "controls_equal": false,
+          "product_xor_pop": 1174208
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q53,q55} q28",
+      "window_idx": 24089,
+      "global_idx": [
+        24089,
+        30711
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30711,
+          "controls_equal": false,
+          "product_xor_pop": 1029123
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q35,q52} q40",
+      "window_idx": 24093,
+      "global_idx": [
+        24093,
+        30715
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30715,
+          "controls_equal": false,
+          "product_xor_pop": 1060602
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q36} q21",
+      "window_idx": 24114,
+      "global_idx": [
+        24114,
+        30737
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30737,
+          "controls_equal": false,
+          "product_xor_pop": 1042585
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q37} q27",
+      "window_idx": 24118,
+      "global_idx": [
+        24118,
+        30741,
+        30899
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30741,
+          "controls_equal": false,
+          "product_xor_pop": 1040711
+        },
+        {
+          "idx": 30899,
+          "controls_equal": false,
+          "product_xor_pop": 1178687
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q38,q45} q28",
+      "window_idx": 24122,
+      "global_idx": [
+        24122,
+        30745
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30745,
+          "controls_equal": false,
+          "product_xor_pop": 1059408
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q39,q46} q41",
+      "window_idx": 24126,
+      "global_idx": [
+        24126,
+        30749
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30749,
+          "controls_equal": false,
+          "product_xor_pop": 1050975
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q42} q27",
+      "window_idx": 24142,
+      "global_idx": [
+        24142,
+        30766,
+        30871
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30766,
+          "controls_equal": false,
+          "product_xor_pop": 1043706
+        },
+        {
+          "idx": 30871,
+          "controls_equal": false,
+          "product_xor_pop": 1176944
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q31} q28",
+      "window_idx": 24146,
+      "global_idx": [
+        24146,
+        30770
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30770,
+          "controls_equal": false,
+          "product_xor_pop": 1051621
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q58,q59} q50",
+      "window_idx": 24150,
+      "global_idx": [
+        24150,
+        30774
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30774,
+          "controls_equal": false,
+          "product_xor_pop": 1028604
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q10,q33} q18",
+      "window_idx": 24249,
+      "global_idx": [
+        24249,
+        30308
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30308,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q34,q54} q21",
+      "window_idx": 24270,
+      "global_idx": [
+        24270,
+        30345,
+        30593
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30345,
+          "controls_equal": false,
+          "product_xor_pop": 781817
+        },
+        {
+          "idx": 30593,
+          "controls_equal": false,
+          "product_xor_pop": 1178969
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q53} q27",
+      "window_idx": 24274,
+      "global_idx": [
+        24274,
+        30349
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30349,
+          "controls_equal": false,
+          "product_xor_pop": 977829
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q35,q55} q28",
+      "window_idx": 24278,
+      "global_idx": [
+        24278,
+        30353
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30353,
+          "controls_equal": false,
+          "product_xor_pop": 1030493
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q36,q52} q21",
+      "window_idx": 24294,
+      "global_idx": [
+        24294,
+        30370
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30370,
+          "controls_equal": false,
+          "product_xor_pop": 1058314
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q37} q27",
+      "window_idx": 24298,
+      "global_idx": [
+        24298,
+        30374,
+        30560
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30374,
+          "controls_equal": false,
+          "product_xor_pop": 1030915
+        },
+        {
+          "idx": 30560,
+          "controls_equal": false,
+          "product_xor_pop": 1181607
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q38} q40",
+      "window_idx": 24302,
+      "global_idx": [
+        24302,
+        30378
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30378,
+          "controls_equal": false,
+          "product_xor_pop": 1034666
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q39,q45} q41",
+      "window_idx": 24306,
+      "global_idx": [
+        24306,
+        30382
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30382,
+          "controls_equal": false,
+          "product_xor_pop": 1024148
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q42,q46} q27",
+      "window_idx": 24322,
+      "global_idx": [
+        24322,
+        30402,
+        30468
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30402,
+          "controls_equal": false,
+          "product_xor_pop": 1169605
+        },
+        {
+          "idx": 30468,
+          "controls_equal": false,
+          "product_xor_pop": 1169605
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q30} q40",
+      "window_idx": 24326,
+      "global_idx": [
+        24326,
+        30406,
+        30472
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30406,
+          "controls_equal": false,
+          "product_xor_pop": 1214246
+        },
+        {
+          "idx": 30472,
+          "controls_equal": false,
+          "product_xor_pop": 1214246
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q31,q59} q50",
+      "window_idx": 24330,
+      "global_idx": [
+        24330,
+        30410,
+        30483
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30410,
+          "controls_equal": false,
+          "product_xor_pop": 1200671
+        },
+        {
+          "idx": 30483,
+          "controls_equal": false,
+          "product_xor_pop": 1200671
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q34,q9} q18",
+      "window_idx": 24423,
+      "global_idx": [
+        24423,
+        30040
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30040,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q53,q54} q21",
+      "window_idx": 24445,
+      "global_idx": [
+        24445,
+        30077,
+        30249
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30077,
+          "controls_equal": false,
+          "product_xor_pop": 783170
+        },
+        {
+          "idx": 30249,
+          "controls_equal": false,
+          "product_xor_pop": 1171117
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q35} q27",
+      "window_idx": 24449,
+      "global_idx": [
+        24449,
+        30081
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30081,
+          "controls_equal": false,
+          "product_xor_pop": 981014
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q36,q55} q28",
+      "window_idx": 24453,
+      "global_idx": [
+        24453,
+        30085
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30085,
+          "controls_equal": false,
+          "product_xor_pop": 1028395
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q37,q52} q21",
+      "window_idx": 24469,
+      "global_idx": [
+        24469,
+        30102
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30102,
+          "controls_equal": false,
+          "product_xor_pop": 1048924
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q38} q27",
+      "window_idx": 24473,
+      "global_idx": [
+        24473,
+        30106
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30106,
+          "controls_equal": false,
+          "product_xor_pop": 1036168
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q39} q40",
+      "window_idx": 24477,
+      "global_idx": [
+        24477,
+        30110
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30110,
+          "controls_equal": false,
+          "product_xor_pop": 1038813
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q42,q45} q41",
+      "window_idx": 24481,
+      "global_idx": [
+        24481,
+        30114
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30114,
+          "controls_equal": false,
+          "product_xor_pop": 1029889
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q46} q27",
+      "window_idx": 24497,
+      "global_idx": [
+        24497,
+        30130,
+        30193
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30130,
+          "controls_equal": false,
+          "product_xor_pop": 1053995
+        },
+        {
+          "idx": 30193,
+          "controls_equal": false,
+          "product_xor_pop": 1194564
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q59} q40",
+      "window_idx": 24501,
+      "global_idx": [
+        24501,
+        30134
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30134,
+          "controls_equal": false,
+          "product_xor_pop": 1038889
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q31,q43} q50",
+      "window_idx": 24505,
+      "global_idx": [
+        24505,
+        30138
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 30138,
+          "controls_equal": false,
+          "product_xor_pop": 1018256
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q53,q8} q18",
+      "window_idx": 24587,
+      "global_idx": [
+        24587,
+        29776
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29776,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q35,q54} q21",
+      "window_idx": 24609,
+      "global_idx": [
+        24609,
+        29814,
+        29981
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29814,
+          "controls_equal": false,
+          "product_xor_pop": 782101
+        },
+        {
+          "idx": 29981,
+          "controls_equal": false,
+          "product_xor_pop": 1174498
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q36} q27",
+      "window_idx": 24613,
+      "global_idx": [
+        24613,
+        29818
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29818,
+          "controls_equal": false,
+          "product_xor_pop": 985308
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q37,q55} q28",
+      "window_idx": 24617,
+      "global_idx": [
+        24617,
+        29822
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29822,
+          "controls_equal": false,
+          "product_xor_pop": 1025088
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q38,q52} q21",
+      "window_idx": 24633,
+      "global_idx": [
+        24633,
+        29839
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29839,
+          "controls_equal": false,
+          "product_xor_pop": 1040145
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q39} q27",
+      "window_idx": 24637,
+      "global_idx": [
+        24637,
+        29843
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29843,
+          "controls_equal": false,
+          "product_xor_pop": 1030035
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q42} q40",
+      "window_idx": 24641,
+      "global_idx": [
+        24641,
+        29847
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29847,
+          "controls_equal": false,
+          "product_xor_pop": 1039806
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q45} q41",
+      "window_idx": 24645,
+      "global_idx": [
+        24645,
+        29851
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29851,
+          "controls_equal": false,
+          "product_xor_pop": 1052817
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q46,q59} q27",
+      "window_idx": 24661,
+      "global_idx": [
+        24661,
+        29867,
+        29925
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29867,
+          "controls_equal": false,
+          "product_xor_pop": 1039758
+        },
+        {
+          "idx": 29925,
+          "controls_equal": false,
+          "product_xor_pop": 1169429
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q43} q40",
+      "window_idx": 24665,
+      "global_idx": [
+        24665,
+        29871
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29871,
+          "controls_equal": false,
+          "product_xor_pop": 1039917
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q31,q44} q50",
+      "window_idx": 24669,
+      "global_idx": [
+        24669,
+        29875
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29875,
+          "controls_equal": false,
+          "product_xor_pop": 1079123
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q35,q7} q18",
+      "window_idx": 24753,
+      "global_idx": [
+        24753,
+        29443
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29443,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q37} q27",
+      "window_idx": 24775,
+      "global_idx": [
+        24775,
+        29481,
+        29602
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29481,
+          "controls_equal": false,
+          "product_xor_pop": 1180130
+        },
+        {
+          "idx": 29602,
+          "controls_equal": false,
+          "product_xor_pop": 1180130
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q38,q55} q21",
+      "window_idx": 24786,
+      "global_idx": [
+        24786,
+        29486,
+        29614
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29486,
+          "controls_equal": false,
+          "product_xor_pop": 1190932
+        },
+        {
+          "idx": 29614,
+          "controls_equal": false,
+          "product_xor_pop": 1190932
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q39,q52} q28",
+      "window_idx": 24790,
+      "global_idx": [
+        24790,
+        29490,
+        29618
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29490,
+          "controls_equal": false,
+          "product_xor_pop": 1178893
+        },
+        {
+          "idx": 29618,
+          "controls_equal": false,
+          "product_xor_pop": 1178893
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q42} q40",
+      "window_idx": 24794,
+      "global_idx": [
+        24794,
+        29494,
+        29622
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29494,
+          "controls_equal": false,
+          "product_xor_pop": 1190509
+        },
+        {
+          "idx": 29622,
+          "controls_equal": false,
+          "product_xor_pop": 1190509
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q29} q41",
+      "window_idx": 24798,
+      "global_idx": [
+        24798,
+        29498,
+        29626
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29498,
+          "controls_equal": false,
+          "product_xor_pop": 1195718
+        },
+        {
+          "idx": 29626,
+          "controls_equal": false,
+          "product_xor_pop": 1195718
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q45,q59} q28",
+      "window_idx": 24814,
+      "global_idx": [
+        24814,
+        29514,
+        29642
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29514,
+          "controls_equal": false,
+          "product_xor_pop": 1182166
+        },
+        {
+          "idx": 29642,
+          "controls_equal": false,
+          "product_xor_pop": 1182166
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q43,q46} q40",
+      "window_idx": 24818,
+      "global_idx": [
+        24818,
+        29518,
+        29646
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29518,
+          "controls_equal": false,
+          "product_xor_pop": 1157108
+        },
+        {
+          "idx": 29646,
+          "controls_equal": false,
+          "product_xor_pop": 1157108
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q44} q50",
+      "window_idx": 24822,
+      "global_idx": [
+        24822,
+        29522,
+        29650
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29522,
+          "controls_equal": false,
+          "product_xor_pop": 1228786
+        },
+        {
+          "idx": 29650,
+          "controls_equal": false,
+          "product_xor_pop": 1228786
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q36,q6} q18",
+      "window_idx": 24894,
+      "global_idx": [
+        24894,
+        29245
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29245,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q38} q27",
+      "window_idx": 24917,
+      "global_idx": [
+        24917,
+        29280
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29280,
+          "controls_equal": false,
+          "product_xor_pop": 967698
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q39,q55} q21",
+      "window_idx": 24928,
+      "global_idx": [
+        24928,
+        29285
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29285,
+          "controls_equal": false,
+          "product_xor_pop": 1024866
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q42,q52} q28",
+      "window_idx": 24932,
+      "global_idx": [
+        24932,
+        29289
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29289,
+          "controls_equal": false,
+          "product_xor_pop": 1031920
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q24} q40",
+      "window_idx": 24936,
+      "global_idx": [
+        24936,
+        29293
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29293,
+          "controls_equal": false,
+          "product_xor_pop": 1047816
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q59} q41",
+      "window_idx": 24940,
+      "global_idx": [
+        24940,
+        29297
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29297,
+          "controls_equal": false,
+          "product_xor_pop": 1051355
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q43,q45} q28",
+      "window_idx": 24956,
+      "global_idx": [
+        24956,
+        29313
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29313,
+          "controls_equal": false,
+          "product_xor_pop": 1041248
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q44,q46} q40",
+      "window_idx": 24960,
+      "global_idx": [
+        24960,
+        29317
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29317,
+          "controls_equal": false,
+          "product_xor_pop": 1125956
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q30,q60} q50",
+      "window_idx": 24964,
+      "global_idx": [
+        24964,
+        29321
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29321,
+          "controls_equal": false,
+          "product_xor_pop": 1137411
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q15,q31} q28",
+      "window_idx": 24980,
+      "global_idx": [
+        24980,
+        29337
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29337,
+          "controls_equal": false,
+          "product_xor_pop": 1407662
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q37,q5} q18",
+      "window_idx": 25025,
+      "global_idx": [
+        25025,
+        29051
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29051,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q39} q27",
+      "window_idx": 25048,
+      "global_idx": [
+        25048,
+        29087
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29087,
+          "controls_equal": false,
+          "product_xor_pop": 1179087
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q42,q55} q21",
+      "window_idx": 25059,
+      "global_idx": [
+        25059,
+        29092
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29092,
+          "controls_equal": false,
+          "product_xor_pop": 1077263
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q24,q52} q28",
+      "window_idx": 25063,
+      "global_idx": [
+        25063,
+        29096
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29096,
+          "controls_equal": false,
+          "product_xor_pop": 1061471
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q22,q59} q40",
+      "window_idx": 25067,
+      "global_idx": [
+        25067,
+        29100
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29100,
+          "controls_equal": false,
+          "product_xor_pop": 1037440
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q29,q43} q41",
+      "window_idx": 25071,
+      "global_idx": [
+        25071,
+        29104
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29104,
+          "controls_equal": false,
+          "product_xor_pop": 1047559
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q44,q45} q28",
+      "window_idx": 25087,
+      "global_idx": [
+        25087,
+        29120
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29120,
+          "controls_equal": false,
+          "product_xor_pop": 1066492
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q46,q60} q40",
+      "window_idx": 25091,
+      "global_idx": [
+        25091,
+        29124
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29124,
+          "controls_equal": false,
+          "product_xor_pop": 1128056
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q15,q30} q50",
+      "window_idx": 25095,
+      "global_idx": [
+        25095,
+        29128
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29128,
+          "controls_equal": false,
+          "product_xor_pop": 1393313
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q31,q50} q28",
+      "window_idx": 25109,
+      "global_idx": [
+        25109,
+        29142
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 29142,
+          "controls_equal": false,
+          "product_xor_pop": 814918
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q38,q4} q18",
+      "window_idx": 25157,
+      "global_idx": [
+        25157,
+        28832
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 28832,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q42} q27",
+      "window_idx": 25175,
+      "global_idx": [
+        25175,
+        28866,
+        28938
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 28866,
+          "controls_equal": false,
+          "product_xor_pop": 803224
+        },
+        {
+          "idx": 28938,
+          "controls_equal": false,
+          "product_xor_pop": 803224
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q3,q39} q21",
+      "window_idx": 25262,
+      "global_idx": [
+        25262,
+        28670
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 28670,
+          "controls_equal": true,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q42,q54} q27",
+      "window_idx": 25277,
+      "global_idx": [
+        25277,
+        28697
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 28697,
+          "controls_equal": false,
+          "product_xor_pop": 0
+        }
+      ]
+    },
+    {
+      "sym": "CCX {q14,q24} q28",
+      "window_idx": 25281,
+      "global_idx": [
+        25281,
+        28701
+      ],
+      "endpoint_equivalence": [
+        {
+          "idx": 28701,
+          "controls_equal": false,
+          "product_xor_pop": 0
+        }
+      ]
+    }
+  ]
+}

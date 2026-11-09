@@ -1,0 +1,79 @@
+{
+  "model": "score=Q*(toffoli+t/4); t=n*(0.56*log2(1/eps)+5.3); eps_n=eps41*41/n",
+  "eps41_proxy": 2.434041480874084e-13,
+  "eps41_source": "20261106_cleanup maoxin_v2 full-verify (n_rot=41); frontier unmeasured",
+  "angle_sum_11_half_turns": "18005584217956859/9223372036854775808",
+  "angle_sum_11_turns": "18005584217956859/18446744073709551616",
+  "candidates": {
+    "A_mega_11_to_1": {
+      "n_from": 41,
+      "n_to": 31,
+      "feasibility": "dead: 21/24 (x,seed) same-branch cells differ (branch_check.json)",
+      "by_eps": {
+        "proxy": {
+          "dT": 294.65183913370356,
+          "dC": 73.66295978342589,
+          "dScore_Q62": 4567.103506572405
+        },
+        "x0.1": {
+          "dT": 313.25463646507274,
+          "dC": 78.31365911626818,
+          "dScore_Q62": 4855.446865208627
+        },
+        "x10": {
+          "dT": 276.0490418023344,
+          "dC": 69.0122604505836,
+          "dScore_Q62": 4278.760147936183
+        }
+      }
+    },
+    "B_pair_41_to_40": {
+      "n_from": 41,
+      "n_to": 40,
+      "feasibility": "screen-pass on 8 probes; built as candidate kmb, verifier-arbitrated",
+      "by_eps": {
+        "proxy": {
+          "dT": 29.562934006153228,
+          "dC": 7.390733501538307,
+          "dScore_Q62": 458.225477095375
+        },
+        "x0.1": {
+          "dT": 31.423213739290077,
+          "dC": 7.855803434822519,
+          "dScore_Q62": 487.0598129589962
+        },
+        "x10": {
+          "dT": 27.70265427301638,
+          "dC": 6.925663568254095,
+          "dScore_Q62": 429.39114123175386
+        }
+      }
+    },
+    "C_clifford_q3": {
+      "n_from": 41,
+      "n_to": 41,
+      "feasibility": "blocked: CSWAP nondiag touches on q3 between @15966/@16302; prize 0 anyway",
+      "by_eps": {
+        "proxy": {
+          "dT": 0.0,
+          "dC": 0.0,
+          "dScore_Q62": 0.0
+        },
+        "x0.1": {
+          "dT": 0.0,
+          "dC": 0.0,
+          "dScore_Q62": 0.0
+        },
+        "x10": {
+          "dT": 0.0,
+          "dC": 0.0,
+          "dScore_Q62": 0.0
+        }
+      }
+    }
+  },
+  "one_rotation_value_proxy": {
+    "dT": 29.562934006153228,
+    "dScore": 458.225477095375
+  }
+}

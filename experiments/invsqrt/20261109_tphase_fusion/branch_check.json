@@ -1,0 +1,541 @@
+{
+  "cuts": [
+    25852,
+    25860,
+    25868,
+    25876,
+    25883,
+    25889,
+    25895,
+    25903,
+    25908,
+    25918,
+    25931
+  ],
+  "xs": [
+    1,
+    2,
+    3,
+    5,
+    64,
+    161,
+    1000,
+    3133452
+  ],
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "q28_table": {
+    "101": {
+      "25852": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "25860": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25868": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false
+      ],
+      "25876": [
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true
+      ],
+      "25883": [
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25889": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25895": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25903": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25908": [
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "25918": [
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25931": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false
+      ]
+    },
+    "202": {
+      "25852": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "25860": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25868": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false
+      ],
+      "25876": [
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true
+      ],
+      "25883": [
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25889": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25895": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25903": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25908": [
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "25918": [
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25931": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false
+      ]
+    },
+    "303": {
+      "25852": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "25860": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25868": [
+        true,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false
+      ],
+      "25876": [
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true
+      ],
+      "25883": [
+        true,
+        true,
+        false,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25889": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25895": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25903": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "25908": [
+        true,
+        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false
+      ],
+      "25918": [
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false
+      ],
+      "25931": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false
+      ]
+    }
+  },
+  "n_disagreements": 21,
+  "disagreements_sample": [
+    {
+      "seed": 101,
+      "x": 2,
+      "q28_across_cuts": [
+        false,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "seed": 101,
+      "x": 3,
+      "q28_across_cuts": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "seed": 101,
+      "x": 5,
+      "q28_across_cuts": [
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "seed": 101,
+      "x": 64,
+      "q28_across_cuts": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false
+      ]
+    },
+    {
+      "seed": 101,
+      "x": 161,
+      "q28_across_cuts": [
+        false,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "seed": 101,
+      "x": 1000,
+      "q28_across_cuts": [
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "seed": 101,
+      "x": 3133452,
+      "q28_across_cuts": [
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "seed": 202,
+      "x": 2,
+      "q28_across_cuts": [
+        false,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "seed": 202,
+      "x": 3,
+      "q28_across_cuts": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "seed": 202,
+      "x": 5,
+      "q28_across_cuts": [
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true
+      ]
+    }
+  ]
+}
