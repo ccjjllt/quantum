@@ -29,9 +29,12 @@
 | 2026-11-05 | [Maoxin V2 原始组合](submissions/20261105_maoxin_v2/README.md) | 58014726 | 24.78590，创建新提交前的去重读取确认COMPLETE |
 | 2026-11-06 | [Syed V9 固定数据集组合](submissions/20261106_syed_v9/README.md) | 58041132 | 24.94081，2026-11-08提交前去重读取确认COMPLETE |
 | 2026-11-08 | [Public Frontier 25.14222 原始组合](submissions/20261108_public_frontier/README.md) | 58123354 | 已创建，未持续监控分数 |
+| 2026-11-10 | [gengsr 25.2268 组合](submissions/20261110_gengsr_252268/README.md) | 58181743 | 已创建，未持续监控分数 |
 
-当前公开比较基线为 **[Public Frontier 25.14222（Alex V126 / Hosen V7 / Maoxin V2 / Isabe V12）](https://www.kaggle.com/code/alexchilton/24-94-lb-verified-three-task-portfolio?scriptVersionId=366869858)**；机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
+当前公开比较基线为 **[gengsr 25.2268（shifter 46 + own chemistry loaders）](https://www.kaggle.com/code/gengsr/lb-25-2268-shifter-46-own-chemistry-loaders)**；机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
+2026-11-10 起比较基线已更新为 gengsr 25.2268（本账号提交 `58181743`，invsqrt 本机重验 PASS 94537.59），
+Syed V9 与 Public Frontier 组合均保留为历史对照，不得将其旧增量直接累加到新基线上。
 共享原始电路在 `artifacts/20261108_public_frontier/release/`，来源快照在相邻 `source/`。
 本次直接提交未修改的原始 `submission.zip`（18 个文件 SHA-256 已核对），没有混入本地研究补丁，提交前未在本机重跑全量官方验证。
 上一版 Syed V9（`artifacts/20261106_syed_v9/release/`）保留为历史对照，不能把基于 Syed V9 的旧增量直接累加到新公开前沿上。
