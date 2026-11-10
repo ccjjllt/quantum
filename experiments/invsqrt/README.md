@@ -1,7 +1,14 @@
 # invsqrt 有效研究入口
 
-当前公开比较基线已于 2026-11-08 更新为 **Public Frontier 25.14222 / Hosen V6 (`7c10edba`)**，
-作者公开报告成本 **95,430.78**，实际 62Q、53,686 操作、1,403 静态 Toffoli-like（`CCX` 1,086，`CCZ` 91，`CSWAP` 226，`HMR` 858）。
+当前公开比较基线已于 2026-11-10 更新为 **gengsr 25.2268（shifter 46 新 family，`26ebf39d`）**，
+本地完整官方验证 **PASS，200,540,928 shots，成本 94537.58955971198**，
+实际 62Q、36,686 操作、1,392 静态 Toffoli-like。
+新 family 审计（七段定位、shifter-46 桶形树、A3 shift-select 循环、不可迁回证明）见
+[2026-11-10 gengsr 审计](20261110_gengsr_audit/README.md)。
+**今后 invsqrt 研究一律以新 family 为起点；旧 family（`7c10edba`）结论全部封存，不再投入。**
+
+此前公开比较基线为 **Public Frontier 25.14222 / Hosen V6 (`7c10edba`)**（2026-11-08），
+作者公开报告成本 **95,430.78**，实际 62Q、53,686 操作、1,403 静态 Toffoli-like。
 最新完整演化谱系拆解（`Syed V9 → Syed V10/V11 → Maoxin V3 → Kirill V23/Atakan V2 → Hosen V6`）与全定义域 $3,133,452$ 输入位并行代数饱和审计见[2026-11-08 Public Frontier 审计](20261108_frontier_audit/README.md)。
 该审计严格证明：在新基线 `7c10edba` 上，第二选择器已 0 CCZ（完全吸收并超越旧无回退迁移）、单门退化与 61 线 $\mathbb{F}_2$ 仿射张成冗余为 0、全部 48 个多 CCX 写累积段与 785 个单 CCX 写累积段的辛秩约简空间为 0、未读目标 `CCX -> HMR` 窥孔为 0；后续降本需转向扩展 `CARRY_PATCHES` 条件进位擦除至平方/乘法恢复段、释放相位期干净辅助线缓存重复乘积、或压降 `[15900:16800]` 局部 62Q→61Q 峰值。
 
