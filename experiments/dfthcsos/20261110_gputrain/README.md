@@ -47,3 +47,23 @@
 - GPU  verdict：10k 步 CPU 仅 807 秒——**GPU 对本路线无必要**；
   qingyu 配额（29.7h 空闲已确认，token 已换回）应留待真正需要并行/二阶探索的任务，
   而不是烧在这条已证盆地上。
+
+## Kaggle GPU 投放（qingyu 配额，2026-11-10）
+- dataset `qingyu1232/qcc-dfthc-train-bundle`（私有；slim_train.py + fastfit.py + prob_r5.npz 68M + seed_r5/r4）。
+- kernel `qingyu1232/qcc-r5-r4-gpu-train`（私有脚本，GPU+internet）：
+  v1/v2 FAIL（数据集挂载路径 `/kaggle/input/datasets/...` 与假设不符，已改动态发现）；
+  v3 RUNNING（R5 50k + R4 20k，`train_gpu.py`）。
+- 运行中 kernel 取不到实时日志（`kernels output` 完成前为空），完成后回填数字。
+  本地 CPU 10k 对照组可作轨迹一致性校验。
+
+## GPU 实测（qingyu 配额，2026-11-10，COMPLETE）
+- 任务：`qingyu1232/qcc-r5-r4-gpu-train` v3（dataset `qcc-dfthc-train-bundle` 私有；
+  v1/v2 FAIL 均为数据集挂载路径问题，已修为动态发现）。
+- R5 50k（seed 793.56）：500:182.19 / 2000:84.82 / 10000:~49.9（与本地 CPU 49.85 一致，
+  器件浮点差）/ … / 50000:**40.24**（467 秒）。15000 步后每 2500 步仅降 ~0.4，
+  渐近 ≈38–40，距 20 mHa 仍 ~20。
+- R4 20k（seed 180.11@500）：20000:**73.07**（194 秒），远未到门。
+- 结论：GPU 把 50k 步压到 8 分钟，但** basin 结论不变**——R5/R4 在此优化器下到不了 20 mHa；
+  20 mHa 需要新形状/新 loss/新优化器，不是更多步数。配额消耗约 11 分钟 GPU。
+- 产物：`artifacts/20261110_gputrain/train_r5_50000.npz`、`train_r4_20000.npz`
+  （Kaggle 输出原样取回；连续探针，非候选）。
