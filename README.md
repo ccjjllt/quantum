@@ -30,6 +30,7 @@
 | 2026-11-06 | [Syed V9 固定数据集组合](submissions/20261106_syed_v9/README.md) | 58041132 | 24.94081，2026-11-08提交前去重读取确认COMPLETE |
 | 2026-11-08 | [Public Frontier 25.14222 原始组合](submissions/20261108_public_frontier/README.md) | 58123354 | 已创建，未持续监控分数 |
 | 2026-11-10 | [gengsr 25.2268 组合](submissions/20261110_gengsr_252268/README.md) | 58181743 | 已创建，未持续监控分数 |
+| 2026-11-10 | [自研三件套组合（全本机验证，P0 化学）](submissions/20261110_trio_candidate/README.md) | 58190972 | 已创建，未持续监控分数 |
 
 当前公开比较基线为 **[gengsr 25.2268（shifter 46 + own chemistry loaders）](https://www.kaggle.com/code/gengsr/lb-25-2268-shifter-46-own-chemistry-loaders)**；机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
