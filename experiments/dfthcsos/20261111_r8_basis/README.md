@@ -41,15 +41,16 @@ lower triangle.  Seed continuous e2:
 | 1,000 | 30.02 | 27.74 | 24.14 |
 | 2,000 | 25.08 | 23.50 | 20.90 |
 | 5,000 | 21.55 | 20.42 | 18.51 |
-| 10,000 | — | — | 17.52 |
-| 15,000 | — | — | 17.00 |
-| 20,000 | — | — | **16.71** |
+| 10,000 | — | 19.12 | 17.52 |
+| 15,000 | — | 18.48 | 17.00 |
+| 20,000 | — | **18.11** | **16.71** |
 
 B135 crosses the 20 mHa continuous gate at 5k (18.51) and reaches 16.71 at
-20k (856.7 s CPU).  B131 is 20.42 at 5k and **19.12 at 10k** (continuation
-running to 20k); B129 21.55 at 5k.  The control R5/B129/C68 (751 vectors)
-reached 67.82 at 5k; the B-axis trajectories are much better because
-R*C=352 is unchanged.
+20k (856.7 s CPU).  B131 is 20.42 at 5k, 19.12 at 10k and **18.11 at 20k**
+(678.8 s CPU).  B129 is 21.55 at 5k; not extended.  The control R5/B129/C68
+(751 vectors) reached 67.82 at 5k; the B-axis trajectories are much better
+because R*C=352 is unchanged.  Both B135 and B131 cross the *continuous*
+gate, but the 8-bit quantized gate is the one that matters (below).
 
 ## 4. Naive 8-bit quantization fails
 
@@ -107,8 +108,18 @@ stage 0 164.15 → 33.21; stage 1 46.62 → 33.68; stage 2 34.47 → 33.46;
 stage 3 33.61 → 33.37 mHa; then flat at ~33.3.  A local `--free 0.5,0.0
 --lbfgs-iters 5000` stage reached 50.03 mHa from 190.64.  The short refits
 are not enough.  The full default-freeze L-BFGS recipe
-(`--lbfgs-until 0.5 --lbfgs-iters 12000 --stage-steps 800`) is running on
-the Kaggle GPU (`qingyu1232/qcc-r3-b135-quantize`) from the 20k structure.
+(`--lbfgs-until 0.5 --lbfgs-iters 12000 --stage-steps 800`) ran on the Kaggle
+GPU `qingyu1232/qcc-r3-b135-quantize` from the 20k structure (total 1,479.1 s
+GPU): stage 0 190.39 → 32.42 mHa, stage 1 43.33 → 33.26, stages 2–13 flat
+at ~33.1; `refine.py` reached error_1 **11.204 mHa**, error_2
+**33.1236 mHa**, lambda_eff **49.862795**; `build.py --shots 64` rejected it:
+`error_2 = 33.1236 mHa > 20 mHa`.  The generated 1,156-row submission has
+T = 6,646 + 9,056 = 15,702, Q = 427, score **334,317,772.35** (+11.96 % vs
+baseline) — and it fails the accuracy gate before the verifier.  The 8-bit
+quantization of this B135 structure plateaus ~33 mHa, ~13 mHa above the gate;
+the continuous 16.71 mHa does not survive.  B131/B129 are worse continuous
+and cannot be better quantized.  **The B axis is closed on both accuracy and
+loader cost.**
 
 ## 6. R3 closed
 
@@ -123,10 +134,15 @@ closed without quantization.
 - `seed_8x129x44_truncfit.npz` (B129 seed)
 - `seed_8x131x44_truncfit.npz`, `seed_8x135x44_truncfit.npz`
 - `train_8x129x44_5000.npz`, `train_8x131x44_5000.npz`
+  SHA `0e4955ba…6427f2`
+- `train_8x131x44_20000.npz` SHA `dd492095…df49c2`
 - `train_8x135x44_5000.npz`, `train_8x135x44_20000.npz`
   SHA `0866dabe…ec62bd3`
 - `struct_8x135x44_20000.npz` SHA `96411985…104fe7`
-- `quant_8x135x44.npz` (quick Adam, ~33.3 mHa; intermediate)
+- `gpu_out_quant/submission_8x135x44/submission.npz` SHA `48672070…b98a62a`
+- `gpu_out_quant/quant_8x135x44.npz` `97c05d49…f2ce401`,
+  `refine_8x135x44.npz` `692c099f…c01f484`,
+  log `9a35c291…f45e903e`
 - `gpu_out/summary.json` (R3)
 - `lera_pipeline/dfthc_refit/` (public Lera V7 source)
 

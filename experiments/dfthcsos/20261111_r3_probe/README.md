@@ -38,9 +38,15 @@ and `starter_pkg/`.  Kernel `qingyu1232/qcc-r3-b135-quantize` runs:
 800 --final-steps 1500`, then `refine.py --brot 8`, then
 `build.py --brot 8 --qrom tensor --shots 64`.
 
-Status at record time: RUNNING.  The result JSON and loaders will be
-downloaded to `artifacts/20261111_r3_probe/gpu_out_quant/` when complete.
-No verifier PASS is claimed yet.
+Status: **COMPLETE with error_2 rejection**.  GPU total 1,479.1 s.  Stage 0
+190.39 → 32.42 mHa, stage 1 43.33 → 33.26, stages 2–13 flat ~33.1.
+`refine.py`: error_1 **11.204 mHa**, error_2 **33.1236 mHa**, lambda_eff
+**49.862795**.  `build.py --shots 64` rejected:
+`error_2 = 33.1236 mHa > 20 mHa`.  The generated submission has
+T = 6,646 + 9,056 = 15,702, Q = 427, score **334,317,772.35** (+11.96 %).
+No verifier PASS.  Output SHA: `submission.npz` `48672070…b98a62a`,
+`quant` `97c05d49…f2ce401`, `refine` `692c099f…c01f484`, log
+`9a35c291…f45e903e`.
 
 ## 3. Local quantization attempts (failed)
 
@@ -72,7 +78,8 @@ re-synthesized for the new table.  Generic loaders make the B-axis +5.3 %
 
 ## 6. Verification scope
 
-R3: continuous e2 only (no quantization/verifier).  B135: official
-quantized `evaluate_words` only if the GPU `quantize.py`/`refine.py` finish;
-the `build.py --shots 64` run is the only official PASS/FAIL.  No PASS is
-claimed at record time.
+R3: continuous e2 only (no quantization/verifier).  B135: the official
+`build.py --shots 64` verifier **rejected** on `error_2 = 33.1236 mHa >
+20 mHa`; no PASS.  The exact official arithmetic (`evaluate_words`) on the
+generated submission gives e1 11.204 mHa, e2 33.1236 mHa, lambda_eff
+49.862795; the score 334,317,772.35 is a cost projection, not a PASS.
