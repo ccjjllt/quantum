@@ -42,6 +42,46 @@ def counts(circuit):
     return nccx, nhmr, ncz, tail
 
 
+def word_register_qubits(kmx_path):
+    """Map the kmx REGISTER header to the qubits of word_0..word_J-1."""
+    regs, names = {}, {}
+    for line in Path(kmx_path).read_text().splitlines():
+        parts = line.split()
+        if not parts:
+            continue
+        if parts[0] == "APPEND_TO_REGISTER":
+            regs.setdefault(parts[2], []).append(parts[1])
+        elif parts[0] == "REGISTER":
+            names[parts[1]] = parts[2].strip('"')
+    out = []
+    for reg, name in names.items():
+        if name.startswith("word_"):
+            out.extend(regs.get(reg, []))
+    return out
+
+
+def word_mbu_variant(fam, words):
+    """Append X-basis measure+reset to the word registers and show the failure."""
+    with tempfile.NamedTemporaryFile(suffix=".kmx") as f:
+        fam[0].to_file(f.name, format="kmx")
+        lines = Path(f.name).read_text().splitlines()
+        qubits = word_register_qubits(f.name)
+        Path("/tmp/k0_word_mbu.kmx").write_text(
+            "\n".join(lines + [f"HMR {q} b0" for q in qubits]) + "\n"
+        )
+    import kickmix as km
+    mod = km.Circuit.from_file("/tmp/k0_word_mbu.kmx", format="kmx")
+    try:
+        recover_words_from_circuits(
+            (mod,), num_vectors=len(words), num_angles=5,
+            shots_per_address=2, seed=20261111,
+        )
+        print("word-MBU variant: UNEXPECTED PASS")
+    except Exception as exc:  # noqa: BLE001 - the probe reports the verifier's message
+        print(f"word-MBU variant ({len(qubits)} HMR on word_0..word_4): "
+              f"{type(exc).__name__}: {exc}")
+
+
 def main() -> None:
     directory = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT
     fam = load_circuits(directory)
@@ -77,6 +117,7 @@ def main() -> None:
     print(f"full 15 loaders: words_match={np.array_equal(w15, words)} "
           f"toffoli_fwd_rev={tof15} expected={2 * total_ccx}")
     print(f"layout J={layout.batch_size} brot={layout.brot} selection={len(layout.selection)}")
+    word_mbu_variant(fam, words)
 
 
 if __name__ == "__main__":

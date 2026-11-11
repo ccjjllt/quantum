@@ -31,9 +31,13 @@
   heliosli v95 `8d4c99a2` 298,600,262.29、junmiaotiao `e627ac4d` 298,859,435.63、
   catalog best `8d4c99a2` 298,600,262.29、T01 best 299,454,243.65、T03 best
   303,854,940.78。基线 8afd4c67 仍最优。见 `20261111_public_survey/`。
-- **MBU 反向装载**：公开 loader 已经是 forward+MBU；15 个 loader 共 4,123 CCX/pass、
-  1,142 HMR+CZ，最后一个 CCX 之后 0 CCX。相干反算本会多 2,284 T（15.32%），
-  已省下；剩余 215 loads 是 oracle 输出，verifier 同电路跑两遍，2× 是结构性的。
+- **MBU 反向装载**：公开 loader 已经是 forward+MBU（prefix/setup 的相位 gadget）；
+  15 个 loader 共 4,123 CCX/pass、1,142 HMR+CZ，最后一个 CCX 之后 0 CCX。
+  相干反算本会多 2,284 T（15.32%），已省下；剩余 215 loads 是 oracle 输出，
+  verifier 同电路跑两遍，2× 是结构性的。对 word 寄存器做 MBU 的变体
+  （k0 + `HMR q11..q50`）官方 `recover_words_from_circuits` 直接报
+  `InvalidCircuits: ANGLE_0: uncorrected phase (measurement kickback)`；
+  即使补相位修复，HMR reset 也会把 word 清零，前向 word 检查失败。
   见 `20261111_mbu_probe/`。
 - **形状 (5,129,68)**：精确 heuristic T 6,516、Q_total 427（387 是 heuristic qubits，
   不是计分 Q）；现 loader 下仅 −0.98%，线性 loader 缩放投影 −23.6%（228.12e6，
