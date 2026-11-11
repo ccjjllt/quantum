@@ -1,65 +1,88 @@
 {
-  "name": "gengsr 25.2268 (shifter 46 + own chemistry loaders)",
-  "adopted_date_beijing": "2026-11-10",
+  "name": "Grimoire 33 public frontier (busyaprime) — 25.33133",
+  "adopted_date_beijing": "2026-11-11",
   "competition": "google-verifiable-quantum-circuit-compilation",
   "notebook": {
-    "ref": "gengsr/lb-25-2268-shifter-46-own-chemistry-loaders",
-    "version": 1,
-    "url": "https://www.kaggle.com/code/gengsr/lb-25-2268-shifter-46-own-chemistry-loaders"
+    "ref": "busyaprime/lb-25-33133-grimoire-33-every-gate-a-pixel",
+    "version": 20,
+    "url": "https://www.kaggle.com/code/busyaprime/lb-25-33133-grimoire-33-every-gate-a-pixel",
+    "author_claim": 25.33133,
+    "evidence": "Author table measured at salts A/B with verifier reports; three components re-run locally at full official settings and match"
   },
-  "companion_notebooks": [
-    {
-      "ref": "ozertuu/25-218-starter-notebook",
-      "version": 91,
-      "url": "https://www.kaggle.com/code/ozertuu/25-218-starter-notebook",
-      "note": "Same-epoch same-family portfolio; invsqrt 27977c55 (36676 ops/1392); shares identical dqi.kmb e9f54be3"
-    },
-    {
-      "ref": "maoxin123/lb-25-218-combined-invsqrt-refit-chem",
-      "version": 2,
-      "url": "https://www.kaggle.com/code/maoxin123/lb-25-218-combined-invsqrt-refit-chem",
-      "note": "Same-epoch same-family portfolio; invsqrt c6519219 (36450 ops/1393); shares identical dqi.kmb e9f54be3"
-    }
-  ],
-  "author_public_submission": {
-    "score": 25.2268,
-    "evidence": "Author-saved verify_results.json (all three tasks PASS); title claim 25.2268"
+  "dataset": {
+    "ref": "busyaprime/33-qcc-v8-members",
+    "license": "apache-2.0",
+    "integrity": "Downloaded files match SHA256SUMS and notebook PINS (18/18)"
   },
   "our_submission": {
-    "id": 58181743,
+    "id": 58235797,
     "creation_confirmed": true,
+    "created_utc": "2026-11-11T11:25:28Z",
+    "status_at_record": "PENDING",
     "score_not_polled": true,
-    "receipt": "submissions/20261110_gengsr_252268/README.md"
+    "receipt": "submissions/20261111_grimoire33/README.md"
   },
-  "release_path": "artifacts/20261110_gengsr_252268/release",
-  "source_path": "artifacts/20261110_public_candidates",
-  "previous_baseline": "Public Frontier 25.14222 (Alex V126 / Hosen V7 / Maoxin V2 / Isabe V12); our submission 58123354",
-  "components_author_report": {
+  "release_path": "artifacts/20261111_grimoire33/candidate",
+  "source_path": "artifacts/20261111_grimoire33",
+  "previous_baseline": "gengsr 25.2268 (shifter 46 + own chemistry loaders)",
+  "previous_baseline_record": {
+    "invsqrt": "26ebf39d, 62Q, 36686 ops, local PASS 94537.58955971198",
+    "dqi": "e9f54be3, 892Q, author-log PASS, cost ~374.686e9",
+    "dfthcsos": "9c358a8e, (8,143,44), author-log PASS, cost ~299.498e6",
+    "our_submission": 58181743
+  },
+  "components": {
     "invsqrt": {
-      "sha256": "26ebf39df3b13e5fd2d923d1b9988043b107b64f6e21efc5cc9bc76f5d56adec",
+      "sha256": "6c6a734dbcb693bb18950a4e4ab84e630854df90dbe6558ed3cef3ecc89b0666",
+      "provenance": "manwithacat HW-25 hybrid: gengsr first 473 ops + two Clifford Z_POW fixes + maoxin a15b0d73 from op 329",
       "Q": 62,
-      "ops": 36686,
-      "static_toffoli_like": 1392,
-      "cost_local_verify": 94537.58955971198,
-      "cost_qualification": "Local full re-run PASS (200540928 shots), exact match with author log"
+      "ops": 36923,
+      "rotations": 41,
+      "static_toffoli_max": 1380,
+      "executed_toffoli_mean": 1218.833259921885,
+      "cost_local_verify": 93863.29319626842,
+      "salt": "grimoire33-inv-20261111",
+      "verified_shots": 200540928,
+      "worst_error_over_tolerance": 0.9993237694056958,
+      "qualification": "Local full re-run PASS"
     },
     "dqi": {
-      "sha256": "e9f54be304cbdcda7306729c335b1a2314a45d0ca818e05cf60e45ddee969bc4",
+      "sha256": "cd71c4822aa090ad859a826acd0d289e699f631d4c55f6337036cccce90fa671",
+      "provenance": "team i want to run gemma 9b public file",
       "Q": 892,
-      "static_toffoli_like": 395586,
-      "cost_approx": 374686873086.94,
-      "qualification": "Author-log PASS (102400 shots, 0/0 failures); not re-run locally. Byte-identical across gengsr/Ozer-v91/Maoxin-25218."
+      "ops": 60804432,
+      "num_bits": 101418,
+      "cost_local_verify": 373844684513.5198,
+      "repetition_factor": 1.1912604648115832,
+      "value_errors": 0,
+      "phase_errors": 0,
+      "salt": "grimoire33-dqi-20261111",
+      "verified_shots": 102400,
+      "qualification": "Local full re-run PASS"
     },
     "dfthcsos": {
-      "submission_npz_sha256": "9c358a8e9a4bba180f7455df777f3a456e68a39b6f7d4de3c485f2bb4554dc13",
-      "shape": [
-        8,
-        143,
-        44
-      ],
-      "cost_approx": 299497671.22,
-      "qualification": "Author-log PASS; not re-run locally. Same (8,143,44) shape, different weights from c1321df2."
+      "submission_npz_sha256": "8afd4c679f8cceecf0556e70a3878c825974f8b655ab48b0532912ce8e55ae7b",
+      "provenance": "Lera table/words + maoxin k1-k3 loaders; busyaprime R58 refit at fixed words",
+      "shape": [8, 143, 44],
+      "T": 14908,
+      "Q": 427,
+      "lambda_eff": 46.90753743257459,
+      "error_1": 0.01999997980055205,
+      "error_2": 0.01999997980003125,
+      "cost_local_verify": 298600061.555139,
+      "salt": "grimoire33-chem-20261111",
+      "verified_shots": 78080,
+      "qualification": "Local full re-run PASS"
     }
   },
-  "verification_scope": "Unchanged public notebook output ZIP uploaded as-is. invsqrt re-verified locally PASS (200540928 shots, exact score match). DQI/chemistry rely on author-saved PASS logs; no local full verifier runs before submission. Cross-checked against Ozer v91 and Maoxin 25.218 same-epoch portfolios (kept under source_path)."
+  "portfolio": {
+    "local_gm": 25.331334272154542,
+    "delta_vs_previous_local": 0.027934272154542583,
+    "components_improvement": {
+      "invsqrt": -61.99,
+      "dqi": -840436924,
+      "dfthcsos": -120819.74
+    }
+  },
+  "verification_scope": "All three components downloaded from busyaprime/33-qcc-v8-members and SHA-256 checked against SHA256SUMS and notebook PINS. Each was run once with the unmodified local official verifier at full default domain: invsqrt 200,540,928 shots, DQI 102,400 shots, chemistry 78,080 shots, all PASS. One local salt per task; no multi-salt re-verification. Online score not yet polled."
 }
