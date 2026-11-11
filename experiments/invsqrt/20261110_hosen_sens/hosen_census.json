@@ -1,0 +1,121 @@
+{
+ "nops": 36686,
+ "audit_compat_recount": {
+  "unread": 0,
+  "guarded": 10
+ },
+ "frame_corrected_totals": {
+  "candidate": 0,
+  "guarded": 9,
+  "ccx_conditional": 1,
+  "blocked": 858,
+  "no_touch": 0
+ },
+ "by_region": {
+  "other": {
+   "blocked": 60,
+   "guarded": 4
+  },
+  "S1": {
+   "blocked": 312,
+   "guarded": 1
+  },
+  "A3": {
+   "guarded": 1,
+   "blocked": 23
+  },
+  "S2": {
+   "blocked": 463,
+   "guarded": 3,
+   "ccx_conditional": 1
+  }
+ },
+ "S1_ccx_breakdown": {
+  "unconditional": 365,
+  "conditional_inline": 0,
+  "forward_fate": {
+   "hmr_guarded_cliff_diag": 1,
+   "blocked_by_CX": 290,
+   "blocked_by_CCX": 74
+  }
+ },
+ "S1_S2_sites_of_interest": [
+  {
+   "class": "guarded",
+   "ccx_idx": 8968,
+   "ccx_line": "CCX q27 q20 q28",
+   "hmr_cond": false,
+   "saw_zpow": false,
+   "saw_cliff_diag": true,
+   "guard_angles": [],
+   "depth": 0,
+   "guard_kind": "cliff_diag",
+   "hmr_idx": 9217,
+   "hmr_line": "HMR q28 b408",
+   "region": "S1"
+  },
+  {
+   "class": "guarded",
+   "ccx_idx": 16771,
+   "ccx_line": "CCX q28 q23 q40",
+   "hmr_cond": false,
+   "saw_zpow": false,
+   "saw_cliff_diag": true,
+   "guard_angles": [],
+   "depth": 0,
+   "guard_kind": "cliff_diag",
+   "hmr_idx": 16924,
+   "hmr_line": "HMR q40 b462",
+   "region": "S2"
+  },
+  {
+   "class": "guarded",
+   "ccx_idx": 16519,
+   "ccx_line": "CCX q18 q21 q50",
+   "hmr_cond": false,
+   "saw_zpow": false,
+   "saw_cliff_diag": true,
+   "guard_angles": [],
+   "depth": 0,
+   "guard_kind": "cliff_diag",
+   "hmr_idx": 18367,
+   "hmr_line": "HMR q50 b64002",
+   "region": "S2"
+  },
+  {
+   "class": "guarded",
+   "ccx_idx": 18501,
+   "ccx_line": "CCX q27 q21 q41",
+   "hmr_cond": false,
+   "saw_zpow": false,
+   "saw_cliff_diag": true,
+   "guard_angles": [],
+   "depth": 0,
+   "guard_kind": "cliff_diag",
+   "hmr_idx": 18508,
+   "hmr_line": "HMR q41 b64001",
+   "region": "S2"
+  },
+  {
+   "class": "ccx_conditional",
+   "ccx_idx": 35665,
+   "ccx_line": "CCX q14 q22 q30",
+   "hmr_cond": false,
+   "saw_zpow": false,
+   "saw_cliff_diag": true,
+   "guard_angles": [],
+   "depth": 2,
+   "hmr_idx": 35808,
+   "hmr_line": "HMR q30 b7943",
+   "region": "S2"
+  }
+ ],
+ "all_candidates": [],
+ "economics": {
+  "per_site_net_toffoli_like": -1,
+  "per_site_dscore_Q62": -62,
+  "n_candidates": 0,
+  "total_expected_dscore": 0,
+  "band_500_1500_reached": false
+ }
+}
