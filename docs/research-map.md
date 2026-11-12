@@ -344,3 +344,14 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   Schrödinger’s cat lived 29.52446 退居第二；公开 plateau 仍 25.3957。
   差距从 16.2% 扩大到 17.1%（score），对应 product cost ≈1.62×。
 - 58271862 仍在评估队列；期望 GM 25.39753。
+
+## 2026-11-12 深夜（第七轮）：R=7 快检的管线约束
+
+- 直接对当前 submission.npz 删一行 rho 得到 R=7（(7,143,44)），再用
+  `dfthc_refit/build.py --qrom tensor --brot 8 --shots 1` 快检，失败于
+  `AssertionError: words must be in the signed gauge`：`tensorqrom` 只接受
+  `quantize.py`/`refine.py` 产出的 **signed-gauge** 角度字，`encode.encode` 的
+  直编码（无 `angle_words`）不满足该断言。R=7 的误差/成本必须走完整
+  quantize→refine→tensorqrom 管线（G 正在做），不能用“删行 + 1-shot”绕过。
+- 该失败也说明：任何换 shape（R/B/C）的化学候选都必须重新量化角度字，
+  不能复用 R=8 的 `angle_words`。
