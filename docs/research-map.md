@@ -310,3 +310,25 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   组合全扫，最好即当前/14,840）。
 - **判断**：公开+本仓库现有源码内，25.40 已接近上限；26–29 段需要新的解码器/
   factorization 算法族（4–6 周级），不是本 session 能完成的局部改写。
+
+## 2026-11-12 深夜（第五轮）：继续并行立项
+
+在公开+现有源码内已关闭 DQI 三条（branch/ancilla/rank）后，本轮又找到四条**未被公开件覆盖**的具体杠杆，均已立项（subagent 只做本地构建/只读，不提交）：
+
+- **化学 R=7**（G）：公开 manifest 只有 R=4/8/9/10，R=7 从未试过。验证器精确
+  heuristic 成本 (7,143,44)=6,230 T（R=8 是 6,662），rows 1,077（−11.7%），
+  Q_total 仍 427；按 rows 投影 T≈13,449、成本 **269.4M（−9.4%）**；即使 λeff 升到
+  48/49 仍 275.7/281.4M。核心风险是 R=7 的近似误差（8-bit 量化已占 15.1 mHa）。
+- **化学 coded2**（I）：`quantize.py` 支持 `--coded2`（每 16 地址块 bit 1 也仿射），
+  当前表 `coded2` 为空、历史日志只有 coded bit 0；每条电路再省 ~25 T，15 电路 ×
+  两遍 ≈750 T（总 T 2.5%），潜在成本 −2.5%。
+- **化学 tree 真实成本**（F）：此前 tree 搜索只用 `tensorqrom.per_output` proxy
+  （5,119 vs 5,311–5,400），未用实际 loader T，也未对换树后的字重新 refit λeff。
+- **DQI external 乘积共享**（J）：源码里 `external_corrected_product`（c≠0）与
+  `external_mul_head` 都调用 `mul24_xor99(combine(head),D,·)`，只是目标 L vs N；
+  两者操作数差一个 `scale(h,c)` 线性映射和 `cx(h,a,ct)`，若能用 0-T 线性修正共享，
+  每步省 ~75–99 T，196 对 × 两遍潜在 15–39k T（4–10%）。
+- **DQI 新解码器族可行性**（H）：half-gcd / BM retain-replace / trace 求根，
+  目标 Q≤892、static T≤340k；既有的 “BM/Euclid/时域 Chien ≥190k” 下界口径先核对。
+- **DQI 提交回执**：58271862 仍在评估队列；期望 GM 25.39753（salt 重抽），
+  本地 25.40483（沿用幸运 draw）。
