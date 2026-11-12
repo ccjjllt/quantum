@@ -1,4 +1,4 @@
-# dfthcsos 已放弃方向总览（2026-11-11）
+# dfthcsos 已放弃方向总览（2026-11-12）
 
 分支 `codex/dfthcsos-research`。本文件是所有已关闭/不再做方向的唯一保留记录。
 旧关闭记录见 `CLOSED_RESEARCH.md`（保留）；形状扫描结论见 `20261110_shapes/README.md`（已删，数字下收）。
@@ -30,7 +30,7 @@
 - **公开集扫描**：截至 2026-11-11 11:34 UTC 无低于 298,600,061.56 的公开化学集；
   heliosli v95 `8d4c99a2` 298,600,262.29、junmiaotiao `e627ac4d` 298,859,435.63、
   catalog best `8d4c99a2` 298,600,262.29、T01 best 299,454,243.65、T03 best
-  303,854,940.78。基线 8afd4c67 仍最优。见 `20261111_public_survey/`。
+  303,854,940.78。基线 8afd4c67 仍最优。见 `20261111_public_survey/（已删）`。
 - **MBU 反向装载**：公开 loader 已经是 forward+MBU（prefix/setup 的相位 gadget）；
   15 个 loader 共 4,123 CCX/pass、1,142 HMR+CZ，最后一个 CCX 之后 0 CCX。
   相干反算本会多 2,284 T（15.32%），已省下；剩余 215 loads 是 oracle 输出，
@@ -38,36 +38,44 @@
   （k0 + `HMR q11..q50`）官方 `recover_words_from_circuits` 直接报
   `InvalidCircuits: ANGLE_0: uncorrected phase (measurement kickback)`；
   即使补相位修复，HMR reset 也会把 word 清零，前向 word 检查失败。
-  见 `20261111_mbu_probe/`。
+  见 `20261111_mbu_probe/（已删）`。
 - **形状 (5,129,68)**：精确 heuristic T 6,516、Q_total 427（387 是 heuristic qubits，
   不是计分 Q）；现 loader 下仅 −0.98%，线性 loader 缩放投影 −23.6%（228.12e6，
   未合成 721 地址 loader）。5k 连续 e2 67.82 mHa，自由幂律外推 50k 38.3 mHa；
   R5/B135/C70 50k 40.24 mHa 对照；U 参数 49,020 vs 当前 86,944，20 mHa 不可信。
-  见 `20261111_shape_probe/`。
+  见 `20261111_shape_probe/（已删）`。
 - **7-bit 字**：直接重量化 e1 2.04 Ha / e2 0.45 Ha（门 0.02 Ha 的 100×/22×），
   λeff 78.15；T 估计 −7.45%（−810 loader T −300 Givens T），但精度地板 ~40 mHa，
-  8-bit 已在量化地板。见 `20261111_7bit_probe/`。
+  8-bit 已在量化地板。见 `20261111_7bit_probe/（已删）`。
 
 - **R3/B129**：GPU 50k（qingyu1232/qcc-r3-gpu-train，1,751.2 s）连续 e2
   (3,129,114) 87.53 / (3,129,120) 95.92 / (3,129,150) 96.35 mHa；远离 20，
-  未量化，关闭。见 `20261111_r3_probe/`。
+  未量化，关闭。见 `20261111_r3_probe/（已删）`。
 - **R8 基组 B 143→129/131/135**：连续 B135 5k 18.51 / 20k 16.71 mHa，
   B131 5k 20.42 / 10k 19.12，B129 5k 21.55；但 8-bit Lera quantize 全配方
   （GPU 1,479.1 s）后 B135 e2 33.1236 mHa（e1 11.204，λeff 49.8628），
   `build.py` 拒绝；且公共 `tensorqrom` 1,156 行实测 4,528–4,530/pass
   = 9,056–9,060 T（fourqrom J=3 16,800 T），B135 打平线 8,262 T；
   投影 score 334.3M（+11.96%）。连续精度不够 + loader 成本否决，关闭。
-  见 `20261111_r8_basis/` 与 `20261111_r3_probe/`。
+  见 `20261111_r8_basis/（已删）` 与 `20261111_r3_probe/（已删）`。
 
-## 已落实（保留，不属放弃）
-- `20261110_p0_gauge`：P0（299497670.48，T−8）已随三件套提交，留作回退。
-- `20261111_lera11x`：Lera (8,143,44) PASS 298942333.64（−555K），新基线候选。
-- `20261106_train_r5`：种子生成脚本（`seed_numpy.py`）保留。
-- `20261110_gputrain` / `20261110_gpu_newshape/`：盆地证据 + 可复用载体。
+## 历史已落实（数字存档，文件删除）
+- P0 `20261110_p0_gauge`：299,497,670.48（T−8），曾随三件套提交；已被 Lera/Maoxin 取代。
+- Lera `20261111_lera11x`：298,942,333.64（−555K），曾被 Maoxin303 取代。
+- Maoxin303 `20261111_lera_deep`：298,720,881.30；已被 Maoxin v22 4,097 loader 取代。
+- 当前采用见 `README.md`：`f21b8a87` + Maoxin v22 4,097 loader，297,557,548.71。
+
+## 可复用载体（保留，不属放弃）
+- `20261106_train_r5`：`seed_numpy.py`（种子生成）。
+- `20261110_gputrain`：`slim_train.py` + `fastfit.py` + `prob_r5.npz`（训练/拟合栈）。
 
 ## 删除清单
-- `experiments/dfthcsos/` 下除本文件、`20261110_arch_review/`、`CLOSED_RESEARCH.md`、
-  `20261106_train_r5/`、`20261110_gputrain/`、`20261110_gpu_newshape/`、
-  `20261110_p0_gauge/`、`20261111_lera11x/`、`README.md` 外全部目录。
-- `artifacts/` 下删除 `20261106_high_yield/`（570M）、`20261106_syed_v9/`、
-  `20261108_public_frontier/`、`20261109_*`、`20261110_brot6/`、`20261110_shapes/`。
+- `experiments/dfthcsos/` 下除本文件、`README.md`、`CLOSED_RESEARCH.md`、
+  `20261110_arch_review/`、`20261106_train_r5/`、`20261110_gputrain/` 外全部目录
+  （含 7bit_probe/shape_probe/mbu_probe/public_survey/r3_probe/r8_basis/synth/synth2/
+  k0hand/lera_deep/lera11x/p0_gauge/gpu_newshape）。
+- `artifacts/` 下删除 `20261111_r3_probe/`（99M）、`20261111_shape_probe/`（380M）、
+  `20261111_survey/`（52M）、`20261110_gpu_newshape/`、`20261110_p0_gauge/`、
+  `20261111_lera11x/`、`20261111_maoxin303/`、`20261111_recon_verify/`、
+  `20261111_7bit_probe_output.txt`、`20261111_mbu_probe_output.txt`；
+  `20261110_gputrain/` 只保留 `prob_r5.npz`。
