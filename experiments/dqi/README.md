@@ -5,7 +5,7 @@ mean T 394,416.2）。本机 102,400-shot **PASS 373,844,684,513.52**（0 value 
 在线 `58235797` / `58256166` 均 0/0。
 
 公开前沿 **`eae396ba`**（Atakan iso-gap h5 + controlled-swap readout windows）本地
-**PASS 373,534,939,340.64**（T 低 0.083%）。2026-11-12 的 24 个 paired seed 实测
+**PASS 373,534,939,340.64**（T 低 0.083%）。2026-11-12 的 52 个 paired seed 实测
 （`20261112_96salt/`）给出 eae 的 paired mean **−0.08285%**、stderr 0.0000073%，
 失败 seed 与 cd71 相同（7/24）；公开 circuits manifest 的 96-draw expected cost
 也为 **373,856,548,625.22 vs 374,166,555,017.02（−0.0829%）**。此前按 72-salt
@@ -24,5 +24,5 @@ mean T 394,416.2）。本机 102,400-shot **PASS 373,844,684,513.52**（0 value 
 
 - 892Q 是契约与算法共同决定的局部最优点；Q−1、Q-batching、unextract 清理均已证不可行。
 - 单门级 T 收益仍小于 salt 噪声；整件换 DQI 必须用 paired/96-draw 期望成本判断。
-  `eae396ba` 已用 24 paired seed + manifest 96-draw 确认 +0.083% 期望收益；更大的
+  `eae396ba` 已用 52 paired seed + manifest 96-draw 确认 +0.083% 期望收益；更大的
   13%+ 级别仍只能来自换解码器族。

@@ -1,4 +1,4 @@
-# `eae396ba` vs `cd71c482`：24 个 paired seed 的实测（2026-11-12）
+# `eae396ba` vs `cd71c482`：52 个 paired seed 的实测（2026-11-12）
 
 ## 目的
 
@@ -10,20 +10,20 @@
 
 - 文件：`cd71c4822aa0`（892Q，local 373,844,684,513.52）与
   `eae396baf0fa`（892Q，local 373,534,939,340.64）。
-- 官方 DQI verifier，102,400 shots，`--seed 0..23` 对两个文件各跑一遍；
+- 官方 DQI verifier，102,400 shots，`--seed 0..51` 对两个文件各跑一遍；
   同一 seed 下两文件使用相同 RNG 流（paired）。
 - 记录 score、value_errors、phase_errors、R、executed Toffoli mean。
 - 脚本：`artifacts/20261112_dqi96/run_sweep.py`；原始 JSONL：
   `artifacts/20261112_dqi96/results.jsonl`。
 
-## 结果（24 个 paired seed）
+## 结果（52 个 paired seed）
 
 | 指标 | `cd71c482` | `eae396ba` |
 |---|---:|---:|
-| clean mean score | 373,844,647,135.03 | **373,534,893,783.41** |
-| 失败 seed 数 | 7 / 24 | 7 / 24 |
-| mean paired relative diff | — | **−0.08285%** |
-| paired stderr | — | 0.0000073% |
+| clean mean score | 373,844,646,921.59 | **373,534,926,459.17** |
+| 失败 seed 数 | 18 / 52 | 18 / 52 |
+| mean paired relative diff | — | **−0.082843%** |
+| paired stderr | — | 0.0000060% |
 | 结论 | — | eae 低 0.083%，约 1,100 SE |
 
 失败 seed 相同（两文件在同 seed 下同时出现 value error），说明 eae 没有引入
@@ -42,5 +42,5 @@ GM），但期望值上 eae 优于 cd71。
 
 ## 验证范围
 
-24 个 paired seed，单文件 102,400 shots/seed；未跑 96 个 seed 的本机全量
-（manifest 的 96-draw 已由公开维护者完成）。未提交 Kaggle。
+52 个 paired seed，单文件 102,400 shots/seed；manifest 的 96-draw 已由公开维护者完成。
+未提交 Kaggle；候选提交见 `submissions/20261112_eae_253957/`。
