@@ -216,3 +216,6 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   `tensorqrom.per_output` 代理下最优（5,119 vs 5,311–5,400），换树无收益。
 - **化学表 survey**：Lera `final_refit_*`/`refined_845` 等 R8/R9 变体的 λeff 为
   47.0–49.1，均高于当前 46.907；当前 (8,143,44) 是已扫描表中的最低成本点。
+- **化学 J=5/6 重综合**：`refined_845` 的 tensorqrom J=5 为 4,611 T/pass、
+  Qmax 119、投影 328.1M，比当前 Maoxin v22 4,097/pass、297.56M 差 10.3%；
+  J=6 超时且不具竞争力。loader 重综合路径关闭。
