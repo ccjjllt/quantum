@@ -500,3 +500,21 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   rows=1,276 反而比当前高，T 节省消失。
 - 已让 K 先测 e1/e2 vs B 的曲线（B=143/180/200/255），只有 e1/e2≤19.9 且
   cost<292M 才继续；若“小 R 必须大 B”使 rows≥1,220，直接 no-go。
+
+## 2026-11-12 深夜（第十八轮）：化学 J 批量 no-go
+
+- 精确 J 表（`tensorqrom8`，lowbits=4，8-bit，6 trials；官方 `resource_costs`）：
+  J=1 485.3M / J=2 398.3M / J=3 358.2M / J=4 349.6M / **J=5 339.4M**（当前构造，
+  静态 CCX 数 == 验证器执行数）。五族都逐 word 等于现件 `angle_words`；J=5 另做
+  官方全量 78,080 shots PASS。
+- 为什么 J 救不回来：`angles_temporary ≤ 128−11−8J < 303`，故 `Q_total=387+8J`
+  严格线性（每步 +8Q，+1.87%）；T 每步只省 `75·cache/J²`（cache≈80，J=5 时 −240 T
+  ≈ −1.6% of T_total）；两边相抵的最优点在 J≈6.1–6.6，但 J=6 在 lowbits=4 撞
+  128-qubit cap（11+48+69+4=132）。
+- 解析上限：把 Maoxin v22 的最佳单电路密度（4,089 T/pass）搬到 J，最优 J=7 →
+  **−1.153%（294.13M）**；到 −2% 需 `T_angles` 再降 1.62%，属于换构造器，不是 J。
+- 两个阻塞发现：当前字表不在 signed gauge（仅 79.06% 满足 bit7==bit6），
+  `w→((w+64)%128)-64` 的 gauge 化不保度量（error_1 0.02→14.299 Ha）；
+  必须改构造器输出全部 8 bit（已新增 `tensorqrom8.py`）。
+- Maoxin v22 4,089 loader：同表同 words、官方全量两个 salt 都 PASS
+  297,237,077.47（−0.108%）——即已提交的 `58271862`（25.40482）。
