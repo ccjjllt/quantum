@@ -14,13 +14,16 @@
   verifier 恰好只跑这两条路径（正向从 0、反向从 batch_k），所以合法。
 - **差距归因（精确到计数）**：cache 不是差距（Maoxin 1,142 vs 本地 1,200，−5%）；
   差距 100% 在**产品项**：Maoxin 2,947 vs 本地 3,942（−25%），以及 CNOT：
-  Maoxin 全家族 217,829 vs 本地 702,587（3.23×）。产品项的差别是**每个 Toffoli 覆盖的
-  rank-1 项数**：Maoxin 2.85（k=4 实测 550 rank-1 / 193 CCX），本地 2.09（550 / 263），
-  上界是 4（一个 Toffoli = 2 个 mixed 项 + 2 个 pure 项）。
+  Maoxin 全家族 217,829 vs 本地 702,587（3.23×）。产品项效率（k=4 实测）：
+  Maoxin 550 个 rank-1 项 / 193 CCX = **2.85**，本地 550 / 263 = **2.09**。
+  （注意：2 不是上界。当线性型建立在 **monomial 索引**上时，两个 monomial 相乘
+  `m·m' = m∪m'` 直接落到另一行，所以一个 Toffoli 能覆盖远多于 2 个 rank-1 项；
+  这正是本地 `shared` 没有利用的自由度——它把 pure 项当 CNOT 修正，要求整轴 monomial
+  都缓存。）
 - **本地构造器在 128-qubit cap 下的上限就是 5,142 T/pass**（J=5/lowbits=4/shared，
   已验证 words 等价 + 官方全量 PASS）。要达到 4,089 需要 Maoxin 那套
-  **“稀疏 monomial 基 S（|S|≈70）+ S² 覆盖非缓存行 + 每个线性型可携带 1 个 r-side
-  monomial 使一个 Toffoli 覆盖 1/2/4 个 rank-1 项”** 的联合搜索；`tensorqrom8` 的
+  **“稀疏 monomial 基 S（|S|≈70）+ 产品型建立在 monomial 上（m·m' 覆盖未缓存行）+
+  每个线性型可携带 0–2 个 r-side monomial”** 的联合搜索；`tensorqrom8` 的
   `shared`/`per_output` 都不做“两个缓存 monomial 相乘去覆盖未缓存行”这件事，
   所以**这不是参数问题，是缺少那套优化器**。
 - **纯解析可达但 Q 不可行**：lowbits=7 全基（cache 125 AND，Q=176）在 35 输出
@@ -108,23 +111,34 @@ CX q49 q50 ; ... ; CX q17 q18                                      # 还原 5 �
   另用 CX 链把该产品项扇出到同组的其它 word bit（`fan_ccx` 同款）。
 - 每个 cache AND 都是 `R + CCX`（init_and）配 `HMR + CZ`（del_and），**不走 Toffoli**。
 
-### 2.3 产品项 = 两个线性型的乘积，且允许携带 r-side monomial
+### 2.3 产品项：型建立在 monomial 上，乘积自己生成新 monomial
 
-对 k=4 的 193 个产品项，把每个控制线性型的 ANF 按“落在 q0..q3（r-side）”与
-“落在 q4..q10（S 侧）”分开统计项数：
+一个产品项是 `CCX pivotA pivotB <word bit>`，pivotA/pivotB 各持有一个**以缓存 monomial
+为基**的线性型（k=4 时每个型 26–59 项）。两个型相乘：
 
-| (#r-side 项 in c1, in c2) | 产品项数 | 每个 Toffoli 覆盖的 rank-1 mixed 项 |
-|---|---:|---:|
-| (0,0) | 30 | 1 |
-| (0,1) / (1,0) | 38 + 43 | 2 |
-| (1,1) | 63 | 4 |
-| (1,2) / (2,1) | 8 + 11 | ≤6 |
+```
+(Σ_{m∈S} α_m·m)(Σ_{m'∈S} α'_m'·m') = Σ α_m α'_m' (m·m'),    m·m' = m ∪ m'
+```
 
-S 侧项数 26–59。**这就是 26% 差距的核心**：`product()` 的恒等式
-`(a1·m + b2·M)(a2·m + b1·M) = (a1·m)(b1·M) + (a2·m)(b2·M) + pure` 允许一个 Toffoli
-最多覆盖 4 个 mixed rank-1 项（当两个型都带 r-side monomial 时）。Maoxin 的
-**550 个 rank-1 项 / 193 个 CCX = 2.85**；本地 `shared` 是 **550 / 263 = 2.09**。
-上界 4。
+即**乘积本身合成新的 monomial（行）**，而型里携带的 r-side monomial 决定它落进哪个
+chunk 列。所以一个 Toffoli 覆盖的不是 2 个 rank-1 项，而是 |supp1|×|supp2| 个 monomial
+对（k=4 平均 30–59 项/型 → 数百个对，去重后仍覆盖几十行）。
+
+按“每个型里有几个 r-side（q0..q3）monomial”分类（k=4 的 193 个产品项）：
+
+| (#r-side 项 in c1, in c2) | 产品项数 | 作用 |
+|---|---:|---|
+| (0,0) | 30 | 只落在 M=0 列：生成 pure-low 部分的行（本地靠 CNOT 从缓存 monomial 扇出） |
+| (0,1) / (1,0) | 38 + 43 | 占 1 个 chunk 列 |
+| (1,1) | 63 | 覆盖 r1、r2、r1·r2 列 |
+| (1,2) / (2,1) | 8 + 11 | 更多列 |
+
+**这就是 26% 差距的机制**：本地 `build_circuit` 的 pure 修正（`low_correction` 与
+`high[m]` 的 CX 扇出）要求**整轴 monomial 都在缓存里**，所以 lowbits=7 必须 120 个 AND；
+Maoxin 把这些行交给产品项自己生成，缓存只放 70 个“种子”，于是
+`Q = 11 + 40 + 70 + 2 = 123~128`。`shared`/`per_output` 的分解模型里“产品项”是
+rank-1 对（行是固定的），**不允许生成新行**，因此它们的缓存必须完整——这是结构性差异，
+不是搜索参数差异。
 
 ### 2.4 stateful：顶位 flag 是“免费基函数”
 
@@ -148,12 +162,13 @@ Q 会到 176。
 
 ## 3. 为什么本地构造器到不了 4,089（上限测量）
 
-`tensorqrom8` 的两条分解路径都不做“两个缓存 monomial 相乘去覆盖未缓存行”：
+`tensorqrom8` 的两条分解路径都把“产品项”当成**行的 rank-1 对**，pure 部分靠 CNOT 从
+缓存 monomial 扇出，因此**没有“产品项生成新行”的自由度**：
 
 - `shared`：按输出分组（6–7 个）求特征，pure 修正要求**该轴 monomial 全缓存**；
 - `per_output`：逐输出对 15×H 混合矩阵做行 rank 分解 + 配对。
 
-解析/实测上限（当前 1,220×75 表，J=5，每电路平均 T×15）：
+解析/实测上限（当前 1,220×75 表，J=5，T/pass 为 15 电路合计）：
 
 | 构造 | cache AND | 产品项 | T/pass | Qmax | 128-cap |
 |---|---:|---:|---:|---:|---|
