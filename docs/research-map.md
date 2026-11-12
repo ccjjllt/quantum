@@ -840,3 +840,13 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - Chien scan 已是 11 T/点 = n−1 下界；跳过低重量方向反了（k=28–35 占 93.6%）。
 - **唯一残留**：精确 rank-30 乘法构造（−17.67%，GM 27.05）；下界 23，tower 42，
   是研究级数学问题，无本 session 构造。DQI 线到此封死。
+
+## 2026-11-12 深夜（第四十轮）：loader 输出基变换是 no-op，剩 product 集重搜
+
+- 定理：Maoxin 族成本 `T=|cache|+|products|`，正确性只依赖
+  `span(M∪P∪1∪地址位) ⊇ V`；可逆输出基 B 不改变 V，product 扇出是 CX（免费），
+  所以 **B 是 no-op**。实测 k=4：identity 268 CCX；随机满秩 B 400；单位下三角 B 395；
+  三者 `words_equal=True`（真实 kickmix，1,220 地址）。
+- 余量 268→243 全在 **product 集重搜**（193→约 168）；已派 subagent 做
+  GF(2) 集合覆盖/ILP。到 168 → 3,645 T/pass → **279.5M（GM 26.5）**；
+  若 span 条件允许更小集合，收益会更大，但需真实 stateful 验证。
