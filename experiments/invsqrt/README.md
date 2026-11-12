@@ -1,102 +1,23 @@
-# invsqrt 有效研究入口
+# invsqrt 研究入口
 
-当前公开比较基线已于 2026-11-10 更新为 **gengsr 25.2268（shifter 46 新 family，`26ebf39d`）**，
-本地完整官方验证 **PASS，200,540,928 shots，成本 94537.58955971198**，
-实际 62Q、36,686 操作、1,392 静态 Toffoli-like。
-新 family 审计（七段定位、shifter-46 桶形树、A3 shift-select 循环、不可迁回证明）见
-[2026-11-10 gengsr 审计](20261110_gengsr_audit/README.md)。
-**今后 invsqrt 研究一律以新 family 为起点；旧 family（`7c10edba`）结论全部封存，不再投入。**
+当前采用（main 已提交 `58256166`）：公开前沿 **`9c708f7b`**——WCao24 44-CSWAP normaliser
+（`94b29cc5`）+ Thomas Gamet early prefix（`5ec4f516`）的 splice，62Q。
+官方 **93,555.26**，本机 200,540,928 shots **PASS 93,555.3164**（mean Toffoli 1,213.866、
+static 1,375、41 rotations、worst 0.99932377@161）。
+来源：`asteriospanoras/lb-25-367-verified-portfolio-dqi-readout-fix` 的 `receipt.json`。
 
-此前公开比较基线为 **Public Frontier 25.14222 / Hosen V6 (`7c10edba`)**（2026-11-08），
-作者公开报告成本 **95,430.78**，实际 62Q、53,686 操作、1,403 静态 Toffoli-like。
-最新完整演化谱系拆解（`Syed V9 → Syed V10/V11 → Maoxin V3 → Kirill V23/Atakan V2 → Hosen V6`）与全定义域 $3,133,452$ 输入位并行代数饱和审计见[2026-11-08 Public Frontier 审计](20261108_frontier_audit/README.md)。
-该审计严格证明：在新基线 `7c10edba` 上，第二选择器已 0 CCZ（完全吸收并超越旧无回退迁移）、单门退化与 61 线 $\mathbb{F}_2$ 仿射张成冗余为 0、全部 48 个多 CCX 写累积段与 785 个单 CCX 写累积段的辛秩约简空间为 0、未读目标 `CCX -> HMR` 窥孔为 0；后续降本需转向扩展 `CARRY_PATCHES` 条件进位擦除至平方/乘法恢复段、释放相位期干净辅助线缓存重复乘积、或压降 `[15900:16800]` 局部 62Q→61Q 峰值。
+上一版 `6c6a734d` 93,863.36（manwithacat HW-25），此前 gengsr `26ebf39d` 94,537.59、
+Public Frontier `7c10edba` 95,430.78、Syed V9 约 97,747.22。
 
-此前公开比较基线为 **Syed V9 / run366109544**，作者报告约 **97747.22**，
-实际62Q、46,844操作、1,475静态Toffoli-like。
-本轮重新证明旧无回退方法仍可迁移，但Syed已压缩第二选择器，
-所以净增量为 **393215/524288 C≈0.75C**，期望成本减少 **46.49988**，不是旧约1C。
+## 已关闭方向
 
-新候选 `artifacts/20261106_syed_v9/invsqrt/syed_v9_nofallback.kmb` 已生成。
-新前缀、压缩选择器、三分支相位/恢复与计费证明通过，3×21,760输入原生对照通过；
-一次完整官方本地验证 **PASS，200,540,928 shots，成本97,700.776777236**。
-详细证据见[本轮Syed研究](20261106_syed_v9/README.md)及原始日志。
-本分支新候选未提交Kaggle。
+2026-11-11/12 及更早的全部关闭方向、关键数字和放弃原因集中在
+[ABANDONED.md](ABANDONED.md)（唯一详细记录）；系统性复盘见
+[20261110_arch_review](20261110_arch_review/README.md)。
+已关闭实验的脚本、候选电路和中间产物已删除；需要时可从 Git 历史找回。
 
-2026-11-06/07 的全部无收益方向已汇总进
-[已关闭方向汇总](20261107_closed_directions/README.md)（每个方向一行失败原因与关键数字），
-详情目录与本地 artifacts 已删除。**没有新增已验证电路收益**，当前 62Q 基线仍是已知最便宜。
+## 当前判断
 
-此前Maoxin V2无回退候选已经完整官方本地PASS，成本约 **97859.63**；
-旧报告上部“尚未全量”是历史阶段，已由main保留的 `submissions/20261106_nofallback_invsqrt/verify_all.log`
-覆盖。旧生成证明链和候选仍保留，不将其约1C增量重复算到Syed新基线上。
-
-## 旧基线的生成和证明链
-
-1. [公开输入与版本](20261104_public_refresh/README.md)：固定Kirill V5，成本约98309.14。
-2. [无回退选择器迁移](20261104_public62_optimization/README.md)：生成`5541151c…`，
-   精确省`262143/262144 C`，成本约98247.14。
-3. [跨HMR联合改写](20261104_reaudit/README.md)：生成历史`aac6ce…`，再省2C/124成本；
-   对最新公开`15118bfa…`仍额外省约1C，等价和计费均已独立证明。
-
-这条链使用固定公开KMB及显式补丁生成，不宣称从数学函数独立综合。
-原始KMB、公开源码、证明和官方日志保留在既有`artifacts/`路径。
-
-## 已验证的历史方法与支持模块
-
-- [尾部AND缓存与相位选择器](20261103_one_ccx/README.md)：保留有效生成器和独立审计，
-  以及样本输入/解释器支持模块。历史收益不能再叠加到已吸收这些改写的新公开基线上。
-- [Stage1无回退选择器](20261104_stage1_nofallback/README.md)：相对旧joint-tail增加0.125C收益；
-  当前使用上面的公开基线迁移实现。
-
-## 此前窗口研究的范围
-
-针对旧 `aac6ce…` 基线，保留`20261104_reaudit/census_cross_hmr.py`及28个互不重叠窗口的实际指令，
-用于HMR两侧联合改写：24个无条件窗口优先，另4个带固定守卫。
-它们只是研究候选，尚无新增已证收益。逐段保持所有边界输出相同的压缩路线已收官。
-
-已收官的无收益实验、错误判据及历史经验汇总在[清理记录](20261104_cleanup/README.md)，
-逐文件删除清单可追溯至Git或未提交源码副本。官方验证均需显式手动运行，不在导入或生成时触发。
-
-## 2026-11-06 清理（本轮）
-
-按用户要求只保留有收益的研究，已把 2026-11-05/06 全部无收益方向
-（旋转 LP、全电路单删、同骨架 3→2/3→1、混合/对角窗、T 侧、Q、替代算术预算证伪，
-以及并行会话的 13 个批量/窗口实验）汇总进
-[`20261106_cleanup/README.md`](20261106_cleanup/README.md)，并删除对应 42 个目录、约 124 MB。
-
-- 清理后保留的收益链：`20261104_public_refresh` → `20261104_public62_optimization`
- → `20261104_reaudit` → `20261105_maoxin_v2`（当时最佳，完整验证 PASS）。
-- 清理后复验：`maoxin_v2_nofallback.kmb`（SHA `49009f89…`）完整官方验证 **PASS**，
-  score 97859.62816338046（同 salt 噪声带内），toffoli 1280.6655，worst 0.99932377@161。
-- 计费口径更正：`C=Toffoli-like+T/4+一般旋转合成成本`，`score=Q*C`。
-  条件门的期望收益可以是分数，旧“至少1门/4C”和“任何更小增量均为噪声”不能作下界。
-  有限样本的salt波动与精确期望计费应分开记录。
-- 删除账本：[`20261106_cleanup/deleted_files.json`](20261106_cleanup/deleted_files.json)
- （逐目录大小；逐文件 SHA-256 因删除脚本中途中止未记录，已在账本中注明）。
-
-## 2026-11-09 清理（Public Frontier 时代无收益方向）
-
-基线：Public Frontier `7c10edba`（62Q，成本 95,430.78）。以下 11-08/11-09
-全部方向均 closed、无正收益；详细数字见各目录 README（保留），
-分析脚本与候选电路等中间产物已删除（快照提交保留历史，见 Git）。
-
-| 实验 | 结论与放弃原因 |
-|---|---|
-| `20261108_frontier_audit`（保留审计脚本） | 5 步谱系拆解；局部窥孔（单删/辛秩/HMR）已饱和证明 |
-| `20261109_carry_cache_peak` | CARRY 扩展无反计算门；乘积缓存无干净线；62→61Q 233 峰不可行 |
-| `20261109_cache_borrow_mincut` | 同三元组端点乘积全不等；脏借用净 +1~+4；61Q 不可能定理（372/24122 修正） |
-| `20261109_tphase_fusion` | 44 对全阻断；候选 B 验证器 FAIL（x=6 超差 2509×）；CZ 1311 对免费 |
-| `20261109_xreg_resynth` | swap 零差分 PASS（95430.98，Δ+0.20）；rotdrop FAIL（x=644） |
-| `20261109_xreg_bigwin` | 重排序零差分 PASS（95430.97）；段内无等乘积对 |
-| `20261109_dirtyfrag_proof` | 脏恒等式实测 +1/处，旧 `+(k-1)` 少计 1 已纠正；无干净线即亏 |
-| `20261109_verify_swap` | 邻位对易零差分 PASS（95430.94）；Δ0 |
-| `20261109_window_census` | `[28200:36305]` 0/68、`[14215:25300]` 0/25、末三窗 0/7、跨窗 top 全不等；全电路 True+clean+同守卫 0/190 |
-
-删除清单：7 个 `scripts/` 目录、`__pycache__`、空目录
-（`20261109_subagent_research`、`experiments/artifacts`）、
-artifacts 内 4 个候选 kmb（零差分/FAIL，可秒级重建）与验证日志
-（结论已记入各 README；快照提交前已 `git add`，历史可恢复）。
-保留：各 README、证据 JSON（`task1_groups.json`、`result.json`、
-`w28200/w14215_groups.json`、验证器日志拷贝）、审计脚本与 lane README。
-后续唯一切口：换算术族大段重综合（未立项，需投入）。
+- 62Q 的局部优化面（单删/辛秩/HMR/脏借用/T 融合/重排序/跨守卫缓存/均值条件化/splice）
+  已全部饱和，公开前沿只剩跨 family splice 与整段重写。
+- 61Q 的纯重标号不可能；值级“重算代替存值”与 S1 shift-select 降级仍是独立大工程。

@@ -1,4 +1,4 @@
-# invsqrt 已放弃方向总览（2026-11-11）
+# invsqrt 已放弃方向总览（2026-11-12）
 
 分支 `codex/invsqrt-research`。本文件是所有已关闭/不再做方向的唯一保留记录：
 每个方向一行结论、关键数字、放弃原因。详细脚本与产物已删除
@@ -31,6 +31,20 @@
   （跨 HMR 合并 −2C，双 seed 98123.14）、Maoxin V2 迁移（≈98k 预测，未全量验证）、
   Syed V9（97747.22）、Public Frontier 谱系 −2316（5 步正交补丁）：
   均被 gengsr 新 family（−893）超越，不再回头。
+
+## 2026-11-11/12 `6c6a734d` / `9c708f7b` 时代（全部关闭）
+- 公开检索（`manwithacat/vqcc-apache-public-circuits` v115，73 个电路）：`6c6a734d`
+  93,863.36 为当时最高；11-11 晚新 splice `9c708f7b`（WCao24 44-CSWAP normaliser
+  + Thomas Gamet early prefix）官方 93,555.26，本机 200M PASS 93,555.3164，成为新公开前沿
+  （已采用，不属放弃）。
+- 均执行 Toffoli 普查（`6c6a734d`，400k MC）：模型 1,218.8324 vs 官方 1,218.8333；
+  可用条件化池仅 6 门，上限 3 mean ≈186 分（低于 30 门立项线）→ 不做。
+- splice 泛化：全 1,865 行 diff 逐 hunk 账，现有 S0 切点 −1.00 mean 已最优，最佳替代 −0.75；
+  S2 合并块栈深不兼容；S2 后缀切点小域官方验证 **FAIL**（x=5，0.5 turn，非恒定偏移）。
+- 62→61Q：峰点 62 线全活，纯重标号不可能；值级重算未立项。
+- HMR 清理：X-basis 测量随机、无 Z 测量；14 门样本候选 **FAIL** x=3（0.5 turn）。
+- 删除：`20261111_a15b0d73*`、`20261111_hybrid_census` 及 artifacts；保留本文件、
+  `20261110_arch_review/`、`README.md`。
 
 ## 删除清单
 - `experiments/invsqrt/` 下除本文件、`20261110_arch_review/`、`README.md` 外全部目录。
