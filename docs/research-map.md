@@ -887,3 +887,25 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
     taiseiu 28.68861、Some Joint 28.65116；这些队伍没有公开电路/生成器。
 - 结论：公开可复现空间已到顶，三件均为公开最佳；追 27+ 只能靠私有级 DQI/化学
   突破。当前 25.40482 不因公开件而改变，不提交新包。
+
+## 2026-11-13 凌晨（第四十三轮）：invsqrt prefix 目标被误算；化学 C 缩减被 error_1 卡死
+
+- **prefix 成本归因（实测 op 区间）**：`9c708f7b` 的 0–8545 不是单一 normaliser。
+  - 0–649：**19 CCX + 44 CSWAP = 63 T**（真正的 leading-zero + 44-CSWAP normaliser）；
+  - 650–7030：**167 CCX**，纯经典算术块（无 CSWAP/HMR）；
+  - 7031–8545：7 CCX。
+  上一轮“193 CCX / 22 bit = 8.8 AND/bit，naive 下界 5/bit ≈110，省 83”把
+  167 个算术 CCX 误算进 normaliser；真正 normaliser 只有 63 T，已经低于 110。
+- **算术块非线性**：把 650–7030 抽成 62Q 独立经典子电路（6,381 ops，无 HMR），
+  随机 62-bit 输入上 2–6 阶布尔导数全部非零（16/16 每阶），不是 affine/quadratic，
+  不能靠 `CCX→CX`/低阶 ESOP 消掉；167 T 已比论文 reference 的 Horner 1,071、
+  squaring 442、mantissa multiply 1,043、final NR multiply 867 低 6–20 倍。
+- **化学 C 缩减**：当前 `5d5007a75784` 的 `error_1=19.99998 mHa` 恰好在 20 门槛；
+  在固定 angle words/15 电路的前提下，任何 w 改动都会破坏 one-body 矩阵，
+  把 C 从 44 降到 36 的固定 U 实验（保留一列 H1、剩余列拟合 error_2）得到
+  M_fixed 范数 1,441 vs 目标 T 范数 12.18，error_2 不可行。**C 缩减必须重编码
+  one-body rows（即重建电路），不是只改 submission.npz。**
+- 记录：`.worktree/invsqrt/experiments/invsqrt/20261113_prefix_audit/`
+  （README、audit.py、audit.json，本地 commit）。
+- 并行：prefix 算术块全重写 subagent、DQI 392k 组合 subagent 仍在跑；未提交、
+  未 push、当前分数不变 25.40482。
