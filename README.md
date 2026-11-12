@@ -34,7 +34,8 @@
 | 2026-11-11 | [Ozer 25.296 原包](submissions/20261111_ozer296/README.md) | 58222873 | 25.29661，COMPLETE |
 | 2026-11-11 | [三验证件三件套（a15b0d73 + 9fcda0c1 + Maoxin303）](submissions/20261111_trio25303/README.md) | 58228252 | 25.30340，COMPLETE |
 | 2026-11-11 | [Grimoire 33 公开前沿组合（三件全本机验证）](submissions/20261111_grimoire33/README.md) | 58235797 | 25.33133，COMPLETE |
-| 2026-11-11 | [Maoxin v22 4,097T 化学 loader（只换 loader）](submissions/20261111_maoxin4097/README.md) | 58239559 | 已创建，待回填（本地预期 25.36086） |
+| 2026-11-11 | [Maoxin v22 4,097T 化学 loader（只换 loader）](submissions/20261111_maoxin4097/README.md) | 58239559 | 25.36085，COMPLETE |
+| 2026-11-12 | [25.367 前沿安全组合（新 invsqrt + 化学 refit，DQI 不换）](submissions/20261112_public_25367/README.md) | 58256166 | 已创建，待回填（本地预期 25.38868） |
 
 当前公开比较基线为 **Grimoire 33（busyaprime，25.33133）**：invsqrt `6c6a734d`、DQI `cd71c482`、化学 `8afd4c67`，三件均由本机全量官方验证 PASS，机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。本账号提交 `58235797` **COMPLETE 25.33133**。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。

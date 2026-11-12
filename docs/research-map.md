@@ -138,16 +138,16 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - **DQI unextract→HMR**：liveness 实测 0 dead targets（unextract 93,787 CCX + 1,536 CSWAP 的所有目标
   在此后仍被使用）；且 kickmix 只有 **X-basis HMR**（对计算基态随机），没有 Z-basis 测量，
   无法把 syndrome 读入 classical bits。uncompute 是 phase-load-bearing，A/B 均关闭。
-  证据：`experiments/dqi/20261111_unextract_hmr/`。
+  证据：`.worktree/dqi/experiments/dqi/ABANDONED.md`（原 `unextract_hmr/` 目录已删）。
 - **DQI Q-batching**：验证器契约要求 S0..S69 各 12 个 disjoint qubit（Q≥840），b=2 的 446Q 直接非法；
   可行 b≤892/840=1.0619，整数只有 1。现实最窄公开件 883Q 仅 +2.01% 上界，且要 8,081 T 预算。
-  证据：`experiments/dqi/20261111_qbatch/`。
+  证据：`.worktree/dqi/experiments/dqi/ABANDONED.md`（原 `qbatch/` 目录已删）。
 - **DQI 当前点 (892Q, 394,416 T) 已在 Q²T 前沿**：889Q 公开件 T +43.5k，净差 +10.3%；
   当前设计用 T 优势换 Q，是局部最优。
 
 ### 局部优化面关闭（2026-11-11 晚，证据在各工作区）
-- **invsqrt**：公开 73 个电路清单（`manwithacat/vqcc-apache-public-circuits` v115）最高仍是
-  `6c6a734d` 93,863.36；均值 Toffoli 普查的可用条件化池仅 6 门（上限 3 mean ≈ 186 分）；
+- **invsqrt**：公开 73 个电路清单（`manwithacat/vqcc-apache-public-circuits` v115）当时最高是
+  `6c6a734d` 93,863.36（11-11 晚被 `9c708f7b` 93,555.26 取代）；均值 Toffoli 普查的可用条件化池仅 6 门（上限 3 mean ≈ 186 分）；
   单 splice 最优已是现有 S0 切点（−1.00 mean）；S2 后缀切点小域验证 FAIL（x=5，0.5 turn）；
   62→61Q 纯重标号不可能；HMR 清理关闭。**invsqrt 不再投入。**
 - **化学公开件**：`8afd4c67` 字表仍是 298,600,061.56 最低；heliosli 8d4c99a2 +200.73、
@@ -167,11 +167,25 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   PASS 0/0、score 373,798,635,029.88；但换 SHA 会重抽 salt，默认 seed 下候选与未改父件
   都出现 1 次 value error。按 72-salt 实测 15/72 单失败、单失败 +0.46%，期望惩罚
   ≈0.096% ≫ 0.012% 收益，**不提交新 DQI SHA**；保留已在线 0/0 的 `cd71c482`。
-  证据：`experiments/dqi/20261111_cd71_diff/`。
+  证据：`.worktree/dqi/experiments/dqi/ABANDONED.md`（原 `cd71_diff/` 目录已删）。
+
+### 2026-11-12 公开前沿再次刷新
+- LB 榜首 **29.45296**（Entangled Team，11-11 22:02 UTC），第二 **29.30643**
+  （Schrödinger's cat lived，20:48 UTC）。
+- 公开 notebook 最高 **25.36727**（`pramitdas/qcc-public-frontier-25-367`、
+  `asteriospanoras/lb-25-367-verified-portfolio-dqi-readout-fix`）。
+- 新 invsqrt **`9c708f7b`**：WCao24 44-CSWAP normaliser + Thomas Gamet early prefix 的 splice，
+  官方 **93,555.2627**（−308 vs 6c6a734d，−0.328%）；本机 200M 全量 PASS 93,555.3164。
+- 新 DQI **`eae396ba`**（Atakan iso-gap h5 + readout windows）：892Q、mean T 394,089.4、
+  本地 PASS **373,534,939,340.64**（−0.083% vs cd71）；换 SHA 的 salt 重抽期望惩罚更大，未采用。
+- 新化学 **`f21b8a87`** + Maoxin v22 4,097 loader：λeff 46.9073833、T 14,856、Q 427，
+  本机 PASS **297,557,548.71**（−0.0003% vs 8afd4c67）。
+- main 采用“新 invsqrt + 新化学 + 原 cd71 DQI”的安全组合，提交 `58256166`，
+  本地预期 GM **25.388681**；不换 DQI SHA。
 
 ### 仍开放（大工程，需独立立项）
-1. **化学新分解**：R=8/B=129/C=44（同 R·C，仅缩 basis B，words 1,108，约 −3~5% T）与
-   R=3/B=129/C=114（words 463，成本模型 0.647×，GM 29.3）正在 GPU 试训；后者精度风险高。
-2. **DQI 换算法**：按 arXiv:2610.22367 的 BM + direct phase bit 重写，绕开 convert/unconvert
-   的 123k T；论文 1,837Q/442k T 整体更差，只有 scan/phase 构造可借鉴。
-3. **invsqrt 换算法**：S1 shift-select 重算降级或 61Q 值级重算证明；两者都是大工程。
+1. **化学新分解**：B 轴已关闭（B135 量化后 33.12 mHa、loader 9,056 T 超 break-even 8,262）；
+   只剩换 factorization/训练范式的算法级工作。
+2. **DQI 换件门槛**：新 DQI 的 T 收益需 >0.2% 才值得 salt 重抽；当前最大候选 `eae396ba` 仅 0.083%。
+3. **invsqrt**：公开 splice 仍在演化；若出现新的“同状态 + 免费 Z_POW 修相位”拼接，按同法复核。
+   61Q 值级重算与 S1 shift-select 降级仍是独立大工程。
