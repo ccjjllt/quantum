@@ -172,11 +172,13 @@ mean   437,947 → 432,000 左右      （3.40e11 在 Q=892 要求 ≤358,709）
    每 CCX ~69/61 CX 的稠密展开，最接近
    `exp/r-main/narrow240/direct_kernels.py::conv/rank_update`（`expose` 稠密 CNOT 网络 +
    每秩项一次 CCX）这一类，但**具体归属未定**；本实验只用它排除「v21 链步」这一身份。
-4. **族不同**：eae 的 tag 词表（`aligned_route`、`head_pivot`、`full_head_product`、
-   `head_phase`、`multiply v`、`inverse12|24 products|scalar|norm`）来自
-   `exp/r-main/narrow240/{measured_heads,direct_converter}.py` 与 `exp/jet24/pro_jet.py`；
-   `final_decoder/decode.py` 的 `external_chain_step` 在 eae 里最多只作为
-   `replay_erase/frozen_chart` 的一个被替换项，无法证明 186/178 是它。
+4. **族不同（词表证据）**：eae 的 tag 词表（`aligned_route`、`head_pivot`、
+   `full_head_product`、`head_phase`、`multiply v`、`inverse12|24 products|scalar|norm`）
+   全部来自 `exp/r-main/narrow240/{measured_heads,direct_converter}.py` 与
+   `exp/jet24/pro_jet.py`，即 direct/gap-chart + jet 那一套实现；`final_decoder/decode.py`
+   的 `external_chain_step` 是另一套（tower-24 算术），它的 kernel 尺寸 84/99/198 在 eae 的
+   186/178 里没有对应。所以 eae 的链若存在，其乘积关系必须**用它自己的源码**重证；本工作区
+   没有 eae 的精确源码，本实验不作断言，也据此不做块级移植。
 
 即使把 §2 的关系式硬套到 eae（196 步/方向 × 2 方向 = 392 对），上限也只有
 `392 × 15 = 5,880 T = 1.47%`（static 395,433）；加上 24-qubit 暂存后的 Q² 惩罚
