@@ -251,3 +251,23 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - **当前公开榜首 29.52446；25.3957 仍是数百队 plateau**。要进 26–28 需要至少一件
   ≥10% 的私有级改进，三条在研线：DQI 低 ancilla 重建、DQI 乘法降秩、化学 J 批量；
   invsqrt 新 family 普查已立项。
+
+## 2026-11-12 深夜：乘法秩的文献校准与公开件 14,840
+
+- **GF(2^12)/GF(2^24) 乘法秩**：当前 42 = Chudnovsky 7 点 × rank(GF(2^3))=6；
+  99 = 11 点 × rank(GF(2^4))=9。文献已知 rank(F_{2^3})=6、rank(F_{2^4})=9、
+  rank(F_{2^6})=15 均为**已证明最优**（Dumas–Lia–Sheekey 2026, arXiv:2602.09577；
+  Ballet–Chaumine–Pieltant–Rolland）；q=2 的通用 Chudnovsky 上界在 n=12 是 51，
+  我们的 42 已更优。要低于 42/99 需要非 tower 的专用张量分解（开放问题），
+  因此 DQI 降秩的期望收益有限，不能单独支撑 −13.5%。
+- **化学公开最优刷新为 14,840 T**：`5d5007a75784`（tiraJoon）与 `92fef6dd17f2`
+  （maoxin123 4,089-Toffoli loader）在**同一 (8,143,44) 表、同一 λeff≈46.907** 上
+  把 T 从 14,856 降到 14,840（T_angles 8,178 vs 8,194），chem 成本
+  297,557,548.71 → **297,237,044.95**（−0.108%）。本地 GM 由 25.39570057
+  升到 **25.40482516**（−0.036%）；仍属 plateau 级，不单独提交。
+- **公开 portfolio 复核**（`ranjeet258/qcc-nov12-verified-expanded-portfolio`，
+  2026-11-12 09:53 UTC）：其 selection report 的三件成本与我们的完全相同，
+  唯一差异就是化学 14,840；baseline 25.40482651560744，gain 0.0。
+  说明公开三件已无其他未采用件。
+- **在研线**（subagent）：DQI 乘法降秩（B）、化学 J 批量（C）、invsqrt 新 family
+  普查 + Q+1 换 C（D）、化学 group 重选（E）。只有全量官方 PASS 且实质增益才进入候选。
