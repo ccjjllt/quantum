@@ -455,3 +455,15 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   即使 λeff 48–50，成本 250–270M（−9~−16%）。
 - 已在 K/G 的 brief 中加入 coded/coded2 组合；先 R=6/C=64（safe），
   再 R=5/C=75（aggressive），最后 R=7/C=55。
+
+## 2026-11-12 深夜（第十四轮）：merge 与 B-truncation 的区别
+
+- `structure.py::merge(p,k,C)` 是**精确**合并：R→R/k，但 B→k·B0、C→max(C,k·C0)，
+  所有项保留；rows=76+R·B **不变**（8→4 时 B=286，rows 仍 1,220）。
+  因此 merge 本身**不产生** R×C 的 T 节省，只能做高质量 seed。
+- R×C 的 rows 降低（B 固定 143、R=5/6/7）必须**同时截断 B**（或从头训练小 R/B）；
+  误差来自 basis 截断。公开 R=4/B=120/C=120（R·B=480）过 19.9 mHa，
+  R=5/B=143/C=75（R·B=715）在两者之间，R=6/B=143/C=64（R·B=858）更稳；
+  当前 R·B=1,144。
+- 建议路径（已发给 K）：`merge(k=2,C=64/75)` 得 4×286×C 精确 seed → 按 U/W 重要性把 B
+  截回 143 → fastfit/refine 短训练 → e1/e2；若 4×143 太小，试 5×143/6×143。
