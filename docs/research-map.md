@@ -700,3 +700,23 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   （210.9M，−29.1%，C 减少会收紧误差）；若 B220/C120 超门，R=4 基本关闭，
   转 R=5/B180/C100（500 项、248.9M，−16.3%）作最后备选。
 - 已让 K 把 B220/C120 的 e1/e2 作为最高优先级；M 的 Maoxin loader 在等这个门。
+
+## 2026-11-12 深夜（第三十二轮）：R=4 截断、loader、换树与 R=7 全部关闭
+
+- **R=4 B 截断（决定性 no-go）**：同一公开表 `729cd14c088f`，10-bit，官方
+  `evaluate_dfthc_angle_words`。B=255 对照 **19.94 mHa PASS**；B=220 **498.75 mHa**、
+  B=200 **690.79**、B=180 **913.61**，全部超 20 mHa 门 25–46 倍。`error_2` 只由
+  `(U,w)` 决定，offset/列旋转救不了，故不构建电路。已用 Kaggle 挂载比赛数据 +
+  `manwithacat/vqcc-apache-public-circuits` 复跑，数字逐位一致：
+  内核 `ccjjllt/quantum-rc-r4-btrunc-gate`，记录
+  `.worktree/dfthcsos/experiments/dfthcsos/20261112_kaggle_r4_gate/`。
+- **Maoxin loader 逆向 no-go**：本地 `tensorqrom8` 在 128Q cap 内上限 **5,142 T/pass**
+  （vs 公开 4,089）；791 行代理 4,601（+8.4%）。只有复现 Maoxin 的 monomial-cache
+  构造才能到 3,645，但未在 128Q 内做到；R=5 用本地 loader 是负收益。
+- **换树 no-go**：同一张表重建 current/heap/star/path，T/pass 5,414/5,422/5,105/5,428；
+  只有 current 过误差门，成本 350.32M（+17.9%）。树间 T 差 ≤6%，生成器才是瓶颈。
+- **R=7 no-go**：C=44 drop1 实测 e1 28.94 / e2 215.54 mHa，loader 4,672 T/pass，
+  cost 311.94M（+4.95%）；rank-308 PSD 下界 14.48 mHa，叠加 15.1 mHa 量化墙
+  理论最好 ~20.9 mHa，仍超门。
+- **结论**：化学维持 `5d5007a75784`（14,840 loader、Q=427、λeff=46.907378146、
+  297,237,044.95）；R=4/R=5/R=7/换树/loader 五条线全部关闭，不产生新候选、不提交。
