@@ -787,3 +787,17 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   4,089/pass、heurT 6,662、T_total=2×4,089+6,662=14,840、Q=427、λeff=46.907）。
   成本杠杆是 **rows / loader**，不是 C。
 - 记录：`.worktree/dfthcsos/experiments/dfthcsos/20261112_ctrunc_joint/`（未推 Kaggle）。
+
+## 2026-11-12 深夜（第三十六轮）：full-support loader 归零，chem 天花板 ≈280M
+
+- full-support（型 = u(r)+v(q)，一个 product 覆盖 16 列）被 **rank 否证**：
+  16×128 ANF 张量的 interior 每 product 最多 rank 2；实测 k=0 的 40 个 bit 中
+  interior rank **15**（k=4 有 32 个 bit=15），所以一般 bit **≥8 product/bit**，
+  不是 1。1,905 方程对 ~284 未知数，1 product/bit 无解。
+- 精确恒等式验证的构造：k=4 346 T、k=0 371 T；15 电路 **6,345 T/pass（+55%）**，
+  cost 387.6M；理论下界 5,720（+40%），302.3M。全部劣于现状，归零。
+- loader 软计数界：48,800 bit 随机表，一个 CCX 最多 2·D bit（D≤128），每 circuit
+  ≥243 CCX → **3,645 T/pass → 279.5M（−6%）**。Maoxin 平均 272.6 CCX，只剩 ~10%
+  余量；2,850（247.6M）需 190 CCX，不可达。
+- **结论**：27.0 不再记在 loader 账上；loader 现实落点 ≈3,600–3,700 T/pass
+  ≈278–282M（GM≈26.5），必须由 shape/C 截断或 DQI 承担。
