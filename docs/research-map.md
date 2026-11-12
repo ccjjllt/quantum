@@ -107,3 +107,71 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - 化学：GPU 长训（本机 JAX cpu 已到渐近；brot=6 证明 GPU 改变不了字宽地板，新形状/新 loss 才值得烧卡）。
 - invsqrt：S1-M1 级改写已证伪（0/13）；整族重综合未立项。
 - 提交策略：三件套 58190972 COMPLETE 25.22676 为当前最好；DQI salt 噪声 ±0.46% 远大于各补丁收益，改包重提的期望值约等于抽奖。
+
+## 2026-11-11 公开前沿刷新与结构判断（北京时间）
+
+### 已兑现
+- 本账号 `58235797`（Grimoire 33 三件套，三件全本机官方验证）**COMPLETE，public 25.33133**；
+  本地 GM `25.331334272` 与线上逐位一致。三件 SHA 与本地分数见
+  `submissions/20261111_grimoire33/README.md`。
+- 公开 notebook 前沿刷新为 busyaprime 25.33133 / Ozer 25.32234；LB 榜首仍
+  29.30100（Entangled Team，11-08），前三未变。
+
+### 结构事实（本轮实测或读码）
+- **DQI 的 R 固定**：`R(eps_plus)=ln2/-ln(1/2+2√eps_plus)`；0 失败 + 102,400 shots +
+  δ=2^-128 → `eps_plus≈8.66e-4` → R=1.19126。所有零失败方案相同，不能从 R 取分。
+- **DQI T 分解**（9f 实测，cd71 同形）：extract 59,169 + synthesis 31,635 + convert 60,663
+  + scan 44,275 + unconvert 62,534 + unsynthesis 40,429 + unextract 96,881 = 395,586；
+  uncompute 三段占 **50.5%**。
+- **uncompute 目标分布**：CCX 大量以 syndrome 线 S（q<840）为目标（unextract 75,899/94,293；
+  unsynthesis 28,967/40,143；unconvert 37,403/56,794），故 unextract 不是纯 ancilla 清理；
+  ancilla-only 可删约 48,961 门（−12.4% T，GM≈26.48）。
+- 论文 arXiv:2610.22367（Gu, Kemeny, Yelin, Lukin）的 DQI 任务明确允许
+  **X-basis measurement-based uncomputation**，并声明电路不必构造 error word、不必沿用 EEA；
+  其 discovered 电路为 442,397 T / 1,837 Q（Q²T 比我们差），但方法学支持 MBU 与 direct phase bit。
+- **化学**：15 个 loader 被验证器前向、反向各计一次，8,246/14,908 T；
+  `Q_total = 84 + 40 + max(303,77) = 427`，loader 的 temporary 不影响 Q。
+- **invsqrt**：`6c6a734d` 静态 max 1,380 vs 均值 1,218.83，161 门为条件执行；
+  跨 family 拼接（gengsr 开头 + 免费 Z_POW 修相位 + maoxin 主体）已被公开件采用并本地复现。
+
+### 已关闭（2026-11-11 晚）
+- **DQI unextract→HMR**：liveness 实测 0 dead targets（unextract 93,787 CCX + 1,536 CSWAP 的所有目标
+  在此后仍被使用）；且 kickmix 只有 **X-basis HMR**（对计算基态随机），没有 Z-basis 测量，
+  无法把 syndrome 读入 classical bits。uncompute 是 phase-load-bearing，A/B 均关闭。
+  证据：`experiments/dqi/20261111_unextract_hmr/`。
+- **DQI Q-batching**：验证器契约要求 S0..S69 各 12 个 disjoint qubit（Q≥840），b=2 的 446Q 直接非法；
+  可行 b≤892/840=1.0619，整数只有 1。现实最窄公开件 883Q 仅 +2.01% 上界，且要 8,081 T 预算。
+  证据：`experiments/dqi/20261111_qbatch/`。
+- **DQI 当前点 (892Q, 394,416 T) 已在 Q²T 前沿**：889Q 公开件 T +43.5k，净差 +10.3%；
+  当前设计用 T 优势换 Q，是局部最优。
+
+### 局部优化面关闭（2026-11-11 晚，证据在各工作区）
+- **invsqrt**：公开 73 个电路清单（`manwithacat/vqcc-apache-public-circuits` v115）最高仍是
+  `6c6a734d` 93,863.36；均值 Toffoli 普查的可用条件化池仅 6 门（上限 3 mean ≈ 186 分）；
+  单 splice 最优已是现有 S0 切点（−1.00 mean）；S2 后缀切点小域验证 FAIL（x=5，0.5 turn）；
+  62→61Q 纯重标号不可能；HMR 清理关闭。**invsqrt 不再投入。**
+- **化学公开件**：`8afd4c67` 字表仍是 298,600,061.56 最低；heliosli 8d4c99a2 +200.73、
+  junmiaotiao +259,374、catalog 最好 +200.73。
+- **化学 loader 新公开件**（2026-11-11 12:38 UTC）：`maoxin123/qcc-v22-4097-toffoli-chemistry-loaders`
+  在**同一张 `8afd4c67` 表、同一角度字**上把 15 个 loader 从 4,123 降到 **4,097 Toffoli/pass**，
+  T 14,908→14,856，chem 298,600,061.56→**297,558,526.59**（−0.349%）。本机 78,080-shot PASS，
+  e1/e2/λeff 逐位不变。已提交 `58239559`，本地 GM **25.360855**。
+- **化学 MBU**：公开 15 个 loader 已经是 forward+MBU；1,142 个前缀/setup ancilla 由
+  X-basis 测量 + 条件 CZ 以 0 Toffoli 清除，剩余 4,123 CCX/pass 是前向 oracle 本体。
+  **MBU 方向已兑现，无剩余收益。**
+- **化学形状 (5,129,68)**：精确 Q_total=427（recon 的 387 是 heuristic 字段，漏了 J·brot=40）；
+  用今日 loader 仅 −0.98%；连续训练 5k 步 67.82 mHa，外推 50k≈38.3 mHa，**过不了 20 mHa**。
+- **化学 7-bit**：直接重量化 e1 2,041.7 mHa / e2 450.8 mHa，λeff 78.15；**关闭**。
+- **DQI**：unextract HMR 与 Q-batching 已关闭（见上）；公开 cd71 已用 886 个 template-C。
+  可再嫁接的 template-A 仅 48 门（≈−0.012% T）。`cd71_tmplAB` 在同 seed（20261111）下
+  PASS 0/0、score 373,798,635,029.88；但换 SHA 会重抽 salt，默认 seed 下候选与未改父件
+  都出现 1 次 value error。按 72-salt 实测 15/72 单失败、单失败 +0.46%，期望惩罚
+  ≈0.096% ≫ 0.012% 收益，**不提交新 DQI SHA**；保留已在线 0/0 的 `cd71c482`。
+  证据：`experiments/dqi/20261111_cd71_diff/`。
+
+### 仍开放（大工程，需独立立项）
+1. **化学新分解**：R=8/B=129/C=44（同 R·C，仅缩 basis B，words 1,108，约 −3~5% T）与
+   R=3/B=129/C=114（words 463，成本模型 0.647×，GM 29.3）正在 GPU 试训；后者精度风险高。
+2. **DQI 换算法**：按 arXiv:2610.22367 的 BM + direct phase bit 重写，绕开 convert/unconvert
+   的 123k T；论文 1,837Q/442k T 整体更差，只有 scan/phase 构造可借鉴。
+3. **invsqrt 换算法**：S1 shift-select 重算降级或 61Q 值级重算证明；两者都是大工程。

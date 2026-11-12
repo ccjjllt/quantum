@@ -33,9 +33,10 @@
 | 2026-11-10 | [自研三件套组合（全本机验证，P0 化学）](submissions/20261110_trio_candidate/README.md) | 58190972 | 已创建，未持续监控分数 |
 | 2026-11-11 | [Ozer 25.296 原包](submissions/20261111_ozer296/README.md) | 58222873 | 25.29661，COMPLETE |
 | 2026-11-11 | [三验证件三件套（a15b0d73 + 9fcda0c1 + Maoxin303）](submissions/20261111_trio25303/README.md) | 58228252 | 25.30340，COMPLETE |
-| 2026-11-11 | [Grimoire 33 公开前沿组合（三件全本机验证）](submissions/20261111_grimoire33/README.md) | 58235797 | 已创建，待回填 |
+| 2026-11-11 | [Grimoire 33 公开前沿组合（三件全本机验证）](submissions/20261111_grimoire33/README.md) | 58235797 | 25.33133，COMPLETE |
+| 2026-11-11 | [Maoxin v22 4,097T 化学 loader（只换 loader）](submissions/20261111_maoxin4097/README.md) | 58239559 | 已创建，待回填（本地预期 25.36086） |
 
-当前公开比较基线为 **Grimoire 33（busyaprime，自报 25.33133）**：invsqrt `6c6a734d`、DQI `cd71c482`、化学 `8afd4c67`，三件均由本机全量官方验证 PASS，机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。本账号提交 `58235797`（创建时为 PENDING）。
+当前公开比较基线为 **Grimoire 33（busyaprime，25.33133）**：invsqrt `6c6a734d`、DQI `cd71c482`、化学 `8afd4c67`，三件均由本机全量官方验证 PASS，机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。本账号提交 `58235797` **COMPLETE 25.33133**。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
 gengsr 25.2268 在 2026-11-10 至 11-11 间曾为比较基线（本账号提交 `58181743`，invsqrt 本机重验 PASS 94537.59），现保留为历史对照；
 Syed V9 与 Public Frontier 组合同样保留为历史对照，不得将其旧增量直接累加到新基线上。

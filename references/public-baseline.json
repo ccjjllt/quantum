@@ -18,8 +18,9 @@
     "id": 58235797,
     "creation_confirmed": true,
     "created_utc": "2026-11-11T11:25:28Z",
-    "status_at_record": "PENDING",
-    "score_not_polled": true,
+    "status_at_record": "COMPLETE",
+    "public_score": 25.33133,
+    "score_not_polled": false,
     "receipt": "submissions/20261111_grimoire33/README.md"
   },
   "release_path": "artifacts/20261111_grimoire33/candidate",
