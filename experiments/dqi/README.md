@@ -29,3 +29,9 @@ mean T 394,416.2）。本机 102,400-shot **PASS 373,844,684,513.52**（0 value 
 - `20261112_branch_recovery`（paper 原则 (a)/(b) 的剩余空间）：决策机器 57,119 T
   = 14.2%，全部在 n−1 零测试 / 1 CSWAP 下界；无 ≥10k 可替换块。**局部 branch
   recovery no-go**，13.5% 只能来自换族（详见该实验 README）。
+- `20261112_decoder_family`（换族判决）：**no-go**。目标要求 convert+unconvert
+  ≤61,884 T（737 乘/方向），而该块的扩展 Euclid 算术下界是 920 乘/方向
+  （两方向 77,280 T）；当前 EEA 核心 ≈939–955 已只高 2–4%，half-gcd 1,027
+  （+7.5–9.4%），其 textbook combine 原型实测 Q=1,296、T=15,120。完美 EEA 也只到
+  398.4k static，比 340k 高 58.4k；half-gcd 反而到 407–409k。BM/trace/WB 更差且
+  Q≥864–1,704。详见 `20261112_decoder_family/README.md`。

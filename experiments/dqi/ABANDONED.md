@@ -48,6 +48,9 @@
   −48.5 mean T，但换 SHA 重抽 salt 的期望惩罚 ~0.096% > 0.0123% 收益，不提交。
 - **decoder2**：pebbling 交换表单值上界 234 < 887，净负；BM/Euclid/时域 Chien 下界
   ≥190k vs extract 59k，纸面关闭；889Q `993c7038` 实为 891Q、同族弱实现（+1,550 门）。
+  （口径更正：该 ≥190k 是**朴素时域** BM/Chien/syndrome 的乘法数 × 幻想 1 CCX/乘，
+  对照对象是 extract 子阶段而非整颗解码器；它不覆盖 half-gcd，也不构成当前频域族的
+  下界。详见 `20261112_decoder_family/README.md` §3.2。）
 - **newcirc_residual**：9f 相对 e9 的 −2 CCX 是新模板 C，template A/B 残余 0/0。
 - **branch-recovery / conditional-routing（`20261112_branch_recovery`，保留目录）**：
   eae396ba 的决策机器总量 **57,119 T = 14.2%**（scan 4,025×11=44,275 + 其余
