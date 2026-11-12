@@ -592,3 +592,17 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   没有 pair 复用——这正是 T 差 18% 的来源。
 - 已把精确层次发给 M；若 1,220 行做到 ≤4,089 T/pass（目标 ≤3,900），
   再扩到 R=5/R=6 新表。
+
+## 2026-11-12 深夜（第二十四轮）：loader T 随 rows 非线性，shape 线关闭
+
+- 实测 `tensorqrom8` J=5（lowbits=4、sizes=[6]*6+[4]）在 791/934/1,220 行：
+  **4,608 / 4,778 / 5,148 T/pass**。rows −35% 只省 10.5%，固定 monomial/selection
+  成本占主导，**不是线性**。
+- 用这个 loader 重算：R=5/C=75 T_total=16,105（**+8.5%**）、R=6/C=64=16,532（**+11.4%**）、
+  R=7/C=55≈16,887（**+13.8%**）——全部比当前 14,840 差。**R×C/R=7 的 shape 线
+  在本地 loader 下 no-go**；已通知 K/G 停止并写 no-go。
+- Maoxin 的每电路 292 = 60 monomial（18 pair + 21 triple + 21 quad）+ 232 data XOR
+  （1,220 地址）。若 data XOR 随 rows 缩放、monomial 固定，则 791 行 per-circuit
+  ≈210、×15≈3,150/pass，R=5/C=75 T_total≈13,189（−11.1%）——这是 shape 线唯一的活口，
+  取决于 M 能否复现 Maoxin 构造并验证 232 的缩放方式。
+- 已把 fixed/variable 拆分与 R=5 目标（T_total ≤13,500、cost ≤265M）发给 M。
