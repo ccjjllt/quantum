@@ -555,3 +555,14 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   已立项 M（从 `.kmb` 逆向 Maoxin 的 coded/lowbits/cache/QROM 构造）。
 - coded2/tree 线的绝对 T 也要与 Maoxin 4,089 比；若基座是 5,142，单靠 coded2
   （~750 T）仍差 7%。已把这条校准发给 K/G/I。
+
+## 2026-11-12 深夜（第二十一轮）：Maoxin loader 的 op 结构差异
+
+- 实测 `angle_k_0`：Maoxin v22 是 **Q=128、T=292、ops 19,883**；
+  本地 `tensorqrom8` J=5 是 **Q=124、T=358、ops 50,996**。
+- Maoxin 的 ops 少 **2.6×**、T 少 18%、Q 用满 128；T/ops 0.0147 vs 本地 0.0070
+  ——Maoxin 的 CNOT 密度低得多。不是同一 tensor 分解的参数差异，更像另一种
+  QROM 架构（bucket-brigade / 地址缓存 + coded lookup），而不是逐 monomial 分解。
+- 已让 M 逐门对齐地址/数据/ancilla 分工，并用 16-address/5-word 原型对比密度；
+  若无法归约成可解释构造，写 no-go 并保留“ops 密度 0.0147 vs 0.0070”的归因。
+- 这决定化学所有 shape/coded 线能否落地：loader 占化学 T 的 55%，Maoxin 比本地低 26%。
