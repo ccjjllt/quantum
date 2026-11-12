@@ -518,3 +518,24 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   必须改构造器输出全部 8 bit（已新增 `tensorqrom8.py`）。
 - Maoxin v22 4,089 loader：同表同 words、官方全量两个 salt 都 PASS
   297,237,077.47（−0.108%）——即已提交的 `58271862`（25.40482）。
+
+## 2026-11-12 深夜（第十九轮）：DQI 新解码器族 no-go（DQI 全关闭）
+
+- **目标算术下界**：要 static T≤340k，需 convert+unconvert ≤61,884 T（该块 −49.8%），
+  即**每方向 737 个 42-T 乘**。但扩展 Euclid（degree-17、两个 Bezout cofactor、
+  正反两方向）的算术下界是 **920 乘/方向 = 77,280 T**；77,280 > 61,884。
+- **当前 eae 已在下界附近**：convert 实测 ≈1,148 个 42-T 乘 = EEA 核心 ≈939–955
+  + setup/reduce 68 + Hankel ≈141；EEA 核心只比经典 extended Euclid 的 920 高 2–4%。
+- **half-gcd 更差**：n=17 时 1,027 乘（比 920 高 12%），最优变体
+  **407.4k–408.7k static、Q≥900**（textbook matmat 子块实测 Q=1,296、T=15,120），
+  比 eae 差 1.5–1.9%。理论最优 extended EEA（920、其余原样）也只到
+  **398.4k–399.7k（−0.4~−0.7%）**，远高于 340k。
+- **替代族**：BM 7,560 乘/方向（论文 locator ~140k T、整颗 4.4e5 T/1,837Q）；
+  Berlekamp trace 155k–1.85M T（scan 只有 44,275）；Welch–Berlekamp 114k 乘；
+  子积树 590k 乘；chirp-z 98k 乘；Paterson–Stockmeyer 48k 乘。全部 no-go。
+- **口径更正**：`ABANDONED.md` 的 “decoder2: ≥190k vs extract 59k” 不是 full
+  decoder/half-gcd 下界；它是朴素时域 BM/Chien/syndrome 的乘法次数按 1 CCX/乘
+  计价、对照 extract 单子阶段 paid。按实测 42 T/乘，朴素时域族是 ≥8.0M T；
+  真实 scan 用系数预缩放，每点 0 乘、11 T。已在 ABANDONED 加口径更正。
+- **判决：DQI 四条大线（branch/低 ancilla/降秩/external 共享/新解码器族）全部
+  no-go；Q≤892 且 static T≤340k 的已知解码器族不存在。** DQI 维持 eae396ba。
