@@ -539,3 +539,19 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   真实 scan 用系数预缩放，每点 0 乘、11 T。已在 ABANDONED 加口径更正。
 - **判决：DQI 四条大线（branch/低 ancilla/降秩/external 共享/新解码器族）全部
   no-go；Q≤892 且 static T≤340k 的已知解码器族不存在。** DQI 维持 eae396ba。
+
+## 2026-11-12 深夜（第二十轮）：loader 构造是化学所有 shape/coded 线的共同瓶颈
+
+- J 扫描实测：本地 `tensorqrom8`（J=5、lowbits=4）在当前 1,220 行表上是
+  **5,142 T/pass**；Maoxin v22 是 **4,089 T/pass**——本地构造器差 **26%**。
+- 按 rows 线性外推（用 5,142 而非 4,089）：
+  - R=7（rows 1,077）loader≈4,540、T_total≈16,067（**+8.3%**，比当前差）；
+  - R=6（rows 934）≈3,939、T_total≈14,854（wash）；
+  - R=5（rows 791）≈3,333、T_total≈13,555（−8.7%，唯一还有收益）；
+  - 若 R=5 的 B 必须涨到 180/200（公开 R=4 是 B=255），T_total≈14,993/15,414（+1%/+3.9%）。
+- 因此 R=7 已不是候选；R=6 只是误差诊断；R=5/B=143/C=75-80 是唯一 shape 点。
+- **最大杠杆变成 loader 构造**：Maoxin 4,089 比本地 5,142 低 26%，占化学 T 的 55%；
+  若能逆向并移植，loader 8,178→~6,500（−20%），化学 cost −11% → GM +3.8%。
+  已立项 M（从 `.kmb` 逆向 Maoxin 的 coded/lowbits/cache/QROM 构造）。
+- coded2/tree 线的绝对 T 也要与 Maoxin 4,089 比；若基座是 5,142，单靠 coded2
+  （~750 T）仍差 7%。已把这条校准发给 K/G/I。
