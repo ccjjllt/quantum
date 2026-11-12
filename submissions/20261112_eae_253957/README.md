@@ -13,8 +13,11 @@ notebook 前沿 25.39570 逐位一致。
 - 公开 circuits manifest 的 96-draw expected cost：
   `eae396ba` **373,856,548,625.22**，`cd71c482` **374,166,555,017.02**；
   eae 的期望成本仍低 **0.0829%**，不是单次 salt 抽签。
+- 本机 52 个 paired seed（同 seed 跑两文件，各 102,400 shots）：
+  eae paired mean **−0.082843%**，stderr **0.0000060%**；失败 seed 18/52 vs
+  18/52 且相同；clean mean 373,844,646,921.59 → 373,534,926,459.17。
 - 之前按 72-salt 的通用 15/72 失败率估算“期望惩罚 ~0.1% > 收益 0.083%”，
-  这个估计偏保守；96-draw 的 paired 结果给出 eae 期望更优。
+  这个估计偏保守；52 个 paired seed + 96-draw manifest 都给出 eae 期望更优。
 - 本机 `eae396ba` 官方验证器 102,400 shots，salt `eae-20261112-a`：
   **PASS 373,534,784,677.4592，0 value / 0 phase**，R=1.1912604648，892Q，
   mean Toffoli 394,089.27。

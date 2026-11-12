@@ -41,8 +41,8 @@
 当前采用组合为 **eae396ba DQI 替换（本账号 `58265561`，COMPLETE 25.39570）**：
 invsqrt `9c708f7b`（93,555.26）、DQI `eae396ba`（373.53e9；96-draw 期望
 373.8565e9）、化学 `f21b8a87` + Maoxin v22 4,097-Toffoli loader（297,557,548.71）。
-24 个 paired seed + 96-draw manifest 显示 eae 期望成本比 `cd71c482` 低 **0.083%**
-（paired mean −0.08285%，stderr 0.0000073%；失败 seed 相同）。本机 GM
+52 个 paired seed + 96-draw manifest 显示 eae 期望成本比 `cd71c482` 低 **0.083%**
+（paired mean −0.082843%，stderr 0.0000060%；失败 seed 相同）。本机 GM
 **25.39570057** 与线上 **25.39570** 一致；当前 public 名次约第 **369**，因为
 25.3957 的公开 plateau 已扩大到数百队。上一版 `58256166`（25.38868）保留为历史
 对照。机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
