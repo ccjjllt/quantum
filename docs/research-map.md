@@ -865,3 +865,25 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   与当前候选一致。
 - 结论：loader 仍是 **4,089 T/pass、T_total 14,840、Q 427、297.237M**；
   product-set 的 2799 只是 z=0 松弛，不是构造。loader 线彻底封死。
+
+## 2026-11-13 凌晨（第四十二轮）：Kaggle MCP 复核公开前沿——我们三件就是公开最佳
+
+- 用 Kaggle MCP 重查（notebooks / datasets / leaderboard / manifest / assembly_best）：
+  - 公开最高 notebook 是 **25.40767–25.40768**（Areeb Ali / Knight Fork 的
+    retained-product DQI，以及 Kirill 对 Alex Chilton V142 的审计）。它只在我们的
+    三件上把 DQI 换成 `8eccde65`（= `eae396ba` + 133 retained products），
+    invsqrt/chem 不变；零失败 cost 373,408,958,733，仅比 eae 少 0.0337%，
+    GM +0.0029。公开 split 抽到 0 失败才是 25.40767；本地空 salt 为 25.3689，
+    1 次失败的 −0.039 远大于该收益。**没有 26+/27+/28+ 公开件。**
+  - `manwithacat/vqcc-apache-public-circuits` v122 的 `manifest.csv`（459 条）：
+    invsqrt 最佳 `9c708f7b` **93,555.2627**、DQI 最佳 expected `eae396ba`
+    **373,856,548,625**（零失败 373,534,939,341）、chem 最佳 `5d5007a75784`
+    **297,237,044.9509761**；三者 SHA 与我们当前件**逐字节一致**。
+    `parts/assembly_best.json` 也把最佳公开化学 assembly 标为 `5d5007a75784`，
+    `verified_status=PASS`、`verified_cost=297237044.9509761`。
+  - 公开 frontier GM（dataset 2026-11-12 07:12 快照）为 **25.39754**（约第 249 名）；
+    我们 public **25.40482** 已高于它；加上 retained DQI 也只是 25.40768。
+  - 排行榜已到 **Entangled Team 29.90871**、Schrödinger 29.76123、yicheng 29.02209、
+    taiseiu 28.68861、Some Joint 28.65116；这些队伍没有公开电路/生成器。
+- 结论：公开可复现空间已到顶，三件均为公开最佳；追 27+ 只能靠私有级 DQI/化学
+  突破。当前 25.40482 不因公开件而改变，不提交新包。
