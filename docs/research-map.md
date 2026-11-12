@@ -850,3 +850,18 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - 余量 268→243 全在 **product 集重搜**（193→约 168）；已派 subagent 做
   GF(2) 集合覆盖/ILP。到 168 → 3,645 T/pass → **279.5M（GM 26.5）**；
   若 span 条件允许更小集合，收益会更大，但需真实 stateful 验证。
+
+## 2026-11-13 凌晨（第四十一轮）：3881 loader 撤回；官方 verifier 是唯一判据
+
+- 上一轮 `loader_productset` 的 `4089→3881`、`GM≈25.9` **全部撤回**。官方
+  `evaluate_circuits(shots_per_address=1)` 在 slim 15 电路上直接
+  `InvalidCircuits: ANGLE_1: uncorrected phase (measurement kickback)`。
+- 根因：loader 是 `|a>|z> → |a>|z⊕delta[a]>`，**z 任意**；slim 的“恒零”门
+  （5 个 flag cache `w?.7∧sel?`、428 个 `w0.6→w0.7`）只在 z=0 为零，product 的
+  pivot 也带 z。官方在跑 `ANGLE_k` 前把上一 batch 写进 word 寄存器，所以 z=0
+  检查不是合法判据。只保留 z-safe 替换后 **saved = 0**，15 个电路与原电路逐字节相同。
+- 官方对照（同 `shots_per_address=1`）：原 15 电路 + 原 `submission.npz`
+  **PASS**，toffoli 14,840、qubits 427、λeff 46.907378、score **297,237,044.95**。
+  与当前候选一致。
+- 结论：loader 仍是 **4,089 T/pass、T_total 14,840、Q 427、297.237M**；
+  product-set 的 2799 只是 z=0 松弛，不是构造。loader 线彻底封死。
