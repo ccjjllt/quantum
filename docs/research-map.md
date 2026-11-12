@@ -388,3 +388,19 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - 回执：`submissions/20261112_14840/README.md`（已回填）。
 - invsqrt 四方向 no-go 已记录；化学 R=7/coded2/tree/group/J 与 DQI 新族/共享
   仍在跑，任何新候选都需全量 PASS + 用户确认后再提交。
+
+## 2026-11-12 深夜（第十轮）：化学 group 选择 no-go 与 signed-gauge 约束
+
+- **group 选择 no-go**（E，`17b1eaf`）：10 种策略（更硬 AL refit、随机重初始化、2%/10% jitter、
+  block-optimal、joint BCD、随机重分组 ×3、co-occurrence partition、局部交换 k=1..40、
+  greedy residual fill、eigen-leaf pool）全部不如当前 (8,143,44)/λeff=46.9074。
+  结构原因：`A = P M Pᵀ`、M 按组块对角且每块 rank≤44；8 组是 1144 个方向的**划分**，
+  换组不改变 words/T/Q；当前 8×143×44（352 个 rank-1 项，每项在 143 维子空间）
+  是绑定约束。理想 rank-352 的 M* 97% 块对角，但块对角部分单独 1,529 mHa、
+  每块 rank 143——误差是 ‖T‖²≈148 对 4e-4 残差的抵消，极敏感。
+  当前结构的误差地板 **19.808 mHa**（Λ≤1000）；换 3w 到 23.5。
+  结论：**低于 292M 必须换 shape/行数/字表，而不是换组**——这直接支持 R=7 线。
+- **signed-gauge 约束**：用 `dfthc_refit/build.py --qrom tensor` 直接重建**当前
+  submission.npz**（Maoxin v22 的 `angle_words`）也报 `words must be in the signed gauge`。
+  即 Maoxin 4,089 loader 的字表不是 `dfthc_refit` 的 signed-gauge 量化产物；
+  任何 coded2/no-coded 对照必须走 `quantize.py`→`refine.py` 重新产字（I 正在做）。
