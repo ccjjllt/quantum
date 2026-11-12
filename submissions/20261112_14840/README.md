@@ -26,7 +26,9 @@
   SHA-256 `67f56f421567e82b5a30bb0c6d4194eb313175e9bd5420bace4f4941fffb1e9b`。
 - 上传：resumable，最终 HTTP 200；Kaggle 提交返回
   `{"message":"Successfully submitted ...","ref":58271862}`。
-- 线上状态/分数：提交后 `submissions.get` 权限被拒，暂未能读取；下一次可查询时回填。
+- **线上状态：COMPLETE，public score 25.40482**（与本地幸运值 25.40482516 一致；
+  高于上一版 25.39570）。提交后 `submissions.get` 权限被拒，分数由
+  `search_competition_submissions` 回填。
 
 ## 口径
 
