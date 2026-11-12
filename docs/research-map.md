@@ -773,3 +773,17 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   仍 25.40–25.41。
 - **新并行线**：full-support loader（chem 206M 目标）与 DQI Q=840 重算（−11.3% 目标）。
   C 截断 joint 已停止，低优先级。
+
+## 2026-11-12 深夜（第三十五轮）：C 截断 joint 过误差门，但 R=4 成本 no-go
+
+- 联合 U+w（连续原子，L-BFGS 400 步）在 R=4/B=255 表上：
+  **C=110 → e2 18.89 mHa**（过门；SVD-only 是 26.70，w-only 22.55），
+  **C=118 → 19.80**（过门且优于 C=120 种子 19.94）。秩不是约束：k=440 自由 PSD
+  下界 2.59 mHa；19.94 中约 1.66 mHa 是 4×255 结构税，联合优化回收 ~3.7 mHa。
+- **但 R=4/B=255/C=120 的成本基线本身是 336.9M**（rows=1,096 → 11-bit loader、
+  Q=429、heurT 8,562、T_total 16,742），比当前 chem 297.237M **高 13.4%**；
+  C=110 只省 371 T（2.2%）→ 329.4M，C=105 → 325.4M。**C 截断无成本价值**。
+- 当前 chem 不是 R=4，而是 **R=8/B=143/C=44**（rows=1,220、11-bit loader
+  4,089/pass、heurT 6,662、T_total=2×4,089+6,662=14,840、Q=427、λeff=46.907）。
+  成本杠杆是 **rows / loader**，不是 C。
+- 记录：`.worktree/dfthcsos/experiments/dfthcsos/20261112_ctrunc_joint/`（未推 Kaggle）。
