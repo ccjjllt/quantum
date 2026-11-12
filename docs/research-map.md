@@ -566,3 +566,15 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - 已让 M 逐门对齐地址/数据/ancilla 分工，并用 16-address/5-word 原型对比密度；
   若无法归约成可解释构造，写 no-go 并保留“ops 密度 0.0147 vs 0.0070”的归因。
 - 这决定化学所有 shape/coded 线能否落地：loader 占化学 T 的 55%，Maoxin 比本地低 26%。
+
+## 2026-11-12 深夜（第二十二轮）：Maoxin loader 的 pair-cache 构造
+
+- Maoxin `angle_k_0.kmb` 的门序列：5 个 `CX`（q17/q18、q25/q26…，数据字成对复制）
+  → `R q51; CCX q4 q5 q51`、`R q52; CCX q4 q6 q52`、`CCX q5 q6 q53` …
+  即对 **q4..q10 这 7 个低地址位做两两乘积缓存**（q51..q68），再由 pair 组合高阶项。
+- 这不是本地 `tensorqrom8` 的 lowbits=4/5 逐 monomial 分解，而是
+  **7-bit 地址块 + pair-product cache + 复用** 的张量 QROM；CNOT 密度低
+  （ops 19,883 vs 50,996、T/ops 0.0147 vs 0.0070）也支持“pair 缓存复用”。
+- 已让 M 写 7-bit block + pair cache 的最小原型，测 T/ops 与本地 lowbits=4/5 对比；
+  若密度接近 Maoxin，再扩到 1,220 行与 R=5/R=6 新表。
+- 这仍是化学最大的单点杠杆：loader 占 T 的 55%，Maoxin 比本地低 26%。
