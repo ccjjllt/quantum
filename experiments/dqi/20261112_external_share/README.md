@@ -29,7 +29,7 @@
    401,313 高 **12.2%**；mean 437,947 → ~432,000，而 3.40e11 需要 ≤358,709（Q=892，§4）。
 5. eae 的 **186/178-T 块不是 v21 的 chain step**（v21 的链步实测是 183/198 T）。实测 eae 两类块
    各 105 / 91 个、extract 与 unextract 都有（共 392 个），形状是「单簇 186/178 个 CCX +
-   每 CCX ~69/61 个 CX 的稠密 Vandermonde 展开」，操作数是 **12-bit E62 vs 24-bit E60|E61**、
+   每 CCX ~69/61 个 CX 的稠密展开（形状上接近 Vandermonde `conv`，具体归属未定）」，操作数是 **12-bit E62 vs 24-bit E60|E61**、
    y 集合也不同（E71 只在 186 块里）——不存在「同一个 24-bit 乘积算两次」。eae 的 tag 词表
    （`aligned_route`/`head_pivot`/`full_head_product`/`head_phase`/`multiply v`/`inverse12|24
    products|scalar|norm`）来自 `exp/r-main/narrow240/{measured_heads,direct_converter}.py` +
@@ -155,8 +155,9 @@ mean   437,947 → 432,000 左右      （3.40e11 在 Q=892 要求 ≤358,709）
 | 178 | 91 | 178 | 10,887 | 21 | 0 | E60,E61（93/85，两半各自低位峰值：E60#0 46、E61#0 48） | E70,E72,E73（无 E71） | E64,E66 |
 | 99 | 311 / 76 | 99 | 6,461 | 19 | 0 | E8 或 E6（单寄存器） | E70..E73 | E64 |
 
-（第三行是 eae 里 99-CCX 的块，65 CX/CCX，正是 `mul24_xor99` 的共轭稠密 mask 形状；
-v21 的 `external_chain_step` 一步是 198 CCX，不在这个表里。）
+（第三行是 eae 里 99-CCX 的块，65 CX/CCX，与 v21 链步实测的 198 CCX / 13,107 CX =
+66.2 CX/CCX 同一量级，符合共轭稠密 mask 的 `mul24_xor99`。**CX 密度不能区分 186/178 块**，
+判别依据是下面的块大小、操作数与 tag 词表。）
 
 判定依据：
 
@@ -165,11 +166,12 @@ v21 的 `external_chain_step` 一步是 198 CCX，不在这个表里。）
    `105×186 + 91×178 = 35,728 T`，extract 侧完全同构，共 **71,456 T = 401,313 的 17.8%**。
 2. **操作数不同**：186 块的乘数是一个 12-bit 字（E62），178 块是 24-bit 字（E60|E61），
    y 集合也不同（E71 只在 186 块）。不存在「同一个 24-bit 乘积两次」。
-3. **不是 v21 的链步**：v21 链步实测 183/198，块内 CCX 是 84+99 或 99+99（§3）；
-   eae 的 186/178 是单簇、每 CCX ~65/61 CX 的稠密 Vandermonde 展开，符合
+3. **不是 v21 的链步**：块大小由 kernel 决定、与几何无关——v21 链步实测 183（84+99）
+   或 198（99+99）CCX；eae 的 186/178 都不是这两个值，也不等于 `tensor(24)` 的 105 或
+   `conv` 家族的 42 倍数（同电路的 `full_head_product` 是 126/168/210）。它们是单簇、
+   每 CCX ~69/61 CX 的稠密展开，最接近
    `exp/r-main/narrow240/direct_kernels.py::conv/rank_update`（`expose` 稠密 CNOT 网络 +
-   每个秩项一次 CCX）的形状，而同一电路里 `full_head_product` 的块大小恰是 42 的整数倍
-   （126/168/210），186/178 不是。
+   每秩项一次 CCX）这一类，但**具体归属未定**；本实验只用它排除「v21 链步」这一身份。
 4. **族不同**：eae 的 tag 词表（`aligned_route`、`head_pivot`、`full_head_product`、
    `head_phase`、`multiply v`、`inverse12|24 products|scalar|norm`）来自
    `exp/r-main/narrow240/{measured_heads,direct_converter}.py` 与 `exp/jet24/pro_jet.py`；

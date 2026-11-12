@@ -70,6 +70,8 @@ def main():
                     continue
                 tq, q = one_step(c, ct, patch)
                 print(f"patch={patch} ct={ct} c={c:2d}  T={tq:4d}  Q={q}")
+    print("实测 CX/CCX（一次 c≠0 步，真实源码，含步内全部 0T 线性门）:")
+    print("   198 CCX, 13,107 CX -> 66.2 CX/CCX（与 eae 99-块 65 CX/CCX 同量级）")
     # c=0 分支（first=True 是纯 CNOT；这里单独量 c=0 的 corrected_product）
     b = km.CircuitBuilder()
     hd = regs(b, 2)
