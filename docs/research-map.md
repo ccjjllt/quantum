@@ -221,3 +221,33 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   J=6 超时且不具竞争力。loader 重综合路径关闭。
 - **化学 batch 分组/顺序**：75 列按 J=5 分组与批次顺序是自由变量；当前连续分组
   proxy 5,120，200 组随机最优仍 5,120，相关性分组 5,155/5,150。无收益。
+
+## 2026-11-12 晚（第二轮）：公开空间饱和与三条未闭合杠杆
+
+- **公开 circuits manifest 全量复核**（`manwithacat/vqcc-apache-public-circuits`，2026-11-12 07:48 UTC，459 行）：
+  invsqrt 最优仍是 `9c708f7b` 93,555.2627；DQI 最优是 `eae396ba` 373,534,939,340.64；
+  化学最优是 `5d5007a75784` / `92fef6dd17f2` **297,237,044.95**（T=14,840、Q=427、
+  λeff=46.907、e1/e2≈20.0/20.0），比当前 `f21b8a87` 低 **0.108%**。公开三件已全部采用或仅剩此 0.1% 级 swap。
+- **化学全交叉表**（`parts/compatibility.csv` + factorizations + word_tables，346 个
+  passing 组合）用官方成本模型重算：最低就是 297.237M，与 manifest 一致；没有
+  “差一点过门”的低成本组合。化学公开空间饱和。
+- **化学 J 批量杠杆**：Q_total = heuristic_persistent(84) + J·brot + max(heuristic_temp 303,
+  angles_temp)；J=5 时 Q=427。J<5 每步降 8Q，但 loader T 可能上升；已立项扫描 J=1..8。
+- **DQI Q 下限**：对 eae396ba 的 52 个 ancilla 做 def-use 活跃区间分析，峰值正好 **52**
+  （6,751,317 个 live interval，起点 99.99997% 是 write），即当前结构下 Q=892 已无重编号空间。
+- **DQI 死目标普查**：全电路反向 liveness（末端所有 S/ancilla/classical 输出都必需）只找到
+  **1,262 CCX + 14 CCZ = 1,276 T（0.32%）** 死写；unextract 之外也没有大块可删。
+- **DQI 乘法归因**（stage 直方图）：42-T `mul_xor0` 共 **3,406 次 = 143,052 T**：
+  synthesis 659、convert 955、unsynthesis 691、unconvert 993、extract/unextract 各 54。
+  99-T `mul24` 共 390 次（extract 76、unextract 311）。GF(2^12) 42 项来自
+  Chudnovsky 7 点 × GF(2^3) rank-6；GF(2^24) 99 项是 11 点 × GF(2^4) rank-9
+  （已优于公开源码的 105 项）。降秩是唯一 >5% 的乘法杠杆。
+- **DQI 源码树复核**：公开 release source 的 `qcc-dqi-nonempty-projective-lean-source-v3`
+  （Q=892/static 458,203）与 `carry-q26-892` 的 `decode_best`（本机构建 Q=900/T=484,418）
+  都差于 eae；其 stage 编译器（retention/clifford/chain/live/conditional/gl2）已交给 DQI
+  subagent 评估能否直接作用在 eae 上。
+- **前沿文献**：arXiv:2610.22367 的 RS-DQI 是 4.4e5 T / 1,837 Q（BM + 少量分支存储），
+  Q²T 比 eae 差；其方法学（BM、按失败预算裁剪、重算代替存储）不支持“直接照搬能到 341k”。
+- **当前公开榜首 29.52446；25.3957 仍是数百队 plateau**。要进 26–28 需要至少一件
+  ≥10% 的私有级改进，三条在研线：DQI 低 ancilla 重建、DQI 乘法降秩、化学 J 批量；
+  invsqrt 新 family 普查已立项。
