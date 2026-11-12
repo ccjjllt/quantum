@@ -745,3 +745,31 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   2610.02321）。
 - 本机所有残留 Python 子进程已清理；后续重计算走 Kaggle。化学仍维持
   `5d5007a75784`，不产生新候选、不提交。
+
+## 2026-11-12 深夜（第三十四轮）：DQI/ invsqrt 封顶，loader 只剩 full-support 逃逸口
+
+- **DQI BM 线索关闭（硬数字）**：官方 EEA 参考实测 **5,725,461 T / 1,893 Q**，复算 cost
+  2.4441e13，与官方 ref 比值 1.00006。当前 `eae396ba` 不是 BM，而是 short-Hankel 族：
+  密钥方程 60,663 T（两方向 123,197），比 BM locator 便宜 7.87×（1,148 乘 vs BM
+  ≈11,360 乘）。把论文 BM 搬到 892Q：477,122 T → cost 4.52e11（**+21.1%**）；
+  BM 自报 1,837Q → +414%。正规基全枚举：GF(2^12) 144 vs 现役 42（3.43×）。
+  −20% 需 rank ≤30（Winograd 下界 23）或密钥方程 ≤650 乘/方向；本时间盒无候选。
+- **invsqrt 封顶**：62Q 无宽度余量（x 比特已被回收，61Q 打平预算 +24.7 C）；C 分解
+  prefix 237 / mid 373 / tail 477，C 最多 −5.4%，现实 −2~−3%；要 −37.8% 需再少
+  300–511 次 AND/erase，无单点 ≥137 C。20% 新家族不存在。
+- **loader gate-level**：15 个 Maoxin 电路逐门精确计数，重复 monomial/product、XOR
+  抵消、控制位常数化、相邻 CX 抵消全部 **0**；2,956 个 product 函数 GF(2) 线性无关。
+  QROM halving/dense 在 N=1,220, b=40 下反向（N≪b²λ²），Q≤128 内 T 1,048–1,376/circuit，
+  比 Maoxin 268 差 3.9–5.1×；Maoxin 是张量 loader（0.22 T/地址），已低于 flat QROM
+  1 T/地址下界。
+- **loader 真实上限**：4×4 rank-4 分解 + 70 cache → 230/circuit = **3,525 T/pass
+  （−15.6%）→ R4/C120 ≈296.9M、R5/C75 ≈275.0M**；loader 单线封顶 ≈270–297M，
+  到不了 27.0（247.6M）。**唯一逃逸口**：full low support（16 monomial，1 product/bit）
+  → 121/circuit = **1,815 T/pass → chem ≈206M、GM≈28.8**；需解 16 个非线性方程
+  `h_K = Σ_{P∪Q=K} a_P c_Q`，已派 subagent 专攻。
+- **公开前沿**：400 个 kernel 标题全扫，11-12 后无 27+/28+；唯一新件 DQI
+  `maoxin123/qcc-dqi-392k-toffoli-decoder` 892Q、mean 392,016，官方 102,400 shots
+  PASS 但 1 value error，cost 373.276e9，仅 **+0.023% GM**，不值得构建。公开 plateau
+  仍 25.40–25.41。
+- **新并行线**：full-support loader（chem 206M 目标）与 DQI Q=840 重算（−11.3% 目标）。
+  C 截断 joint 已停止，低优先级。
