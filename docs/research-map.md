@@ -909,3 +909,23 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   （README、audit.py、audit.json，本地 commit）。
 - 并行：prefix 算术块全重写 subagent、DQI 392k 组合 subagent 仍在跑；未提交、
   未 push、当前分数不变 25.40482。
+
+## 2026-11-13 凌晨（第四十四轮）：DQI 392k 是逐 draw 严格支配，但只 +0.0447 GM
+
+- `maoxin123/qcc-dqi-392k-toffoli-decoder`：SHA `4c81b726…01e5d9`，892Q，
+  mean T 392,016.12（eae 394,089.46，**−0.5261%**）。
+- 官方 verifier 16 个 salt × 102,400 shots 全部 PASS：合计 **7 errors / 1,638,400
+  shots**（4 value + 3 phase），p=4.27e-6/shot，λ=0.4375/draw，P(0 失败)=0.646；
+  直方图 {0:10,1:5,2:1} 与 Poisson(0.4375) 吻合。
+- **paired seed 8/8 错误模式与 eae 完全一致**（含 seed 4 phase、seed 29 双 phase），
+  cost 比 **0.9947389 ± 3.9e-7**；失败由共享解码器核心触发，与编译 T 结构无关。
+  所以 392k 对**每一个 draw** 都便宜 0.5261%，是零风险严格支配。
+- 组合 GM：zero-failure **25.44954**；expected **25.4329**（eae expected 25.3882；
+  我们 public 25.40482 是 eae 的 0-failure draw）。
+- retention：392k 的 52 个 ancilla 窗口全被占用；现有 ancilla 仅省 2 T；
+  +1 host 省 138 T 但 Q² 涨 0.224%（需 880 T 打平），+2 省 262 T 仍亏。
+  **392k + retention = 392k**，关闭。
+- 判定：+0.0447 GM 落在 0.02–0.05「不值得单独打包」区间；但它是**免费替换**，
+  若因化学/invsqrt 新件重新组包，应顺手把 eae 换成 392k，无需再评估。
+- 验证范围：24 次全量 102,400-shot（16 salt + 8 paired seed），共 2,457,600 shots，
+  全部 PASS；未打包、未提交、未 push。记录 `.worktree/dqi/.../20261113_392k_combo/`。
