@@ -62,13 +62,14 @@ def main():
         m = evaluate_words(inp, words, tree, BROT)
         cache, prod = rank_model(words)
         # how many of the 75 two-body columns satisfy bit0(a) == bit0(a^8) inside every block
+        # address-aligned pairing: block boundaries are on the 1,220 addresses, two-body rows start at 76
         paired = 0
         for c in range(75):
-            col = words[76:, c]; ok = True
-            for s in range(0, 1144, 16):
+            ok = True
+            for s in range(0, len(words), 16):
                 for lo in range(8):
-                    a, a2 = 76+s+lo, 76+s+lo+8
-                    if a2 < len(words) and ((words[a, c] >> 0) & 1) != ((words[a2, c] >> 0) & 1):
+                    a, a2 = s + lo, s + lo + 8
+                    if a >= 76 and a2 < len(words) and ((words[a, c] >> 0) & 1) != ((words[a2, c] >> 0) & 1):
                         ok = False; break
                 if not ok: break
             paired += ok
