@@ -1,0 +1,243 @@
+lines=61514188  ancilla range [840,892)  distinct=52
+
+=== per-qubit first/last stage set
+q840: first=2698652 last=61163142 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q841: first=2698652 last=61162977 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q842: first=2698701 last=61162975 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q843: first=2698653 last=61163145 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q844: first=2698702 last=61162498 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q845: first=2698654 last=61162489 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q846: first=2698741 last=61162360 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q847: first=2698655 last=61163290 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q848: first=2698656 last=61163286 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q849: first=2698657 last=61163289 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q850: first=2698658 last=61163283 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q851: first=2698745 last=61162364 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q852: first=2698704 last=61163288 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q853: first=2698659 last=61162494 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q854: first=2698660 last=61162495 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q855: first=2698777 last=61162363 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q856: first=2698705 last=61162492 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q857: first=2698661 last=61163279 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q858: first=2698662 last=61163106 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q859: first=2698778 last=61162359 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q860: first=2698708 last=61163281 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q861: first=2700840 last=61163284 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q862: first=2700840 last=61162356 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q863: first=2700900 last=61162365 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q864: first=2700851 last=61163140 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q865: first=2700944 last=61163280 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q866: first=2700841 last=61163282 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q867: first=2700870 last=61162493 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q868: first=2700852 last=61163094 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q869: first=2700853 last=61163144 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q870: first=2700854 last=61162355 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q871: first=2701093 last=61162496 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q872: first=2701099 last=61162357 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q873: first=2701105 last=61163285 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q874: first=2701109 last=61162488 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q875: first=2701115 last=61163100 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q876: first=2701121 last=61163141 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q877: first=2701125 last=61163078 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q878: first=2701148 last=61163090 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q879: first=2701135 last=61162358 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q880: first=2701260 last=61162362 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q881: first=2701286 last=61162366 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q882: first=2701310 last=61162491 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q883: first=2912285 last=61163143 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q884: first=2912254 last=61162976 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q885: first=2912255 last=61162487 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q886: first=2912256 last=61162490 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q887: first=2912257 last=61162361 stages=['extract', 'synthesis', 'unextract', 'unsynthesis']
+q888: first=2908157 last=61163287 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q889: first=2908346 last=61152406 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q890: first=2908481 last=61162497 stages=['convert', 'extract', 'scan', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+q891: first=2909361 last=61163084 stages=['convert', 'extract', 'synthesis', 'unconvert', 'unextract', 'unsynthesis']
+
+=== ops touching ancilla, by stage
+convert            CX         429506
+convert            CZ         48136
+convert            CCX        21363
+convert            HMR        3313
+convert            SWAP       2889
+convert            Z          1731
+convert            R          1530
+convert            CSWAP      1448
+convert            X          46
+extract            CX         1870808
+extract            CZ         106103
+extract            CCX        57012
+extract            SWAP       17428
+extract            Z          8398
+extract            HMR        2267
+extract            R          518
+extract            X          484
+extract            CSWAP      192
+scan               CX         375060
+scan               CZ         88550
+scan               R          44275
+scan               CCX        44275
+scan               HMR        44275
+scan               SWAP       20475
+synthesis          CX         1412804
+synthesis          CCX        16743
+synthesis          SWAP       3919
+synthesis          CZ         993
+synthesis          HMR        508
+synthesis          R          429
+synthesis          Z          90
+synthesis          CSWAP      24
+synthesis          X          14
+unconvert          CX         380129
+unconvert          CZ         60319
+unconvert          CCX        22739
+unconvert          HMR        7504
+unconvert          R          5400
+unconvert          Z          3592
+unconvert          CSWAP      3348
+unconvert          SWAP       3265
+unconvert          CCZ        68
+unconvert          X          35
+unextract          CX         2938056
+unextract          SWAP       151669
+unextract          CZ         111569
+unextract          CCX        97049
+unextract          Z          21358
+unextract          HMR        13807
+unextract          CCZ        2912
+unextract          X          2599
+unextract          CSWAP      1536
+unextract          R          695
+unsynthesis        CX         364264
+unsynthesis        CZ         35390
+unsynthesis        CCX        13752
+unsynthesis        SWAP       4468
+unsynthesis        Z          4213
+unsynthesis        HMR        2258
+unsynthesis        R          710
+unsynthesis        X          416
+unsynthesis        CCZ        259
+unsynthesis        CSWAP      24
+
+=== T gates touching ancilla (role split)
+convert            CCX        anc_control_only   3991
+convert            CSWAP      anc_control_only   1150
+convert            CCX        anc_target         17372
+convert            CSWAP      anc_target         298
+extract            CCX        anc_control_only   44086
+extract            CCX        anc_target         12926
+extract            CSWAP      anc_target         192
+scan               CCX        anc_target         44275
+synthesis          CCX        anc_control_only   1764
+synthesis          CSWAP      anc_control_only   24
+synthesis          CCX        anc_target         14979
+unconvert          CCX        anc_control_only   3348
+unconvert          CSWAP      anc_control_only   2997
+unconvert          CCZ        anc_control_only   21
+unconvert          CCX        anc_target         19391
+unconvert          CSWAP      anc_target         351
+unconvert          CCZ        anc_target         47
+unextract          CCX        anc_control_only   73934
+unextract          CSWAP      anc_control_only   546
+unextract          CCX        anc_target         23115
+unextract          CSWAP      anc_target         990
+unextract          CCZ        anc_target         2912
+unsynthesis        CCX        anc_control_only   2573
+unsynthesis        CCZ        anc_control_only   1
+unsynthesis        CSWAP      anc_control_only   24
+unsynthesis        CCX        anc_target         11179
+unsynthesis        CCZ        anc_target         258
+
+=== scope (all-ancilla vs mixed)
+convert            all_ancilla  211293
+convert            mixed        298669
+extract            all_ancilla  1732179
+extract            mixed        331031
+scan               all_ancilla  387485
+scan               mixed        229425
+synthesis          all_ancilla  272433
+synthesis          mixed        1163091
+unconvert          all_ancilla  187246
+unconvert          mixed        299153
+unextract          all_ancilla  3025822
+unextract          mixed        315428
+unsynthesis        all_ancilla  334966
+unsynthesis        mixed        90788
+
+=== most frequent non-ancilla partners (top 30)
+q22	41861
+q15	31988
+q20	30856
+q48	29337
+q19	29107
+q12	25344
+q18	24203
+q14	21982
+q13	21699
+q49	21072
+q0	20196
+q16	19233
+q480	19002
+q21	18921
+q50	17016
+q792	16602
+q51	15836
+q17	15691
+q53	14898
+q52	14892
+q672	14380
+q59	13998
+q55	13923
+q56	13894
+q54	13847
+q57	13746
+q58	13736
+q481	12479
+q96	12439
+q768	12361
+
+=== per-stage per-sub T detail (sub marks with ancilla T > 0)
+unextract        None                               CCX      96933
+extract          None                               CCX      52392
+scan             None                               CCX      44275
+unconvert        None                               CCX      20163
+convert          None                               CCX      18970
+synthesis        None                               CCX      16627
+unsynthesis      None                               CCX      11665
+unextract        None                               CCZ      2912
+unconvert        aligned_route                      CSWAP    1680
+extract          inverse24 products                 CCX      1610
+unextract        None                               CSWAP    1536
+unconvert        None                               CSWAP    1500
+extract          inverse24 scalar                   CCX      1334
+unconvert        inverse12 products                 CCX      1015
+convert          inverse12 products                 CCX      998
+extract          inverse24 norm                     CCX      966
+unsynthesis      inverse12 products                 CCX      900
+convert          inverse12 scalar                   CCX      868
+unconvert        inverse12 scalar                   CCX      861
+convert          None                               CSWAP    752
+convert          aligned_route                      CSWAP    696
+unsynthesis      inverse12 scalar                   CCX      647
+extract          multiply v                         CCX      594
+unsynthesis      inverse12 norm                     CCX      540
+unconvert        inverse12 norm                     CCX      502
+convert          inverse12 norm                     CCX      445
+unsynthesis      None                               CCZ      259
+extract          None                               CSWAP    192
+unconvert        head_pivot                         CSWAP    168
+unconvert        head_phase                         CCX      118
+convert          full_head_product                  CCX      82
+unconvert        full_head_product                  CCX      80
+unconvert        None                               CCZ      68
+extract          inverse12 products                 CCX      50
+synthesis        inverse12 products                 CCX      50
+unextract        inverse12 products                 CCX      50
+extract          inverse12 scalar                   CCX      36
+synthesis        inverse12 scalar                   CCX      36
+unextract        inverse12 scalar                   CCX      36
+extract          inverse12 norm                     CCX      30
+synthesis        inverse12 norm                     CCX      30
+unextract        inverse12 norm                     CCX      30
+synthesis        None                               CSWAP    24
+unsynthesis      None                               CSWAP    24

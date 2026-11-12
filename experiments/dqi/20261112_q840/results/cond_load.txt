@@ -1,0 +1,116 @@
+### classically-conditioned ops touching ancilla (depth>0)
+unextract        CX         dst  401296
+unextract        SWAP       dst  119952
+scan             CZ         src  88550
+scan             R          dst  44275
+scan             CCX        dst  44275
+scan             HMR        dst  44275
+unextract        CZ         dst  25064
+unextract        HMR        dst  9166
+unextract        Z          dst  8820
+unextract        CCX        dst  5638
+unextract        CCZ        dst  1778
+unextract        X          dst  864
+unextract        R          dst  164
+unconvert        R          dst  102
+unconvert        CCX        dst  102
+unconvert        CZ         src  102
+unconvert        HMR        dst  102
+unconvert        CCX        src  36
+
+### unconditioned ops touching ancilla (depth==0)
+unextract        CX         dst  2517993
+extract          CX         dst  1816765
+synthesis        CX         src  1011784
+synthesis        CX         dst  401020
+unsynthesis      CX         dst  336179
+convert          CX         dst  280663
+scan             CX         dst  278460
+unconvert        CX         dst  238618
+convert          CX         src  148843
+unconvert        CX         src  141511
+extract          CZ         dst  101021
+scan             CX         src  96600
+unextract        CZ         dst  76187
+unextract        CCX        src  73934
+extract          CX         src  54043
+unconvert        CZ         dst  47513
+convert          CZ         dst  46133
+extract          CCX        src  44086
+unsynthesis      CZ         dst  34502
+unextract        SWAP       dst  31717
+unsynthesis      CX         src  28085
+scan             SWAP       dst  20475
+unconvert        CCX        dst  19289
+unextract        CX         src  18767
+unextract        CCX        dst  17477
+extract          SWAP       dst  17428
+convert          CCX        dst  17372
+synthesis        CCX        dst  14979
+extract          CCX        dst  12926
+unconvert        CZ         src  12704
+unextract        Z          dst  12538
+unsynthesis      CCX        dst  11179
+unextract        CZ         src  10318
+extract          Z          dst  8398
+unconvert        HMR        dst  7402
+unconvert        R          dst  5298
+extract          CZ         src  5082
+unextract        HMR        dst  4641
+unsynthesis      SWAP       dst  4458
+unsynthesis      Z          dst  4213
+convert          CCX        src  3991
+synthesis        SWAP       dst  3919
+unconvert        Z          dst  3592
+convert          HMR        dst  3313
+unconvert        CCX        src  3312
+unconvert        CSWAP      src  2997
+unconvert        SWAP       dst  2783
+convert          SWAP       dst  2601
+unsynthesis      CCX        src  2573
+extract          HMR        dst  2267
+unsynthesis      HMR        dst  2258
+convert          CZ         src  2003
+synthesis        CCX        src  1764
+unextract        X          dst  1735
+convert          Z          dst  1731
+convert          R          dst  1530
+convert          CSWAP      src  1150
+unextract        CCZ        dst  1134
+unextract        CSWAP      dst  990
+unsynthesis      CZ         src  888
+unsynthesis      R          dst  710
+synthesis        CZ         dst  668
+unextract        CSWAP      src  546
+unextract        R          dst  531
+extract          R          dst  518
+synthesis        HMR        dst  508
+extract          X          dst  484
+unconvert        SWAP       src  482
+synthesis        R          dst  429
+unsynthesis      X          dst  416
+unconvert        CSWAP      dst  351
+synthesis        CZ         src  325
+convert          CSWAP      dst  298
+convert          SWAP       src  288
+unsynthesis      CCZ        dst  258
+extract          CSWAP      dst  192
+synthesis        Z          dst  90
+unconvert        CCZ        dst  47
+convert          X          dst  46
+unconvert        X          dst  35
+synthesis        CSWAP      src  24
+unsynthesis      CSWAP      src  24
+unconvert        CCZ        src  21
+synthesis        X          dst  14
+unsynthesis      SWAP       src  10
+unsynthesis      CCZ        src  1
+
+### destination writes per (stage,q), nonzero only
+extract      n_q= 52 total=1959999 q840:46106 q841:56274 q842:89938 q843:19628 q844:43685 q845:107231 q846:20830 q847:94872 q848:25031 q849:122837 q850:10611 q851:117471 q852:13207 q853:50233 ...
+synthesis    n_q= 52 total= 421627 q840:2 q841:8697 q842:5081 q843:4966 q844:2 q845:17115 q846:9032 q847:4882 q848:2 q849:8775 q850:22868 q851:18273 q852:21559 q853:21503 ...
+convert      n_q= 51 total= 353687 q840:12619 q841:257 q842:6 q843:2 q844:13609 q845:15887 q846:298 q847:2 q848:15446 q849:211 q850:14225 q851:15125 q852:13897 q853:14465 ...
+scan         n_q= 23 total= 431760 q841:12075 q842:16380 q843:28665 q847:20475 q849:12075 q859:12075 q860:32760 q865:16380 q866:20475 q867:36855 q868:24570 q869:32760 q870:28665 q871:20475 ...
+unconvert    n_q= 51 total= 325234 q840:16072 q841:461 q842:6 q843:2 q844:12158 q845:10945 q846:8732 q847:2 q848:10030 q849:293 q850:10337 q851:9826 q852:10935 q853:8338 ...
+unsynthesis  n_q= 52 total= 394173 q840:8504 q841:8690 q842:4584 q843:4493 q844:8175 q845:8247 q846:8587 q847:4364 q848:9227 q849:3136 q850:9091 q851:8823 q852:8644 q853:9212 ...
+unextract    n_q= 52 total=3237685 q840:113604 q841:141023 q842:69241 q843:169078 q844:91884 q845:50368 q846:53504 q847:48628 q848:38816 q849:28071 q850:133431 q851:77105 q852:37970 q853:32392 ...

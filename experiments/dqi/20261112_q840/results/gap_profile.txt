@@ -1,0 +1,56 @@
+window W=200 ops; max distinct bank qubits in window = 52 at line 58714748
+qubits: (840, 841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852, 853, 854, 855, 856, 857, 858, 859, 860, 861, 862, 863, 864, 865, 866, 867, 868, 869, 870, 871, 872, 873, 874, 875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885, 886, 887, 888, 889, 890, 891)
+
+per-qubit uses and max gap (op lines) / total lines = 61514188
+q840: uses= 304295 max_gap= 23569764
+q841: uses= 340403 max_gap=  3449706
+q842: uses= 320533 max_gap=  5663165
+q843: uses= 323683 max_gap=  5663322
+q844: uses= 289462 max_gap= 23560230
+q845: uses= 411283 max_gap= 25506739
+q846: uses= 203805 max_gap= 23606699
+q847: uses= 290195 max_gap=  5663194
+q848: uses= 206109 max_gap= 25506732
+q849: uses= 264654 max_gap=  3449688
+q850: uses= 363429 max_gap= 23560230
+q851: uses= 440598 max_gap= 23560230
+q852: uses= 281102 max_gap= 25532834
+q853: uses= 322878 max_gap= 23560230
+q854: uses= 316275 max_gap= 23560230
+q855: uses= 221823 max_gap= 23569764
+q856: uses= 228349 max_gap= 25506734
+q857: uses= 424550 max_gap= 25506729
+q858: uses= 183648 max_gap= 25506731
+q859: uses= 463589 max_gap=  3449694
+q860: uses= 317312 max_gap=  5663300
+q861: uses= 295136 max_gap= 23560230
+q862: uses= 230943 max_gap= 23569764
+q863: uses= 193995 max_gap= 23560230
+q864: uses= 202803 max_gap= 25506730
+q865: uses= 314195 max_gap=  5663162
+q866: uses= 291235 max_gap=  5663159
+q867: uses= 280075 max_gap=  5663151
+q868: uses= 251506 max_gap=  5663152
+q869: uses= 265506 max_gap=  5663234
+q870: uses= 267673 max_gap=  5663156
+q871: uses= 310222 max_gap=  5663301
+q872: uses= 273488 max_gap=  5663403
+q873: uses= 260191 max_gap=  3449712
+q874: uses= 270115 max_gap=  3449676
+q875: uses= 298929 max_gap=  3449658
+q876: uses= 359756 max_gap= 23569764
+q877: uses= 250970 max_gap= 23569764
+q878: uses= 247602 max_gap=  3370338
+q879: uses= 230042 max_gap= 23560230
+q880: uses= 282711 max_gap=  3449670
+q881: uses= 300016 max_gap=  3449700
+q882: uses= 364523 max_gap= 25506738
+q883: uses= 321123 max_gap= 23560230
+q884: uses= 374093 max_gap= 25506736
+q885: uses= 256202 max_gap=  3449664
+q886: uses= 274033 max_gap= 23560230
+q887: uses= 322808 max_gap= 45376060
+q888: uses= 191698 max_gap= 25506737
+q889: uses= 155501 max_gap= 27050878
+q890: uses= 186640 max_gap=  3449682
+q891: uses= 307804 max_gap= 25506733

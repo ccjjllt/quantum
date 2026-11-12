@@ -1,0 +1,15 @@
+stage            distinct_S  ops_touching_S distinct_bank  ops_touching_bank
+mask_projection         840             840             0                  0
+initial                 840          255757             0                  0
+extract                 840         3416305            52            2063210
+synthesis               840         5142949            52            1435524
+convert                 840         5467418            51             509962
+scan                    828        22751549            23             616910
+unconvert               840         5042547            51             486399
+unsynthesis             840         5361229            52             425754
+unextract               840         4566872            52            3341250
+uninitial               840          255667             0                  0
+restore_masks             0               0             0                  0
+
+syndrome qubits never touched: 0
+least-used syndrome qubits: [(23, 31565), (62, 41741), (67, 42364), (66, 42747), (68, 43222), (64, 43859), (70, 44041), (69, 44759), (63, 46909), (65, 47809), (61, 48064), (162, 51019), (763, 51412), (71, 51866), (757, 52780), (762, 53421), (758, 53807), (761, 53892), (759, 54575), (760, 54585)]
