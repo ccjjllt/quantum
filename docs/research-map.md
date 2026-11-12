@@ -189,3 +189,27 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 2. **DQI 换件门槛**：新 DQI 的 T 收益需 >0.2% 才值得 salt 重抽；当前最大候选 `eae396ba` 仅 0.083%。
 3. **invsqrt**：公开 splice 仍在演化；若出现新的“同状态 + 免费 Z_POW 修相位”拼接，按同法复核。
    61Q 值级重算与 S1 shift-select 降级仍是独立大工程。
+
+## 2026-11-12 晚：公开前沿 25.39570 与三个判决性探针
+
+- **公开前沿刷新为 25.39570**（`ozertuu/25-39570-sota-vqcc-fast-runner-portfolio`，
+  11-12 01:51 UTC）：组合就是本仓库的 invsqrt `9c708f7b` + 化学 `f21b8a87` +
+  DQI `eae396ba`；相对 `58256166` 唯一差别是 DQI。
+- **eae 的 96-draw 期望成本**（公开 circuits manifest）：
+  `eae396ba` 373,856,548,625.22 vs `cd71c482` 374,166,555,017.02，eae 低 **0.0829%**；
+  不是单次 salt 抽签。本机 `eae396ba` 全量 102,400 shots **PASS 373,534,784,677.46**
+  （salt `eae-20261112-a`，0/0）。据此组装候选
+  `submissions/20261112_eae_253957/`，本地 GM **25.39570057**，与公开 25.39570 一致；
+  未自动提交。
+- **化学 lowbits=3 探针**：`tensorqrom` 在 `refined_845`（R8/B143/C45，λeff 48.137）
+  上 lowbits=3 的 ANGLE T 为 3,992/pass（当前 4,097/pass，−2.6%），但官方计分
+  会再算一次 reverse（T≈14,725 vs 14,856，仅 −0.9%），且该表 λeff 高 2.6%，
+  投影成本 ≈302.7M **更差**；另外最大电路 **195 qubits > 128**，被 cap 直接拒绝。
+  lowbits=4 是 128-qubit cap 下的可行点，现有 4,097/pass 已近该构造最优。
+- **invsqrt 经典查表探针**：`HMR` 是 X-basis 测量（H+measure+reset），
+  指令集没有独立 H，也没有 Z-basis 测量；无法把 x 读入 classical bits 后按 x
+  条件相位，故该捷径不可行。
+- **化学树搜索**：当前 `tree_edges` 在 path/star/heap + 24 棵随机树的
+  `tensorqrom.per_output` 代理下最优（5,119 vs 5,311–5,400），换树无收益。
+- **化学表 survey**：Lera `final_refit_*`/`refined_845` 等 R8/R9 变体的 λeff 为
+  47.0–49.1，均高于当前 46.907；当前 (8,143,44) 是已扫描表中的最低成本点。

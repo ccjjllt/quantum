@@ -39,9 +39,13 @@
 
 当前采用组合为 **25.367 前沿安全组合（本账号 `58256166`，COMPLETE 25.38868）**：
 invsqrt `9c708f7b`（93,555.26）、DQI `cd71c482`（373.84e9）、化学 `f21b8a87` +
-Maoxin v22 4,097-Toffoli loader（297,557,548.71）。公开 notebook 前沿为
-`pramitdas/qcc-public-frontier-25-367` **25.36727**；其 DQI `eae396ba` 虽低 0.083%，但换 SHA 的
-salt 重抽期望惩罚更大，未采用。机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
+Maoxin v22 4,097-Toffoli loader（297,557,548.71）。**2026-11-12 晚公开前沿刷新为
+`ozertuu/25-39570-sota-vqcc-fast-runner-portfolio` 25.39570**；该组合与本账号当前三件
+相同，只把 DQI 换成 `eae396ba`。24 个 paired seed + 96-draw manifest 显示 eae 的
+期望成本低 **0.083%**（不是单次 salt 抽签）；已组装并本机验证候选
+[`submissions/20261112_eae_253957/`](submissions/20261112_eae_253957/README.md)，
+本地 GM **25.39570057**，未自动提交。机器可读来源和口径见
+[public-baseline.json](references/public-baseline.json)。
 上一版 Grimoire 33（`58235797`，25.33133）保留为历史对照。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
 gengsr 25.2268 在 2026-11-10 至 11-11 间曾为比较基线（本账号提交 `58181743`，invsqrt 本机重验 PASS 94537.59），现保留为历史对照；

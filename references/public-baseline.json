@@ -4,10 +4,11 @@
   "competition": "google-verifiable-quantum-circuit-compilation",
   "public_frontier": {
     "notebooks": [
+      "ozertuu/25-39570-sota-vqcc-fast-runner-portfolio",
       "pramitdas/qcc-public-frontier-25-367",
       "asteriospanoras/lb-25-367-verified-portfolio-dqi-readout-fix"
     ],
-    "score": 25.36727,
+    "score": 25.3957,
     "lb_top": {
       "Entangled Team": 29.45296,
       "Schrodinger's cat lived": 29.30643
@@ -20,6 +21,20 @@
     "status_at_record": "COMPLETE",
     "public_score": 25.38868,
     "receipt": "submissions/20261112_public_25367/README.md"
+  },
+  "verified_candidate": {
+    "name": "eae396ba DQI on the 25.367 invsqrt/chemistry",
+    "local_gm": 25.39570057135932,
+    "status": "packaged, not submitted",
+    "receipt": "submissions/20261112_eae_253957/README.md",
+    "submission_zip_sha256": "81f4bd3dc2554ccc137f9cbe1531766f209daa3ac51ef49224cbd6fb6379a9ec",
+    "components": {
+      "invsqrt": "9c708f7b9abc7c7e6719f6e258a3881945e9ee1fd4fd7009fe37367ca1ef20d1",
+      "dqi": "eae396baf0fa52952e07d891237e271257e35bc0483afe57abd17c77857785bd",
+      "dfthcsos": "f21b8a8725c342eb04c37fad269a431003a304d1ac9ad6bf5c56f1d075fde2eb"
+    },
+    "dqi_expected_cost_96draw": 373856548625.2234,
+    "dqi_local_pass": 373534784677.4592
   },
   "release_path": "artifacts/20261112_public_25367/candidate",
   "source_path": "artifacts/20261112_public_25367",
