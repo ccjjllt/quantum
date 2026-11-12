@@ -1,5 +1,5 @@
 {
-  "name": "25.367 public frontier + safe DQI (our 58256166) — 25.38868",
+  "name": "25.39570 public frontier + eae DQI (our 58265561) \u2014 25.39570",
   "adopted_date_beijing": "2026-11-12",
   "competition": "google-verifiable-quantum-circuit-compilation",
   "public_frontier": {
@@ -10,39 +10,25 @@
     ],
     "score": 25.3957,
     "lb_top": {
-      "Entangled Team": 29.45296,
-      "Schrodinger's cat lived": 29.30643
+      "Schrodinger's cat lived": 29.52446,
+      "Entangled Team": 29.45296
     }
   },
   "our_submission": {
-    "id": 58256166,
+    "id": 58265561,
     "creation_confirmed": true,
-    "created_utc": "2026-11-12T01:10:18Z",
+    "created_utc": "2026-11-12T07:42:01Z",
     "status_at_record": "COMPLETE",
-    "public_score": 25.38868,
-    "receipt": "submissions/20261112_public_25367/README.md"
+    "public_score": 25.3957,
+    "receipt": "submissions/20261112_eae_253957/README.md"
   },
-  "verified_candidate": {
-    "name": "eae396ba DQI on the 25.367 invsqrt/chemistry",
-    "local_gm": 25.39570057135932,
-    "status": "submitted 58265561, scoring pending",
-    "receipt": "submissions/20261112_eae_253957/README.md",
-    "submission_zip_sha256": "81f4bd3dc2554ccc137f9cbe1531766f209daa3ac51ef49224cbd6fb6379a9ec",
-    "components": {
-      "invsqrt": "9c708f7b9abc7c7e6719f6e258a3881945e9ee1fd4fd7009fe37367ca1ef20d1",
-      "dqi": "eae396baf0fa52952e07d891237e271257e35bc0483afe57abd17c77857785bd",
-      "dfthcsos": "f21b8a8725c342eb04c37fad269a431003a304d1ac9ad6bf5c56f1d075fde2eb"
-    },
-    "dqi_expected_cost_96draw": 373856548625.2234,
-    "dqi_local_pass": 373534784677.4592
-  },
-  "release_path": "artifacts/20261112_public_25367/candidate",
-  "source_path": "artifacts/20261112_public_25367",
+  "release_path": "artifacts/20261112_eae_candidate",
+  "source_path": "artifacts/20261112_eae_candidate",
   "previous_baseline": {
-    "name": "Maoxin v22 4,097T chem loaders",
-    "submission": 58239559,
-    "score": 25.36085,
-    "before_that": "Grimoire 33 25.33133 (58235797)"
+    "name": "25.367 safe combo (cd71 DQI)",
+    "submission": 58256166,
+    "score": 25.38868,
+    "before_that": "Maoxin v22 4,097T chem loaders 25.36085 (58239559)"
   },
   "components": {
     "invsqrt": {
@@ -60,25 +46,30 @@
       "qualification": "Local full re-run PASS"
     },
     "dqi": {
-      "sha256": "cd71c4822aa090ad859a826acd0d289e699f631d4c55f6337036cccce90fa671",
-      "provenance": "Grimoire 33 public DQI (Atakan/Gemma lineage)",
+      "sha256": "eae396baf0fa52952e07d891237e271257e35bc0483afe57abd17c77857785bd",
+      "provenance": "Atakan Aldemir four-Toffoli GF(64) phase + 44-CSWAP inverse normaliser",
       "Q": 892,
-      "ops": 60804432,
-      "num_bits": 101418,
-      "executed_toffoli_mean": 394416.2253613281,
-      "static_toffoli_max": 394698,
-      "cost_local_verify": 373844684513.5198,
+      "ops": 61460043,
+      "num_bits": 151525,
+      "executed_toffoli_mean": 394089.2726757813,
+      "static_toffoli_max": 401313,
+      "cost_local_verify": 373534784677.4592,
       "repetition_factor": 1.1912604648115832,
       "value_errors": 0,
       "phase_errors": 0,
-      "salt": "grimoire33-dqi-20261111",
+      "salt": "eae-20261112-a",
       "verified_shots": 102400,
-      "qualification": "Same file as 58235797; local full PASS and online 0/0 in 58235797 and 58256166 (no SHA change, no salt re-roll)"
+      "expected_cost_96draw": 373856548625.2234,
+      "qualification": "Local full 102,400-shot PASS 0/0; online COMPLETE 25.39570 in 58265561"
     },
     "dfthcsos": {
       "submission_npz_sha256": "f21b8a8725c342eb04c37fad269a431003a304d1ac9ad6bf5c56f1d075fde2eb",
       "provenance": "prvsiyan constrained refit on table 8afd4c67 + maoxin123 v22 4,097-Toffoli/pass loaders",
-      "shape": [8, 143, 44],
+      "shape": [
+        8,
+        143,
+        44
+      ],
       "T": 14856,
       "Q": 427,
       "lambda_eff": 46.90738327801011,
@@ -93,17 +84,11 @@
     }
   },
   "portfolio": {
-    "local_gm": 25.388681347,
-    "public_score": 25.38868,
-    "delta_vs_previous": 0.027836
+    "local_gm": 25.39570057135932,
+    "public_score": 25.3957,
+    "delta_vs_previous": 0.00702
   },
   "rejected": {
-    "dqi_eae396ba": {
-      "sha256": "eae396baf0fa52952e07d891237e271257e35bc0483afe57abd17c77857785bd",
-      "local_cost": 373534939340.6408,
-      "delta_vs_cd71": -0.0828,
-      "reason": "New SHA would re-roll the salt; 72-salt 15/72 single-failure and +0.46% per failure imply ~0.1% expected penalty > 0.083% T gain"
-    },
     "chem_maoxin_v22": {
       "submission_npz_sha256": "8afd4c679f8cceecf0556e70a3878c825974f8b655ab48b0532912ce8e55ae7b",
       "cost": 297558526.59,
@@ -111,5 +96,5 @@
       "reason": "f21b8a87 is a slightly better constrained refit on the same table/loaders"
     }
   },
-  "verification_scope": "invsqrt 200,540,928 shots PASS; chemistry 78,080 shots PASS; DQI same file as 58235797, local 102,400-shot PASS and online 0/0 in both 58235797 and 58256166. One local salt per task; no multi-salt re-verification. Online score 25.38868 matches local GM 25.388681."
+  "verification_scope": "invsqrt 200,540,928 shots PASS; chemistry 78,080 shots PASS; DQI eae396ba local 102,400-shot PASS 0/0 (salt eae-20261112-a) and online COMPLETE 25.39570. One local salt per task; no multi-salt re-verification. Online score 25.39570 matches local GM 25.39570057."
 }

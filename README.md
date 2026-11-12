@@ -36,17 +36,16 @@
 | 2026-11-11 | [Grimoire 33 公开前沿组合（三件全本机验证）](submissions/20261111_grimoire33/README.md) | 58235797 | 25.33133，COMPLETE |
 | 2026-11-11 | [Maoxin v22 4,097T 化学 loader（只换 loader）](submissions/20261111_maoxin4097/README.md) | 58239559 | 25.36085，COMPLETE |
 | 2026-11-12 | [25.367 前沿安全组合（新 invsqrt + 化学 refit，DQI 不换）](submissions/20261112_public_25367/README.md) | 58256166 | 25.38868，COMPLETE |
+| 2026-11-12 | [eae396ba DQI 替换（公开前沿 25.39570）](submissions/20261112_eae_253957/README.md) | 58265561 | 25.39570，COMPLETE |
 
-当前采用组合为 **25.367 前沿安全组合（本账号 `58256166`，COMPLETE 25.38868）**：
-invsqrt `9c708f7b`（93,555.26）、DQI `cd71c482`（373.84e9）、化学 `f21b8a87` +
-Maoxin v22 4,097-Toffoli loader（297,557,548.71）。**2026-11-12 晚公开前沿刷新为
-`ozertuu/25-39570-sota-vqcc-fast-runner-portfolio` 25.39570**；该组合与本账号当前三件
-相同，只把 DQI 换成 `eae396ba`。24 个 paired seed + 96-draw manifest 显示 eae 的
-期望成本低 **0.083%**（不是单次 salt 抽签）；已组装并本机验证候选
-[`submissions/20261112_eae_253957/`](submissions/20261112_eae_253957/README.md)，
-本地 GM **25.39570057**，已提交 Kaggle **58265561**（2026-11-12T07:42:01Z，
-状态以平台回填为准）。机器可读来源和口径见
-[public-baseline.json](references/public-baseline.json)。
+当前采用组合为 **eae396ba DQI 替换（本账号 `58265561`，COMPLETE 25.39570）**：
+invsqrt `9c708f7b`（93,555.26）、DQI `eae396ba`（373.53e9；96-draw 期望
+373.8565e9）、化学 `f21b8a87` + Maoxin v22 4,097-Toffoli loader（297,557,548.71）。
+24 个 paired seed + 96-draw manifest 显示 eae 期望成本比 `cd71c482` 低 **0.083%**
+（paired mean −0.08285%，stderr 0.0000073%；失败 seed 相同）。本机 GM
+**25.39570057** 与线上 **25.39570** 一致；当前 public 名次约第 **369**，因为
+25.3957 的公开 plateau 已扩大到数百队。上一版 `58256166`（25.38868）保留为历史
+对照。机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
 上一版 Grimoire 33（`58235797`，25.33133）保留为历史对照。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
 gengsr 25.2268 在 2026-11-10 至 11-11 间曾为比较基线（本账号提交 `58181743`，invsqrt 本机重验 PASS 94537.59），现保留为历史对照；

@@ -49,8 +49,9 @@ plateau 约在第 163–184 名（同分按提交时间 tie-break）。
 - 候选目录：`artifacts/20261112_eae_candidate/`（18 个文件）。
 - `submission.zip`：82,303,835 bytes，外层 SHA-256
   `81f4bd3dc2554ccc137f9cbe1531766f209daa3ac51ef49224cbd6fb6379a9ec`。
-- **已提交 Kaggle**：ref **58265561**，2026-11-12T07:42:01Z（北京时间 15:42），
-  状态以平台回填为准；本地预期 public **25.39570**。
+- **已提交 Kaggle**：ref **58265561**，2026-11-12T07:42:01Z（北京时间 15:42）；
+  **COMPLETE，public_score 25.39570**，与本地 GM 25.39570057 一致。
+  当前 public 名次约第 **369**（25.3957 的公开 plateau 已扩大到数百队）。
 
 ## 验证范围与风险
 
@@ -59,5 +60,5 @@ plateau 约在第 163–184 名（同分按提交时间 tie-break）。
 - eae 的 private draw 仍可能命中 1 次失败（单失败 +0.46% DQI 成本，约
   −0.153% GM）；96-draw 期望成本仍优于 cd71，因此这是期望值上的改进，
   不是保证。
-- 该包不改变 `references/public-baseline.json` 的已采用基线；它是一份
-  已验证的候选/替换记录。
+- 该包已成为本账号当前 best submitted（`58265561`）；上一版 `58256166`
+  25.38868 保留为历史对照。
