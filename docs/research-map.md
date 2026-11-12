@@ -578,3 +578,17 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - 已让 M 写 7-bit block + pair cache 的最小原型，测 T/ops 与本地 lowbits=4/5 对比；
   若密度接近 Maoxin，再扩到 1,220 行与 R=5/R=6 新表。
 - 这仍是化学最大的单点杠杆：loader 占 T 的 55%，Maoxin 比本地低 26%。
+
+## 2026-11-12 深夜（第二十三轮）：Maoxin 的分层 monomial cache 精确计数
+
+- Maoxin `angle_k_0` 的 292 个 CCX 按控制/目标分类：
+  - `(bit,bit,pair)` **18**：q4..q10 的两两乘积 → q51..q68；
+  - `(bit,pair,mid)` **21**：pair × bit → triple（如 `(4,53)->70` = q4q5q6）；
+  - `(bit,mid,other)` **21**：triple/quad × bit；
+  - 其余 `(mid,other,other)` 19、`(bit,other,other)` 12、`(pair,other,other)` 12、
+    `(other,pair,other)` 9、`(other,mid,other)` 9 等为数据字 XOR。
+- 即 **pair→triple→quad 的分数阶 monomial cache + 数据 XOR**；pair 被高阶复用，
+  所以 CCX 只有 292。本地 `tensorqrom8` 的 358 很可能是逐 monomial 独立算、
+  没有 pair 复用——这正是 T 差 18% 的来源。
+- 已把精确层次发给 M；若 1,220 行做到 ≤4,089 T/pass（目标 ≤3,900），
+  再扩到 R=5/R=6 新表。
