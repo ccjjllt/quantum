@@ -271,3 +271,23 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   说明公开三件已无其他未采用件。
 - **在研线**（subagent）：DQI 乘法降秩（B）、化学 J 批量（C）、invsqrt 新 family
   普查 + Q+1 换 C（D）、化学 group 重选（E）。只有全量官方 PASS 且实质增益才进入候选。
+
+## 2026-11-12 深夜（第三轮）：14,840 提交与 DQI 两条 no-go
+
+- **已提交 `58271862`**（用户批准）：invsqrt `9c708f7b` + DQI `eae396ba` +
+  化学 `5d5007a75784`（4,089/pass loader）。化学件本机官方 **全量 78,080 shots PASS**：
+  T=14,840、Q=427、λeff=46.907378146123214、e1/e2≈20.0 mHa、E_gap=3.914898003、
+  成本 297,237,044.95。组合本地 GM **25.40482516**（上一版 25.39570057，+0.036%）。
+  ZIP 82,261,596 bytes、SHA-256 `67f56f42…1e9b`、18 件。
+  回执：`submissions/20261112_14840/README.md`；线上分数待回填。
+- **DQI 低 ancilla：no-go**（`20261112_low_ancilla`）。公开 889Q 与 eae 892Q 的
+  ancilla 都是 **48 个贯穿全电路的 24-bit external jet word + 1–4 flags**，
+  def-use 峰值 = 全部（slack 0）；883Q 公开 baseline 只降 1.3% Q² 却 +30.6k mean T，
+  净亏 5.4%。Q 不能靠 noscratch/allocator 降。
+- **DQI 乘法降秩：no-go（含新证明）**（`20261112_mulrank`）。
+  `rank(GF(2^3))=6` 由**完全枚举 2,869,685 个 5 项候选、0 解**证明（r=6 自检命中）；
+  `rank_sym(GF(2^4))=9` 同法证明。42=7×6、99=11×9 在 Chudnovsky/tower 族内最优；
+  即使 36+90 也只到 390,211 T，仍高于 377k 目标。公开 889Q 差分实测每个 12-bit
+  秩项值 5,183 T、24-bit 秩项值 1,201 T（乘法占 77.9%），提示 eae 的乘法占比
+  需要按 186/178 复合块重新标定（不是任务书的 45.3%）。
+- **仍开放**：化学 J 批量（C）、化学 group 重选（E）、invsqrt 新 family + Q+1 换 C（D）。
