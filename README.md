@@ -44,7 +44,8 @@ Maoxin v22 4,097-Toffoli loader（297,557,548.71）。**2026-11-12 晚公开前�
 相同，只把 DQI 换成 `eae396ba`。24 个 paired seed + 96-draw manifest 显示 eae 的
 期望成本低 **0.083%**（不是单次 salt 抽签）；已组装并本机验证候选
 [`submissions/20261112_eae_253957/`](submissions/20261112_eae_253957/README.md)，
-本地 GM **25.39570057**，未自动提交。机器可读来源和口径见
+本地 GM **25.39570057**，已提交 Kaggle **58265561**（2026-11-12T07:42:01Z，
+状态以平台回填为准）。机器可读来源和口径见
 [public-baseline.json](references/public-baseline.json)。
 上一版 Grimoire 33（`58235797`，25.33133）保留为历史对照。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。

@@ -25,7 +25,7 @@
   "verified_candidate": {
     "name": "eae396ba DQI on the 25.367 invsqrt/chemistry",
     "local_gm": 25.39570057135932,
-    "status": "packaged, not submitted",
+    "status": "submitted 58265561, scoring pending",
     "receipt": "submissions/20261112_eae_253957/README.md",
     "submission_zip_sha256": "81f4bd3dc2554ccc137f9cbe1531766f209daa3ac51ef49224cbd6fb6379a9ec",
     "components": {
