@@ -15,6 +15,15 @@ synth/synth2、公开集 survey 的完整数字与放弃原因见
 [CLOSED_RESEARCH.md](CLOSED_RESEARCH.md)；系统性复盘见
 [20261110_arch_review](20261110_arch_review/README.md)。
 
+2026-11-12 的 loader 结构搜索（全部静态代理，未跑 78k）：
+[table_survey](20261112_table_survey/README.md)、[tree_search](20261112_tree_search/README.md)、
+[row_order](20261112_row_order/README.md)、[lowbits](20261112_lowbits/README.md)、
+[j6](20261112_j6/README.md)、[batch_group](20261112_batch_group/README.md)、
+[gauge_search](20261112_gauge_search/README.md)、
+**[loader_aware_train](20261112_loader_aware_train/README.md)（no-go：结构化 1% loader T
+要付 ~10 倍误差门的代价；真 loader = 80 缓存 AND + 214 product CCX/电路 = 4,097，
+表字 rank 15/15 已是最泛型）。**
+
 ## 可复用载体（保留）
 
 - [20261106_train_r5](20261106_train_r5/README.md)：`seed_numpy.py` 种子生成。

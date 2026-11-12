@@ -56,6 +56,8 @@ class Problem:
                 if a >= N and a2 < N + self.A:
                     pairs.append((a - N, a2 - N))
         self.pairs = np.array(pairs, np.int64)
+        # the penalty is summed, not averaged: the mean-normalised gradient (~1e-9 per angle) is
+        # swamped by error_2 and the optimiser never moves R at all (verified).
         self.nR = 1.0
         # gather matrices for du
         P = len(self.i)
@@ -88,7 +90,7 @@ class Problem:
         (da, na), (db, nb) = self._lattice(phi)
         d0 = da[a] ** 2 + da[b] ** 2
         d1 = db[a] ** 2 + db[b] ** 2
-        return float(np.sum(np.minimum(d0, d1)) / self.nR) if self.nR != 1.0 else float(np.sum(np.minimum(d0, d1)))
+        return float(np.sum(np.minimum(d0, d1)) / self.nR)
 
     def loss_grad(self, x):
         nphi = self.A * (self.N - 1)
