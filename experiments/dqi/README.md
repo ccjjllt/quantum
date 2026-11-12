@@ -26,3 +26,6 @@ mean T 394,416.2）。本机 102,400-shot **PASS 373,844,684,513.52**（0 value 
 - 单门级 T 收益仍小于 salt 噪声；整件换 DQI 必须用 paired/96-draw 期望成本判断。
   `eae396ba` 已用 52 paired seed + manifest 96-draw 确认 +0.083% 期望收益；更大的
   13%+ 级别仍只能来自换解码器族。
+- `20261112_branch_recovery`（paper 原则 (a)/(b) 的剩余空间）：决策机器 57,119 T
+  = 14.2%，全部在 n−1 零测试 / 1 CSWAP 下界；无 ≥10k 可替换块。**局部 branch
+  recovery no-go**，13.5% 只能来自换族（详见该实验 README）。

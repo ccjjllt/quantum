@@ -49,6 +49,14 @@
 - **decoder2**：pebbling 交换表单值上界 234 < 887，净负；BM/Euclid/时域 Chien 下界
   ≥190k vs extract 59k，纸面关闭；889Q `993c7038` 实为 891Q、同族弱实现（+1,550 门）。
 - **newcirc_residual**：9f 相对 e9 的 −2 CCX 是新模板 C，template A/B 残余 0/0。
+- **branch-recovery / conditional-routing（`20261112_branch_recovery`，保留目录）**：
+  eae396ba 的决策机器总量 **57,119 T = 14.2%**（scan 4,025×11=44,275 + 其余
+  zero-test ladder 832 + routing CSWAP 12,012），每项都在 n−1 CCX/n-bit 零测试
+  与 1 CSWAP/T 的下界上；可归因于「存储/重算分支决定」的 ≤832 T，不存在 ≥10k
+  的可替换块。全电路 45.3% 的 T 是 42-T GF(2^12)（3,406 块）与 99-T GF(2^24)
+  （390 块）乘法。unextract 比 extract 多的 44,293 T 中 +23,265 是 9 个
+  homogeneous group 的第二条 scalar chain（重建 head 以重放 gauge phase）。
+  只读分析 + n=12 toy 穷举；未构建候选、未跑验证器。
 
 ## 已落实、可复用（保留，不属放弃）
 - `20261110_e9diff`：−55 定位（convert/unconvert 各 −24 CSWAP 模板 A + unextract −7 模板 B），
