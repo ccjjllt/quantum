@@ -35,9 +35,14 @@
 | 2026-11-11 | [三验证件三件套（a15b0d73 + 9fcda0c1 + Maoxin303）](submissions/20261111_trio25303/README.md) | 58228252 | 25.30340，COMPLETE |
 | 2026-11-11 | [Grimoire 33 公开前沿组合（三件全本机验证）](submissions/20261111_grimoire33/README.md) | 58235797 | 25.33133，COMPLETE |
 | 2026-11-11 | [Maoxin v22 4,097T 化学 loader（只换 loader）](submissions/20261111_maoxin4097/README.md) | 58239559 | 25.36085，COMPLETE |
-| 2026-11-12 | [25.367 前沿安全组合（新 invsqrt + 化学 refit，DQI 不换）](submissions/20261112_public_25367/README.md) | 58256166 | 已创建，待回填（本地预期 25.38868） |
+| 2026-11-12 | [25.367 前沿安全组合（新 invsqrt + 化学 refit，DQI 不换）](submissions/20261112_public_25367/README.md) | 58256166 | 25.38868，COMPLETE |
 
-当前公开比较基线为 **Grimoire 33（busyaprime，25.33133）**：invsqrt `6c6a734d`、DQI `cd71c482`、化学 `8afd4c67`，三件均由本机全量官方验证 PASS，机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。本账号提交 `58235797` **COMPLETE 25.33133**。
+当前采用组合为 **25.367 前沿安全组合（本账号 `58256166`，COMPLETE 25.38868）**：
+invsqrt `9c708f7b`（93,555.26）、DQI `cd71c482`（373.84e9）、化学 `f21b8a87` +
+Maoxin v22 4,097-Toffoli loader（297,557,548.71）。公开 notebook 前沿为
+`pramitdas/qcc-public-frontier-25-367` **25.36727**；其 DQI `eae396ba` 虽低 0.083%，但换 SHA 的
+salt 重抽期望惩罚更大，未采用。机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
+上一版 Grimoire 33（`58235797`，25.33133）保留为历史对照。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
 gengsr 25.2268 在 2026-11-10 至 11-11 间曾为比较基线（本账号提交 `58181743`，invsqrt 本机重验 PASS 94537.59），现保留为历史对照；
 Syed V9 与 Public Frontier 组合同样保留为历史对照，不得将其旧增量直接累加到新基线上。
