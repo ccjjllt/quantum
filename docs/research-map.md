@@ -606,3 +606,17 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   ≈210、×15≈3,150/pass，R=5/C=75 T_total≈13,189（−11.1%）——这是 shape 线唯一的活口，
   取决于 M 能否复现 Maoxin 构造并验证 232 的缩放方式。
 - 已把 fixed/variable 拆分与 R=5 目标（T_total ≤13,500、cost ≤265M）发给 M。
+
+## 2026-11-12 深夜（第二十五轮）：Maoxin 的 7-bit block 与 R=5 目标
+
+- Maoxin 的 q4..q10 = **7 个低地址位 = 128-address block**；1,220/128≈9.5 block。
+- 60 个 monomial（18 pair + 21 triple + 21 quad）是对低 7 位 pattern 的缓存、
+  **跨 block 复用**，固定 60/电路；232 个 data XOR 是每 block 数据加载
+  ≈**24.4/block**。本地 lowbits=4 是 16-address block（77 个），每 block ~4.3，
+  block 多导致总 data XOR ~328——固定/变量结构更差。
+- 投影：791 行（R=5，6.2 block）≈6.2×24.4+60=**211/电路**、×15=**3,165 T/pass**；
+  R=5/C=75 T_total≈**13,219（−10.9%）**；934 行（R=6）≈238/电路、T_total≈14,116（−4.9%）。
+- 已让 M 先复现 1,220 行的 292/电路，再测 791 行是否 ≈211（≤270 才继续）；
+  若成立，构建 R=5/B=143/C=75 loader + 官方全量，目标 cost ≤265M。
+- 注意：R=5 的误差门仍未验证（公开 R=4 是 B=255）；M 只负责 loader 构造，
+  误差由 K 的 e1/e2 诊断提供。
