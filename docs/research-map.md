@@ -657,3 +657,16 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
     220.3M@48（−25.9%）。
   - R5/B143/C75（rows 791）：T=6,889+2,635=**9,524**，cost **190.8M（−35.8%）**。
 - 结论不变：R=5 的收益取决于 K 的误差门与 M 的 loader 复现；两者都成立时 GM≈28.2（C75）。
+
+## 2026-11-12 深夜（第二十九轮）：Maoxin data-XOR 的门级模式
+
+- 对 `angle_k_0` 的 292 个 CCX 按 qubit 类别（H=q0–q3、L=q4–q10、D=q11–q49、
+  A=q51–q127）分类：
+  `(A,A,D)` 142、`(H,A,D)` 51、`(L,A,A)` 50、`(L,L,A)` 19、`(A,L,D)` 8、
+  `(H,H,A)` 6、`(L,A,D)` 6、`(A,H,D)` 5、`(H,A,A)` 4、`(A,H,A)` 1。
+  含至少一个高地址位（q0–q3）控制的 CCX 只有 **67** 个。
+- 即 data XOR 不是一个简单的“16 high patterns × 低 monomial”结构；(L,L,A) 19 + (L,A,A) 50
+  是低 7 位的 monomial cache，(A,A,D) 142 + (H,A,D) 51 是 data 加载。10-bit 的
+  **ANF 项数减半**（19,047/38,214=0.498）是经验比例，不是高位 pattern 的直接减半。
+- M 的 R=5 投影应使用 **ANF 比例**（data XOR ≈116、+60 monomial ≈176/电路、
+  loader ≈2,635/pass），不要假设 high-bit 分组；原型要按实际 CCX 模式验证。
