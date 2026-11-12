@@ -47,10 +47,10 @@ plateau 约在第 163–184 名（同分按提交时间 tie-break）。
 ## 打包与提交状态
 
 - 候选目录：`artifacts/20261112_eae_candidate/`（18 个文件）。
-- `submission.zip`：78 MB，外层 SHA-256
+- `submission.zip`：82,303,835 bytes，外层 SHA-256
   `81f4bd3dc2554ccc137f9cbe1531766f209daa3ac51ef49224cbd6fb6379a9ec`。
-- **未提交 Kaggle**（按仓库约定不自动提交）。如需提交：
-  `kaggle competitions submit -c google-verifiable-quantum-circuit-compilation -f submissions/20261112_eae_253957/submission.zip -m "eae396ba DQI: local GM 25.39570"`
+- **已提交 Kaggle**：ref **58265561**，2026-11-12T07:42:01Z（北京时间 15:42），
+  状态以平台回填为准；本地预期 public **25.39570**。
 
 ## 验证范围与风险
 
