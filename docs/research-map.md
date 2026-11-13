@@ -950,3 +950,18 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   3,133,452 个 x、三种 HMR 分支上 0 差异；可做“候选 = 基线”的全域等价证明。
 - 结论：prefix 已无可行的机械/算术重写；最好仍是 237 T、C=1,508.9567、62Q、
   score 93,555.2627。未生成候选、未跑官方验证、未提交/push。
+
+## 2026-11-13 上午（第四十六轮）：提交 DQI 392k 免费替换（ref 58290992）
+
+- 用户批准后提交 18 件：invsqrt `9c708f7b` + DQI `392k`（`4c81b726…`）+
+  chem `5d5007a75784`。ZIP SHA-256
+  `818057cdb455c4653d5944e9fd82afef2a74996f454b257ffbc6e6a2b0e58fd6`，
+  27,992,059 bytes，18 files。
+- DQI 392k 已完成 24 次全量官方验证（16 salt + 8 paired seed，2,457,600 shots，
+  全部 PASS）；逐 draw 比 eae 便宜 0.5261%。invsqrt/chem 与 58271862 相同，
+  已有全量 PASS。
+- 预期：expected GM **25.4329**；0-failure 25.4495；1 failure 25.4107；
+  2+ failures 25.3778。当前最佳仍是 58271862 的 **25.40482**。
+- 提交 ref **58290992**，2026-11-13 01:26 UTC；截至最后一次检查仍为
+  `SubmissionStatus.PENDING`（排行榜队列延迟；此前有 8–9h 延迟记录）。
+- 记录：`submissions/20261113_392k_swap/README.md`；未 push。
