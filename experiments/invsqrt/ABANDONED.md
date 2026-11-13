@@ -63,8 +63,8 @@
   63 T normaliser + 167 T 算术块 + 7 T 收尾 = 237 T；上一轮 “193 CCX / 22 bit → 省 83 C”
   归因撤回。167 T 块已有 6.5× AND 复用（1,081 单项式 / 21,904 关联），局部冗余 0。
   无候选；用精确定点模拟器对 3,133,452 个 x 逐点比对，0 差异。
-- **retention**（`20261113_retention`）：只保留 `retain.py` planner；retention 判决为
-  no-go（52 ancilla 全 live，最多省 2 T）。
+- **retention planner**（`20261113_retention`）：只保留 `retain.py`（public retained-product
+  planner）；未形成候选，作为可复用工具保留。
 
 ## 2026-11-13 停止研究
 公开 46Q invsqrt `321aff83…35177` 已把成本降到 80,162.73，比自研 `9c708f7b`
