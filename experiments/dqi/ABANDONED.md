@@ -65,8 +65,43 @@
 - `20261110_e9diff`：−55 定位（convert/unconvert 各 −24 CSWAP 模板 A + unextract −7 模板 B），
   残余 0；模板 A/B 方法证据保留。889Q 与 72-salt 的关键数字已收入本文件，原始目录删除。
 
+## 2026-11-12/13 追加关闭（详细目录已删除，数字保留）
+- **96-salt paired**（`20261112_96salt`）：52 paired seed 下 `eae396ba` 比 `cd71c482`
+  paired mean −0.08285%、stderr 0.0000073%；失败 seed 相同。结论已用于
+  `submissions/20261112_eae_253957/`，不属于继续研究方向。
+- **近似解码**（`20261112_approx`）：非精确双线性乘子每次调用出错概率下界 **1/4**
+  （丢 1 项实测 0.250000）；丢 6 项实测 0.8154–0.8220；单 shot 有 1,148–5,900 次调用，
+  ε 直接越过 1/16。近似路线死在 ε，不是 R 惩罚。
+- **解码器族**（`20261112_decoder_family`）：目标要求 convert+unconvert ≤61,884 T；
+  扩展 Euclid 算术本身下界 77,280 T；half-gcd 1,027 乘/方向（+7.5–9.4%），
+  plain EEA 920；完美 EEA 也只到 398.4k static。不存在 Q≤892、static T≤340k 的族。
+- **direct phase/MBU**（`20261112_direct_phase`）：uncompute 三段占 51.3% static；
+  phase 门贯穿所有阶段（unextract 125,333 CZ + 25,117 Z + 2,912 CCZ），没有可整体
+  搬移的末端 phase 块；局部 phase 搬移/HMR 清理 no-go。
+- **external-chain 共享**（`20261112_external_share`）：两个乘法调用点逻辑值被 gauge
+  分开；理论上限仅 15 T/步（99−84），不是 75–99 T/步；且需 24Q 暂存。no-go。
+- **low-ancilla**（`20261112_low_ancilla`，1.0G artifacts）：889Q 的 49 个 ancilla 中
+  48 个是 24-bit external word，峰值 49 = 全部 ancilla，slack 0；892Q 同。
+  公开生成器本来就用零 workspace 乘法。Q 无法降。
+- **乘法秩**（`20261112_mulrank`）：`rank(GF(2^3))=6` 严格证明（2,869,685 候选 0 解），
+  35 项路线死；`rank_sym(GF(2^4))=9`；最好仍差目标 471 T。秩路线达不到。
+- **下一代解码器**（`20261112_next_decoder`，845M artifacts）：BM 参考电路实测
+  5,725,461 T / 1,893Q，比 eae 差一个量级；normal bases 144 vs 42；没有 ≥20% 新族。
+- **Q=840 重算**（`20261112_q840`）：52 ancilla 中 48 个是 24-bit external word，
+  70.5% paid 门至少一个操作数落在其上；每阶段 840 syndrome 全用。不是可重算缓存。
+- **392k combo**（`20261113_392k_combo`）：392k 严格逐 draw 便宜 0.5261%，失败模式
+  与 eae 完全相同；retention 最多省 2 T；组合 expected GM 25.4329。已由主仓库提交
+  58290992 验证，不再作为研究线继续。
+
+## 2026-11-13 停止研究
+公开 889Q DQI `7cbe8ecf…14cd9` 成本 360.73e9，比自研 `eae396ba`（892Q，373.53e9）
+低 3.4%。892Q 局部面、Q−1、Q-batching、unextract、解码器族均已有可核查下界；
+剩余 13.5% 只能换算法族，停止推进。总览见 main `docs/abandoned-research.md`。
+
 ## 删除清单
-- `experiments/dqi/` 下除本文件、`20261110_arch_review/`、`20261110_e9diff/`、`README.md`
-  外全部目录（含 decoder2/newcirc_residual/qbatch/unextract_hmr/cd71_diff/e9diff_889/r1salt）。
-- `artifacts/` 下除 `20261110_e9diff/` 外全部目录（含 72salt、cd71_diff 1.4G、
-  unextract_hmr 2.1G、qbatch、newcirc_residual、r1salt 日志）。
+- `experiments/dqi/` 下除本文件、`20261110_arch_review/`、`20261110_e9diff/`、
+  `20261112_branch_recovery/`、`README.md` 外全部目录（含 96salt/approx/decoder_family/
+  direct_phase/external_share/low_ancilla/mulrank/next_decoder/q840/392k_combo）。
+- `artifacts/` 下除 `20261110_e9diff/`、`20261112_branch_recovery/` 外全部目录
+  （含 next_decoder 845M、low_ancilla 1.0G、frontier_source、external_share、mulrank、
+  392k_combo 等）。

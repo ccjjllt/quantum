@@ -6,10 +6,10 @@ mean T 394,416.2）。本机 102,400-shot **PASS 373,844,684,513.52**（0 value 
 
 公开前沿 **`eae396ba`**（Atakan iso-gap h5 + controlled-swap readout windows）本地
 **PASS 373,534,939,340.64**（T 低 0.083%）。2026-11-12 的 52 个 paired seed 实测
-（`20261112_96salt/`）给出 eae 的 paired mean **−0.08285%**、stderr 0.0000073%，
-失败 seed 与 cd71 相同（7/24）；公开 circuits manifest 的 96-draw expected cost
-也为 **373,856,548,625.22 vs 374,166,555,017.02（−0.0829%）**。此前按 72-salt
-通用 15/72 估计的 ~0.1% 期望惩罚过于保守；eae 在期望值上更优，已组装候选
+（原 `20261112_96salt/`，目录已删除，数字见 `ABANDONED.md`）给出 eae 的 paired mean
+**−0.08285%**、stderr 0.0000073%，失败 seed 与 cd71 相同（7/24）；公开 circuits manifest
+的 96-draw expected cost 也为 **373,856,548,625.22 vs 374,166,555,017.02（−0.0829%）**。
+此前按 72-salt 通用 15/72 估计的 ~0.1% 期望惩罚过于保守；eae 在期望值上更优，已组装候选
 `submissions/20261112_eae_253957/`（本地 GM 25.39570057，未自动提交）。
 
 ## 已关闭方向
@@ -34,4 +34,15 @@ mean T 394,416.2）。本机 102,400-shot **PASS 373,844,684,513.52**（0 value 
   （两方向 77,280 T）；当前 EEA 核心 ≈939–955 已只高 2–4%，half-gcd 1,027
   （+7.5–9.4%），其 textbook combine 原型实测 Q=1,296、T=15,120。完美 EEA 也只到
   398.4k static，比 340k 高 58.4k；half-gcd 反而到 407–409k。BM/trace/WB 更差且
-  Q≥864–1,704。详见 `20261112_decoder_family/README.md`。
+  Q≥864–1,704。详见 main `docs/abandoned-research.md`。
+
+## 2026-11-13 停止研究
+
+公开 889Q DQI `7cbe8ecf…14cd9` 成本 **360.73e9**（27.078 trio，Kaggle public
+27.00209），比本线 `eae396ba`（892Q，373.53e9）低 **3.4%**。892Q 局部面、Q−1、
+Q-batching、unextract、近似解码、乘法秩与解码器族均已有可核查下界；392k 的
++0.5261% T 收益已由主仓库提交 58290992 验证。剩余 13.5% 只能换算法族，停止推进。
+
+已关闭实验的详细文档、脚本和大型 artifacts 已删除；总览与放弃原因见 main
+`docs/abandoned-research.md`。保留 `20261110_arch_review/`、`20261110_e9diff/`、
+`20261112_branch_recovery/`、本文件与 `ABANDONED.md`。
