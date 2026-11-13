@@ -965,3 +965,23 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
 - 提交 ref **58290992**，2026-11-13 01:26 UTC；截至最后一次检查仍为
   `SubmissionStatus.PENDING`（排行榜队列延迟；此前有 8–9h 延迟记录）。
 - 记录：`submissions/20261113_392k_swap/README.md`；未 push。
+
+## 2026-11-13（第四十七轮）：公开 frontier 跃到 27.08；三件全部独立全量 PASS 并提交
+
+- 2026-11-13 凌晨出现新的公开 27.0+ 三件（Syed Asad Ali v12 /
+  `ozertuu/quantum-sim-linalg-cache` v25 / `ozertuu/quantum-ai-27-083-vqcc-dqi-cutoff-17`）。
+  本机用**未改动的官方 verifier**逐件独立全量复验：
+  - invsqrt `321aff83…35177`：**46Q**，cost **80,162.732141**；200,540,928 shots
+    PASS，worst/tol 0.9735759969，toffoli_equivalent 1,742.6681。
+  - DQI `7cbe8ecf…14cd9`：**889Q**，cost **360,733,280,431.94**；102,400 shots
+    PASS，0 value / 0 phase，R=1.1912604648；toffoli_count 383,156.29。
+  - chemistry `6418ec8e…a77f`：**427Q**，cost **296,635,967.5936**；78,080 shots
+    PASS，error_1 0.0196103713、error_2 0.0199987799；T=14,810（4,074 T/pass）。
+  - 组合 GM = **27.0783908611**（若 DQI 抽到 1 失败仍约 27.03）。
+- DQI 是 cutoff-17 变体：排除 weight 15–16，附加概率 ≈1.525e-7/shot
+  （每 102,400-shot draw 期望 0.0156 次失败）；官方默认 salt 实测 0/0。
+- 之前 58290992（DQI 392k swap）已完成：public **25.44039**（高于 25.40482）。
+- 已按用户批准提交 18 件新 trio：ref **58299045**（2026-11-13 06:40 UTC，
+  `SubmissionStatus.PENDING`）；ZIP SHA-256
+  `63c5a0776bb1d91490c2e50e4c04607c78b91472f9da45247901ea4af314657c`。
+- 记录：`submissions/20261113_27_078/README.md`；未 push。
