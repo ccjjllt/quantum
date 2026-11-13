@@ -169,6 +169,8 @@ $ du -sh artifacts .worktree/*/artifacts experiments
 清理动作：
 
 - 删除三条研究线中所有已关闭实验目录（保留上列入口/复盘/可复用载体）。
+- 删除三个工作区中共同历史的 `20261030_public_best/`、`20261030_public_audit/`
+  和 `20261101_public_hw06/`，以及 `__pycache__`。
 - 删除 `.worktree/*/artifacts/` 中除 `20261110_e9diff`、`20261112_branch_recovery`、
   `20261110_gputrain` 之外的产物。
 - 删除 main `artifacts/` 下除 `references/frontier-20261112/` 来源清单外的全部历史产物。
