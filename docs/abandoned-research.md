@@ -179,7 +179,7 @@ $ du -sh artifacts .worktree/*/artifacts experiments
 
 ```text
 $ du -sh .
-3.4G    .
+3.4G    .                       # 删除研究产物后
 
 $ du -sh artifacts experiments
 0B      artifacts
@@ -188,16 +188,28 @@ $ du -sh artifacts experiments
 $ du -sh .worktree/invsqrt .worktree/dqi .worktree/dfthcsos
 312K    .worktree/invsqrt
 560K    .worktree/dqi
-417M    .worktree/dfthcsos      # 351M 是本地 .uv-cache，65M 是保留的 gputrain 训练栈
+417M    .worktree/dfthcsos      # 其中 351M 是本地 .uv-cache
 
 $ df -h .
-/dev/disk3s5   926Gi   415Gi   480Gi    47%   # 清理前 433Gi 已用；本次系统层面减少约 18GiB
+/dev/disk3s5   926Gi   415Gi   481Gi    47%   # 清理前 433Gi 已用
 ```
 
-仓库工作树从清理前 **16G 降到 3.4G**（约 −12.6G）。主要来源是 main artifacts
-（8.6G→0B）和三条研究线 artifacts（4.2G→65M）。Git 跟踪文件删除统计：
-invsqrt 40 files / 3,890 lines、DQI 70 files / 9,830 lines、dfthcsos 135 files /
-15,100 lines；这些文档仍可从各分支历史恢复。
+随后又删除了本地 `uv` 缓存（`.uv-cache/` 1.1G + `.worktree/dfthcsos/.uv-cache/`
+351M，均为可重建缓存，不是研究产物）：
+
+```text
+$ du -sh .
+2.0G    .
+$ du -sh .worktree/dfthcsos
+66M     .worktree/dfthcsos      # 只剩保留的 gputrain 训练栈
+$ uv run python -c "import kickmix; ..."
+3.12.13 0.1                    # 删除缓存后 .venv 仍可用
+```
+
+仓库工作树从清理前 **16G 降到 2.0G**（约 −14G）。主要来源是 main artifacts
+（8.6G→0B）和三条研究线 artifacts（4.2G→65M），加上本地 uv 缓存 1.45G。
+Git 跟踪文件删除统计：invsqrt 40 files / 3,890 lines、DQI 70 files / 9,830 lines、
+dfthcsos 135 files / 15,100 lines；这些文档仍可从各分支历史恢复。
 
 > 注：`submissions/` 中的历史 ZIP 是提交回执的一部分，本次未删除；如需继续压缩磁盘，
 > 可在确认不再复跑历史提交后单独清理旧 ZIP。`artifacts/` 与 `submissions/*.zip` 均
