@@ -13,8 +13,10 @@
 | 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | DQI | `codex/dqi-research` | `.worktree/dqi/` | 已停止；见 [总览](docs/abandoned-research.md) |
 
-工作区链接用于本机浏览，`.worktree/` 不进入 Git。三条研究线保留共同历史，新增研究只写入各自工作区。
-官方数据、原始公开包和已有 Python 环境可只读共用；每条研究线的候选和日志写入自己的 `artifacts/`。
+工作区链接用于本机浏览，`.worktree/` 不进入 Git。三条研究线已于 2026-11-13 停止，
+只保留入口 README、`ABANDONED.md`、系统性复盘和可复用载体；已关闭实验的详细文档、
+脚本与大型 artifacts 已清理（见 [已停止研究总览](docs/abandoned-research.md)）。
+官方数据、原始公开包和已有 Python 环境可只读共用。
 采用研究成果时，main 记录实际选定的产物、来源、参数和验证范围，不整支混入研究过程。
 
 ## 已有提交记录
@@ -63,12 +65,12 @@ gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧�
 
 ## 已停止研究（2026-11-13）
 
-三条自研线（invsqrt、DQI、dfthcsos/化学）已停止推进：最后一版均被公开前沿超过，
+三条研究线（invsqrt、DQI、dfthcsos/化学）已停止推进：最后一版均被公开前沿超过，
 最近的判决实验全部 no-go，剩余收益需要换算法族/新训练范式。各研究分支只保留入口 README、
 `ABANDONED.md`、系统性复盘和可复用载体；已关闭实验的详细文档、脚本与大型 artifacts 已删除。
 
 - invsqrt：自研 `9c708f7b` 62Q/93,555.26 → 公开 46Q/80,162.73（低 14.3%）。
-- DQI：自研 `eae396ba` 892Q/373.53e9 → 公开 889Q/360.73e9（低 3.4%）。
+- DQI：本线最后采用 `eae396ba` 892Q/373.53e9 → 公开 889Q/360.73e9（低 3.4%）。
 - 化学：自研 4,097 loader/297.56M → 公开 4,074 loader/296.64M（低 0.31%）。
 
 完整概况、关键数字、放弃原因、删除清单与恢复口径见
