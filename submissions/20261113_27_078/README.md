@@ -25,10 +25,11 @@ draw was less favorable (implied DQI cost ≈363.80e9, about 2 errors), so the r
 score is 27.00209. It is still +1.5617 over the previous best 25.44039 and +1.5973
 over 25.40482.
 
-DQI is the cutoff-17 variant: it excludes weights 15–16 with additional
-probability ≈1.525e-7/shot (expected 0.0156 errors per 102,400-shot draw).
-The official default-salt run had 0 value / 0 phase errors; a 1-error draw
-would raise DQI cost by 0.46% and still leave GM ≈27.03.
+DQI is the cutoff-17 variant: it excludes weights 15–16. The notebook estimated
+an additional failure probability ≈1.525e-7/shot, but the public draw implies
+≈2 errors per 102,400 shots (DQI cost ≈363.80e9), so that estimate was optimistic.
+Treat the DQI failure rate as uncertain/possibly ~2e-5 per shot; the private draw
+may be 0–3 errors, giving a private GM roughly in 26.96–27.08.
 
 ## Package
 
