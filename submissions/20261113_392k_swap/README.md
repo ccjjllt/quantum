@@ -14,3 +14,6 @@
 - **ZIP SHA-256**: `818057cdb455c4653d5944e9fd82afef2a74996f454b257ffbc6e6a2b0e58fd6`
 - **Files**: 18 (invsqrt.kmb, dqi.kmb, dfthcsos/submission.npz + 15 angle loaders).
 - **Submission ref**: 58290992 (2026-11-13 01:26 UTC), status PENDING at submission time.
+- **Status checks**: 2026-11-13 01:38 UTC still `SubmissionStatus.PENDING`;
+  background waiter logs `/tmp/sub58290992_wait.log` and will report on
+  COMPLETE/ERROR. Current best remains 58271862 = 25.40482.
