@@ -985,3 +985,13 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   `SubmissionStatus.PENDING`）；ZIP SHA-256
   `63c5a0776bb1d91490c2e50e4c04607c78b91472f9da45247901ea4af314657c`。
 - 记录：`submissions/20261113_27_078/README.md`；未 push。
+
+### 第四十七轮结果（2026-11-13 更新）
+
+- 58299045 **COMPLETE，publicScore 27.00209**。三件均独立官方全量 PASS；
+  invsqrt 80,162.73 / DQI 7cbe8ecf / chem 296,635,967.59。
+- 本机默认 salt 的 DQI 是 0 失败（局部 GM 27.0784）；公开 draw 隐含 DQI cost
+  ≈363.80e9（约 2 次失败），所以实际 public 是 **27.00209**，仍比之前最佳
+  25.44039 **高 +1.5617**，比 25.40482 高 +1.5973。
+- cutoff-17 DQI 的公开 draw 比 notebook 声称的 “0 失败” 差；private draw 可能
+  是 0–3 次失败，预期 GM 约 27.0–27.08。当前最佳 public 已确认 27.00209。

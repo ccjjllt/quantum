@@ -19,8 +19,11 @@ from Syed Asad Ali's Apache-2.0 v12 own-circuit portfolio and the
 
 ## Score
 
-GM = `(2076774.2337/80162.7321 × 24439463583672.93/360733280431.94 ×
-3355599588.3155/296635967.5936)^(1/3)` = **27.0783908611**.
+Local independent GM with the default-salt DQI cost (0 errors) is
+**27.0783908611**. The **actual Kaggle public score is 27.00209**; the public DQI
+draw was less favorable (implied DQI cost ≈363.80e9, about 2 errors), so the realized
+score is 27.00209. It is still +1.5617 over the previous best 25.44039 and +1.5973
+over 25.40482.
 
 DQI is the cutoff-17 variant: it excludes weights 15–16 with additional
 probability ≈1.525e-7/shot (expected 0.0156 errors per 102,400-shot draw).
@@ -33,4 +36,4 @@ would raise DQI cost by 0.46% and still leave GM ≈27.03.
 - 18 files; 463,378,740 bytes uncompressed; 47 MB compressed.
 - Previous submission 58290992 completed at **25.44039** (392k DQI swap);
   this package supersedes it.
-- **Submission ref**: 58299045 (2026-11-13 06:40 UTC), status PENDING at submission time.
+- **Submission ref**: 58299045 (2026-11-13 06:40 UTC). **COMPLETE, publicScore 27.00209**.
