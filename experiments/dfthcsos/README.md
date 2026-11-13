@@ -1,11 +1,10 @@
 # dfthcsos（化学）研究入口
 
-当前采用（main 已提交 `58256166`）：**`f21b8a87` + Maoxin v22 4,097-Toffoli/pass loaders**，
-字表 `8afd4c67`，形状 `(8,143,44)`；T=14,856、Q=427、λeff=46.9073833，
-本机 78,080-shot **PASS 297,557,548.71**，e1=e2=0.01999998 Ha。
-
-上一版 `8afd4c67` + Maoxin v22 4,097 为 297,558,526.59；更早 Maoxin303 298,720,881.30、
-Lera 298,942,333.64、P0 299,497,670.48。
+当前采用（main 已提交 `58299045`，Kaggle public **27.00209**）：公开化学件
+`6418ec8e…a77f`，**4,074 T/pass**，Q=427，λeff=46.907347493481，T=14,810，
+官方 78,080-shot **PASS 296,635,967.5936**（e1=0.0196103713、e2=0.0199987799）。
+本线最后一版是 `f21b8a87` + Maoxin v22 4,097 loader，297,557,548.71；更早
+Maoxin303 298,720,881.30、Lera 298,942,333.64、P0 299,497,670.48。
 
 ## 已关闭方向
 
@@ -15,14 +14,12 @@ synth/synth2、公开集 survey 的完整数字与放弃原因见
 [CLOSED_RESEARCH.md](CLOSED_RESEARCH.md)；系统性复盘见
 [20261110_arch_review](20261110_arch_review/README.md)。
 
-2026-11-12 的 loader 结构搜索（全部静态代理，未跑 78k）：
-[table_survey](20261112_table_survey/README.md)、[tree_search](20261112_tree_search/README.md)、
-[row_order](20261112_row_order/README.md)、[lowbits](20261112_lowbits/README.md)、
-[j6](20261112_j6/README.md)、[batch_group](20261112_batch_group/README.md)、
-[gauge_search](20261112_gauge_search/README.md)、
-**[loader_aware_train](20261112_loader_aware_train/README.md)（no-go：结构化 1% loader T
-要付 ~10 倍误差门的代价；真 loader = 80 缓存 AND + 214 product CCX/电路 = 4,097，
-表字 rank 15/15 已是最泛型）。**
+2026-11-12/13 的 loader 结构搜索（table survey、tree/row/batch/gauge、lowbits、J、
+product-set、full-support、ESOP、loader-aware train、R=7、C 截断）全部 no-go，
+详细文档与产物已删除；关键数字与放弃原因见 `ABANDONED.md` 和 main
+`docs/abandoned-research.md`。其中 loader_aware_train 的结论保留：
+结构化 1% loader T 要付 ~10 倍误差门代价；真 loader = 80 缓存 AND + 214 product
+CCX/电路 = 4,097，表字 rank 15/15 已是最泛型。
 
 ## 可复用载体（保留）
 
@@ -36,3 +33,10 @@ synth/synth2、公开集 survey 的完整数字与放弃原因见
 
 - (8,143,44) 的 T/Q/λeff 已接近局部最优；B 轴与 7-bit 都被精度门否决。
 - 下一刀只能是新 factorization / 新训练范式，属独立大工程。
+
+## 2026-11-13 停止研究
+
+公开化学件 4,074 T/pass + 296.64M 已优于本线 4,097 loader + 297.56M（+0.31%）。
+训练盆地在 38–40 mHa，距 20 mHa 门约 2×；loader 4,089 已逆向到机制层，本仓库
+构造器无法在 ≤4,089 落地。继续需要新 factorization / 新训练范式，停止推进。
+总览与放弃原因见 main `docs/abandoned-research.md`。

@@ -69,13 +69,46 @@
 - `20261106_train_r5`：`seed_numpy.py`（种子生成）。
 - `20261110_gputrain`：`slim_train.py` + `fastfit.py` + `prob_r5.npz`（训练/拟合栈）。
 
+## 2026-11-12/13 追加关闭（详细目录已删除，数字保留）
+- **coded2**（`20261112_coded2`，387M artifacts）：e1 22.65 / e2 34.60 mHa（门 20.0）；
+  本仓库 loader 对同表复现 4,612/pass，最好 ~307.6M。精度与 loader 差距双否。
+- **R=4 C 截断联合**（`20261112_ctrunc_joint`）：C=110 连续原子 18.89 mHa 过门，
+  但 rows=1,096 需 11-bit loader，成本 325–337M（+9.5–13.4%）；B=255 下成本无解。
+- **R=7 / (R,C) 重分区**（`20261112_r7`、`20261112_rc_shape`）：R=7 loader
+  4,672–4,677 T/pass，成本 311.9–327.1M；门内形状 basis 1,020–1,287，R=7 不足。
+- **loader 结构搜索**（tree/row/batch/gauge/lowbits/J）：
+  当前树/行序/gauge 已最优；J=5 最优但比当前 +14.07%；lowbits=3 总账仅 −0.9%
+  且 λeff 更差；tree_real 用自己的构造器重建同表 5,414 T/pass（公开 4,089）。
+- **loader product-set/full-support/ESOP**（`20261112_loader_productset` 等）：
+  “4089→3881 T/pass、288.90M” 是 z=0 假象，官方 `evaluate_circuits` 以
+  `uncorrected phase` REJECTED；full-support 需 8 product/bit（不是 1）；
+  输出基变换是严格零收益；gate-level 可删 T 实测 0。
+- **loader-aware 训练**（`20261112_loader_aware_train`）：真 loader = 80 缓存 AND +
+  214 product CCX = 4,097；结构化 1% loader T 要付 ~10× 误差门代价；表字 rank 15/15
+  已是当前构造器最泛型。no-go。
+- **其余形状/训练**（`20261112_table_survey`、`group_search`、`j6`、`jbatch`、
+  `loader_re`、`loader_opt`、`kaggle_r4_gate`、`kaggle_r4_ctrunc_gate`）：
+  均无 ≥2.5% 收益或成本/误差否决；关键数字已在本文件与 main
+  `docs/abandoned-research.md`。
+- **未完成项**（`20261113_cfix`）：只有 `run.py`，无 README/结果/候选，未纳入研究结论；
+  随本目录删除。
+
+## 2026-11-13 停止研究
+公开 4,074 T/pass + 296.64M 化学件已略优于自研 `f21b8a87` + 4,097 loader
+（297.56M，+0.31%）。`(8,143,44)` 的 T/Q/λeff 已接近局部最优；训练盆地 38–40 mHa
+距 20 mHa 约 2×；loader 4,089 已被逆向到机制层，本仓库构造器无法在 ≤4,089 落地。
+继续需要新 factorization/新训练范式，停止推进。总览见 main `docs/abandoned-research.md`。
+
 ## 删除清单
 - `experiments/dfthcsos/` 下除本文件、`README.md`、`CLOSED_RESEARCH.md`、
   `20261110_arch_review/`、`20261106_train_r5/`、`20261110_gputrain/` 外全部目录
-  （含 7bit_probe/shape_probe/mbu_probe/public_survey/r3_probe/r8_basis/synth/synth2/
-  k0hand/lera_deep/lera11x/p0_gauge/gpu_newshape）。
-- `artifacts/` 下删除 `20261111_r3_probe/`（99M）、`20261111_shape_probe/`（380M）、
-  `20261111_survey/`（52M）、`20261110_gpu_newshape/`、`20261110_p0_gauge/`、
-  `20261111_lera11x/`、`20261111_maoxin303/`、`20261111_recon_verify/`、
-  `20261111_7bit_probe_output.txt`、`20261111_mbu_probe_output.txt`；
-  `20261110_gputrain/` 只保留 `prob_r5.npz`。
+  （含 20261112 的 loader/shape/tree/group/j6/jbatch/coded2/rc_shape/r7 等全部
+  以及未完成的 20261113_cfix）。
+- `artifacts/` 下删除 `20261112_coded2/`（387M）、`20261112_rc_shape/`（405M）、
+  `20261112_ctrunc_joint/`（71M）、`20261112_tree_real/`（54M）、`20261112_jbatch/`（47M）、
+  `20261112_r7/`、`20261112_loader_re/`、`20261112_loader_aware_train/`、
+  `20261112_group_search/`、`20261112_j6/`、`20261112_lowbits/`、
+  `20261112_loader_productset/`、`20261112_loader_esop/`、`20261112_gauge_search/`、
+  `20261112_tree_search/`、`20261112_table_survey/`、`20261112_row_order/`、
+  `20261112_batch_group/`、`20261112_kaggle_r4_gate/`、`20261112_kaggle_r4_ctrunc_gate/`；
+  `20261110_gputrain/` 保留训练栈。
