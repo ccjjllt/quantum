@@ -21,3 +21,14 @@ Public Frontier `7c10edba` 95,430.78、Syed V9 约 97,747.22。
 - 62Q 的局部优化面（单删/辛秩/HMR/脏借用/T 融合/重排序/跨守卫缓存/均值条件化/splice）
   已全部饱和，公开前沿只剩跨 family splice 与整段重写。
 - 61Q 的纯重标号不可能；值级“重算代替存值”与 S1 shift-select 降级仍是独立大工程。
+
+## 2026-11-13 停止研究
+
+公开 46Q invsqrt `321aff83…35177` 已把成本降到 **80,162.73**（27.078 trio，Kaggle
+public 27.00209），比本线 `9c708f7b`（62Q，93,555.26）低 **14.3%**。62Q 局部面已
+实测饱和（S1/S2 0/305、旋转 0、prefix 167 T 已有 6.5× AND 复用），剩余收益需要
+新算法家族，停止推进。
+
+已关闭实验的详细文档、脚本和全部 invsqrt artifacts 已删除；总览与放弃原因见
+main `docs/abandoned-research.md`。保留 `20261110_arch_review/`、
+`20261113_retention/retain.py`、本文件与 `ABANDONED.md`。
