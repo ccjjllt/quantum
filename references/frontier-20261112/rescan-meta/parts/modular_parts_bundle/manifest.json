@@ -1,0 +1,37 @@
+{
+  "evidence_policy": "invsqrt static and scoped local cut evidence; chemistry recorded exact word transitions and accuracy ledger; DQI recorded tagged stages with sampled resource summaries; no new verifier; one exact HW-25 assembled KMB has local and hosted official verifier PASS",
+  "families": {
+    "chemistry": {
+      "files": {
+        "chemistry_accuracy.jsonl": "339e8f50943c8b53160144ef0e819db1ff550686683abc3e256f52e41ce8ce31",
+        "chemistry_best_control.jsonl": "8fc310fc05fd34fc09d0986dd2d7231dfd24723f77e1815514ca90d676c8d409",
+        "chemistry_factorizations.jsonl": "dd5369167ebad918de7fd3adef417ca147d310980191f7df89d04556482bbee7",
+        "chemistry_modules.jsonl": "71a4171955f008e8edc5f5a1a6751a1f428e41cdd8e7f7ce91016af9a7033680",
+        "chemistry_word_tables.jsonl": "50481f2e1e538dd033678694ee3fd65644a2795f231779cbb6f98cc45c87d1ab",
+        "manifest.json": "e0ace9ce0159b808961fe6c67e226b76707f1cbb383675f3daf4e15637124451"
+      },
+      "source_manifest_sha256": "e0ace9ce0159b808961fe6c67e226b76707f1cbb383675f3daf4e15637124451"
+    },
+    "dqi": {
+      "files": {
+        "dqi_modules.jsonl": "3cf5591ae682ddbc1e68ce6eb11cffc8e02f0aea359e89ae5532efc03472a3e4",
+        "dqi_source_edges.jsonl": "2b3ed5e59d1d6d92794a3a95a59328d578812e0f63d3f5f5c54652eb2b9d8e45",
+        "dqi_sources.jsonl": "3524e24703efbf54ddee0b80815a2a81675a3b2a88590b0a32102e660a9a9a9a",
+        "manifest.json": "8cd90430fd6f814351c724024b3dbcdbd38736a53faa1b911d59beeff7e82402"
+      },
+      "source_manifest_sha256": "8cd90430fd6f814351c724024b3dbcdbd38736a53faa1b911d59beeff7e82402"
+    },
+    "invsqrt": {
+      "files": {
+        "cross_source_joins.jsonl": "9e2a6c77f2bc15e694abdee352cd52cae36d734ca7e3e748079748730166090c",
+        "cuts.jsonl": "7f87d2344aa64e6b24da6c260bbaa65a2722cd5784cae2a5651d7ff85bb87db2",
+        "manifest.json": "9a6ca9cc19b8e853d13bf77feaf6d58d6a9a9790f138af07d54a0759c2cdbc30",
+        "modules.jsonl": "1384989be42cd713be515c9b8da8d257a5a890b42744fc15291d81b042d11b62",
+        "source_edges.jsonl": "559fb19a7736c86644aded94a2d6304addf782c1aecc8e10e9418e260e58306c",
+        "sources.jsonl": "70148d3a34904ded6a689d8577fe2ed3a1a355ffac4324df9c921f0118280871"
+      },
+      "source_manifest_sha256": "9a6ca9cc19b8e853d13bf77feaf6d58d6a9a9790f138af07d54a0759c2cdbc30"
+    }
+  },
+  "schema": "vqcc-modular-parts-bundle-v2"
+}

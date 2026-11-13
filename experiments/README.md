@@ -1,6 +1,13 @@
 # 实验记录
 
-main 保留历史实验和公开组合装配记录。新增 invsqrt、化学、DQI 研究分别在 `.worktree/invsqrt`、`.worktree/dfthcsos`、`.worktree/dqi` 的对应 `codex/` 分支开展；提交包与回执由 main 管理。
+> 2026-11-13：三条自研线（invsqrt、DQI、dfthcsos）已停止推进。main 只保留
+> `frontier/20261112_rescan/` 这一份公开前沿来源记录；历史实验目录已删除，
+> 概况、放弃原因和删除清单见 [docs/abandoned-research.md](../docs/abandoned-research.md)。
+> 各研究分支只保留入口 README、`ABANDONED.md`、系统性复盘和可复用载体。
+
+main 保留公开前沿来源和 submission 回执。若未来恢复研究，新增 invsqrt、化学、DQI
+实验分别写入 `.worktree/invsqrt`、`.worktree/dfthcsos`、`.worktree/dqi` 的对应
+`codex/` 分支；提交包与回执由 main 管理。
 
 这里按 `invsqrt`、`dqi`、`dfthcsos` 分别保存研究笔记、小型探索脚本和结果。先完成实验，再决定是否值得抽成公共代码；不为一次性探索搭建测试或门控体系。
 

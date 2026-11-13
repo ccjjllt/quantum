@@ -6,12 +6,12 @@
 
 ## 分支与本地工作区
 
-| 职责 | 分支 | 本地目录 | 当前研究入口 |
+| 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 本页及 `submissions/` |
-| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | [Syed V9 研究](.worktree/invsqrt/experiments/invsqrt/20261106_syed_v9/README.md) |
-| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | [Syed V9 研究](.worktree/dfthcsos/experiments/dfthcsos/20261106_syed_v9/README.md) |
-| DQI | `codex/dqi-research` | `.worktree/dqi/` | [Syed V9 研究](.worktree/dqi/experiments/dqi/20261106_syed_v9/README.md) |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 27.00209（ref 58299045） |
+| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | 已停止；见 [总览](docs/abandoned-research.md) |
+| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | 已停止；见 [总览](docs/abandoned-research.md) |
+| DQI | `codex/dqi-research` | `.worktree/dqi/` | 已停止；见 [总览](docs/abandoned-research.md) |
 
 工作区链接用于本机浏览，`.worktree/` 不进入 Git。三条研究线保留共同历史，新增研究只写入各自工作区。
 官方数据、原始公开包和已有 Python 环境可只读共用；每条研究线的候选和日志写入自己的 `artifacts/`。
@@ -37,30 +37,42 @@
 | 2026-11-11 | [Maoxin v22 4,097T 化学 loader（只换 loader）](submissions/20261111_maoxin4097/README.md) | 58239559 | 25.36085，COMPLETE |
 | 2026-11-12 | [25.367 前沿安全组合（新 invsqrt + 化学 refit，DQI 不换）](submissions/20261112_public_25367/README.md) | 58256166 | 25.38868，COMPLETE |
 | 2026-11-12 | [eae396ba DQI 替换（公开前沿 25.39570）](submissions/20261112_eae_253957/README.md) | 58265561 | 25.39570，COMPLETE |
+| 2026-11-13 | [392k DQI swap（公开 392k 解码器）](submissions/20261113_392k_swap/README.md) | 58290992 | 25.44039，COMPLETE |
+| 2026-11-13 | [27.078 public-frontier trio（46Q invsqrt + 889Q DQI + 4,074T chem）](submissions/20261113_27_078/README.md) | 58299045 | **27.00209，COMPLETE** |
 
-当前采用组合为 **eae396ba DQI 替换（本账号 `58265561`，COMPLETE 25.39570）**：
-invsqrt `9c708f7b`（93,555.26）、DQI `eae396ba`（373.53e9；96-draw 期望
-373.8565e9）、化学 `f21b8a87` + Maoxin v22 4,097-Toffoli loader（297,557,548.71）。
-52 个 paired seed + 96-draw manifest 显示 eae 期望成本比 `cd71c482` 低 **0.083%**
-（paired mean −0.082843%，stderr 0.0000060%；失败 seed 相同）。本机 GM
-**25.39570057** 与线上 **25.39570** 一致；当前 public 名次约第 **369**，因为
-25.3957 的公开 plateau 已扩大到数百队。上一版 `58256166`（25.38868）保留为历史
-对照。机器可读来源和口径见 [public-baseline.json](references/public-baseline.json)。
-上一版 Grimoire 33（`58235797`，25.33133）保留为历史对照。
+当前采用组合为 **27.078 public-frontier trio（本账号 `58299045`，COMPLETE 27.00209）**：
+invsqrt `321aff83…35177`（46Q，80,162.732141）、DQI `7cbe8ecf…14cd9`
+（889Q，360,733,280,431.94）、化学 `6418ec8e…a77f`（427Q，296,635,967.5936）。
+三件均用未改动的官方验证器独立全量 PASS；本机默认 salt GM **27.0783908611**，
+公开 draw 的 DQI 约 2 次失败，实际 public **27.00209**，比上一版 25.44039 高
++1.5617。private draw 预期 GM 约 27.0–27.08。机器可读来源和口径见
+[public-baseline.json](references/public-baseline.json)。
+历史组合与证据保留在 `submissions/*/README.md`；原始大产物已按
+[已停止研究总览](docs/abandoned-research.md) 清理。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
-gengsr 25.2268 在 2026-11-10 至 11-11 间曾为比较基线（本账号提交 `58181743`，invsqrt 本机重验 PASS 94537.59），现保留为历史对照；
-Syed V9 与 Public Frontier 组合同样保留为历史对照，不得将其旧增量直接累加到新基线上。
-共享原始电路在 `artifacts/20261108_public_frontier/release/`，来源快照在相邻 `source/`。
-本次直接提交未修改的原始 `submission.zip`（18 个文件 SHA-256 已核对），没有混入本地研究补丁，提交前未在本机重跑全量官方验证。
-上一版 Syed V9（`artifacts/20261106_syed_v9/release/`）保留为历史对照，不能把基于 Syed V9 的旧增量直接累加到新公开前沿上。
+gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧组合均保留为历史对照，
+不得将其旧增量直接累加到新基线上。
 
 历史组合与证据：
 
-- `artifacts/20261030_public_best/`：v45_oz 公开输入、归属、首次提交记录；化学在本机完成默认规模官方验证，成本337,991,954.0482345。
-- `experiments/20261030_public_best/`：该历史公开组合的来源清单与装配代码，保留原路径便于复现。
-- `artifacts/20261101_public_hw06/`：HW-06 来源及提交记录，本机未全量复跑。
-- `artifacts/20261104_submission_refresh/`：Heliosli V5 固定版本、作者日志和平台回执。
-- `artifacts/20261105_submission_maoxin_v2/`：Maoxin V2 本次提交的机器可读回执。
+- 每个历史提交的机器回执、来源、SHA-256 和验证范围保留在 `submissions/<日期_方案>/README.md`。
+- 原始候选、公开源解包、重复 ZIP 和中间产物已于 2026-11-13 清理；当前最佳候选固定为
+  `submissions/20261113_27_078/submission.zip`（SHA-256 `63c5a077…657c`，18 文件）。
+- 官方公开源清单保留在 `references/frontier-20261112/`；被删除目录的概况、大小和放弃原因
+  见 [已停止研究总览](docs/abandoned-research.md)。
+
+## 已停止研究（2026-11-13）
+
+三条自研线（invsqrt、DQI、dfthcsos/化学）已停止推进：最后一版均被公开前沿超过，
+最近的判决实验全部 no-go，剩余收益需要换算法族/新训练范式。各研究分支只保留入口 README、
+`ABANDONED.md`、系统性复盘和可复用载体；已关闭实验的详细文档、脚本与大型 artifacts 已删除。
+
+- invsqrt：自研 `9c708f7b` 62Q/93,555.26 → 公开 46Q/80,162.73（低 14.3%）。
+- DQI：自研 `eae396ba` 892Q/373.53e9 → 公开 889Q/360.73e9（低 3.4%）。
+- 化学：自研 4,097 loader/297.56M → 公开 4,074 loader/296.64M（低 0.31%）。
+
+完整概况、关键数字、放弃原因、删除清单与恢复口径见
+[已停止研究总览](docs/abandoned-research.md)。
 
 ## main 的治理约定
 
@@ -85,12 +97,13 @@ macOS 使用 PyPI 原生 kickmix，不导入比赛数据包面向 Kaggle Linux �
 已有本地环境为 Python 3.12.13 / kickmix1.0.0；安装完成不代表全量验证通过。
 
 ```text
-.worktree/            三个独立研究工作区（不入 Git）
+.worktree/            三个已停止研究分支的入口/ABANDONED/复盘/可复用载体（不入 Git）
 data/competition/     官方原始数据和未修改的验证器（不入 Git）
 docs/research-map.md  比赛契约与公开资料的带日期快照
-references/          来源清单
-experiments/          main 的历史记录与公开组合装配；新算法研究在研究分支
-artifacts/            main 的公开输入、来源快照与提交证据（不入 Git）
+docs/abandoned-research.md  已停止研究总览、放弃原因与清理记录
+references/          来源清单；frontier-20261112/ 保留当前最佳公开源清单
+experiments/          仅保留 frontier/20261112_rescan/；历史实验已清理
+artifacts/            历史大产物已清理（不入 Git）；当前最佳候选见 submissions/20261113_27_078/
 submissions/          最终 ZIP（不入 Git）及 README 回执
 scripts/             静态查看、手动验证和打包入口
 ```

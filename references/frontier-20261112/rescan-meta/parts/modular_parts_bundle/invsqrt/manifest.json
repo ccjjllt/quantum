@@ -1,0 +1,29 @@
+{
+  "evidence_scope": "source continuity exact; cross-source joins retain local evidence tier",
+  "files": {
+    "cross_source_joins.jsonl": {
+      "rows": 45,
+      "sha256": "9e2a6c77f2bc15e694abdee352cd52cae36d734ca7e3e748079748730166090c"
+    },
+    "cuts.jsonl": {
+      "rows": 186,
+      "sha256": "7f87d2344aa64e6b24da6c260bbaa65a2722cd5784cae2a5651d7ff85bb87db2"
+    },
+    "modules.jsonl": {
+      "rows": 140,
+      "sha256": "1384989be42cd713be515c9b8da8d257a5a890b42744fc15291d81b042d11b62"
+    },
+    "source_edges.jsonl": {
+      "rows": 94,
+      "sha256": "559fb19a7736c86644aded94a2d6304addf782c1aecc8e10e9418e260e58306c"
+    },
+    "sources.jsonl": {
+      "rows": 46,
+      "sha256": "70148d3a34904ded6a689d8577fe2ed3a1a355ffac4324df9c921f0118280871"
+    }
+  },
+  "host_sha256": "a15b0d73f720ec75cc7f5bfe1aac96902df241a3035302db74a8d4cf22ed3668",
+  "schema": "vqcc-modular-parts-v1-manifest",
+  "sibling_census_sha256": "17321c8d8ebfc4a97f284a0a9fbdce5e34d53b8e94add0fba78a4031642f7b23",
+  "source_manifest_sha256": "68d9697223f030f93332b36785c8e469251d1e379252f22fb060b1fadd4eaba6"
+}

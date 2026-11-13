@@ -1,0 +1,33 @@
+{
+  "assembly_best_sha256": "53a0595fe1959613e88760febc85a547222ff1e681cc198a923f7c5809fb3cfe",
+  "evidence_scope": "recorded chemistry parts ledger; bytes checked; no fresh verifier",
+  "files": {
+    "chemistry_accuracy.jsonl": {
+      "rows": 2226,
+      "sha256": "339e8f50943c8b53160144ef0e819db1ff550686683abc3e256f52e41ce8ce31"
+    },
+    "chemistry_best_control.jsonl": {
+      "rows": 1,
+      "sha256": "8fc310fc05fd34fc09d0986dd2d7231dfd24723f77e1815514ca90d676c8d409"
+    },
+    "chemistry_factorizations.jsonl": {
+      "rows": 225,
+      "sha256": "dd5369167ebad918de7fd3adef417ca147d310980191f7df89d04556482bbee7"
+    },
+    "chemistry_modules.jsonl": {
+      "rows": 1047,
+      "sha256": "71a4171955f008e8edc5f5a1a6751a1f428e41cdd8e7f7ce91016af9a7033680"
+    },
+    "chemistry_word_tables.jsonl": {
+      "rows": 34,
+      "sha256": "50481f2e1e538dd033678694ee3fd65644a2795f231779cbb6f98cc45c87d1ab"
+    }
+  },
+  "schema": "vqcc-chemistry-modules-v1-manifest",
+  "source_ledger_sha256": {
+    "angle_circuits.csv": "1ac810eb0389ea91d6a0db89718fd1e35c3b53fc736d4eeade2f672795aeb00c",
+    "compatibility.csv": "a42c8eec5d3680ec0a12f7900434a2932c3ec1c97f87e3979d883d682c84a270",
+    "factorizations.csv": "2eaefbba1ec65df561c400a1092e4def2ab81141fa247abf84f2859509e5005d",
+    "word_tables.csv": "6b734587c784685e81ccb3f4faa01eef15ebd92c878c55d3e8e84393539c0f46"
+  }
+}
