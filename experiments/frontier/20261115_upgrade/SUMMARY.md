@@ -57,3 +57,13 @@
 3. 若继续冲 27.4+：DQI 888Q 源码级重分配（+0.01–0.02）或 chemistry B=129
    全量重训（+0.3–0.4，高风险）。两者都需要新的 Kaggle 构建/验证会话。
 4. 不追公开榜第 31–146 名：其组件未公开，公开件天花板已确认。
+
+## 2026-11-15 18:03 UTC 进行中
+
+- `qingyu1232/qcc-chem-b129-full`（T4 GPU）已启动：从公开 (8,143,44) 表做 full-U
+  L-BFGS shrink，schedule `139x44,135x44,131x44,129x44`，`--fit 2500 --final 8000
+  --select impact --device`。这是 B=129 的关键判决；只看连续 error_2 是否足够低
+  （目标 ≤15 mHa），不通过就关闭 B<143 线。
+- `qingyu1232/qcc-chem-b139-shrink` 是 139 的快速闸门，但 B129 full 已覆盖它。
+- 两 run 均在 Kaggle，未在本机跑模拟；结果出来后只对通过点做 8-bit rounding、
+  loader build 和官方 78,080-shot 验证，且只有 GM ≥27.50 才打包提交。
