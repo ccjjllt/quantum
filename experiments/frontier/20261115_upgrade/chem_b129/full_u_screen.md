@@ -28,3 +28,10 @@ fails, the B<143 line is closed and the current 27.31193 submission remains best
 - 当前提交：`58350759` **COMPLETE 27.31193**，MCP 名次 **159 / 3053**。
   只有 B=129 连续 fit 的 error_2 足够低（目标 ≤15 mHa）才继续 rounding/build/verify；
   否则 B<143 线关闭，27.31193 保留。
+
+## 2026-11-15 19:xx UTC 状态
+
+- `qcc-chem-b129-full` 仍为 RUNNING，尚无 `list_notebook_session_output` 输出；
+  `get_accelerator_quota()` 显示 GPU time_used ≈ 1,131s。
+- 未读到最终连续 error_2；没有达到 GM 27.5 的候选，当前最佳仍是 27.31193。
+- 未在本机跑模拟；B=129 的运行和后续 build/verify 都在 Kaggle。
