@@ -1007,8 +1007,7 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   v2 的 4,033-Toffoli/pass 化学 + `821bf8d1` DQI + 46Q invsqrt。
   本账号提交 **58349843**，MCP **COMPLETE 27.30661**。
 - 进一步替换 invsqrt 为 HW-26 `1ba197b02771`（46Q，78,673.569211；未修改官方
-  verifier 200,540,928 shots PASS，worst/tol 0.9986660009），提交 **58350759**，
-  预期 **27.31193**，pending。
+  verifier 200,540,928 shots PASS，worst/tol 0.9986660009），提交 **58350759**，**COMPLETE 27.31193**。
 - 公开可复现上限 **27.31214**（再把化学权重换成 npz `e52b7cdd`，仅 +0.0002）；
   公开榜 27.31+ 的更高分主要来自 DQI 抽签/私有组件，不能直接用公开件复现。
 - DQI retention `max_hops=0/1/2` 实测均只宿主 241 个乘积，逐字节复现 `821bf8d1`；

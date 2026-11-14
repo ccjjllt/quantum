@@ -5,7 +5,7 @@
 | 项 | 值 |
 |---|---|
 | 第一次提交 | ref **58349843**，`maoxin123/qcc-v27-4033-toffoli-coded-word-chemistry` v2 输出，MCP **COMPLETE 27.30661** |
-| 升级提交 | ref **58350759**，HW-26 invsqrt `1ba197b02771` + DQI `821bf8d1` + maoxin 4,033 chemistry，预期 **27.31193**，pending |
+| 升级提交 | ref **58350759**，HW-26 invsqrt `1ba197b02771` + DQI `821bf8d1` + maoxin 4,033 chemistry，**COMPLETE 27.31193** |
 | 包 | `submissions/20261115_public_2731/submission.zip`，SHA-256 `46d53bde…c933`，18 文件 |
 | 独立验证 | HW-26：未修改官方 invsqrt verifier，200,540,928 shots **PASS**，78,673.56921101942，worst/tol 0.9986660009 |
 
@@ -51,7 +51,7 @@
 
 ## 下一步（按收益/可行性）
 
-1. 等 58350759 的排行榜回执；若 27.31193 完成，保留为当前最佳。
+1. 58350759 已 **COMPLETE 27.31193**，保留为当前最佳。
 2. 用 `junmiaotiao` npz `e52b7cdd` 替换化学权重，可到 27.31214（+0.0002，零风险，
    但需要重新打包/提交；不建议为此单独消耗提交次数）。
 3. 若继续冲 27.4+：DQI 888Q 源码级重分配（+0.01–0.02）或 chemistry B=129

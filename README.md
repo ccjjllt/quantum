@@ -42,9 +42,9 @@
 | 2026-11-13 | [392k DQI swap（公开 392k 解码器）](submissions/20261113_392k_swap/README.md) | 58290992 | 25.44039，COMPLETE |
 | 2026-11-13 | [27.078 public-frontier trio（46Q invsqrt + 889Q DQI + 4,074T chem）](submissions/20261113_27_078/README.md) | 58299045 | **27.00209，COMPLETE** |
 | 2026-11-15 | [公开 27.30661 包（maoxin v27 4033 chem + 821bf8d1 DQI + 46Q invsqrt）](submissions/20261115_public_2731/README.md) | 58349843 | **27.30661，COMPLETE** |
-| 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | 已提交，预期 27.31193，pending |
+| 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | **27.31193，COMPLETE** |
 
-当前采用组合为 **HW-26 升级包（本账号 `58350759`，预期 27.31193）**：
+当前采用组合为 **HW-26 升级包（本账号 `58350759`，COMPLETE 27.31193）**：
 invsqrt `1ba197b02771`（46Q，78,673.569211；未修改官方 verifier 200,540,928 shots PASS，
 worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 errors）、
 化学 maoxin 4,033 loader（427Q，294,991,455.82，T=14,728）。
@@ -70,7 +70,7 @@ gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧�
 
 公开前沿已从 27.078 升到 27.3066：2026-11-15 提交 `58349843`（maoxin v27
 4,033 chemistry + `821bf8d1` DQI + 46Q invsqrt），MCP 回执 **COMPLETE，27.30661**。
-随后提交 `58350759`（HW-26 invsqrt `1ba197b02771` + 同 DQI/化学），预期 **27.31193**。
+随后提交 `58350759`（HW-26 invsqrt `1ba197b02771` + 同 DQI/化学），**COMPLETE 27.31193**。
 HW-26 已在 Kaggle 用未修改官方 verifier 独立 PASS（200,540,928 shots）。
 研究记录、公开前沿扫描和逐项判据见
 [experiments/frontier/20261115_upgrade](experiments/frontier/20261115_upgrade/README.md)。

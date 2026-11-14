@@ -5,7 +5,7 @@
 | ref | 内容 | 状态 | Public Score |
 |---:|---|---|---:|
 | 58349843 | `maoxin123/qcc-v27-4033-toffoli-coded-word-chemistry` v2 的 Kaggle 输出 | COMPLETE | **27.30661** |
-| 58350759 | HW-26 invsqrt `1ba197b02771` + DQI `821bf8d1` + maoxin 4,033 chemistry | pending | 预期 27.31193 |
+| 58350759 | HW-26 invsqrt `1ba197b02771` + DQI `821bf8d1` + maoxin 4,033 chemistry | COMPLETE | **27.31193** |
 
 两版 ZIP 均为 18 文件。`58349843` 大小 49,292,293 B；`58350759` 大小
 49,292,319 B，SHA-256
@@ -25,7 +25,7 @@
 本机默认 salt GM 27.306613；实际 public **27.30661**（COMPLETE），比上一版
 58299045（27.00209）高 **+0.30452**。
 
-## 58350759（pending，预期 27.31193）
+## 58350759（COMPLETE，27.31193）
 
 只把 invsqrt 换成 **HW-26 `1ba197b02771`**（manwithacat/vqcc-hedge-wizardry v27，
 46Q，78,673.569211），DQI 和化学保持不变。
@@ -33,7 +33,7 @@
 - HW-26 独立官方验证（自建 Kaggle notebook `qcc-hw-26-invsqrt-verify`）：
   未修改 `verifier.py`，**200,540,928 shots PASS**，score 78,673.56921101942，
   worst/tol 0.9986660009，circuit SHA-256 与源件一致。
-- 组合预期 GM **27.31193**（+0.00532），已提交但尚未看到排行榜回执。
+- 组合 GM **27.31193**（+0.00532），MCP 回执 **COMPLETE，public_score 27.31193**。
 - 公开可复现上限为 27.31214（再把化学 npz 换成 `e52b7cdd`，仅 +0.0002）。
 
 ## 验证范围
