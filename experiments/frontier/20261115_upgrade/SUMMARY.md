@@ -86,3 +86,21 @@ so the fit should be <= ~12.5 mHa"。B=129 的 19.830 mHa 高出门槛 7.3 mHa�
 
 未做 8-bit rounding / loader build / 官方 78,080-shot 验证（第 1 步未过门槛，后续无意义）。
 当前最佳保持 **27.31193（ref 58350759；提交时 159/3053，复核 175/3055）**。
+
+## 2026-11-15 追加实测：DQI 无免费 qubit
+
+`qingyu1232/qcc-dqi-q888-probe`（CPU，COMPLETE）读到 `821bf8d1` 的原始日志：
+
+```
+num_qubits 889 num_bits 154157 static_toffoli_like 383414
+distinct_indices_used 889 min 0 max 888
+UNUSED_IN_0..Q-1 0 []
+FREE_SHRINK_IF_RENUMBERED 0 (Q -> 889 )
+usage_least10 [(13606,15),(14180,23),(14852,11),(15232,35),...]
+```
+
+889 条 wire 全部在用，`0..888` 无空洞，最冷门的一条也有 13,606 次操作。
+→ "声明宽度 > 实用宽度，重编号白拿一个 qubit"（+0.0205 GM）**不存在**。
+889→888 只能走真实 release-and-recompute（预算 ΔT ≤ 862，源码级 7 族改造，预期 +0.0095…+0.0205）。
+
+详见 `dqi_plan.md` §8。
