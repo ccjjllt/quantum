@@ -1,0 +1,25 @@
+DF-THC compact groups pipeline
+Copyright 2026 marculera (Kaggle)
+
+Licensed under the Apache License, Version 2.0 (see LICENSE). The weights, seeds and tables in this dataset were
+trained here and derive from the competition's FeMoCo Hamiltonian; the arrays H1_I and Hsym_lower in them are the
+hosts' fixed shifts, as published in the starter kit (sohier/verifiable-circuit-compilation-starter-kit).
+
+Parts of the pipeline in dfthc_refit/ adapt or reimplement public work. Each module's docstring names its source:
+
+- refine.py: adapted from chemistry_refine.py of ahmedberatozer/quantum-ai-df-thc-group-compression (notebook
+  code, Apache-2.0), which credits kozykappa's sparse column rotations and anazemcev's effective-norm method.
+- quantize.py, experiments/quantize_rm.py: ahmedberatozer's staged progressive rounding and the fine start of its
+  schedule (vqcc-v8-components); michaelrustad's L-BFGS stages (hybrid quantization). Own code.
+- experiments/rmcode.py: somejoint's coded low bit (qcc-our-chemistry-b143-c60-xor2, Apache-2.0). Own code.
+- tensorqrom.py: mrmeows' exact lookup emitter design (qcc-1375-open-circuits, Apache-2.0), heliosli's scratch bit,
+  somejoint's codes. Own code.
+- fourqrom.py: ANF loading and erasure as in the public banked-QROM code (banked_lab.py in ahmedberatozer's
+  group-compression notebook, after Kozykorpesh and Sumit Chongder). Own construction.
+- onebody.py: the role of mrmeows' refresh_one_body8.py; own code. polish_words.py: phucthaiv02's exact word-level
+  coordinate descent after rounding; own version.
+- refit_weights.py: phucthaiv02's joint (w, W) refit at fixed words (qcc-verified-portfolio-df-thc-retraining-study,
+  Apache-2.0); our own implementation. experiments/refit_al.py puts it in augmented-Lagrangian form.
+
+No file in this dataset is copied from a dataset under other terms. Tables derived from ahmedberatozer's
+factorization datasets (license "other") are not included; the notebook records their measured values instead.

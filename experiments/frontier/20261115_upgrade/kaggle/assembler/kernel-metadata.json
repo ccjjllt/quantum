@@ -1,0 +1,20 @@
+{
+  "id": "qingyu1232/qcc-frontier-2731-assembler",
+  "title": "QCC 27.31 frontier assembler",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "heliosli/qcc-circuits-live",
+    "maoxin123/qcc-chemistry-4033-toffoli-loaders",
+    "ahoirg/qcc-portfolio-gm-27-28999"
+  ],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": []
+}

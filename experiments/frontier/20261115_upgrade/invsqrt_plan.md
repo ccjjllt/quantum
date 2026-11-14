@@ -1,0 +1,394 @@
+# invsqrt 前沿评估：46Q 增量盘点与 Q45 判决（2026-11-15）
+
+范围：只做**只读**核查（下载公开件、静态读电路、读生成器源码），未跑官方 verifier，
+未做任何量子模拟，未提交。所有"PASS/成本"数字都标了来源；本文件没有一条是本机验证结果。
+
+---
+
+## 0. 判决（先给结论）
+
+1. **公开最好件不是我们现在用的 `e46d90c3`，而是 `1ba197b02771`（manwithacat HW-26）。**
+   46Q、static 1,550、mean 1,478.75、cost **78,673.57**（作者本机官方 verifier PASS）。
+   我们的 `e46d90c3` 是 78,719.529147，贵 **1 个 Toffoli（= 46 cost）**。
+   换成它是**唯一确定可拿**的增量：GM **27.30661 → 27.31193（+0.00532）**。
+   HW-26 已经包含 e46 的那一处 measured-CZ 改写（逐 op diff 证实，见 §2.3），不存在"两处合并"的额外收益。
+
+2. **公开空间不存在 Q < 46 的 invsqrt。** 497 件聚合集（manwithacat v125，2026-11-14 11:49）
+   里 invsqrt 的 Q 直方图最小是 46（6 件）；54 件 Atlas（2026-11-12 快照）最小是 62Q。
+   46Q 这一档的 6 件成本是 78,673.57 / 78,719.53 / 78,765.51 / 78,765.55 / 78,765.64 / 80,162.6~7。
+
+3. **Q=45 在当前架构下是负收益，而且不是"差一点"。**
+   公开已有三次 Q45 尝试（`asteriospanoras/qcc-27-30-what-works-what-fails-and-why`，2026-11-14），
+   结论是：46 线上最便宜的精确覆盖在 `4560ac0c` 上要 **+196 Toffoli**，在 `321aff83` 上要 **+257**。
+   1 个 qubit 的盈亏平衡是 **≤ 38 个 Toffoli**（`46·C / 45 = 38.03`）。所以 +196 意味着
+   cost 85,828（GM **−0.776**），+257 意味着 88,573（GM **−1.053**）。
+   触发点不是稳态宽度，而是 261 段瞬态里的 257 段由 alternating-carry adder 的进位线打开。
+
+4. **T 侧也已经饱和**（下面 §4 逐项）：33 个旋转是 2⁻⁴…2⁻³⁶ 的二进制阶梯（删一个就 2.3×
+   超出 margin，LP 重拟合只值 −0.08 cost）；64 行表受精度约束（margin 只剩 ≈20%）；
+   divider 578 已是该校验和结构的低点；严格 dead-write 扫描（含输入寄存器线、把 Z_POW 视为读取）
+   在 `e46d90c3` / `1ba197b0` / `321aff83` 上是 **0 处**。
+
+5. 因此**唯一还值得花的"研究级"Kaggle 实验**不是再去试 Q45，而是把 Q45 从"公开的发射级估算"
+   变成**分配器级判决**：一次 notebook（约 15–25 分钟 build）给出确定的分阶段超宽清单与每处最低补价。
+   gate 是 `Σ 最低补价 ≤ 38`。过则按 §6 建 Q45；不过就永久关闭 invsqrt 的宽度线，记录归档。
+
+---
+
+## 1. 当前口径（main 已提交的 58349843）
+
+| 项 | 值 | 来源 |
+|---|---|---|
+| 本账号上一版 GM（本机默认 salt） | **27.306613** | `experiments/frontier/20261115_upgrade/README.md`、本文件 §5 复算 |
+| invsqrt `e46d90c3` | 46Q、**78,719.529147** | maoxin v27 notebook 官方 verifier 输出 |
+| DQI `821bf8d1` | 889Q、360,209,905,486.02 | 同上 |
+| chemistry `3f864a7a` + 4,033 loaders | 427Q、294,991,455.82 | 同上 |
+| 参考成本 R_inv | **2,076,774.233715** | ahoirg v028 REF 与 maoxin v27 REFERENCE 一致 |
+| 参考成本 R_dqi / R_chem | 24,439,463,583,672.93 / 3,355,599,588.3155 | 同上 |
+
+GM = (R_inv/c_inv · R_dqi/c_dqi · R_chem/c_chem)^(1/3)。
+单项 1% 降本 → GM ×1.00334。
+
+`e46d90c3` 的静态结构（本机 `kickmix` 直读，未模拟）：
+
+```
+Q 46   ops 23,877   num_bits 387
+CCX 1413  CCZ 9  CSWAP 129   → static Toffoli-like 1,551
+其中 142 个 Toffoli 在 PUSH_CONDITION 块内 → 实际 mean = 1551 − 142/2 = 1,479.75
+T 1   generic rotation 33（另有 4 个 Clifford + 1 个 T 的 Z_POW，共 38）
+CX 13055  CZ 2225  HMR 1278  X 3267  SWAP 11
+```
+
+成本分解（可复算）：`C = 1479.75 + 1/4 + 231.294 = 1711.294`，`cost = 46·C = 78,719.53`。
+旋转项 **231.294 = 13.5% of C**，等价 33 个旋转每个 7.0095 Toffoli-equivalent（28.04 T）。
+由旋转项反推 phase margin ≈ **1.26×10⁸** units of 2⁻⁶⁴（worst/tol ≈ 0.797）；
+公开 post-mortem 给 `4560ac0c` 的是 `116,320,642 units`（0.813），生成器 `cost_model`
+默认 `margin_units64 = 124,370,688`（0.800）。三者同一档，本文用 ≈1.2×10⁸ / 0.80。
+
+> 注：`mizeroluckygall` 的 walkthrough 写 e46 的 worst/tol = 0.99867，与该口径不一致
+> （0.99867 会要求旋转项 ≈264、cost ≈80,224）。本文不采用该数字。
+
+---
+
+## 2. 公开检索：Q < 46 或 cost < 78,719.5
+
+### 2.1 数据源
+
+| 源 | 版本/日期 | 用法 |
+|---|---|---|
+| `manwithacat/vqcc-apache-public-circuits` | v125，2026-11-14 11:49，497 行 | `manifest.csv` 全表，Q/成本/作者/首发日 |
+| `asteriospanoras/qcc-circuit-atlas` | 2026-11-12，54 件 invsqrt | `circuits.csv`，Q/static Toffoli |
+| `manwithacat/vqcc-hedge-wizardry` | 2026-11-14 16:33 | HW-26 件本体 + `README`/`SHA256SUMS` |
+| `heliosli/qcc-circuits-live`、`junmiaotiao/qcc-frontier-20261114f`、`masonbradleygilhool/qcc-frontier-merge-v3` | 11-14 | 三者的 `invsqrt.kmb` 都是 `e46d90c3`（逐字节一致） |
+| `syed3000/vqcc-own-circuit-portfolio` | 11-12 | `invsqrt_source_zip`（生成器源码）+ `invsqrt.kmb` |
+| `xianyu3/vqcc-v52-asterios-invsqrt-source-20261114` | 11-14 | `base_submission/invsqrt.kmb` = `dcde7078`，含 v52 source receipt |
+
+### 2.2 结果（46Q 档全部）
+
+| SHA-256 | 作者 / 来源 | Q | static | mean | cost | 备注 |
+|---|---|---:|---:|---:|---:|---|
+| `1ba197b027713aac164056d12505c87f286c3fcd94f403c522073325763bf2f9` | manwithacat **HW-26**（hedge dataset，11-14） | 46 | **1,550** | **1,478.75** | **78,673.57** | **公开最低**，官方 verifier PASS |
+| `e46d90c36d1beb3ce7731a3e0b5c3659b3cda7f5f290b73c6c34513d96c005b6` | asterios（measured-CZ）/ 在 maoxin v27 中 | 46 | 1,551 | 1,479.75 | 78,719.529147 | 我们在用 |
+| `dcde70780434501912c5cc032c6dfad25ac694d50da4e8e45cdb65115baa81b2` | Atakan Aldemir fine-angle | 46 | 1,552 | 1,480.75 | 78,765.5131 | HW-26/e46 的母本 |
+| `e0db1ac70e25…` | ozertuu | 46 | – | – | 78,765.5451 | |
+| `4560ac0c017bf6d1bf27c73320f2e30c247a2a18143d58ff92a601f8bc20b218` | ahoirg 64-row table | 46 | 1,552 | 1,480.75 | 78,765.6368 | Q45 分析用的另一母本 |
+| `b6f7d70510e8…` | ThomasG | 46 | – | – | 80,162.6774 | |
+| `6530283ef666…` | PhilipLinHan | 46 | – | – | 80,162.6853 | |
+| `321aff83636214196daa9cbc9dcc9c5e12a155bcff8d9989e98b8cee40935177` | Syed Asad Ali v12 | 46 | 1,599 | 1,511.57 | 80,162.7321 | 生成器可复现该文件 |
+
+- 62Q 最好仍是 `9c708f7b9abc…` 93,555.2627（已被 46Q 线淘汰 14.3%）。
+- **Q < 46：0 件。** 聚合集 Q 直方图（invsqrt 87 行）：46×6、62×53、63×10、64×1、66、68、76、82、89、90、93、95、105、140、145、208、256、258、260×2、273。
+  Atlas 54 件：62×29、63×4、66、68、82×3、90×2、92×2、93×3、95、115×2、194、259、260×3、273。
+- **cost < 78,673.57：0 件。**
+
+### 2.3 `1ba197b0` 与 `e46d90c3` 的关系（逐 op diff）
+
+对 `dcde7078 → 1ba197b0` 做 op 级 diff，只有 6 个 hunk，全部是测量改写：
+
+```
+a[3239:3241] CX q37 q21 / CX q38 q21            → HMR q21 b61 + 条件 Z q37 / Z q38
+a[3252]      CX q38 q21                          → 条件 Z q38
+a[3288:3291] CX q16/q17/q18 q21                  → 条件 Z q16/q17/q18
+a[3292]      CCX q16 q20 q21                     → 条件 CZ q16 q20      ← 这条就是 e46 的 measured-CZ
+a[3297]      CCX q10 q11 q13                     → CCX q10 q11 q21 + CX q21 q13
+a[3399]      CCX q10 q11 q13                     → CX q21 q13 + HMR q21 b387 + CZ q10 q11 if b387
+a[3403]      HMR q21 b61                         → 删除（已提前）
+```
+
+即 **HW-26 = e46 的改写 + 额外的 measure-out（q10·q11 借 q21 中转后测掉）**，
+1,551 → 1,550。两者不能叠加，只能二选一，而 HW-26 严格更便宜 1 个 Toffoli。
+
+---
+
+## 3. 46Q 是怎么来的：stage / peak 账本
+
+生成器源码在 `syed3000/vqcc-own-circuit-portfolio` 的 `invsqrt_source_zip`
+（2,563,106 B；解包 561 个文件、19 MB）。构建链：
+`build.sh` → `tools/build_variant.py`（`builder.set_max_qubits(Q)`，超宽即抛异常）
+→ `tools/pipeline.sh`（held-AND / affine / Z 合并的全域机械 pass + 精确全域证明）
+→ `agents/composer/post_inplace.sh`。`src/patches/PATCH_ORDER.txt` 末尾写死 `Q 46`。
+
+`src/work/c10/narrow/arithmetic_round2/native/candidate10/COMPLETE_GATE.json` 里有 **Q48 时代的
+peak ledger**（这是唯一公开的分阶段宽度账本）：
+
+| stage | data owners | scratch ≤ | peak |
+|---|---|---:|---:|
+| normalization | input 22 + flags 4 | 20 | 46 |
+| consuming_root | 22 + 4 | 13 | 39 |
+| first_loader | root 12 + residual 10 + flags 4 + D 13 + H 3 | 6 | **48** |
+| first_coefficient | + snapshot 1、H 5 | 3 | **48** |
+| product_forward | root 12 + word 16 + flags 4 + D 13 | 3 | **48** |
+| phase_endpoint_and_divider_inverse | root 12 + remainder 14 + history 13 + flags 4 | 5 | **48** |
+| second_loader | retained_root 8 + product 15 + flags 4 + D 13 + H 3 | 5 | **48** |
+| second_coefficient | retained_root 7 … | 3 | **48** |
+| inverse_product_after_v3_retirement | retained_root 6 + word 16 … | 5 | **48** |
+| v3_restoration | 7 + 16 … | 0 | 44 |
+| coefficient_inverse | 7 + residual 10 … | 5 | 45 |
+| root_decoder | restored_root 12 + residual 10 + flags 4 + A 13 + H 5 | 0 | 44 |
+
+Q48 → Q46 是**两轮"每阶段同时 −1"**，由 13 个 patch 模块完成（每条都在 docstring 里写清了
+它省的是哪根线）：
+
+| patch | 省的线 | 代价 |
+|---|---|---|
+| `patch_fwd_narrow.py` | normalization 局部峰 46 → **37**（奇数前缀测掉重算） | 0 Toffoli（同 18+1+32） |
+| `patch_w47_body.py`（MICRO47） | `a6 = v[11]` 在 prepare_H3_initial 后立刻 X 测，跨第一系数 forward/seed/product forward 都不在（coef1 的第 46 根线余量） | 0 |
+| `patch_coef2_q46.py` | 第二次系数 forward 把 D12 测掉（`D12 = H4^H3^D11·H3`），事后 1 个 Toffoli 重建 | **+1 Toffoli** |
+| `patch_proddisp.py` / `patch_coefdisp.py` | 前向每行的 rounding carry 提前释放（disposable carry） | 0 |
+| `patch_seedinv.py` | v0/v1/v3 跨整个 inverse product 退休，用 3 条 seed 行的逆恢复 | 0 |
+| `patch_h2ret.py` | H2 跨 inverse product 退休，3-AND 精确重建 | +3 |
+| `patch_hret_sat_s15k7a.py` | divider cleanup：history signs 13..15 在 phase endpoint 后退休，逐条按 SAT-AND 程序重建；cap=46 时末行 j12 走自适应 inverse_add | 少量 |
+| `patch_endpoint_v9e2.py` | endpoint 把 root bit **v9** 也跨 walk8 退休（v10 用 v9 程序的 1 个 AND 重建） | 少量 |
+| `q46_loaders.py` / `patch_ld_first20_56b8.py` / `patch_second46_c19_70nb1.py` | loader work cap 20 / 19 → 两个 loader 峰 46 | loader 由 56+70（128 行表）降到 **27+29**（64 行表） |
+
+**结论：46 不是"平均宽度"，是 7 个 stage 同时钉在 46。**
+要拿 Q=45，必须让 first_loader / first_coefficient / product_forward / second_loader /
+second_coefficient / phase_endpoint+divider-cleanup / inverse_product **同时**各让出 1 根线，
+而且每个都要一个新的精确重建程序。
+
+顺带一个结构性下界：root 之后 22 根 x 线变成 (v 12, h 10)，这是一个**双射**（v+h 就是 x 的
+另一种基），任何一根都不可退休；工作集最低是 D13 + H3 + flags4 = 20。所以
+**Q ≥ 42 是结构下限**，现在的 46 里只有 4 根是加法器/进位开销。理论上 Q44 可及，
+但每根的价格就落在下面这个数字上。
+
+### 3.1 已发射电路的实测宽度轮廓（本机静态，非模拟）
+
+`1ba197b0`：23,894 ops，其中 **18,559 ops（77.7%）恰好 46 根线同时在用**，
+且是**一整段连续区间**（op 2364 → 20922），不是散点。`e46d90c3` 同形（18,542，2364→20905）。
+这说明"峰值段"占全电路 3/4，不存在"只在几个 op 上冒一下"的便宜修法。
+
+### 3.2 公开的 Q45 三次尝试（同一结论，量化更强）
+
+`asteriospanoras/qcc-27-30-what-works-what-fails-and-why`（2026-11-14）：
+
+- `321aff83` 在 46 根线共 8,137 ops / 485 段；精确重调度（消 swap、重命名经典位、
+  提前 437 个测量）压到 1,792 units / 261 段，**其中 257 段由交替进位加法器的进位线打开**。
+- in-place adder 要 **+257 Toffoli**；`4560ac0c` 上最便宜的精确覆盖（rebuild + 单进位加法器）
+  要 **+196**。
+- 把 63 个输入才触发的 rare shift flag 藏进空闲线的仿射奇偶：**0 个候选**。
+- Q47 时"保留乘积"的精确打包：46 根线保留 0 个，47 根线保留 2 个（每根线值 38 个 Toffoli，
+  完全不划算）。
+
+**我的独立复核与之一致**（本机静态，未跑模拟）：严格 dead-write 扫描
+（窗口 = 上一次 HMR 到本次 HMR；把 `Z_POW`/`NEG` 视为对该线的读取；控制位/CZ 视为读取；
+不跳过输入寄存器线）在 `e46d90c3`、`1ba197b0`、`321aff83` 上都是 **0 处**。
+把 Z_POW 当"非读取"时会跳出 8 个窗口（全部是 q21 的旋转累加 gadget，ops 8063–8295），
+那 8 处都靠 `Z_POW q21 θ` 把值变成相位，**不可删**——这正是 asterios 说"旧窥孔扫描漏掉
+输入寄存器线才找到 1 处"的同一类误判。
+
+---
+
+## 4. T 侧逐项（每个杠杆的单价已算成 GM）
+
+单价（以 GM 27.306613、C = 1711.294 为基准）：
+
+| 动作 | 成本变化 | ΔGM | 备注 |
+|---|---:|---:|---|
+| −1 无条件 Toffoli | −46 | **+0.00532** | = HW-26 的全部价值 |
+| −1 条件 Toffoli（1/2 执行） | −23 | +0.00266 | 把 Toffoli 变成 HMR 条件门 |
+| −1 rotation | −322.4 | **+0.03718** | 每个 7.0095 T-eq |
+| −1 qubit（46→45） | −1711.29 | **+0.20079** | 盈亏平衡 = 38 个 Toffoli |
+| 46→44 / 43 / 42（0 Toffoli 代价） | — | +0.4076 / +0.6208 / +0.8407 | 纯理论 |
+
+### 4.1 表行数 64 → 32：不可行
+
+64 行表 = 6 个地址位 + 13 intercept + 7 slope 位，两个 loader 合成 27 + 29 = 56 Toffoli
+（原 128 行版 56 + 70 = 126，这正是 78,765.6 vs 80,162.7 的来源）。
+32 行把线性插值段长加倍 → 插值误差 ∝ h² 变 4×。当前 margin 只剩 ≈20%（1.2e8 / 621.1e6 units），
+4× 直接越界。要补回精度得多跑一次 Newton 细化 ≈ **+230 Toffoli**，净 −20 + 230 = **+210（GM −0.9）**。
+反方向 128 行也只省不到一次 Newton，且 loader 涨回 +70。**64 行是局部最优。**
+
+### 4.2 旋转/相位折叠：不可行
+
+33 个旋转的相位是精确的二进制阶梯 `2⁻⁴, 2⁻⁵, …, 2⁻³⁶` turns（本机枚举，见下表节选），
+这就是输出精度的位数，不是可压缩的冗余：
+
+```
+q21 2^-4 … 2^-2 (clifford)   q21 2^-3 (T)   q26 2^-17   q30 2^-36 = 1.4815e-11 turns
+```
+
+- 最小权重 `2⁻³⁶ turn = 2.685e8 units`，是 margin（≈1.2e8）的 **>2×** → 删任何一个都越界。
+- 公开 LP 重拟合（相位对角度是线性的，所以是精确 LP）：在 `4560ac0c` 上只值
+  `116,291,417 → 116,320,642`（cost −0.08），在 `9c708f7b` 上只值 2 units。
+- "删一个再重调其余"：32/33 infeasible；唯一 feasible 的那个反而变成 **79,369.55**（比 78,765.26 贵）。
+- 没有任何旋转落在条件块里（本机核对：38 个 Z_POW 中 0 个在 PUSH_CONDITION 内），
+  所以也不存在"让旋转只执行一半"的空间。
+
+### 4.3 Divider 578：结构已到位
+
+`candidate10` 的逐组件 Toffoli 账（`COMPLETE_GATE.json`）：normalization 94.75、root 192、
+**divider 578**、product 228.5、coefficient 118、seed 17.5、first/second loader 61+79、
+shared cleanup 9、phase endpoint 139，合计 1,548.75（Q48 版）。
+divider 占 static 的 37%，是最大单块。但它是"22 位被除数 / 12 位除数 → 12 位商"的
+逐位多项式商，578/12 ≈ 48 Toffoli/位；换成 Newton 倒数需要一次 ≈24 位乘法（≈576 AND，
+比整个 16×16 product 228.5 还贵 2.5×）再加修正，**不可能更便宜**。这和老 62Q 线
+"Newton-CORDIC 4.8×–28× 超预算"的结论一致。
+
+### 4.4 measurement-based uncompute：已用尽
+
+1,279 个 HMR、709 组条件相位、142/1,550 的 Toffoli 已经是条件门（这就是 static 1,550 →
+mean 1,478.75 的全部来源，正好 142/2 = 71.25）。严格 dead-write 扫描 0 处（§3.2）。
+唯一已知的剩余模式（measure-out，需要一段空闲线）已被 HW-26 用掉。
+
+---
+
+## 5. 候选清单与期望分数（按性价比排序）
+
+| # | 动作 | invsqrt cost | GM | ΔGM | 风险 | 工作量 |
+|---|---|---:|---:|---:|---|---|
+| A | 换成 `1ba197b02771`（HW-26） | 78,673.57 | **27.31193** | **+0.00532** | 极低（作者已 PASS） | 一次 notebook |
+| B | Q=45，补价 0 → 38 Toffoli | 77,008.24 → 78,718.24 | **27.50740 → 27.30676** | **+0.20079 → +0.00015** | 高（公开 3 次失败，最便宜覆盖 +196） | 数周生成器工作 |
+| C | 32 行表 + 一次 Newton（净 +210 T） | 88,379.53 | 26.27311 | −1.03351 | 高 | 数周（重拟合 + 重新证明） |
+| D | 再删 1 个旋转 | 已证不可行 | — | — | 公开：删一个再重调 = 79,369.55（比 78,765.26 贵） | — |
+| E | Q=45 按公开 +196 落地 | 85,828.24 | 26.53090 | −0.77572 | — | 不要做 |
+| F | Q=44/43（0 代价，仅供定级） | 75,296.94 / 73,585.65 | 27.71423 / 27.92743 | +0.40762 / +0.62082 | 需每个 stage 都让线 | — |
+
+A 是**唯一确定为正**的动作，但它只有 +0.005 GM（公开榜上大概是 0.005 分，不是 0.05）。
+B 是唯一 ≥0.1 的杠杆，但按现有证据 P(GO) 明显低于 10%，EV 量级只有 +0.01~0.02。
+
+---
+
+## 6. 推荐的单一 Kaggle 实验：`INV-45C`（分配器级 Q45 判决 + 第一次让线）
+
+**为什么是这个**：Q=45 的 +0.20079 GM 是整个 portfolio 里最大的单点杠杆
+（对照：化学 1 个 qubit = +0.078，DQI 1 个 qubit = +0.038）。
+公开结论（+196 / +257）是在**已发射电路**上做的重调度估算，它看不到 builder 的
+"这根线的用途"和"此刻有没有脏线可用"，因此既可能高估（有免费的 dirty borrow）
+也可能低估。一次 build 就能把这个不确定性消掉，成本是一个 notebook。
+
+### 6.1 输入（全部有 hash / 版本）
+
+| 输入 | 用途 | 关键 hash / 大小 |
+|---|---|---|
+| competition data（`kickmix/` + `verifiers/`） | build.sh 必需，且会校验 host 文件 | `kickmix.so` sha `c66b3216c4029e0cdfd09054306aa0feadf53ab2f50c1164e37f752874e5005e`；`verify_submission_invsqrt.py` sha `ddef520dec6b68d1cf0a6f328ddd36d79eb84570b9192cf3f7acaf073f06733a` |
+| `syed3000/vqcc-own-circuit-portfolio` | `invsqrt_source_zip` | 2,563,106 B；重建出 `321aff83…35177` |
+| `manwithacat/vqcc-hedge-wizardry` | 对照件 `circuits/invsqrt/1ba197b02771.kmb` | sha `1ba197b027713aac164056d12505c87f286c3fcd94f403c522073325763bf2f9`，198,631 B |
+
+### 6.2 步骤（CPU、internet off、一次会话）
+
+0. **工具链回归（必过）**：按原样 build（`PATCH_ORDER.txt` 里 `Q 46`），断言输出
+   sha256 = `321aff83636214196daa9cbc9dcc9c5e12a155bcff8d9989e98b8cee40935177`。
+   这一步证明源码树、host 文件、Python 3.13 环境都对；不通过就停。
+1. **加一段 10 行插桩**（不改任何 pinned 源）：在 `build_variant.build()` 里
+   `monkeypatch builder.alloc_qubits / free`，记录 `(调用序号, count, 当前 allocated 数,
+   调用栈里的 patch 模块名, CUT_HOOK 最近一次 label)`；并把 `set_max_qubits` 临时设为
+   `float('inf')` 之外的"软上限"：超过 45 时**不抛异常**，只记一条 `over` 事件并继续。
+   这样**一次 build 就拿到全部超宽点**，而不是每改一处重跑一次。
+2. **cap 放宽到 45 跑一次**，输出 `q45_census.json`：
+   - 每条 over 事件的 stage / 超宽根数 / 是谁申请的；
+   - 该时刻是否存在"脏线"（allocated 但 owner_trace 已无 live reader）→ 可 0 代价借用；
+   - 该时刻是否存在"可在别处重建的 live 值"（用 `agents/composer/p/*.json` 同款 SAT-AND 形式的
+     最便宜重建价；`src/tools/minand_sat.py` **未随源码发布**，需要按
+     `agents/normroot/q47_t2_rewrite.json` 的格式自己写一个最小 AND 搜索，k ≤ 4 的
+     exhaustive/DP 即可）。
+3. **判决行**：`Σ(每 stage 最低总补价, 含 loader work cap 降 1 的 Toffoli 涨价) ≤ 38 ?`
+   - `≤ 38` → GO：按 §6.3 建 Q45 候选，成本落在 **77,008.24（补价 0）… 78,718.24（补价 38）**，
+     GM **27.50740 … 27.30676**（补价越接近 38，收益越接近 0）。
+   - `> 38` → **NO-GO，永久关闭 invsqrt 宽度线**，把 census 归档进本目录。
+
+### 6.3 GO 分支的验证计划（唯一允许的验证口径）
+
+1. `bash build.sh` 自带：全域精确证明必须返回
+   `PASS_EXACT_NATIVE_TEXT_ALL_REQUESTED_INPUTS_ALL_HMR_TRANSCRIPTS`
+   （3,133,452 输入 × 全部 HMR transcript，1,268+ measurement variables）。
+2. 官方 verifier 原样、默认 batch：
+   `python verifiers/invsqrt/verify_submission_invsqrt.py <kmb>`（200,540,928 shots，2 个 salt：
+   默认 + `s1`）。要求 `PASS` 且 `score ≤ 78,719.53`（哪怕只低 1）。
+3. 只有 1+2 都过，才进 `submissions/`；不进 main 之前不写"已验证"。
+
+### 6.4 预期与 EV
+
+| 分支 | 概率（按公开证据估） | 结果 | ΔGM |
+|---|---:|---|---:|
+| GO 且补价 ≤38 | <10% | 77,008.24 … 78,718.24 | +0.2008 … +0.0002 |
+| NO-GO（补价 +196 一类） | ~90% | 关闭宽度线 | 0 |
+| EV | | | ≈ **+0.01 ~ +0.02**（不如 A 的 +0.00532 稳，量级同阶且能终结一条线） |
+
+**因此建议并行做 A（换 HW-26，稳拿 +0.005），把 INV-45C 当作"一次会话内给 Q45 定生死"的判决实验，
+而不是当作一个高胜率的生产任务。** 如果 INV-45C 判 NO-GO，invsqrt 就只剩 A，之后本任务不应再投入。
+
+---
+
+## 7. 风险
+
+1. **换件重抽**：invsqrt 的 HMR 结果由文件 hash 派生，所以同一文件的成本是确定的；
+   换文件 = 换种子 = 换分支抽样。200M shots 下 mean 的抖动约 ±0.001 Toffoli（±0.05 cost），
+   不影响 A 的判定；但 e46 → 1ba197b0 的 45.96 差距里没有运气成分（差 1 个 static Toffoli）。
+2. **精度余量**：e46/1ba197b0 的 phase margin ≈ 1.26e8 units（worst/tol ≈ 0.80）。
+   任何新的测量改写都会动相位；A 不需要改写，安全。任何 Q45 候选都必须重跑全域精确证明。
+3. **源码不完整**：发布的 `invsqrt_source_zip` 缺 `tools/minand_sat.py`（宽度工作的核心工具），
+   也缺 width2 的其它 hold-set 变体。Q45 的第一步实际上包含"重建这个搜索工具"，工时不能按
+   "改一个 patch"估。
+4. **公开扫描的时效**：本文件基于 2026-11-14/15 的快照。11-15 之后若有新公开件，
+   先按 §2.1 的三张表复核，再看是否有 Q<46 或 cost<78,673.57。
+5. **不要相信单 salt 的门级搜索**（本仓库已有 FAIL 记录）；任何删门候选要过全域证明，
+   不是抽样。
+
+---
+
+## 8. 本次验证范围（明确边界）
+
+- **执行过**：下载公开数据集/notebook 源码；`kickmix` 直读 `.kmb`（Q/op 统计/Z_POW 角度分类/
+  条件门计数/live-wire 轮廓）；op 级 diff；静态 dead-write 扫描；成本算式复算（本机 Python）。
+- **未执行**：官方 verifier（任何任务、任何 salt）、量子模拟、生成器 build（需 CPython 3.13 +
+  Linux `kickmix.so`）、任何 Kaggle 提交。
+- 因此本文所有 cost / PASS 数字都来自**公开回执或作者本机验证**，不是本机验证结果；
+  GM 27.306613 是按使用中的三件成本复算，与 `experiments/frontier/20261115_upgrade/README.md` 一致。
+
+---
+
+## 9. 复现命令
+
+```bash
+# 公开最好件（HW-26）
+KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) ~/.local/bin/kaggle datasets download \
+  -d manwithacat/vqcc-hedge-wizardry -f circuits/invsqrt/1ba197b02771.kmb -p artifacts/20261115_invsqrt/hedge --unzip
+shasum -a 256 artifacts/20261115_invsqrt/hedge/circuits/invsqrt/1ba197b02771.kmb   # 1ba197b02771…
+
+# 生成器源码（46Q builder）
+KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) ~/.local/bin/kaggle datasets download \
+  -d syed3000/vqcc-own-circuit-portfolio -f invsqrt_source_zip -p artifacts/20261115_invsqrt/syed --unzip
+
+# 静态读（Q / static Toffoli / 条件门 / 宽度轮廓）
+.venv/bin/python scripts/inspect_circuit.py artifacts/20261115_invsqrt/hedge/circuits/invsqrt/1ba197b02771.kmb
+
+# 公开件索引
+KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) ~/.local/bin/kaggle datasets download \
+  -d manwithacat/vqcc-apache-public-circuits -f manifest.csv -p artifacts/20261115_invsqrt/mwac --unzip
+KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) ~/.local/bin/kaggle datasets download \
+  -d asteriospanoras/qcc-circuit-atlas -f circuits.csv -p artifacts/20261115_invsqrt/meta --unzip
+```
+
+来源链接：
+
+- HW-26：`https://www.kaggle.com/datasets/manwithacat/vqcc-hedge-wizardry`，
+  `https://www.kaggle.com/code/manwithacat/vqcc-hedge-wizardry-notebook`（v28）
+- 45Q 失败分析：`https://www.kaggle.com/code/asteriospanoras/qcc-27-30-what-works-what-fails-and-why`
+- measured-CZ 解释：`https://www.kaggle.com/code/mizeroluckygall/quantum-circuits-one-toffoli-less-in-invsqrt`，
+  源：`https://www.kaggle.com/code/asteriospanoras/qcc-27-30-public-frontier-free-cz-fix-in-invsq`
+- 46Q builder：`https://www.kaggle.com/code/syed3000/vqcc-own-circuit-portfolio-notebook`（v12），
+  源码数据集 `https://www.kaggle.com/datasets/syed3000/vqcc-own-circuit-portfolio`
+- 64 行表：`https://www.kaggle.com/code/ahoirg/qcc-submit-verify-and-package`（v028），
+  `https://www.kaggle.com/datasets/ahoirg/qcc-portfolio-gm-27-28999`
+- 索引：`https://www.kaggle.com/datasets/manwithacat/vqcc-apache-public-circuits`（v125），
+  `https://www.kaggle.com/datasets/asteriospanoras/qcc-circuit-atlas`（11-12）

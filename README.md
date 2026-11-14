@@ -41,14 +41,17 @@
 | 2026-11-12 | [eae396ba DQI 替换（公开前沿 25.39570）](submissions/20261112_eae_253957/README.md) | 58265561 | 25.39570，COMPLETE |
 | 2026-11-13 | [392k DQI swap（公开 392k 解码器）](submissions/20261113_392k_swap/README.md) | 58290992 | 25.44039，COMPLETE |
 | 2026-11-13 | [27.078 public-frontier trio（46Q invsqrt + 889Q DQI + 4,074T chem）](submissions/20261113_27_078/README.md) | 58299045 | **27.00209，COMPLETE** |
+| 2026-11-15 | [公开 27.30661 包（maoxin v27 4033 chem + 821bf8d1 DQI + 46Q invsqrt）](submissions/20261115_public_2731/README.md) | 58349843 | **27.30661，COMPLETE** |
+| 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | 已提交，预期 27.31193，pending |
 
-当前采用组合为 **27.078 public-frontier trio（本账号 `58299045`，COMPLETE 27.00209）**：
-invsqrt `321aff83…35177`（46Q，80,162.732141）、DQI `7cbe8ecf…14cd9`
-（889Q，360,733,280,431.94）、化学 `6418ec8e…a77f`（427Q，296,635,967.5936）。
-三件均用未改动的官方验证器独立全量 PASS；本机默认 salt GM **27.0783908611**，
-公开 draw 的 DQI 约 2 次失败，实际 public **27.00209**，比上一版 25.44039 高
-+1.5617。private draw 预期 GM 约 27.0–27.08。机器可读来源和口径见
-[public-baseline.json](references/public-baseline.json)。
+当前采用组合为 **HW-26 升级包（本账号 `58350759`，预期 27.31193）**：
+invsqrt `1ba197b02771`（46Q，78,673.569211；未修改官方 verifier 200,540,928 shots PASS，
+worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 errors）、
+化学 maoxin 4,033 loader（427Q，294,991,455.82，T=14,728）。
+上一版 `58349843` 已 COMPLETE、public **27.30661**，是第一次公开 27+ 升级（+0.30452）。
+两版均以公开 Apache-2.0 件为源，归属和来源记录在
+[20261115_public_2731](submissions/20261115_public_2731/README.md)。
+
 历史组合与证据保留在 `submissions/*/README.md`；原始大产物已按
 [已停止研究总览](docs/abandoned-research.md) 清理。
 作者公开提交 `58121501`（及 Hosen42 `58120775`）得分 **25.14222**，不是本账号 `58123354` 的实时成绩。
@@ -63,7 +66,16 @@ gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧�
 - 官方公开源清单保留在 `references/frontier-20261112/`；被删除目录的概况、大小和放弃原因
   见 [已停止研究总览](docs/abandoned-research.md)。
 
-## 已停止研究（2026-11-13）
+## 公开前沿升级（2026-11-15）
+
+公开前沿已从 27.078 升到 27.3066：2026-11-15 提交 `58349843`（maoxin v27
+4,033 chemistry + `821bf8d1` DQI + 46Q invsqrt），MCP 回执 **COMPLETE，27.30661**。
+随后提交 `58350759`（HW-26 invsqrt `1ba197b02771` + 同 DQI/化学），预期 **27.31193**。
+HW-26 已在 Kaggle 用未修改官方 verifier 独立 PASS（200,540,928 shots）。
+研究记录、公开前沿扫描和逐项判据见
+[experiments/frontier/20261115_upgrade](experiments/frontier/20261115_upgrade/README.md)。
+
+## 自研线停止（2026-11-13）
 
 三条研究线（invsqrt、DQI、dfthcsos/化学）已停止推进：最后一版均被公开前沿超过，
 最近的判决实验全部 no-go，剩余收益需要换算法族/新训练范式。各研究分支只保留入口 README、
