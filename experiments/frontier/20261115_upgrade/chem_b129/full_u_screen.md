@@ -35,3 +35,13 @@ fails, the B<143 line is closed and the current 27.31193 submission remains best
   `get_accelerator_quota()` 显示 GPU time_used ≈ 1,131s。
 - 未读到最终连续 error_2；没有达到 GM 27.5 的候选，当前最佳仍是 27.31193。
 - 未在本机跑模拟；B=129 的运行和后续 build/verify 都在 Kaggle。
+
+## 2026-11-15 后续
+
+- B129 full GPU 版本在读取结果前被改写为占位版本，旧 version 的 output 无法通过 MCP
+  `kernels.get` 取回；未得到最终 `error_2`，不能据此下结论。
+- 已改在 **Kaggle CPU** 上跑决定性的 B=139 full-U 闸门：
+  `qingyu1232/qcc-chem-b139-cpu`，`139x44`，`--fade 300 --fit 1500 --final 4000
+  --select impact`，下载 starter+pipeline，不下载 994MB competition zip。
+- 若 B=139 full-U 连续 e2 仍 >20 mHa，则 B=129 直接关闭；若接近 15 mHa，再等 GPU
+  槽位跑 B=129。所有计算在 Kaggle，本机不跑模拟。
