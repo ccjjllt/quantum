@@ -507,3 +507,32 @@ AssertionError
 
 **宽度线正式关闭**（除获准开展一次新的 body 合成项目）。补充：构建只要 85 s，
 所以一旦有 45 线 body，验证成本很低——瓶颈纯粹是合成工作，不是算力。
+
+## 14. INV-45D：Q45 可能只是"两个省线开关没叠加"（2026-11-15）
+
+重读 `patches/patch_w47_body.py` 的头注释，发现 width 阶梯是**逐个技巧叠加**的：
+
+```
+Q48（naive）
+Q47 = Q48 + 「把 h0 打包进 exponent flags」(PACK=True)，代价 3 个 Toffoli 解包
+Q46 = Q47 + 「a6 提前 X-测量退休」(A6_EARLY=True)，0 额外 Toffoli
+```
+
+而**出厂发行的 Q46 body 写的是 `PACK=False, A6_EARLY=True`** —— 两个技巧**没有叠加**，
+且 `patch_w47_body.py:210` 硬断言 `builder.max_qubits in (46, 47, 48)` 让 Q45 连跑都跑不到。
+
+如果两个技巧互相独立，那么 `PACK=True + A6_EARLY=True` 就应该给出 **45 线 body**，
+代价只是解包的那 3 个 Toffoli。Q45 的盈亏平衡是 **ΔT ≤ 66**，所以 3 个 Toffoli 是白送的：
+Q45 在 `T_mean ≤ 1,545` 时 invsqrt cost 75,290 → **GM 27.715（+0.40）**。
+
+已上线 `qingyu1232/qcc-inv45d-stack`（Kaggle CPU），依次尝试并记录每一档死在哪里：
+
+| 变体 | Q | PACK | A6_EARLY | 作用 |
+|---|--:|---|---|---|
+| A | 46 | False | True | 工具链闸门（必须复现 `321aff83…`） |
+| **B** | **45** | **True** | **True** | **叠加，真正要试的那个** |
+| C | 45 | True | False | 只打包 |
+| D | 45 | False | True | 对照（INV-45C 里死于 body 断言的那个） |
+
+判据：B 能构建出 `num_qubits == 45`，静态 T ≤ 1,550 + 66，且官方 verifier 在 200,540,928 shots 上
+PASS；否则记录每一档的断言位置，把"45 线需要新合成"这一结论钉死。
