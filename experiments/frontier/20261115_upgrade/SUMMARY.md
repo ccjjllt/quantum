@@ -144,3 +144,26 @@ usage_least10 [(13606,15),(14180,23),(14852,11),(15232,35),...]
 507 行 manifest + 24 条 HW 条目：invsqrt 最好仍是我们的 HW-26（78,673.569），DQI 仍是
 `821bf8d1`，化学最好 294,984,216.56（asterios v4 λ refit）。拼装后 **27.31215**，
 比我们的 **27.31193** 高 +0.00022。这就是公开件的绝对上限。
+
+## 2026-11-15 最终：INV-45C 关闭 invsqrt 宽度线（实测）
+
+`qingyu1232/qcc-inv45c-census`（Kaggle CPU，COMPLETE，全场 110 s）：
+
+- **Q=46 工具链闸门 PASS**：同源码 + 比赛 kickmix，85 s 逐字节重建
+  `321aff836362…35177`，exact proof `PASS_EXACT_NATIVE_TEXT_ALL_REQUESTED_INPUTS_ALL_HMR_TRANSCRIPTS`。
+- **Q=45 rc=1**，死在 `patches/patch_w47_body.py:210`
+
+```
+assert builder.max_qubits in (46, 47, 48)
+AssertionError
+```
+
+生成器只写了 **46/47/48** 三个手写 body，**没有 45 线 body**；而且 46 线的余量已经被
+作者用掉（`A6_EARLY ... gives coef1 its 46th-wire headroom at zero extra Toffolis`）。
+再加上两个 loader certificate 钉死 `peak 46 / entry 46`，Q45 需要的是**新合成一个 45 线
+body + 重搜证书**，不是找回 ≤66 Toffoli 的排布余量。
+
+**invsqrt 宽度线关闭**。修正后的估值（`score ∝ Q²`）：Q45 若 0 补价可达 GM **27.715**，
+盈亏平衡 ΔT ≤ 66 Toffoli —— 但这条曲线现在没有可执行入口。
+
+当前最佳 **27.31193**（ref 58350759，rank 177/3056）。
