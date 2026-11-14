@@ -276,3 +276,29 @@ KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) \
 因此本次复扫的唯一增量是化学权重 λ refit：拼装后 GM = **27.31215**，比我们的
 **27.31193** 高 **+0.00022**（0.0008%）。这是公开件天花板；我们没有为 +0.0002 再消耗
 一次提交（现有 27.31193 的 DQI 抽签已是 0 错误地板，重提交只可能持平或更差）。
+
+## 再复扫：`atakanaldemir/qcc-terminal-readout-and-phase-folds` v6
+
+11-14 18:42 的更新里有一张更低的化学成本表（原文摘录）：
+
+```
+| Chemistry                  | Cost            | Toffolis | Task qubits |
+| Maoxin123 4033 source      | 294991455.819055| 14728    | 427         |
+| Our published V15          | 294984413.836437| 14728    | 427         |
+| Our new continuation       | 294982944.809323| 14728    | 427         |
+```
+
+"Only W/H2_I change. All 15 loaders, angle words, tree, precision, inverse and DQI stay
+exact." 同一篇里也确认 invsqrt 那一 Toffoli 的改动是 Asterios 的 V5 变换（即我们已在用的
+`1ba197b02771` 线），并明确声明 `Conditional GM 27.30687575207525 is NOT an observed
+public score`。
+
+于是公开件的化学最好值从 294,984,216.56 再降到 **294,982,944.81**。拼装（HW-26 +
+821bf8d1 + 294,982,944.81）：
+
+```
+GM = 27.31193 × (294991455.82 / 294982944.81)^(1/3) = 27.31219
+```
+
+比我们的 **27.31193** 高 **+0.00026**。`T=14,728`、`Q=427`、DQI 都不变，只有权重微小变化。
+结论不变：公开件天花板 ≈ **27.3122**，我们已在 0.0003 以内；这不足以支撑一次有意义的提交。
