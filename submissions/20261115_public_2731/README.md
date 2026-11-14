@@ -7,7 +7,7 @@
 | 58349843 | `maoxin123/qcc-v27-4033-toffoli-coded-word-chemistry` v2 的 Kaggle 输出 | COMPLETE | **27.30661** |
 | 58350759 | HW-26 invsqrt `1ba197b02771` + DQI `821bf8d1` + maoxin 4,033 chemistry | COMPLETE | **27.31193** |
 
-两版 ZIP 均为 18 文件。`58349843` 大小 49,292,293 B；`58350759` 大小
+两版 ZIP 均为 18 文件。MCP competition 回执当前名次 **159 / 3053**（2026-11-15，27.31193 生效后）。`58349843` 大小 49,292,293 B；`58350759` 大小
 49,292,319 B，SHA-256
 `46d53bde0a8b3e6e6aed2693df3a12f540eeb258da75588cbfb99c21f369c933`。
 
