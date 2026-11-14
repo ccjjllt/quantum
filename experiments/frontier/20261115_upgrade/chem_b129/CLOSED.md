@@ -384,3 +384,31 @@ B=135 需要 3.408 mHa（18.408 → 15.00）。已实测的约束有三条，任
 
 因此即使 Adam 轨迹到手，也只能改变"起点平台有多松"，不能改变上述上界。
 **27.31193 保持为实测天花板；化学线正式结束。**
+
+## 15. 换账号解卡：Adam 轨迹已在两台新配额上真跑（2026-11-15）
+
+qingyu1232 的三个 session 至今仍是 `RUNNING / 0 files / log ""`，`cancel_notebook_session`
+被拒，GPU 时间冻结。用户提供了 `jiyujia` 与 `zhuating` 的配额，因此改用**官方 CLI 2.2.5**
+（支持 `KAGGLE_API_TOKEN`，即 `~/.kaggle/access_token_<user>` 的 `KGAT_` token）以这两个身份
+推送脚本型 kernel。配额实测：
+
+```
+jiyujia   GPU 0.90h used / 29.10h remaining          zhuating  GPU 0.00h / 30.00h
+qingyu1232 GPU 0.99h used / 29.01h remaining   <-- 配额从来不是瓶颈，是 session 卡死
+```
+
+两个 kernel（都是 `kernel_type=script`、`machine_shape=NvidiaTeslaT4`、私有）：
+
+| kernel | 形状 | 内容 |
+|---|---|---|
+| `jiyujia/qcc-chem-adam-traj-gpu` | `(8,135,44)` | shrink 500/2500/8000 → Adam 24,000 步（每 500 报一次）→ 若连续 e2 ≤15.0 立即 8-bit 量化 → 再 `shrink` 一次 `143→135` 的"先长训再剪枝"对照 → 若也 ≤15.0 再量化 |
+| `zhuating/qcc-chem-adam-traj-129` | `(8,129,44)` | shrink 链 `139→135→131→129` → Adam 24,000 步 → 若连续 e2 ≤15.0 立即量化 |
+
+判据（与前面各节一致）：
+
+- 连续 `e2_c ≤ 15.0 mHa` 且量化后 `e2_q ≤ 20 mHa`；
+- 成本：`B=135` → `T=14,389` → chem cost **288.20 M ≤ 288.98 M** → GM **27.525**；
+  `B=129` → `T=14,134` → 283.10 M → GM **27.689**。
+
+这样做的意义：Adam 是上游明确写"the one lever not yet pulled"的那一条，而此前本会话
+从未拿到任何 Adam 的 `error_2` 数值。现在它不再依赖 qingyu1232 的解卡。
