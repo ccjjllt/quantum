@@ -70,3 +70,13 @@ fails, the B<143 line is closed and the current 27.31193 submission remains best
 - 结论：**本会话关闭 B<143 线**，保留当前最佳 **27.31193（ref 58350759，rank 159/3053）**。
   若以后重开，必须先有一次能返回连续 e2 的完整 U/W retrain，再做 8-bit rounding 与
   官方 78,080-shot 验证；不能在未读数的情况下假设通过。
+
+## 2026-11-15 阻塞：Kaggle GPU session limit
+
+- B129 v1 与 B139 full-U 运行一直 RUNNING、无输出；尝试用同一 notebook 重启一个
+  时间受限的 B139 fast GPU screen，MCP 返回：
+  `Maximum batch GPU session count of 2 reached`。
+- 两个 GPU-enabled notebook 的旧版本仍占用配额；MCP token 没有
+  `kernelSessions.cancel` 权限，无法从工具侧释放。
+- 继续获得 B139/B129 连续 e2 需要：在 Kaggle UI 停止/删除两个 GPU session，
+  或等待其运行结束。当前没有可提交的新候选，最佳仍是 27.31193。
