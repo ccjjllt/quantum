@@ -639,3 +639,56 @@ gate46      Q=46 -> 130 s，SHA 321aff83…，GATE PASS
 
 **这就是 invsqrt 宽度线的真实剩余工作量**：一次 8 输入级别的 SAT 重建搜索，
 而不是"再调一个开关"。构建只需 130 s，所以一旦有恒等式，验证成本极低。
+
+## 17. INV-45G：活线集合正式导出（Q45 的候选退休对象与前置条件）
+
+`qingyu1232/qcc-inv45g-wires`（CPU，COMPLETE）把每个 MARK 的 owner → 真实 wire id 打了出来。
+Q=45 + `PACK=True` + `A6_EARLY=True` 时：
+
+```
+MARK body_entry              25  v=12(w10..w21) h=10(h0=None) flags=4(w22..w25)
+MARK first_table             41  + D=13(w34,36,0,30,32,28,35,33,31,29,26,27,37) + H=3(w38,39,40)
+MARK first_coefficient       43  v[11]=None（a6 已退休）  H=5(w38,39,40,w44,w21)
+MARK first_metadata_retired  37
+MARK seed_ready              44  v=11(w10..w20, None)  h=10(w41,w1..w9)  flags=4(w22..w25)
+                                 D=13  seed=6(w43,w40,w39,w38,w21,w44)
+<crash> arithmetic.py:38  _compute_carry  allocated 45 + 1 > 45
+```
+
+关键事实（这是判定任何 Q45 方案所需的形式化结果）：
+
+1. `product_forward(builder, D, seed, h)` 的签名与实现**只读 `D`、`seed`、`h`**
+   （`patch_proddisp.py`：`word = list(seed) + list(h)`，`C = [False] + list(D)`）。
+2. 因此在 `product_forward` 整个执行期间，**`v` 的 11 条与 `flags` 的 4 条共 15 条线完全空闲**。
+   峰值 44 + product 自己的 1 条 carry + 1 = 46 > 45，缺的就是这 1 条。
+3. 但 `seed_ready` 之后紧接着的分段 carry（`_compute_carry`，在 `engine/fusion/arithmetic.py:38`，
+   受 `INPUTS.json` 字节锁保护，不能改）**立刻**就要第 46 条，所以空闲的 v 必须在
+   **product 之前**退休、在 **divider 之前**（`divider_module.compute_phase_cleanup(builder, v, P, flags)`
+   会读 v 和 flags）重建。
+4. 现成的重建先例只有 a6：`a6 = D10^D11^D12^(D10^a5)(D11^a5)`，用 **v[10]** 和 D[10..12]，
+   1 个 CCX + 2 个 CX（`patch_w47_body.py:249-256`），"exact on all 4096 roots"。
+   注意它**依赖 v[10] 存活**，所以 v[10] 自己不能当候选。
+
+## 18. Q45 的真正阻塞：作者的重建搜索工具没有随源码发布
+
+作者造这类恒等式用的工具是 `tools/minand_sat.py`（`patch_endpoint_v9e2.py` 头注释明确引用
+`tools/minand_sat.py` 与 `agents/composer/p/v9_form_e2.json`：8 输入、SAT 求出的直线 AND 程序）。
+但本仓库的 `src/tools/` 里**只有**：
+
+```
+audit_affine.py   audit_pairs.py   build_variant.py  env.sh  hold_pass.py
+kmsim.py   kmx_to_kmb.py   macrun.py   merge_zpow.py   pipeline.sh   postpass.py   prove_any.py
+```
+
+**没有 `minand_sat.py`**。而 `audit_affine.py` / `audit_pairs.py` / `hold_pass.py` 解决的是
+**T 轴**（找可被 CX 替代的 CCX、把重算的 AND 积挂在空闲线上），不是"某条线能不能用别的线重建"
+这条 Q 轴问题。
+
+所以 Q45 的剩余工作是一次**符号推导**：对 15 条空闲线中的某一条 k，在 GF(2) 上求
+`v[k] = f(其余活线)`，要求 1–2 个 AND（最好纯 XOR，零 Toffoli）。这需要
+(a) 作者未发布的 `minand_sat.py` + 语义模型，或 (b) 手工推 EEA 的域代数。
+本会话拿不到 (a)，(b) 不是能在会话内可靠完成的推导（猜错的恒等式会被生成器自带的
+`PASS_EXACT_NATIVE_TEXT_...` exact proof 直接否掉，不会污染提交）。
+
+**结论：invsqrt Q45 已把"缺什么"压缩到一条可判定的命题——"15 条空闲线里存在一条 1–2 AND 的
+重建恒等式"——但证明它需要的工具不在公开源码里。** 构建只要 130 s，一旦有恒等式，验证成本极低。
