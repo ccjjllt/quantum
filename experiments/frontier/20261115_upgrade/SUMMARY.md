@@ -167,3 +167,57 @@ body + 重搜证书**，不是找回 ≤66 Toffoli 的排布余量。
 盈亏平衡 ΔT ≤ 66 Toffoli —— 但这条曲线现在没有可执行入口。
 
 当前最佳 **27.31193**（ref 58350759，rank 177/3056）。
+
+## 2026-11-15 追加：换轴（B → C）与 Adam 的真实轨迹
+
+本轮在用户提供的 `jiyujia` / `zhuating` 配额上用**官方 CLI 2.2.5 + KGAT token** 重开了
+Kaggle 计算，并把研究方向换了一条轴。四条实测结论：
+
+### 1. 卡住的问题解决了，而且不需要 UI 操作
+
+- 官方 CLI 2.2.5 支持 `KAGGLE_API_TOKEN`（`~/.kaggle/access_token_<user>`），可直接以
+  `jiyujia` / `zhuating` 身份推送脚本型 kernel；两者配额 **29.1h / 30.0h GPU**。
+- **脚本型 kernel 不受 qingyu1232 那三个卡死 notebook session 的影响**：同一账号
+  `qingyu1232/qcc-chem-buildgate` 立刻 RUNNING。所以之前"需要用户在 UI 里手动停止 session"
+  的请求可以撤回。
+- 排队而不是配额：`machine_shape=NvidiaTeslaT4` 在 jiyujia 上 QUEUED 55 分钟，
+  改成 `machine_shape=""`（任意 GPU）后 30 秒 RUNNING。
+
+### 2. 官方闸门再次确认
+
+`verifiers/dfthcsos/verify.py`：`ERROR_2_THRESHOLD = 0.020`、`ERROR_1_THRESHOLD = 0.020`、
+`LAMBDA_FLOOR = 49.0`、`E_GAP_FLOOR = 3.914898`、`QUBIT_CAP = 128`、`SHOTS_PER_ADDRESS = 64`。
+
+### 3. 新发现：T 对 **C（乘积数）** 的敏感度是 **B（基函数）** 的约 40 倍
+
+用官方自己的 `scoreinfra/costs_prepare.py` 代入 (R,B,C)=(8,143,44) 得 model=6,662，
+而实测件 T=14,728 ≈ 2×model+1,404，于是
+
+```
+dT/dC ≈ -156 Toffoli / 乘积      (+0.098 GM / 个)
+dT/dB ≈   -4 Toffoli / 基函数    (+0.004 GM / 个)
+```
+
+原因是 `inner_state_prep` 的 QROAM 项 `R*C*ceil((B+1)/2^k2)`：C 是线性乘数，B 只在跨
+`ceil` / `QR` 台阶时跳变。**此前整条 B<143 线（`chem_b129/CLOSED.md`）追的其实是只值
++0.02~+0.03 GM 的轴**；真正值钱的是 C。详见 `chem_c_axis/PLAN.md`。
+
+### 4. 实测：砍 C 的精度账单 + 第一条 Adam 轨迹
+
+`jiyujia/qcc-chem-cprobe`（L-BFGS，同预算）：连续 error_2 = **20.103 mHa（C=40，+5.33）**、
+**29.127 mHa（C=36，+14.35）**，基准 (143,44) 是 14.777。
+
+`zhuating/qcc-chem-adam-traj-129`（Adam 24,000 步，**默认 lr 1e-3**）：
+
+```
+start 20.179 -> 1000 步 100.879（被打坏）-> 13000 步 20.112 -> 24000 步 19.486
+```
+
+即默认 lr 把 L-BFGS 起点摧毁、用 13,000 步才爬回来，净收益仅 **−0.69 mHa**。
+这既解释了"Adam 看起来没用"，也指出真正的变量是**学习率**。
+
+因此下一轮的决定性实验已上线：`zhuating/qcc-chem-lrtune` —— 同一配方只把 lr 改成
+1e-4→1e-6、36,000 步，分别在锚点 (143,44)（需要证明能低于 14.777）与 C 轴目标 (143,40)
+（需要 ≤15.02）上跑。若 (143,40) 过闸门 → chem cost 282.4M → **GM 27.71**（+0.40）。
+
+当前最佳仍是 **27.31193**（ref 58350759，COMPLETE），本轮没有产生可提交的候选。
