@@ -51,6 +51,7 @@ worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 error
 上一版 `58349843` 已 COMPLETE、public **27.30661**，是第一次公开 27+ 升级（+0.30452）。
 两版均以公开 Apache-2.0 件为源，归属和来源记录在
 [20261115_public_2731](submissions/20261115_public_2731/README.md)。
+MCP 当前名次 **159 / 3053**（2026-11-15，27.31193 生效后）。
 
 历史组合与证据保留在 `submissions/*/README.md`；原始大产物已按
 [已停止研究总览](docs/abandoned-research.md) 清理。
