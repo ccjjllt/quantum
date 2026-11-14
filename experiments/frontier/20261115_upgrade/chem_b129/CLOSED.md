@@ -197,3 +197,27 @@ start (8, 143, 44)
 注：该 run 的 `quantize.py` 因 `dfthcsos.scoreinfra` 不在 PYTHONPATH 而 rc=1（未产出
 `e2_q`）。修正版 `qingyu1232/qcc-chem-measured-e2q` 把比赛 `verifiers/` 树加进
 PYTHONPATH 后重跑，专为拿到直接量化的 `e2_q(143)` / `e2_q(129)`。
+
+## 8. 最后一条未试路径已上线：Adam 重训 (8,135,44)（Kaggle CPU）
+
+上游 `adam_train.py` 的 docstring 明确指出这是"the one lever not yet pulled"：
+
+> The L-BFGS seeds plateau where they start (random 19, DF 6.8 at (9,180,90), 19 at a scoring
+> shape); the public seeds came out of tens of thousands of Adam epochs and prune far better,
+> so this is the one lever not yet pulled.
+
+所以上面所有 19.8/21.1 的连续 e2 都是 **L-BFGS/shrink 路径** 的上限，不等于该形状的真实地板。
+为把这个变量单独测掉，已启动：
+
+- `qingyu1232/qcc-chem-adam-b135-cpu`（CPU，`JAX_PLATFORMS=cpu`；GPU 两个槽位被卡住的
+  reservation 占满、GPU 时间冻结在 3,551.975 s，故走 CPU）
+- 第 1 步：full-U shrink 到 `(8,135,44)`（`--fade 300 --fit 1200 --final 4000`）
+- 第 2 步：`adam_train.py --steps 8000 --lr 1e-3 --lr-final 1e-5 --kappa 5e-5
+  --report 250 --save 1000 --chunk 50`，每 250 步打印一次 error_2 轨迹
+- 闸门：连续 `error_2 ≤ 12.5 mHa`（现有实测 rounding 代价 5.22 mHa），且量化后 ≤20 mHa
+- 选 `B=135` 的理由：`T=14,389` → chem cost 288.20 M → GM **27.525**，本身就能过 27.50；
+  而且它的连续地板（18.408）比 B=129（19.830/21.134）更接近目标
+
+判读：如果 8,000 步后仍停在 ≳16 mHa 且趋势平坦，则"129/135 维基组不可能过量化闸门"
+被实测确认，化学线彻底关闭；如果掉到 ≤12.5，则进入 quantize/refine/refit + 15 loader
+build + 官方 78,080-shot 验证。
