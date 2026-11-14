@@ -255,3 +255,24 @@ KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) \
 - `artifacts/20261115_frontier/portfolios/mason/{invsqrt.kmb}`（= `e46d90c3`）
 - `artifacts/20261115_frontier/portfolios/mason_chem/`（旧 family loader，仅核对用）
 - `artifacts/20261115_frontier/atlas/circuits.csv`：Atlas v2 的 1,719 件索引
+
+## 复扫 2026-11-15 19:00 UTC（11-14 18:56–19:09 之后的新件）
+
+`manwithacat/vqcc-apache-public-circuits` 已从 497 行涨到 **507 行**
+（updated 2026-11-14T18:59Z），`vqcc-hedge-wizardry` updated 18:56Z，
+新 notebook `atakanaldemir/qcc-terminal-readout-and-phase-folds`（18:42）。
+
+用 MCP 拉取新 `manifest.csv` 与 `entries.csv` 全量比对：
+
+| 任务 | 公开最好件（11-15 19:00 快照） | 我们现用 | 差 |
+|---|---:|---|---:|
+| invsqrt | 78,719.526 `330fdd0ca5f5`（manifest 内） | **78,673.569** `1ba197b02771`（HW-26，manifest 未收录） | 我们更优 |
+| DQI | 360,209,905,486.02 `821bf8d1` | 同件 | 0 |
+| chemistry | **294,984,216.56** `c6e74b63ad82`（asterios v4 λ refit，T=14,728） | 294,991,455.82 | 对方 −0.0024% |
+
+`vqcc-hedge-wizardry` 仍只有 **24 条**，最后一条就是 **HW-26**（我们已在用）。18:56 的更新
+没有新增 HW 条目。
+
+因此本次复扫的唯一增量是化学权重 λ refit：拼装后 GM = **27.31215**，比我们的
+**27.31193** 高 **+0.00022**（0.0008%）。这是公开件天花板；我们没有为 +0.0002 再消耗
+一次提交（现有 27.31193 的 DQI 抽签已是 0 错误地板，重提交只可能持平或更差）。
