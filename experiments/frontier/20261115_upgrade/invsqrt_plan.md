@@ -392,3 +392,39 @@ KAGGLE_API_TOKEN=$(cat ~/.kaggle/access_token) ~/.local/bin/kaggle datasets down
   `https://www.kaggle.com/datasets/ahoirg/qcc-portfolio-gm-27-28999`
 - 索引：`https://www.kaggle.com/datasets/manwithacat/vqcc-apache-public-circuits`（v125），
   `https://www.kaggle.com/datasets/asteriospanoras/qcc-circuit-atlas`（11-12）
+
+## 10. INV-45C 已启动（2026-11-15，Kaggle CPU）
+
+`qingyu1232/qcc-inv45c-census`。实现方式比计划更简单：`build.sh` 的宽度就是从
+`src/patches/PATCH_ORDER.txt` 的 `Q` 行读的
+
+```bash
+Q=$(awk '$1=="Q"{print $2}' "$X/patches/PATCH_ORDER.txt")
+$PY ... build_variant.py --out "$X/build" --name "${NAME}raw" --Q "$Q" "${ARGS[@]}"
+```
+
+所以把 `Q 46` 改成 `Q 45` 就会让 `builder.set_max_qubits(45)`，超宽时生成器直接抛错，
+日志会指出第一个超限点及其所在 stage —— 这正是 INV-45C 要的"软上限"行为，不需要自己
+写 allocator 探针。
+
+两段构建：
+
+1. **工具链闸门**：`Q 46` 重建，必须得到 SHA `321aff836362…35177`（否则说明环境/版本不对，
+   后续结论无效）。
+2. **软上限**：`Q 45` 重建。GO 判据不变：若最便宜精确修复的 Toffoli 总和 ≤ 38，
+   则 invsqrt cost ∈ [77,008.24, 78,718.24]，GM ∈ [27.307, 27.507]；否则关闭宽度线。
+
+全程在 Kaggle CPU 上跑（kickmix 只有 Linux 版），本机不构建、不模拟。
+
+## 11. 为什么 `Q 46` 仍可能是 45 的（这次要回答的问题）
+
+`PATCH_ORDER.txt` 末尾是 `with q46_loaders.py` + `Q 46`，而 `q46_loaders.py` 里有
+
+```python
+assert builder.max_qubits>=spec['peak'] and builder.num_allocated_qubits==spec['entry']
+```
+
+即两个 loader 的 certificate 是按 peak 46 / entry 46 写死的。所以 `Q 45` 大概率在
+**loader 阶段**就断言失败，而不是在 peak 段。如果确实如此，那么 Q45 不是"重新调度 46 条线"
+的问题，而是"重新搜索两个 loader 的 certificate"的问题——这与公开三次尝试给出的
++196/+257 Toffoli 结论一致。本次 build 会把这个判断变成实测。
