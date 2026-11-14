@@ -585,3 +585,57 @@ ValueError: Attempted to allocate more qubits than the maximum.
 
 附带记录：`PACK=True` 的代价是 `unpack_h0` 的 3 个 Toffoli（`patch_w47_body.py` 头注释），
 即这条路线即使成功，ΔT 也只有个位数水平，远在盈亏平衡之内。
+
+## 16. INV-45E/F：Q45 的峰值定位到 `product_forward`，并证伪"推迟解包"
+
+### 16.1 INV-45E：body 级 MARK 表把峰值钉在一个阶段
+
+`qingyu1232/qcc-inv45e-marks`（CPU，COMPLETE）。给 `patch_w47_body.py` 的 `_mark` 加一行
+`print('MARK', label, live)`，Q=45 + `PACK=True` + `A6_EARLY=True`：
+
+```
+MARK body_entry 25
+MARK first_table 41
+MARK first_coefficient 43
+MARK first_metadata_retired 37
+MARK seed_ready 44
+<crash> arithmetic.py:38 _compute_carry: allocated 45 + requested 1 > max 45
+```
+
+即：`seed_ready` 时 **44 条活线**，峰值发生在**紧接其后的 `baseline.product_forward`**
+（`patch_proddisp.py`）。此前只知道"死在 `_compute_carry`"，现在知道是**哪一个阶段**。
+
+附带发现：`engine/fusion/arithmetic.py` 受 `INPUTS.json` 的**字节长度锁**
+（`arithmetic_variant.check_manifest` → `assert len(raw) == pin['bytes']`），
+所以不能直接给 carry 加法打补丁，只能改 `patches/` 下的文件。
+
+### 16.2 INV-45F：为什么"把 h0 解包推迟到 product 之后"不成立（已实测）
+
+观察到 h0 的解包（`unpack_h0_after_seed`）正好发生在 `seed_forward` 与 `product_forward`
+之间，等于把打包刚省下的那条线**在峰值前又还回去**了。于是试了推迟：
+
+```
+q45_defer   Q=45 PACK=True A6=True DEFER=True
+  File ".../patches/patch_proddisp.py", line 45, in product_forward
+    builder.cx(q, t)
+  TypeError: Expected a q | b | bool | km.array | ... but got control=None
+q45_nodefer Q=45 PACK=True A6=True DEFER=False   （对照，复现 INV-45E 的崩溃）
+  arithmetic.py:38  allocated 45 + requested 1 > max 45
+gate46      Q=46 -> 130 s，SHA 321aff83…，GATE PASS
+```
+
+`control=None` 说明 **product 真的读 h[0]**，所以解包不能推迟。这条最省事的思路被实测否证。
+
+### 16.3 Q45 现在到底缺什么（精确结论）
+
+1. Q45 的 body **能跑**（`PACK=True` 让 loader 的 26+20=46 那关通过）；
+2. 峰值 = `seed_ready` 的 44 + `product_forward` 自己的 1 条 carry 线 + 1 = 46；
+3. 作者已有的退休补丁（`patch_seedinv` v0/v1/v3、`patch_endpoint_v9e2` v9、
+   `patch_h2ret` H2、`patch_coef2_q46` D12、`patch_hret_sat_s15k7a` history signs）
+   **全部已在 `PATCH_ORDER.txt` 里启用**，没有现成的手法是空的；
+4. 所以 Q45 需要**一条新的、覆盖 `product_forward` 的退休恒等式**：某个在 product 期间
+   空闲、且可由其余活线在 1–2 个 AND 内重建的 wire。作者造这类恒等式用的工具是
+   `tools/minand_sat.py`（`v9_form_e2.json` 就是这么来的：8 输入 SAT 直线程序）。
+
+**这就是 invsqrt 宽度线的真实剩余工作量**：一次 8 输入级别的 SAT 重建搜索，
+而不是"再调一个开关"。构建只需 130 s，所以一旦有恒等式，验证成本极低。
