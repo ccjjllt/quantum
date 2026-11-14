@@ -87,8 +87,8 @@ K_CIRCUITS = math.ceil(N_WORDS / J)
 #   i.e. L(pass) = K_CIRCUITS * (80 + d * R*B) with d = 189/1144 = 0.1650.
 #   Independent check on Lera's (9,143,40) family (1,287 rows, 297-299 Toffoli/loader) -> d = 0.1686.
 #   d = 0.1650 reproduces the shipped 4,033 (model 4,031); 0.1686 is the pessimistic bound.
-LOADER_D_PRIMARY = 0.1650
-LOADER_D_PESSIMISTIC = 0.1686
+LOADER_D_PRIMARY = 0.16509      # (4033/15 - 80)/1144, anchored on the measured 4,033/pass at R*B=1,144
+LOADER_D_PESSIMISTIC = 0.1686   # (297 - 80)/1287, from Lera's (9,143,40) family
 LOADER_FIXED_ANDS = 80.0
 
 
@@ -110,7 +110,7 @@ import onebody  # noqa: E402  (vendored)
 import paths  # noqa: E402  (vendored; inserts the verifiers on sys.path)
 import refine  # noqa: E402  (vendored)
 import refit_weights  # noqa: E402  (vendored)
-from scipy.optimize import minimize  # noqa: E402
+from scipy.optimize import linear_sum_assignment, minimize  # noqa: E402
 from dfthcsos.scoreinfra.reference import UPPER_ENERGY, check_fcidump, load_reference  # noqa: E402
 from dfthcsos.verify import heuristic_costs, native_inputs  # noqa: E402  (official, unmodified)
 
@@ -118,23 +118,42 @@ from dfthcsos.verify import heuristic_costs, native_inputs  # noqa: E402  (offic
 # ---------------------------------------------------------------------------------------------
 # One-body assembly without JAX
 # ---------------------------------------------------------------------------------------------
+def _align_rows(words, vecs, edges, brot):
+    """Permute word rows so that row j is the row the verifier will pair with eigenvalue j.
+
+    The verifier pairs each submitted one-body row with an exact eigenvector of h1' by a one-to-one
+    assignment on |overlap| (`reconstruct_h1_thc`), so row order is free for it.  `onebody.polish`
+    and `onebody.error` do not match: they assume row j is the j-th ascending eigenvector.  A table
+    built by `encode.signed_words(eigvecs.T, ...)` is already in that order; a foreign table (like
+    the shipped 4,033 one) need not be, and polishing it unaligned silently optimises the wrong
+    pairing (~25 mHa instead of ~20 mHa on the shipped rows).
+    """
+    mod = 1 << brot
+    v = encode.decode(np.asarray(words, np.int64) % mod, edges, brot)
+    sub, ideal = linear_sum_assignment(-np.abs(v @ vecs))
+    out = np.array(words, np.int64).copy()
+    out[ideal] = np.asarray(words, np.int64)[sub]
+    return out
+
+
 def assemble_numpy(words2, w, W, p, edges, brot, one_start=None):
     """`refine.assemble` with its one-body step reduced to the numpy candidates of `onebody.refresh`.
 
     Upstream `refine.assemble` calls `onebody.refresh`, which additionally imports the JAX module
     `onebody_quant` (progressive one-body rounding) and runs `kicks` random restarts.  This keeps
     upstream's other two candidates -- the rounded eigenvectors of h1' and the caller's `one_start`
-    -- polished with `onebody.polish`, and drops the JAX candidate and the kicks.  `error_2`,
-    `Lambda`, `E_gap` and `lambda_eff` do not depend on the one-body rows at all; only `error_1`
-    does, and it is reported per row so the difference is visible.  `--final` uses the full
-    upstream path (needs jax).
+    -- polished with `onebody.polish`, and drops the JAX candidate and the kicks, after aligning
+    `one_start` to the eigenbasis (see `_align_rows`).  `error_2`, `Lambda`, `E_gap` and
+    `lambda_eff` do not depend on the one-body rows at all; only `error_1` does, and it is reported
+    per row.  `--final` uses the full upstream path (needs jax).
     """
     h1p = p.h1(W)
     _, vecs = np.linalg.eigh(h1p)
     wide = (-4, -2, -1, 1, 2, 4)
-    cands = [onebody.polish(encode.signed_words(vecs.T, edges, brot), h1p, edges, brot, steps=wide)]
+    cands = [encode.signed_words(vecs.T, edges, brot)]
     if one_start is not None:
-        cands.append(onebody.polish(np.asarray(one_start, np.int64), h1p, edges, brot, steps=wide))
+        cands.append(_align_rows(one_start, vecs, edges, brot))
+    cands = [onebody.polish(c, h1p, edges, brot, steps=wide) for c in cands]
     one = min(cands, key=lambda c: onebody.error(c, h1p, edges, brot))
     with np.load(paths.SHIFTS) as z:
         shifts = {k: np.array(z[k]) for k in ("H1_I", "Hsym_lower")}
@@ -268,7 +287,8 @@ class _Reached(Exception):
     """Raised from the L-BFGS callback once error_2 has reached the target."""
 
 
-def refit_w_W(cand: dict, target_mha: float, margin: float, maxiter: int, log_every: int, log=print):
+def refit_w_W(cand: dict, target_mha: float, margin: float, maxiter: int, log_every: int,
+              rounds: int = 1, gauge_hops: int = 10, log=print):
     """Refit (w, W) at fixed words.  This is `vendor/dfthc_refit/refit_weights.py:refit()` with its
     acceptance wrapper opened up.
 
@@ -359,19 +379,29 @@ def refit_w_W(cand: dict, target_mha: float, margin: float, maxiter: int, log_ev
     log(f"L-BFGS: {res_msg} after {len(trace)} iterations: e2 {1e3 * e2:.4f} mHa, "
         f"E_gap {gap:.9f}, Lambda {Lam:.4f}, lambda_eff {math.sqrt(max(gap * (2 * Lam - gap), 0)):.4f}")
 
-    # Upstream's exact moves: column gauge + offset solve, then the official read-back.
-    W = refine.optimize_offsets(refine.Problem(u, w, ref, S, beta), W, margin)
-    p = refine.Problem(u, w, ref, S, beta)
-    table = (refine.assemble(words2, w, W, p, edges, brot,
-                             one_start=np.asarray(cand["angle_words"])[:N])
-             if _USE_UPSTREAM_ONE_BODY else
-             assemble_numpy(words2, w, W, p, edges, brot,
-                            one_start=np.asarray(cand["angle_words"])[:N]))
-    metrics = refine.official(table, brot)
-    log(f"official: e1 {1e3 * metrics['error_1']:.4f}  e2 {1e3 * metrics['error_2']:.4f} mHa  "
-        f"Lambda {metrics['Lambda']:.4f}  E_gap {metrics['E_gap']:.9f}  "
-        f"lambda_eff {metrics['lambda_eff']:.6f}")
-    return table, metrics, trace
+    # Upstream's round body, verbatim in order: exact column gauge (it leaves w w^T, w W^T and
+    # |W|^2 alone, so error_2 and h1' are unchanged and only the L1 term of Lambda moves), then the
+    # offset solve, then the official read-back; keep the best lambda_eff that keeps error_2.
+    one_start = np.asarray(cand["angle_words"])[:N]
+    best = None
+    for r in range(rounds):
+        w, W = refine.rotate_columns(w, W, sweeps=2, seed=r, hops=gauge_hops)
+        p = refine.Problem(u, w, ref, S, beta)
+        W = refine.optimize_offsets(p, W, margin)
+        table = (refine.assemble(words2, w, W, p, edges, brot, one_start=one_start)
+                 if _USE_UPSTREAM_ONE_BODY else
+                 assemble_numpy(words2, w, W, p, edges, brot, one_start=one_start))
+        metrics = refine.official(table, brot)
+        log(f"round {r}: e1 {1e3 * metrics['error_1']:.4f}  e2 {1e3 * metrics['error_2']:.4f} mHa  "
+            f"Lambda {metrics['Lambda']:.4f}  E_gap {metrics['E_gap']:.9f}  "
+            f"lambda_eff {metrics['lambda_eff']:.6f}")
+        ok = (metrics["error_2"] <= ERROR_2_GATE and metrics["E_gap"] > E_GAP_FLOOR
+              and metrics["Lambda"] > LAMBDA_FLOOR)
+        if ok and (best is None or metrics["lambda_eff"] < best[1]["lambda_eff"]):
+            best = (table, metrics)
+    if best is None:
+        best = (table, metrics)
+    return best[0], best[1], trace
 
 
 _USE_UPSTREAM_ONE_BODY = False
@@ -421,7 +451,7 @@ def main() -> None:
     ap.add_argument("--b-list", default="143,139,135,131,129")
     ap.add_argument("--c-list", default="44,46,48")
     ap.add_argument("--drop-metric", default="l2", choices=("l2", "l1", "max"))
-    ap.add_argument("--target", type=float, default=19.9999,
+    ap.add_argument("--target", type=float, default=19.99,
                     help="error_2 target in mHa.  The gate is 20.0 and lambda_eff is smallest at the "
                          "largest allowed error, so the public refits sit at 19.9999 mHa; upstream's "
                          "own 19.92 default only helps tables whose frozen-word floor is well below it.")
@@ -431,6 +461,10 @@ def main() -> None:
                          "solve, so 1e-5 Ha (1.3e-6 of lambda_eff) is the smallest safe cushion.")
     ap.add_argument("--maxiter", type=int, default=6000, help="L-BFGS iterations per grid point")
     ap.add_argument("--log-every", type=int, default=250, help="print the trace every N iterations")
+    ap.add_argument("--rounds", type=int, default=1,
+                    help="refine.py gauge+offset rounds per point (upstream default 3; 1 is enough to screen)")
+    ap.add_argument("--gauge-hops", type=int, default=10,
+                    help="basin-hopping rounds inside refine.rotate_columns (upstream 10; 0 is faster)")
     ap.add_argument("--final", action="store_true",
                     help="use the unmodified upstream one-body step (needs jax) -- for finalists only")
     ap.add_argument("--dry-run", action="store_true", help="inputs + cost model only, no refit")
@@ -475,7 +509,8 @@ def main() -> None:
                 m = refine.official(cand, BROT)     # official evaluate_words, no refit
                 trace, note = [], "dry-run (no refit)"
             else:
-                _, m, trace = refit_w_W(cand, args.target, args.margin, args.maxiter, args.log_every)
+                _, m, trace = refit_w_W(cand, args.target, args.margin, args.maxiter, args.log_every,
+                                    rounds=args.rounds, gauge_hops=args.gauge_hops)
                 note = ""
             ok, bad = gates(m)
             decisive = [g for g in bad if g != "e1"]
@@ -547,6 +582,11 @@ def main() -> None:
     if args.dry_run:
         print("DRY RUN: the e2 column is the un-refitted truncation, which is expected to be far above "
               "20 mHa.  Rerun without --dry-run to refit.")
+    elif best is not None and best["cost"] > BASE_COST * 0.995:
+        print(f"VERDICT: NO GAIN -- the only passing point is (B,C)=({best['B']},{best['C']}) at "
+              f"{best['cost'] / 1e6:.2f}M, which is the unmodified control (|dGM| "
+              f"{abs(best['dGM_pct']):.3f}%).  Nothing in the grid beats the shipped point, so the "
+              f"truncate-plus-weight-refit form of B<143 is closed; record the e2 column and stop.")
     elif best is not None:
         print(f"VERDICT: PASS at (B,C)=({best['B']},{best['C']}): cost {best['cost'] / 1e6:.2f}M "
               f"({best['cost'] / BASE_COST * 100 - 100:+.2f}%), dGM {best['dGM_pct']:+.3f}%. "

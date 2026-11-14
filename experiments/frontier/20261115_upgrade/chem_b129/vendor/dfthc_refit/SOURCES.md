@@ -14,24 +14,23 @@ documented excerpt noted below. They are **not** our work.
 | Cited as | `dfthc_refit 1.1.0/1.2.0/1.5.0/1.6.0-dev` in `manwithacat/vqcc-hedge-wizardry` HW-15..HW-24 |
 | Method lineage (per upstream docstrings) | `ahmedberatozer/quantum-ai-df-thc-group-compression` (Apache-2.0): `chemistry_refine.py` `sparsify_columns` / `optimize_effective_norm`; kozykappa (sparse rotations); anazemcev (effective norm); phucthaiv02 (the "spend the error budget on lambda_eff" idea); michaelrustad (L-BFGS quantization); SomeJoint/Agniv Banerjee (Reed-Muller coded low bit) |
 
-SHA-256 of the vendored files (as shipped in dataset v7):
+SHA-256 of the vendored files (byte counts also matched the dataset listing at copy time):
 
 ```
-LICENSE           (Apache-2.0 text, unchanged)
-NOTICE            (upstream NOTICE, unchanged)
-paths.py          verbatim
-encode.py         verbatim
-onebody.py        verbatim
-onebody_quant.py  verbatim
-refine.py         verbatim
-refit_weights.py  verbatim
-quantize.py       EXCERPT -- see below
-UPSTREAM_README.md  upstream dfthc_refit/README.md, verbatim
-VERSION           verbatim
+cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+f14ee238f7f6a3f97fef01fc55967f685e47fa47515834ff8af262da7a8ceb2e  NOTICE
+6b46ba71136fc5a69745024f814f8b3cef23d9555aed8aee514045c86417fcab  VERSION
+cf92548221ecaf3b2355840b0b5ec8d4e771ce5dbe81093ec9c4a0e841108441  UPSTREAM_README.md
+c04d3b681597ef2c97348cc6802016a6b04cf88a4226291e83a5c2b2fb1907ae  paths.py
+3b3fe0a7de33d283327c6466403a95b823ab65e600f5d08e83a4df45fb9a038a  encode.py
+2ccebd92af86b70362e322c1fbb8c198d3a7bb625ac0c257c9e2192b7cc2fa78  onebody.py
+1c3e5fcf82548b290d24c90cdde276c0210e7eacdbc062268302d9ecfd6c39bb  onebody_quant.py
+be60b31e5d6f3319286a9e5db8075de90019559be97c6699c29c810876649250  refine.py
+5e90d3860b0123b090d4d539f47244cb6c47743f811cdff848e14cb2104cab72  refit_weights.py
+8f8d812be55e893d94de44ab0d2f8b63a93462c2348cda0252edbb3a3f75ac13  quantize.py (excerpt)
 ```
 
-Run `shasum -a 256 vendor/dfthc_refit/*` to record them; they were verified against the
-byte counts published in the dataset listing when this directory was created.
+`quantize.py` is the only file that is not upstream's: it is an excerpt (see below).
 
 ## The one modification: `quantize.py`
 
