@@ -536,3 +536,52 @@ Q45 在 `T_mean ≤ 1,545` 时 invsqrt cost 75,290 → **GM 27.715（+0.40）**�
 
 判据：B 能构建出 `num_qubits == 45`，静态 T ≤ 1,550 + 66，且官方 verifier 在 200,540,928 shots 上
 PASS；否则记录每一档的断言位置，把"45 线需要新合成"这一结论钉死。
+
+## 15. INV-45D 结果：Q45 现在只差**一条线**，而且是一个具体站点
+
+`qingyu1232/qcc-inv45d-stack`（Kaggle CPU，COMPLETE）。四档变体，逐档原文：
+
+```
+PATCH_ORDER tail ['with q46_loaders.py', 'Q 46', 'post agents/micro47/scripts/relocate_cs2.py']
+BODY PACK/A6 ['A6_EARLY = True ...', 'PACK = False   # agent loader2: no h0 pack']
+====================== q46            Q=46 PACK=False A6_EARLY=True
+generator done (18 s)  pipeline done (105 s)  post pass done (141 s)
+proof: PASS_EXACT_NATIVE_TEXT_ALL_REQUESTED_INPUTS_ALL_HMR_TRANSCRIPTS
+BUILT invsqrt.kmb 321aff83636214196daa9cbc9dcc9c5e12a155bcff8d9989e98b8cee40935177
+GATE_Q46 PASS
+====================== q45_stack      Q=45 PACK=True  A6_EARLY=True
+ValueError: Attempted to allocate more qubits than the maximum.
+  allocated: 45  requested: 1  allocated+requested: 46  max: 45
+  File ".../engine/fusion/arithmetic.py", line 38, in _compute_carry
+    outgoing = builder.alloc_qubits(1)[0]
+====================== q45_pack_only Q=45 PACK=True  A6_EARLY=False
+（同上，同一个 arithmetic.py:38）
+====================== q45_a6_only   Q=45 PACK=False A6_EARLY=True
+ValueError: Attempted to allocate more qubits than the maximum.
+  allocated: 26  requested: 20  allocated+requested: 46  max: 45
+  File ".../patches/patch_ld_first20_56b8.py", line 60, in load_joint16
+    available = list(builder.alloc_qubits(cap))
+```
+
+**这是一个实质进展，不是又一次"不行"：**
+
+1. 之前（INV-45C）Q45 死在 `patch_w47_body.py:210` 的 `assert builder.max_qubits in (46,47,48)`，
+   也就是**连 body 都跑不到**，结论只能写成"没有 45 线 body"。
+2. 现在把打包开关叠上去（`PACK=True`）并把断言放宽到 45 后，**Q45 的 body 真的跑起来了**：
+   - 对照（`PACK=False`）死在 **loader**：`26 + 20 = 46`；
+   - 一旦 `PACK=True`，loader 那关过了（打包确实省下一条线），前进到 **`arithmetic.py:38`**，
+     死在"45 已分配、还要 1 条"。
+3. 也就是说 Q45 的缺口被定位到**唯一一处**：分段 measurement-carry 加法要一个 `outgoing` carry 线，
+   而那一刻 45 条线全满。`_compute_carry` 里 `incoming` 与 `outgoing` 在最后一行
+   `cx(incoming, outgoing)` 同时被读，所以**不能**简单共用；需要第三条路线：
+   - 再退休一个可从其余活线重建的操作数（作者给 a6 用过的手法：
+     `hmr(v[11]); free(v[11]); v[11]=None`，再用 `current-D` 恒等式 1 个 CCX 重建，并用 Z 补 HMR 符号）；
+   - 或让 carry 边界的 `outgoing` 落在某个此刻已死的线上。
+
+**因此 invsqrt 的下一件事非常具体**：在 `emit_body` 里再造一个"可重建操作数"的提前退休
+（候选是 v[10] / h[9] / flags[3]，判据是它的值可由其余活线在 1–2 个 Toffoli 内重建），
+使 `_compute_carry` 那一刻只剩 44 条活线。成功后 Q=45，
+盈亏平衡 ΔT ≤ 66，收益 **+0.20（ΔT=66）… +0.40（ΔT=0）GM**。
+
+附带记录：`PACK=True` 的代价是 `unpack_h0` 的 3 个 Toffoli（`patch_w47_body.py` 头注释），
+即这条路线即使成功，ΔT 也只有个位数水平，远在盈亏平衡之内。
