@@ -566,3 +566,27 @@ score = R(eps_plus) * Q^2 * T_mean
 
 结论：**DQI 的唯一剩余杠杆就是 889→888 的真实重分配**（+0.0205 GM），
 没有"降低 R"或"抽签优化"这类空间。
+
+## 10. DQI 的抽签是**由电路哈希决定的**，不是提交时随机（实测源码）
+
+`verifiers/dqi/verify_submission_dqi.py:300-304, 338-339, 358`：
+
+```python
+def _initial_seed(circuit_hash: str, salt: str) -> int:
+    if not salt:
+        return int(circuit_hash, 16)           # 无 salt 时直接用电 .kmb 的 SHA-256
+    return int(hashlib.sha256(f'{circuit_hash}{salt}'.encode('utf-8')).hexdigest(), 16)
+...
+base_seed = _initial_seed(circuit_hash, salt) if seed is None else int(seed)
+```
+
+结论（重要，纠正了之前"抽签运气"的说法）：
+
+1. DQI 的 shot 采样、`HMR` 结果、`R` 结果全部由 **`.kmb` 自身的 SHA-256（+ 比赛的 salt）**
+   派生。所以对同一个 DQI 文件，**每次提交得到完全相同的失败集合和完全相同的 cost**。
+2. 因此我们的 **27.31193 是这三个文件的确定性分数**，不是运气；同一个 `821bf8d1`
+   换谁来提交都是 360,209,905,486.02。
+3. 反过来说，**重复提交同一个 DQI 文件不可能"抽"到更好的结果**，也无法通过换
+   invsqrt/化学件来改变 DQI 的 draw（种子只看 DQI 自己的哈希）。
+4. 榜上 27.314–27.319 与 27.3066 的差别因此来自**不同的 DQI 电路**（不同哈希 → 不同 draw）
+   或不同的 Q/T，而不是同一文件的运气。
