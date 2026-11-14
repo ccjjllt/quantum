@@ -510,3 +510,31 @@ Key links:
 - https://www.kaggle.com/code/asteriospanoras/qcc-27-30-what-works-what-fails-and-why
 - https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation/discussion/759048
 - https://www.kaggle.com/datasets/syed3000/vqcc-own-circuit-portfolio
+
+## 8. 实测：889 → 888 没有"免费"路径（2026-11-15，Kaggle）
+
+`qingyu1232/qcc-dqi-q888-probe`（CPU，COMPLETE）直接读 `821bf8d1` 的声明宽度与实际用量，
+原始日志：
+
+```
+dqi.kmb bytes 455584321 sha256 821bf8d1…b672a3 MATCH_821
+num_qubits 889 num_bits 154157 static_toffoli_like 383414
+op_kinds {'A': 49980, 'R': 52177, 'B': 17022253, 'Z': 46466, 'P': 3039542,
+          'C': 32216017, 'S': 378664, 'X': 107658, 'H': 71568}
+distinct_indices_used 889 min 0 max 888
+UNUSED_IN_0..Q-1 0 []
+ABOVE_DECLARED 0 []
+FREE_SHRINK_IF_RENUMBERED 0 (Q -> 889 )
+usage_least10 [(13606,15),(14180,23),(14852,11),(15232,35),(15272,19),…]
+```
+
+判决：
+
+- 声明的 889 条 wire **全部被使用**，最大下标正好 888，`0..888` 无空洞。
+  因此"声明宽度大于实用宽度 → 重编号白拿一个 qubit"这条路**不存在**，`
+  (Q/(Q+1))² 的免费 0.225% 不存在。
+- 最冷门的 wire 也有 13,606 次操作，不存在"顺带删掉一条死线"的空间。
+- 所以 889→888 只能走**真实重分配**（release-and-recompute / HMR），
+  预算仍是 ΔT ≤ 862（盈亏平衡），预期 +0.0095…+0.0205 GM，需要源码级 7 族改造。
+
+验证范围：本项在 Kaggle 上跑（kickmix 只在 Linux 可用），本机未执行。
