@@ -60,3 +60,13 @@ fails, the B<143 line is closed and the current 27.31193 submission remains best
 - `qcc-chem-b139-cpu` 和 `qcc-chem-b139-quick` 均仍 RUNNING，无输出；Kaggle CPU 队列未返回。
 - 没有最终连续 error_2，没有 GM ≥27.5 候选，未提交新包；当前最佳 27.31193。
 - 本机未跑模拟或官方验证；所有计算都在 Kaggle。
+
+## 2026-11-15 结论：本会话关闭 B<143 线
+
+- 廉价 Stage A（只 refit W/H2_I）已实测失败：B=139 e2 64.31 mHa、B=129 e2 138.07 mHa。
+- full-U 的 B139 CPU 与 B129 GPU v1 在本会话时间盒内均未返回最终连续 error_2：
+  B129 v1 一直 RUNNING、无输出，GPU time_used 已超过 1,860s；B139 CPU/quick 也停在 RUNNING。
+- 没有候选达到 **GM ≥27.5**，也没有 chem cost ≤288.8M 的证据；因此不打包、不提交。
+- 结论：**本会话关闭 B<143 线**，保留当前最佳 **27.31193（ref 58350759，rank 159/3053）**。
+  若以后重开，必须先有一次能返回连续 e2 的完整 U/W retrain，再做 8-bit rounding 与
+  官方 78,080-shot 验证；不能在未读数的情况下假设通过。

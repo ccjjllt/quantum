@@ -67,3 +67,7 @@
 - `qingyu1232/qcc-chem-b139-shrink` 是 139 的快速闸门，但 B129 full 已覆盖它。
 - 两 run 均在 Kaggle，未在本机跑模拟；结果出来后只对通过点做 8-bit rounding、
   loader build 和官方 78,080-shot 验证，且只有 GM ≥27.50 才打包提交。
+
+## 2026-11-15 结论
+
+B<143 的廉价 Stage A 失败（B139 e2 64.31、B129 e2 138.07 mHa）；full-U 的 B129 GPU v1 与 B139 CPU 在时间盒内未返回最终 e2，未达到 GM 27.5。本会话关闭 B<143，保留 27.31193（rank 159/3053）。
