@@ -1000,3 +1000,19 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   25.44039 **高 +1.5617**，比 25.40482 高 +1.5973。
 - cutoff-17 DQI 的公开 draw 比 notebook 声称的 “0 失败” 差；private draw 可能
   是 0–3 次失败，预期 GM 约 27.0–27.08。当前最佳 public 已确认 27.00209。
+
+## 2026-11-15（第四十八轮）：公开 27.3066 与 HW-26 升级
+
+- 公开前沿已从 27.078 升到 **27.3066**：`maoxin123/qcc-v27-4033-toffoli-coded-word-chemistry`
+  v2 的 4,033-Toffoli/pass 化学 + `821bf8d1` DQI + 46Q invsqrt。
+  本账号提交 **58349843**，MCP **COMPLETE 27.30661**。
+- 进一步替换 invsqrt 为 HW-26 `1ba197b02771`（46Q，78,673.569211；未修改官方
+  verifier 200,540,928 shots PASS，worst/tol 0.9986660009），提交 **58350759**，
+  预期 **27.31193**，pending。
+- 公开可复现上限 **27.31214**（再把化学权重换成 npz `e52b7cdd`，仅 +0.0002）；
+  公开榜 27.31+ 的更高分主要来自 DQI 抽签/私有组件，不能直接用公开件复现。
+- DQI retention `max_hops=0/1/2` 实测均只宿主 241 个乘积，逐字节复现 `821bf8d1`；
+  cutoff 18 仍最优。化学 B=143→129 是唯一 ≥1% 的公开思路，但截断 warm start
+  无法过 e2 门，需要全量重训。
+- 研究记录：`experiments/frontier/20261115_upgrade/`；回执：
+  `submissions/20261115_public_2731/README.md`。
