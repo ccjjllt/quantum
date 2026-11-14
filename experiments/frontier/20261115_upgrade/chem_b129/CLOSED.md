@@ -412,3 +412,19 @@ qingyu1232 GPU 0.99h used / 29.01h remaining   <-- 配额从来不是瓶颈，�
 
 这样做的意义：Adam 是上游明确写"the one lever not yet pulled"的那一条，而此前本会话
 从未拿到任何 Adam 的 `error_2` 数值。现在它不再依赖 qingyu1232 的解卡。
+
+### 15.1 排队原因定位：`machine_shape` 而不是配额
+
+jiyujia 的 GPU kernel 在 `machine_shape=NvidiaTeslaT4` 下 **QUEUED 55 分钟**；改成
+`machine_shape=""`（任意 GPU）重新推送后 **30 秒内变 RUNNING**。zhuating 的同一份
+metadata（T4）则是秒开。结论：不是配额、不是账号权限，而是该账号被钉在 T4 池上排队。
+
+顺带确认官方闸门（`verifiers/dfthcsos/verify.py`）：
+
+```
+ERROR_2_THRESHOLD = 0.020      # 20 mHa，硬闸门
+ERROR_1_THRESHOLD = 0.020
+LAMBDA_FLOOR = 49.0 ;  E_GAP_FLOOR = 3.914898 ;  QUBIT_CAP = 128 ;  SHOTS_PER_ADDRESS = 64
+```
+
+即 20 mHa 确实是硬门槛，`error_1` 与 `error_2` 都要 ≤20 mHa。
