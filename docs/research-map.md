@@ -1015,3 +1015,19 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   无法过 e2 门，需要全量重训。
 - 研究记录：`experiments/frontier/20261115_upgrade/`；回执：
   `submissions/20261115_public_2731/README.md`。
+
+### 第四十九轮结果（2026-11-15，B<143 实测关闭）
+
+- `qingyu1232/qcc-chem-b129-full` **v1 已 COMPLETE**（T4，上游 `shrink.py` full-U
+  L-BFGS，seed 为公开 `(8,143,44)` 表）。实测**连续** error_2：
+  B=139 **16.173**、B=135 18.408、B=131 20.713、B=129 **19.830** mHa。
+- 上游 `recipes/finish_merged_b8.toml` 写明 "Rounding has cost 6-8 mHa on merged
+  shapes, so the fit should be <= ~12.5 mHa"。B=129 的 19.830 高出门槛 7.3 mHa，
+  量化后约 26–28 mHa，超过 20 mHa 硬闸门。
+- GM 门槛同样独立否证：`dT/dB = -42.40`，GM≥27.50 需 T≤14,428（chem cost ≤288.98M），
+  只有 B≤135 才够，而 B=135 的 e2 = 18.408 mHa 也不过门槛。B=139 虽最接近 e2 门槛，
+  但只能到 GM 27.42。
+- 结论：**B<143 关闭**（不是时间盒，是两条闸门同时不过）。未做 8-bit rounding、
+  loader build、官方 78,080-shot 验证（第 1 步未过，后续无意义）。
+- 当前最佳保持 **27.31193**（ref 58350759；提交时 159/3053，复核 175/3055）。
+- 记录：`experiments/frontier/20261115_upgrade/chem_b129/CLOSED.md`。
