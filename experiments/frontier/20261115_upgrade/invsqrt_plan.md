@@ -692,3 +692,53 @@ kmsim.py   kmx_to_kmb.py   macrun.py   merge_zpow.py   pipeline.sh   postpass.py
 
 **结论：invsqrt Q45 已把"缺什么"压缩到一条可判定的命题——"15 条空闲线里存在一条 1–2 AND 的
 重建恒等式"——但证明它需要的工具不在公开源码里。** 构建只要 130 s，一旦有恒等式，验证成本极低。
+
+## 19. INV-45I：仿射重建搜索（全域 3,133,452 输入）——**否定**
+
+用作者自己的 `tools/kmsim.py`（位切片模拟器，官方域 MAX_X = 3,133,452）在 Q46 的真实 kmx 上做：
+
+```
+build rc 0   BUILT 291626  321aff8363…  GATE PASS
+kmx lines 34812  num_qubits 46
+cuts file s15k7araw.build.json  n 24
+CUT seed_ready                     instr 5697  live 44
+CUT signed_product15               instr 6699  live 44
+CUT coefficient_retired_for_divider instr 6712  live 31
+ops 34789   quantum wires 46
+official inputs 3133452
+snapshot at 5697: nonzero wires 45
+referenced in the product window (5697→6699, 1,002 ops): 39 wires
+IDLE wires 10  ['q14','q15','q16','q17','q18','q19','q22','q23','q24','q25']
+none q14 / q15 / q16 / q17 / q18 / q19 / q22 / q23 / q24 / q25
+SATURATED 45 live, 10 idle, 0 expressible
+```
+
+**结论（实测，不是推断）：**
+
+1. 在 `product_forward` 的 1,002 条 op 里，**真正完全未被引用**的活线是 **10 条**，不是先前按
+   owner 数推的 15 条 —— 其中 6 条是 `v` 段（q14–q19）、4 条正是 `flags`（q22–q25）。
+2. 对这 10 条逐一做 GF(2) 消元（**把被测线自己排除在基之外**；第一版忘了这一步，
+   得到"全部 = 0"的假结果，已修正重跑）：**没有任何一条能表示成其余活线的仿射函数**
+   （含常数项，全域 3,133,452 个输入）。
+3. 也就是说：**零 Toffoli 重建（纯 XOR）不存在**。剩下唯一可能是 1–2 个 AND 的重建，
+   而求这个的工具 `tools/minand_sat.py` 不在公开源码里（§18）。
+
+因此 reviewer 指定的这条判据——"若有仿射重建 => 退休该线 => Q45"——**已按实测关闭**：
+
+```
+PASS 条件（仿射）: 存在 w ∈ idle 使 w ∈ span{其余活线} ∪ {1}   -> 实测 0/10
+```
+
+## 20. invsqrt 宽度线最终状态
+
+| 路线 | 判据 | 结果 |
+|---|---|---|
+| Q45 body 存在？ | `patch_w47_body.py:210` 断言 | 叠加 `PACK=True` 后可运行（§15） |
+| Q45 差多少 | `_compute_carry` 需第 46 条 | 峰值在 `product_forward`，44 活 + 2（§16、§17） |
+| 空闲线 | product 窗口内未被引用 | **10 条**（6 v + 4 flags）（§19） |
+| 仿射重建 | 全域 GF(2) 消元 | **0/10，不存在**（§19） |
+| 1–2 AND 重建 | 需 `minand_sat.py` | 工具未发布（§18） |
+
+**invsqrt Q45 到此为止**：三条子路线（body / 峰值 / 仿射重建）全部有实测结论，
+唯一未测的是"1–2 AND 重建"，它缺工具而不是缺算力。
+构建 138 s、官方域模拟数秒，所以一旦补上 SAT 工具，这条路可以在一次会话内跑完。
