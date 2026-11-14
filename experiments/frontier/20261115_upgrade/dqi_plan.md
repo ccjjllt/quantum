@@ -590,3 +590,22 @@ base_seed = _initial_seed(circuit_hash, salt) if seed is None else int(seed)
    invsqrt/化学件来改变 DQI 的 draw（种子只看 DQI 自己的哈希）。
 4. 榜上 27.314–27.319 与 27.3066 的差别因此来自**不同的 DQI 电路**（不同哈希 → 不同 draw）
    或不同的 Q/T，而不是同一文件的运气。
+
+## 11. 源码级审计：889 是"五见证平台"，没有便宜的 qubit（2026-11-15）
+
+完整报告见 `dqi_ancilla/REPORT.md`（326 行，只读源码分析，未构建、未模拟）。要点：
+
+- 49 个 ancilla 的账正好是 **24 + 1 + 24**：
+  - 24 = EEA 的 working carry word pair（`integrated_pipeline.py:163`→`:202`）；
+  - 1 = gauge sentinel flag（`rolling_tail.py:226`，`:167→:198`）；
+  - 24 = 瞬时 GF(2^24) scratch，出现在 **5 个调用点**，从不同时存在，每次返回前 free。
+- **这 5 个站点各自都恰好到 864+1+24 = 889**。因为 Q 是全局最大值，
+  **任何单点改动都改变不了 Q** —— 这正是此前 `qcc-dqi-q888-probe` 看到
+  `FREE_SHRINK_IF_RENUMBERED 0` 的结构性原因。
+- 唯一可能的路是把三个 1-bit predicate（tail flag / third-chart predicate / gauge sentinel）
+  改成经典控制，ΔT 结构下界 0、悲观 +600，盈亏平衡 **+863**。最好 +0.0205 GM，现实 ±0.010。
+- 887 及以下需要把 24-bit product scratch 在 5 个站点同时降到 23 bit —— 那是新的算术恒等式，
+  不是补丁。
+
+因此 DQI 的 Q 轴（每个 qubit +0.0205）在"补丁"意义上关闭；要拿它必须做一次
+**五点定点手术**，且收益只有 +0.01～+0.02。
