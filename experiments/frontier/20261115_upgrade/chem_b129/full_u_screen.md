@@ -53,3 +53,10 @@ fails, the B<143 line is closed and the current 27.31193 submission remains best
 - 同时 `qcc-chem-b139-cpu`（CPU full-U 139x44 闸门）仍在 RUNNING。
 - 两者都未产出连续 error_2；当前没有 GM ≥27.5 的候选，最佳仍是 27.31193。
 - 所有计算在 Kaggle；本机未跑模拟。
+
+## 2026-11-15 19:xx UTC（最终状态）
+
+- `qcc-chem-b129-full` v1（GPU）仍 RUNNING，无输出；`qcc-chem-b129-full` v2 是占位 CPU 版本。
+- `qcc-chem-b139-cpu` 和 `qcc-chem-b139-quick` 均仍 RUNNING，无输出；Kaggle CPU 队列未返回。
+- 没有最终连续 error_2，没有 GM ≥27.5 候选，未提交新包；当前最佳 27.31193。
+- 本机未跑模拟或官方验证；所有计算都在 Kaggle。
