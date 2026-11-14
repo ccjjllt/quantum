@@ -454,3 +454,56 @@ T = 1,711.294 (plan §4 的 C) → ΔT ≤ 76.9
 §4 写的 38。公开最便宜的精确覆盖是 +196（3× 于盈亏平衡，仍为负），但**余量比原先认为的
 宽 1.75×**，这使得"让生成器直接以 45 条线重新发射"这条路的期望值明显上升——
 这正是 INV-45C 在测的东西（builder 级 0 补价即 27.715，远高于 27.5）。
+
+## 13. INV-45C 结果：工具链 PASS，但生成器**根本没有 45 线的 body**（实测）
+
+`qingyu1232/qcc-inv45c-census`（Kaggle CPU，COMPLETE）。两段构建都在同一个会话里跑完，
+而且比计划预期的 15–25 min 快得多（85 s）：
+
+```
+TREE /kaggle/working/inv45/src/invsqrt_source
+KSO_SHA match True VER_SHA match True
+python3.13: /usr/bin/python3.13
+PATCH_ORDER tail: ['with q46_loaders.py', 'Q 46', 'post agents/micro47/scripts/relocate_cs2.py']
+==================== q46 Q 46
+build: s15k7a at Q46, 26 patch args
+generator done (11 s)   pipeline done (63 s)   post pass done (84 s)
+proof: PASS_EXACT_NATIVE_TEXT_ALL_REQUESTED_INPUTS_ALL_HMR_TRANSCRIPTS
+wall time 85 s
+BUILT invsqrt.kmb 321aff83636214196daa9cbc9dcc9c5e12a155bcff8d9989e98b8cee40935177
+GATE_Q46 PASS
+==================== q45 Q 45
+-- q45 rc 1
+build: s15k7a at Q45, 26 patch args
+Traceback (most recent call last):
+  File ".../tools/build_variant.py", line 105, in build
+    v, h = emit_body(builder, v, h, flags, ctx.tables, old.divider, ctx.decoder.decode_root, trace=owner_trace)
+  File ".../patches/patch_w47_body.py", line 210, in emit_body
+    assert builder.max_qubits in (46, 47, 48)
+AssertionError
+```
+
+判决（这是**结构性**答案，不是推测）：
+
+1. **工具链闸门 PASS**：同一份源码 + 比赛 kickmix 在 85 s 内逐字节重建
+   `321aff83…35177`，exact proof 状态 `PASS_EXACT_NATIVE_TEXT_ALL_REQUESTED_INPUTS_ALL_HMR_TRANSCRIPTS`。
+   所以下面的失败是真实的宽度限制，不是环境问题。
+2. **Q45 在 body emitter 的第一行就断言失败**：`patch_w47_body.py:210`
+   `assert builder.max_qubits in (46, 47, 48)`。也就是说生成器只有 **46 / 47 / 48**
+   三种 body；**没有 45 线 body 这种东西**。
+3. 该文件头自述这三个 body 都是**手写的宽度专用合成**：
+   - `Q46 body: retire a6 through the product forward (+1 Toffoli)`、
+     `A6_EARLY=True ... This gives coef1 its 46th-wire headroom at zero extra Toffolis`；
+   - `Q47 BODY: free h0 packing into the exponent flags + Pro 2 snapshot2 table-cleanup tail`。
+   即 46 线的余量**已经被作者用掉**（a6 提前 X-measure 换来的第 46 条线头寸）。
+4. 再加上 `q46_loaders.py` 的两个 loader certificate 钉死 `peak 46 / entry 46`
+   （`assert builder.max_qubits>=spec['peak'] and builder.num_allocated_qubits==spec['entry']`），
+   Q45 需要的是**重新合成一个 45 线 body + 重搜两个 loader certificate**，
+   而不是"在现有 46 线排布里找回 ≤66 个 Toffoli 的余量"。
+
+因此 INV-45C 的 GO 条件（`Σ 最便宜修复 ≤ 66`）**无法被满足**：不存在可加价的 46 线排布，
+可加价的对象尚未被写出来。这与公开三次尝试的 +196/+257 Toffoli 一致——那些数字也是
+"强行从已发射电路里挤"，而不是"生成器原生 45 线"。
+
+**宽度线正式关闭**（除获准开展一次新的 body 合成项目）。补充：构建只要 85 s，
+所以一旦有 45 线 body，验证成本很低——瓶颈纯粹是合成工作，不是算力。
