@@ -45,3 +45,11 @@ fails, the B<143 line is closed and the current 27.31193 submission remains best
   --select impact`，下载 starter+pipeline，不下载 994MB competition zip。
 - 若 B=139 full-U 连续 e2 仍 >20 mHa，则 B=129 直接关闭；若接近 15 mHa，再等 GPU
   槽位跑 B=129。所有计算在 Kaggle，本机不跑模拟。
+
+## 2026-11-15 19:xx UTC 更正
+
+- `qcc-chem-b129-full` 的 **v1** 仍在 RUNNING（`versionLabel:"v1"` 查询，GPU true），
+  没有最终输出；v2 是后来写入的占位 CPU 版本，不代表 v1 结果。
+- 同时 `qcc-chem-b139-cpu`（CPU full-U 139x44 闸门）仍在 RUNNING。
+- 两者都未产出连续 error_2；当前没有 GM ≥27.5 的候选，最佳仍是 27.31193。
+- 所有计算在 Kaggle；本机未跑模拟。
