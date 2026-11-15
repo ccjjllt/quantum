@@ -722,3 +722,58 @@ self.builder.cx(current, previous); erase_zero_flag(self.builder, denominator, p
 判据不变：`num_qubits == 888`、`static_toffoli_like ≤ 384,518`（=383,655+863 盈亏平衡），
 官方 verifier 默认 salt + 16 salts，0 value/0 phase errors；预期成本 < 360,209,905,486.02 才提交。
 构建 145–215 s、验证 4.4 min/salt，所以一轮判定 ≈ 15 min。
+
+## 14. DQI-888 步骤 4–5：惰性分配补丁有效，墙从第一道推进到第二道
+
+### 14.1 源文件被自引用哈希链冻结，只能做运行时补丁
+
+`v7_binding.py` 用三层清单把 132 + 266 + 21 个源文件按 `bytes + sha256` 锁死，清单自身又被
+`V6_PLAN_SHA`/`V6_MANIFEST_SHA` 常量锁死。直接改
+`first3_retained_norm_adapter.py` 会立刻失败：
+
+```
+AssertionError: controller_work/after_v3/blocks/v6/first3_retained_norm_adapter.py
+  (v7_binding._check_files: assert source.stat().st_size == row['bytes'] and digest(source) == row['sha256'])
+```
+
+（作者在文件 docstring 里也写了这个设计："the existing initial tail predicate is borrowed only
+before its first use and is HMR-reset **without being freed**" —— 为了保住 `821bf8d1` 的原样，
+他刻意不 free 这条线。）
+
+### 14.2 运行时惰性补丁（不改任何文件，哈希全对）
+
+把 `RollingTail.current` 换成**首次读取时才分配**的属性（`_cur = UNSET` 哨兵，
+`seed_prefix` 显式设 `None` 的情况不受影响），并给**所有持有 `RollingTail` 的模块**打补丁：
+
+```
+Base.Tail is <module 'rolling_tail_deferred' .../converter_width/tail_phase_defer/rolling_tail_deferred.py>
+modules holding RollingTail: ['rolling_tail', 'rolling_tail_conditional', 'rolling_tail_early', 'rolling_tail_deferred']
+patched 4 module(s)
+```
+
+第一次只补 `rolling_tail_early` 时无效（`Base.Tail` 是 `rolling_tail_deferred`），补全四个后生效。
+
+### 14.3 墙推进了：第一处已通过，现在卡在 third-pivot
+
+```
+BUILD FAILED
+  first3_retained_norm_adapter.py:72  third = Third.emit_prefix(builder, words[:2], words[2], carry, borrowed_flag)
+  third_pivot_chart.py:79              inner = Norm.inverse_prefix_with_bank(builder, current, clean_bank)
+  inverse_retained_norm_deferred.py:87 temporary = builder.alloc_qubits(12)
+ValueError: allocated 877 + requested 12 = 889 > 888
+```
+
+对比步骤 3（当时死在 `first3_retained_norm_adapter.py:52` 的**第一次** bank 反演）：
+**现在前三次 bank 反演都过了**，说明 tail flag 那一条确实被让出来了；新的占用者是
+`borrowed_flag`（adapter 第 65 行 `borrowed_flag = tail.current` 分配、随后传给
+`Third.emit_prefix`），它在 third-pivot 的 bank 反演期间活着。
+
+这与 `dqi_ancilla/REPORT.md` 的"五见证"结构一致：**每修一处，墙就换到下一位见证者**。
+目前已确认的顺序是：① tail predicate（已解决）→ ② third-pivot 的 borrowed flag。
+
+### 14.4 下一步
+
+对 `third_pivot_chart.emit_prefix` 做同型处理：把 `borrowed_flag` 的**读取**推迟到它第一次
+被真正使用的位置（`third_pivot_chart.py:115` 的 `flag = builder.alloc_qubits(1)` 附近），
+或者把该函数里的 bank 反演挪到借用之前。判据不变（Q=888、static ≤ 384,518、官方 verifier）。
+构建失败只要 34 s，所以每次迭代很便宜。
