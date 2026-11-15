@@ -361,3 +361,24 @@ ref 58382097  COMPLETE  public 27.31541      （预测 27.31541，实测一致�
 顺带测到两个有用数字：`S3` 的不同值只有 **122,233,720**，`span{fp(c_i)}` 秩 **64/64**，
 按均匀模型随机碰撞期望 ≈ 946×(1.22e8)²/2⁶⁴ ≈ **0.008/线**——所以"7-AND 为空"本来就极可能是对的，
 只是这一次没有被正确测量。可信的判定仍只到 **6-AND（0/10，全域）**。
+
+## 2026-11-16 收口：7-AND 有效判定为 EMPTY（invsqrt Q 线关闭）
+
+`jiyujia/qcc-inv45t-sevenand-cpu`（COMPLETE，9,577 s）修好了此前的实现缺陷后给出**可信**结果：
+
+```
+GATE PASS 321aff83      distinct S3 122,233,720      sorted asserted
+POSITIVE_CONTROL 200/200    SWEEP EMPTY (946 targets, 9,025 s)    VERIFIED 0
+```
+
+即 q22 在 7 个 AND 内无重建恒等式（全域 3,133,452 输入判定）。此前的两次 GPU"空结果"
+正控制 0/300，已作废；这一次控制 200/200，是**测量**而非失效。
+
+AND 阶梯因此关闭在 0–7（q22 七档全部实测，其余九条线 0–6 全部实测）。
+Q=45 需要 ≥8-AND 或 SAT 综合，不属于"再跑一次"的范围。
+
+另记一条外部变动（会破坏可复现性）：`syed3000/vqcc-own-circuit-portfolio` 已删除
+`invsqrt_source_zip`，运行时下载会 `HTTP 400`；atlas 里的 `kmx/invsqrt/321aff836362.kmx`
+仍可用于重建同一份 46Q 电路（已内联 kmsim 的 kernel `qcc-inv45u-sevenand-atlas` 走这条路）。
+
+当前最佳：**ref 58382097, COMPLETE, 27.31541**。
