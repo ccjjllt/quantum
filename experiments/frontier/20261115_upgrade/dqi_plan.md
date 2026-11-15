@@ -671,3 +671,54 @@ builder.free(temporary)
 
 这与此前 `dqi_ancilla/REPORT.md` 的"五站点协同"不同：真实构建显示**第一个也是唯一的阻塞点**
 是这处 12 位暂存；先修它，再看是否还有第二个。
+
+## 13. DQI-888 步骤 3：877 条活线的精确构成 —— 只差**一条 1-bit flag**
+
+`qingyu1232/qcc-dqi888-instr2`（COMPLETE）。给 `CircuitBuilder` 套了一层代理，记录每次
+`alloc_qubits` 的调用点（`file:line`），`free` 时移除；溢出时 dump 所有仍活的线及其分配点：
+
+```
+==== maxq 889
+allocated at end 840
+built cutoff 18 at max 889: 889 qubits, 383655 static Toffoli-like
+SHA 32b0a8b444762334ac028a381693cab9185b370ffd2261560894929afffaf216  MATCH_32b0a8b4 True
+
+==== maxq 888
+OVERFLOW at controller_work/after_v3/blocks/v5/inverse_retained_norm_deferred.py:87  requested 12  allocated 877
+LIVE_1BIT 5 sites 5
+  live 24 from controller_work/after_c5/integration_v3/integrated_pipeline.py:163
+  live 12 from controller_work/after_v3/blocks/v5/inverse_retained_norm_deferred.py:80
+  live  1 from controller_work/after_c5/extractor_width/rolling_tail_early.py:41
+```
+
+即溢出那一刻的 **877 = 840（syndromes）+ 24（carry 字对）+ 12（inverse_norm）+ 1（rolling-tail
+`current` flag）**，账目完全对得上。而要分配的 `temporary` 正是第 12 个。
+
+**因此 888 只需要处理一条线**：`rolling_tail_early.py:41` 的 `self.current`。
+它是此刻唯一的 1-bit predicate；把它（HMR 成经典位 + free，稍后按 numerator 重新求得）
+处理掉，876 + 12 = 888，构建就能过。
+
+这与 `dqi_ancilla/REPORT.md` §5 的"五见证平台"并不矛盾，但**更锐利**：五见证描述的是
+其他路径上的峰值；**cutoff-18 这条真实构建路径上，阻塞点就是这一个 flag**。
+报告 §6 推荐的第一个补丁也正是 A/B 站点（`rolling_tail_early.py`），与此独立吻合。
+
+### 13.1 下一步的唯一改动
+
+`RollingTail.begin_slot/end_slot`（`rolling_tail_early.py:41,48-90`）里 `self.current` 的使用是：
+
+```python
+current = self.current if first else self.builder.alloc_qubits(1)[0]
+zero_xor(self.builder, numerator, current)      # current = [numerator == 0]
+self.builder.cswap(current, numerator, denominator)
+...
+self.builder.cx(current, previous); erase_zero_flag(self.builder, denominator, previous)
+```
+
+作者在 gauge 站点已经演示过"park + 重算"（`gauge_park_lender.py` 的 `park/unpark`：
+`cswap → alloc_bits → hmr → ... → toggle_zero 重算 → cz 补相位 → cswap`）。
+把同样的手法用在 `self.current` 上，让它在 `inverse_prefix_with_bank` 期间不占线，
+即可拿到 888。
+
+判据不变：`num_qubits == 888`、`static_toffoli_like ≤ 384,518`（=383,655+863 盈亏平衡），
+官方 verifier 默认 salt + 16 salts，0 value/0 phase errors；预期成本 < 360,209,905,486.02 才提交。
+构建 145–215 s、验证 4.4 min/salt，所以一轮判定 ≈ 15 min。
