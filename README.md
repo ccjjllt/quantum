@@ -42,9 +42,12 @@
 | 2026-11-13 | [392k DQI swap（公开 392k 解码器）](submissions/20261113_392k_swap/README.md) | 58290992 | 25.44039，COMPLETE |
 | 2026-11-13 | [27.078 public-frontier trio（46Q invsqrt + 889Q DQI + 4,074T chem）](submissions/20261113_27_078/README.md) | 58299045 | **27.00209，COMPLETE** |
 | 2026-11-15 | [公开 27.30661 包（maoxin v27 4033 chem + 821bf8d1 DQI + 46Q invsqrt）](submissions/20261115_public_2731/README.md) | 58349843 | **27.30661，COMPLETE** |
-| 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | **27.31193，COMPLETE** |
+| 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | 27.31193，COMPLETE |
+| 2026-11-15 | [化学换件：4030 loader + 新权重 refit](experiments/frontier/20261115_upgrade/chem_ab/REPORT.md) | 58382097 | **27.31541，COMPLETE** |
 
-当前采用组合为 **HW-26 升级包（本账号 `58350759`，COMPLETE 27.31193）**：
+当前采用组合为 **化学换件升级包（本账号 `58382097`，COMPLETE 27.31541）**：
+`1ba197b02771` invsqrt + `821bf8d1` DQI + 4030-Toffoli 化学件（新权重 refit）。
+上一版 `58350759` 为 27.31193。
 invsqrt `1ba197b02771`（46Q，78,673.569211；未修改官方 verifier 200,540,928 shots PASS，
 worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 errors）、
 化学 maoxin 4,033 loader（427Q，294,991,455.82，T=14,728）。

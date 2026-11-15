@@ -1029,5 +1029,7 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   但只能到 GM 27.42。
 - 结论：**B<143 关闭**（不是时间盒，是两条闸门同时不过）。未做 8-bit rounding、
   loader build、官方 78,080-shot 验证（第 1 步未过，后续无意义）。
-- 当前最佳保持 **27.31193**（ref 58350759；提交时 159/3053，复核 175/3055）。
+- 当前最佳 **27.31541**（ref 58382097，2026-11-15，COMPLETE）：invsqrt `1ba197b0` + DQI `821bf8d1` 不变，
+  化学件换成 4030-Toffoli loader + 新权重 refit（官方 verifier 同环境 A/B：294,878,860.58 vs 294,991,455.82，
+  两者均 PASS；预测 27.31541，实测一致）。上一版 27.31193（ref 58350759）。
 - 记录：`experiments/frontier/20261115_upgrade/chem_b129/CLOSED.md`。
