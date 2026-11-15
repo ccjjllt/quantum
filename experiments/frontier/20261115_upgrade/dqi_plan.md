@@ -931,3 +931,41 @@ Karatsuba 形式，需要三组 12 位中间量再合并，那**不是把 24 拆
 
 **本会话成果：27.31193（rank ~336/3073），相对采用的公开包 +0.00532。**
 要达到 28+（−9% 成本乘积）或 29.9（−23.9%），必须完成上面任意一条"新恒等式"级工作。
+
+## 19. DQI-888 步骤 7：第三道墙的活线构成实测——**没有可复用的 bank**
+
+`qingyu1232/qcc-dqi888-wall3`（CPU，COMPLETE，42 s）。把两个已生效的运行时补丁（惰性 tail +
+`push_condition` 古典化 zero_flag + adapter 重指向）与活线插桩合并，溢出时 dump：
+
+```
+patches: lazy tail + classical zero_flag + adapter re-point
+OVERFLOW at .../direct_carry_arithmetic.py:37  requested 24  allocated 865
+  live 24 from .../after_c5/integration_v3/integrated_pipeline.py:163
+  live  1 from .../after_c5/converter_width/tail_phase_defer/rolling_tail_deferred.py:57
+ValueError: allocated 865 + requested 24 = 889 > 888
+```
+
+**整个 865 只有两项非 syndrome 的活线**：24 位的 carry 字对（`integrated_pipeline.py:163`）
+和 1 位的 tail flag。加上 840 个 syndrome 寄存器正好 865。
+
+也就是说：
+
+1. **没有空闲的 12 位段可复用**——此处不存在 `clean_bank`（`divide_deferred(builder, source,
+   target)` 的签名里根本没有 bank 参数），reviewer 设想的"复用 clean_bank 的 12+12 分段"
+   在这条调用路径上不成立；
+2. 24 位 scratch 是 GF(2²⁴) 乘法的目标寄存器（`A.product → Prior.product(…, tensor24(delta))`），
+   而 24 位 carry 是运算对象；
+3. 因此 Q=888 需要把 **carry 或 scratch 从 24 降到 23**——即新的算术恒等式，
+   不是调度/补丁能解决的。
+
+### 19.1 DQI 轴的最终账（全部实测）
+
+| 项 | 数值 / 状态 |
+|---|---|
+| 889 复现闸门 | ✅ `32b0a8b4`（145 s）/ `821bf8d1`（早前会话） |
+| 墙① tail flag | ✅ 惰性属性解决（4 模块运行时补丁） |
+| 墙② third-pivot zero_flag | ✅ 古典化解决（`push_condition`，ΔT **−24**） |
+| 墙③ 24 位算术 scratch | ❌ 活线 = 840 + 24 + 1，**无空闲 bank**，需 24→23 |
+| 888 构建 / 官方 verifier | ❌ 从未成功 / 从未运行 |
+
+DQI 的 Q 轴在"补丁"意义上**彻底关闭**，且现在有构建级证据（不是源码推断）。
