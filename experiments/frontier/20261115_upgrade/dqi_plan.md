@@ -609,3 +609,65 @@ base_seed = _initial_seed(circuit_hash, salt) if seed is None else int(seed)
 
 因此 DQI 的 Q 轴（每个 qubit +0.0205）在"补丁"意义上关闭；要拿它必须做一次
 **五点定点手术**，且收益只有 +0.01～+0.02。
+
+## 12. DQI-888 步骤 1–2：工具链闸门通过，且找到**唯一的第一个失败点**（2026-11-15 实测）
+
+### 12.1 闸门：`build_cut.py ... 18` 在本会话重现
+
+`qingyu1232/qcc-dqi888-gate`（CPU，COMPLETE）：
+
+```
+src zip 8486126  build_cut 1849  comp True
+built cutoff 18: 889 qubits, 383655 static Toffoli-like, 145s
+CUT18 qubits 889  num_bits 53908  static 383655
+CUT18 sha 32b0a8b444762334ac028a381693cab9185b370ffd2261560894929afffaf216
+GATE_32b0a8b4 True
+```
+
+**构建只要 145–209 s** —— 这一点很重要：888 手术的迭代成本是分钟级，不是"多天"。
+
+### 12.2 `set_max_qubits(888)` 的第一失败点（决定性）
+
+`qingyu1232/qcc-dqi888-probe`（COMPLETE）：
+
+```
+ValueError: Attempted to allocate more qubits than the maximum.
+  allocated: 877  requested: 12  allocated+requested: 889  max: 888
+  File ".../blocks/v5/inverse_retained_norm_deferred.py", line 87, in _inverse_with_bank
+    temporary = builder.alloc_qubits(12)
+```
+
+**这比此前源码审计的结论精确得多**：不是抽象的"五见证都在 864+1+24"，
+而是**一个 12 位临时字**在这条路径上需要 877+12=889。
+
+失败点的上下文（`_inverse_with_bank`）：
+
+```python
+inverse_norm = builder.alloc_qubits(12)      # 12 位倒数，活着
+...
+temporary = builder.alloc_qubits(12)         # <- 死在这里
+for half in (source[:12], source[12:]):
+    xor_product(builder, half, inverse_norm, temporary)
+    builder.swap(half, temporary)            # 交换后 temporary 持旧的 half
+    mask = builder.alloc_bits(12); builder.hmr(temporary, mask)   # 把这个旧值测成经典 mask
+builder.free(temporary)
+```
+
+所以 `temporary` 的作用是**给 swap 当暂存 + 随后被 HMR 成经典 mask**。
+要拿到 888，只需要在这条路径上让峰值降到 876：
+
+- 要么在 `alloc_qubits(12)` 之前释放 1 条活线（候选：`delta` 之类的 1-bit predicate，
+  或 `prefix_record.child_mask` 之外仍活着的 flag）；
+- 要么把这块 12 位暂存改成**复用 `clean_bank` 里的空闲段**（函数本身已经持有 `clean_bank`，
+  `original_norm/child_norm/child_inverse` 就是从中切出来的）。
+
+### 12.3 下一步（下一次构建即可判定）
+
+在 `inverse_retained_norm_deferred.py` 的 `temporary` 处做**一处**改动，重建 888：
+
+- 判据：`num_qubits == 888`，`static_toffoli_like` ≤ 383,655 + 863（盈亏平衡），
+  生成器/官方可验证性由官方 verifier（默认 salt 起）判定；
+- 因为构建 145 s、验证 4.4 min/salt，一次完整判定 ≈ 15 min。
+
+这与此前 `dqi_ancilla/REPORT.md` 的"五站点协同"不同：真实构建显示**第一个也是唯一的阻塞点**
+是这处 12 位暂存；先修它，再看是否还有第二个。
