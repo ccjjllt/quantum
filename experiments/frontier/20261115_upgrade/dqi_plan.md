@@ -969,3 +969,50 @@ ValueError: allocated 865 + requested 24 = 889 > 888
 | 888 构建 / 官方 verifier | ❌ 从未成功 / 从未运行 |
 
 DQI 的 Q 轴在"补丁"意义上**彻底关闭**，且现在有构建级证据（不是源码推断）。
+
+## 20. DQI 24→23 判定：**不存在**（576 次基向量求值 + 2000 次随机验证，实测）
+
+上一轮把第三道墙定位到 `_adjoint_consume` 的 24 位乘积 scratch（活线 840+24+1，无空闲 bank）。
+reviewer 要求先做数值判定：23 位是否足以承载乘积。答案是**否**，而且证据是决定性的。
+
+`qingyu1232/qcc-dqi23bit`（CPU，COMPLETE，约 10 s）。用作者自己的
+`controller_work/night_root/extension24_tensor.py`（`F4096[t]/(t^2+t+delta)`，rank-99 Karatsuba
+张量，`DELTA=2048`，99 个 terms）做经典求值：
+
+```
+tensor terms 99   DELTA 2048
+unit basis bit: 0
+unit identity on 2000 random values: True        <- 1 * v == v
+reachable output bits: 24 of 24
+bitmap (bit23..bit0): 111111111111111111111111
+bit 23 reachable: True
+first basis pairs setting bit 23: [(0,23,'0x800000'), (1,22,'0x800000'), (2,21,'0x800000'), ...]
+span rank of {a*b : a,b basis} : 24 of 24
+random products with bit 23 set: 2482 of 5000
+```
+
+**读法**：
+
+1. `1 * v == v` 在 2000 个随机值上成立 ⟹ 单位元在基里（bit 0）⟹ 乘积的像 **就是整个 GF(2²⁴)**
+   （2²⁴ 个值），不是某个小子空间；
+2. 24 个输出位**全部**可达，bit 23 由 `e0·e23` 直接置起；
+3. 乘积的双线性像的秩是 **24/24**；
+4. 随机乘积中 **49.6%** 的 bit 23 为 1。
+
+所以「把 24 位 scratch 换成 23 位」**在代数上不可能**：23 位只能表示 2²³ 个值，而乘积需要 2²⁴。
+塔表示 GF((2¹²)²) 的 12+12 拆分也不省线——两个半字都是通用 GF(2¹²) 元素，仍然要 24 位同时存在
+（除非把算法改成"算低半字→测掉→算高半字"的流式版本，那要重推相位偿还，属于新算法而非新位宽）。
+
+### 20.1 DQI Q 轴：永久关闭（四条证据链）
+
+| 环节 | 证据 |
+|---|---|
+| 889 复现闸门 | `32b0a8b4`（145 s）/ `821bf8d1` |
+| 墙① tail flag | ✅ 惰性属性运行时补丁（4 模块） |
+| 墙② third-pivot `zero_flag` | ✅ `push_condition` 古典化（ΔT **−24**） |
+| 墙③ 24 位乘积 scratch | ❌ 活线恰为 840+24+1，无空闲 bank |
+| **24→23 位恒等式** | ❌ **本节：像为满 24 维，bit 23 可达，2000 随机验证** |
+| 888 构建 / 官方 verifier | ❌ 从未成功 / 从未运行 |
+
+Q=888 只能来自**算法级重写**（流式半字 + 相位重推），不是位宽或调度调整。DQI 的 Q 轴到此
+在"补丁 / 位宽"意义上彻底关闭，且这一结论是**可复现的数值事实**，不是外推。
