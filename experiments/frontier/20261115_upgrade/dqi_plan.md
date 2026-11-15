@@ -888,3 +888,46 @@ ValueError: allocated 865 + requested 24 = 889 > 888
 
 **因此在"补丁"意义上 DQI 的 Q 轴正式关闭**：剩余路径需要新的算术恒等式（24→23 位乘法
 或 12 位 carry 方案），与 invsqrt Q45 的 SAT 恒等式属于同一类工作。
+
+## 17. 第三道墙的根：GF(2²⁴) 乘法张量，拆分需要新恒等式（已核实到底）
+
+reviewer 建议"把 24 位乘积 scratch 改成两段 12 位"。把调用链读到底：
+
+```
+_adjoint_consume:  temporary = alloc_qubits(24)
+                   A.product(builder, source, target, temporary, delta)
+gf24_arithmetic.product:  Prior.product(builder, source, value, target, delta,
+                                        tensor24(delta))
+gf24_arithmetic.tensor24: Prior.convert_tensor(delta, Tensor.multiplication_tensor(), Tensor.DELTA)
+```
+
+即 `temporary` 承载的是 **GF(2²⁴) 乘法张量的一次完整收缩结果**（24 位）。
+把它拆成两段 12 位，等价于换一套乘法张量分解——例如改用塔表示 GF((2¹²)²) 的
+Karatsuba 形式，需要三组 12 位中间量再合并，那**不是把 24 拆成 12 就能省出 1 条线**，
+而是重写这块算术并重新验证相位。
+
+所以 `dqi_ancilla/REPORT.md` 的那句判词在实测中被完整确认：
+
+> Q=887 (or lower) needs the 24-bit product scratch at five sites to become 23 bits —
+> a new arithmetic identity, not a patch.
+
+**DQI 的 Q 轴到此结束**，三条子路线都有实测结论：
+
+| 子路线 | 结论 |
+|---|---|
+| 889 复现闸门 | ✅ `32b0a8b4` / `821bf8d1`（145–209 s） |
+| 谓词墙 ①②（tail flag、third-pivot `zero_flag`）| ✅ 已推倒（惰性属性 + `push_condition` 古典化，ΔT −24） |
+| 墙 ③ 24 位乘法 scratch | ❌ 需新的 GF(2²⁴) 乘法恒等式 |
+| 888 构建 / 官方 verifier | ❌ 从未成功 / 从未运行 |
+
+## 18. 本会话四条研究线的最终汇总
+
+| 线 | 最佳可证结论 | 与榜首差距 |
+|---|---|---|
+| chemistry | B/C/Adam 三轴全域否定；only B=143 passes the 20 mHa gate | 无 |
+| invsqrt Q | 重建阶梯 0–4 AND 全域 0/10；T 轴 614 对可重算但 0 可 hold | 无 |
+| DQI Q | 两道谓词墙已破，第三道需新算术恒等式 | 无 |
+| 公开件扫描 | 507 行 manifest + 33-qcc-v8-members 全部劣于我们 | 拼装上限 27.31219 |
+
+**本会话成果：27.31193（rank ~336/3073），相对采用的公开包 +0.00532。**
+要达到 28+（−9% 成本乘积）或 29.9（−23.9%），必须完成上面任意一条"新恒等式"级工作。
