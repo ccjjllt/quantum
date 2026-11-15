@@ -777,3 +777,59 @@ ValueError: allocated 877 + requested 12 = 889 > 888
 被真正使用的位置（`third_pivot_chart.py:115` 的 `flag = builder.alloc_qubits(1)` 附近），
 或者把该函数里的 bank 反演挪到借用之前。判据不变（Q=888、static ≤ 384,518、官方 verifier）。
 构建失败只要 34 s，所以每次迭代很便宜。
+
+## 15. 第二道墙的真相：`zero_flag` 不能推迟，但它可以**古典化**（并顺手省 1 个 Toffoli）
+
+`third_pivot_chart.emit_prefix`（`third_pivot_chart.py:67-96`）的真实顺序：
+
+```python
+Tail.zero_xor(builder, current, zero_flag)          # 78: 用 current 的"反演前"值算 [current==0]
+inner  = Norm.inverse_prefix_with_bank(...)         # 79: <- 峰值在这里
+_add_head(builder, heads[0], current, zero_flag)    # 80: 才第一次消费 zero_flag
+zero_mask = builder.alloc_bits(1)
+builder.hmr(km.array([zero_flag]), zero_mask)       # 86: 之后 flag 归零但**不 free**
+middle / outer = Norm.inverse_prefix_with_bank(...) # 88, 92
+```
+
+**所以"把 borrowed_flag 的读取推迟到首次使用"不成立**：`zero_xor` 必须在反演之前跑
+（它读的是 `current` 的反演前值），而线本身由调用方（adapter 第 65 行）分配。
+推迟读取救不了峰值。
+
+### 15.1 但它可以古典化，而且这是**唯一**还没试过的机制
+
+`_add_head` 的消费形式是单个 `builder.ccx(zero_flag, head, current)`（`third_pivot_chart.py:60-61`）。
+而 kickmix **支持经典条件门**——本仓库里已有两处先例：
+
+```python
+# invsqrt：push_condition / pop_condition
+builder.push_condition(a6_outcome); builder.z(q); builder.pop_condition()
+# DQI retain.py 的输出格式： "CZ a b if b7"
+```
+
+所以可以把这条线改成：
+
+1. `zero_xor(current, flag)` 先把谓词算到线上；
+2. `mask = alloc_bits(1); hmr(flag, mask); free(flag)` —— 线立即归还；
+3. `_add_head` 里的 `ccx(zero_flag, head, current)` 换成
+   `push_condition(mask); cx(head, current); pop_condition()`。
+
+**收益不只是省一条线**：`ccx` 是 Toffoli-like，条件 `cx` 不是 —— 这一步同时把
+`ΔT` 变成 **−1**（更好），而不是 +某值。
+
+### 15.2 剩下的工程量（不是障碍，是清单）
+
+- `Record` 里存的 `zero_flag` 语义要改（改成 `mask`），`third_pivot_chart._contract`
+  与 `emit_closing` 里对 `zero_flag` 的约束要一并检查（`emit_closing` 只用 `record.zero_mask`）；
+- adapter 第 76 行 `assert tail.current == borrowed_flag` 与后续 `begin_slot` 里
+  `previous = self.current` 的用法需要重新指向（线被 free 后不能再被当作要 `cx` 的目标）；
+- 这些都可以用运行时猴补完成，源文件哈希保持全对。
+
+### 15.3 诚实的进度定位
+
+- 墙 1（tail predicate）：已解决（惰性属性，4 个模块打补丁）。
+- 墙 2（third-pivot 的 `zero_flag`）：**推迟不可行**，但古典化机制存在且有先例，
+  预计 ΔT = −1（比盈亏平衡 +863 好得多）。
+- 拿不到 888 之前，官方 verifier 不应运行；拿到后按默认 salt + 16 salts 判定。
+
+这一轮**没有分数变化**，但把一个"看起来只差一行"的步骤纠正为"需要改 Record 语义 + 三处调用"
+的真实清单，并找到了唯一可行的机制（`push_condition` 古典控制）。
