@@ -833,3 +833,58 @@ builder.push_condition(a6_outcome); builder.z(q); builder.pop_condition()
 
 这一轮**没有分数变化**，但把一个"看起来只差一行"的步骤纠正为"需要改 Record 语义 + 三处调用"
 的真实清单，并找到了唯一可行的机制（`push_condition` 古典控制）。
+
+## 16. DQI-888 结论：两道谓词墙已推倒，第三道是**算术宽度**（不可用补丁解决）
+
+`qingyu1232/qcc-dqi888-class`（COMPLETE，26 s 到失败）：
+
+```
+lazy tail patched on ['rolling_tail', 'rolling_tail_conditional', 'rolling_tail_early', 'rolling_tail_deferred']
+third_pivot emit_prefix patched
+adapter emit_prefix re-exec'd with tail re-point
+BUILD FAILED
+  first3_retained_norm_adapter.py:89   builder.swap(current, carry)
+  direct_carry_arithmetic.py:72        divide_deferred
+  direct_carry_arithmetic.py:37        _adjoint_consume:  temporary = builder.alloc_qubits(24)
+ValueError: allocated 865 + requested 24 = 889 > 888
+```
+
+**墙的推进序列（每一步都是实测）：**
+
+| # | 失败点 | 占用 | 处理 | 结果 |
+|---|---|---|---|---|
+| 1 | `first3_retained_norm_adapter.py:52` → `_inverse_with_bank` 的 12 位临时 | 877+12 | tail predicate 惰性分配（4 模块补丁） | ✅ 推倒 |
+| 2 | `third_pivot_chart.py:79` → 同一个 12 位临时 | 877+12 | `zero_flag` 古典化（`zero_xor → hmr → free`，`ccx` 改 `push_condition+cx`，顺带 ΔT **−24**） | ✅ 推倒 |
+| 3 | **`_adjoint_consume` 的 24 位临时**（division） | **865+24** | —— | ❌ **结构性** |
+
+### 16.1 为什么第三道墙不能用补丁解决
+
+865 = **840（syndromes）+ 24（carry 字对）+ 1（tail flag）**。这三项都是**必需的**：
+
+- 840 是契约规定的 70 个 12-bit syndrome 寄存器，不能动；
+- 24 是 `divide_deferred` 的 carry，是运算对象；
+- 1 是 tail flag：它在 slot 里被用作 `cswap(current, numerator, denominator)` 的**相干控制位**，
+  不是"算完就测"的谓词，**不能古典化**（一测就把 12+12 比特的相干交换破坏掉）。
+
+而 `_adjoint_consume` 要的 24 位 scratch 是 GF(2^24) 乘法的目标寄存器，也不能拆成 12+12
+（`xor_product` 的输出宽度就是 24）。
+
+这正是 `dqi_ancilla/REPORT.md` 里那句预言的落地版：
+> "Q=887 (or lower) needs the 24-bit product scratch at five sites to become 23 bits —
+> a new arithmetic identity, not a patch."
+
+实测把它从"来自源码审计的推断"变成了"来自真实构建的第三条墙"：
+**Q=888 需要一条 24→23 位的新算术恒等式**（或等价地把 carry 从 24 降下来），
+这是新的数学，不是补丁。
+
+### 16.2 DQI 轴的最终账
+
+| 项 | 状态 |
+|---|---|
+| 889 件复现闸门 | ✅ `32b0a8b4` / `821bf8d1` 均重现（145–209 s） |
+| 888 构建 | ❌ 三道墙：tail flag（已解）、third-pivot flag（已解）、24 位算术 scratch（**不可解**） |
+| 官方 verifier | ❌ **从未运行**（没有 888 件可验） |
+| λ/成本变化 | 无 |
+
+**因此在"补丁"意义上 DQI 的 Q 轴正式关闭**：剩余路径需要新的算术恒等式（24→23 位乘法
+或 12 位 carry 方案），与 invsqrt Q45 的 SAT 恒等式属于同一类工作。
