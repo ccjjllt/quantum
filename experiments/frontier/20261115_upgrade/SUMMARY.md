@@ -292,3 +292,35 @@ q45_a6only  Q=45 PACK=False A6_EARLY=True   -> loader: 26 + 20 = 46 > 45
 盈亏平衡 66，收益 **+0.20…+0.40 GM**。
 
 当前最佳仍 **27.31193**（ref 58350759，COMPLETE，rank 216/3061）。
+
+## 2026-11-15（本轮）DQI 24→23 判定：不存在（决定性数值证据）
+
+`qingyu1232/qcc-dqi23bit`（CPU，COMPLETE）。用作者自己的
+`controller_work/night_root/extension24_tensor.py`（`F4096[t]/(t²+t+delta)`，rank-99 张量，
+`DELTA=2048`，99 terms）做经典求值：
+
+```
+unit basis bit: 0
+unit identity on 2000 random values: True        <- 1 * v == v
+reachable output bits: 24 of 24   bitmap 111111111111111111111111
+bit 23 reachable: True            first pairs [(0,23),(1,22),(2,21),...] -> 0x800000
+span rank of {a*b : a,b basis} : 24 of 24
+random products with bit 23 set: 2482 of 5000
+```
+
+结论：乘积的像就是整个 GF(2²⁴)（单位元在基里 ⟹ 2²⁴ 个值），**23 位 scratch 在代数上不可能**；
+12+12 塔拆分也不省线（两个半字都是通用 GF(2¹²) 元素）。Q=888 只能来自**算法级重写**
+（流式半字 + 相位重推）。
+
+配套的构建级证据（前几轮）：墙① tail flag 与墙② third-pivot `zero_flag` 已用运行时补丁推倒
+（后者用 `push_condition` 古典化，ΔT **−24**），墙③ 的活线恰为 **840 + 24 + 1**，没有可复用的
+bank。**DQI 的 Q 轴在"补丁 / 位宽"意义上永久关闭。**
+
+## 2026-11-15（本轮）invsqrt 7-AND：最后一级阶梯，GPU 执行中
+
+0–6 AND 已全域 0/10（判定域 3,133,452 个官方输入）。7-AND 在 CPU 上按实测 8.6M 查询/秒要
+11.8 h/线，本轮改用 T4（`torch.searchsorted`）执行：S3 = 385M 值在主机排序后上传，946 个目标
+（`fp(target) ⊕ fp(c_i)`）逐个 sweep，命中一律在全域精确复核。
+
+如果 7-AND 也是空，则 invsqrt 的 Q 轴在**可枚举恒等式**意义上关闭，且 T 轴早已关闭
+（重建件 614 对 / 提交件 645 对可重算，0 可 hold）——两条宽度/深度路线都没有剩余便宜收益。
