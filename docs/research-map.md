@@ -1029,7 +1029,10 @@ Heliosli 当时保存的本地日志：invsqrt 为 62Q、改善约 20.5616 倍�
   但只能到 GM 27.42。
 - 结论：**B<143 关闭**（不是时间盒，是两条闸门同时不过）。未做 8-bit rounding、
   loader build、官方 78,080-shot 验证（第 1 步未过，后续无意义）。
-- 当前最佳 **27.31541**（ref 58382097，2026-11-15，COMPLETE）：invsqrt `1ba197b0` + DQI `821bf8d1` 不变，
+- 当前最佳 **28.05896**（ref 58392219，2026-11-16，COMPLETE，rank 91/3114）：换成 28.059 公开组合——
+  `47b31838` invsqrt（44Q，75,170.62）+ `46446af1` DQI（890Q，347,904,227,556，T 从 383,008 降到 368,700）
+  + marculera v6 化学（427Q，T=14,712，294,800,582.44）。三件均由官方 verifier 在 Kaggle 复核 PASS。
+- 上一版 **27.31541**（ref 58382097，2026-11-15，COMPLETE）：invsqrt `1ba197b0` + DQI `821bf8d1` 不变，
   化学件换成 4030-Toffoli loader + 新权重 refit（官方 verifier 同环境 A/B：294,878,860.58 vs 294,991,455.82，
   两者均 PASS；预测 27.31541，实测一致）。上一版 27.31193（ref 58350759）。
 - 记录：`experiments/frontier/20261115_upgrade/chem_b129/CLOSED.md`。

@@ -43,11 +43,14 @@
 | 2026-11-13 | [27.078 public-frontier trio（46Q invsqrt + 889Q DQI + 4,074T chem）](submissions/20261113_27_078/README.md) | 58299045 | **27.00209，COMPLETE** |
 | 2026-11-15 | [公开 27.30661 包（maoxin v27 4033 chem + 821bf8d1 DQI + 46Q invsqrt）](submissions/20261115_public_2731/README.md) | 58349843 | **27.30661，COMPLETE** |
 | 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | 27.31193，COMPLETE |
-| 2026-11-15 | [化学换件：4030 loader + 新权重 refit](experiments/frontier/20261115_upgrade/chem_ab/REPORT.md) | 58382097 | **27.31541，COMPLETE** |
+| 2026-11-15 | [化学换件：4030 loader + 新权重 refit](experiments/frontier/20261115_upgrade/chem_ab/REPORT.md) | 58382097 | 27.31541，COMPLETE |
+| 2026-11-16 | [换栈：28.059 公开组合（44Q invsqrt + 890Q DQI + marculera v6 化学）](experiments/frontier/20261115_upgrade/stack_28059/REPORT.md) | 58392219 | **28.05896，COMPLETE（rank 91/3114）** |
 
-当前采用组合为 **化学换件升级包（本账号 `58382097`，COMPLETE 27.31541）**：
-`1ba197b02771` invsqrt + `821bf8d1` DQI + 4030-Toffoli 化学件（新权重 refit）。
-上一版 `58350759` 为 27.31193。
+当前采用组合为 **28.059 公开组合（本账号 `58392219`，COMPLETE 28.05896，rank 91/3114）**：
+`47b31838` invsqrt（44Q，75,170.62）+ `46446af1` DQI（890Q，347,904,227,556）+ marculera v6 化学
+（427Q，T=14,712，294,800,582.44）。三件均由官方 verifier 在本账号复核 PASS：
+chem 28 s、invsqrt 630 s（200,540,928 shots）、DQI 162 s（102,400 shots，0 value/0 phase errors）。
+历史：`58382097` 27.31541 → `58350759` 27.31193 → `58349843` 27.30661。
 invsqrt `1ba197b02771`（46Q，78,673.569211；未修改官方 verifier 200,540,928 shots PASS，
 worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 errors）、
 化学 maoxin 4,033 loader（427Q，294,991,455.82，T=14,728）。

@@ -382,3 +382,22 @@ Q=45 需要 ≥8-AND 或 SAT 综合，不属于"再跑一次"的范围。
 仍可用于重建同一份 46Q 电路（已内联 kmsim 的 kernel `qcc-inv45u-sevenand-atlas` 走这条路）。
 
 当前最佳：**ref 58382097, COMPLETE, 27.31541**。
+
+## 2026-11-16 **换栈成功：28.05896（COMPLETE，rank 91/3114）**
+
+把三件电路整体换成公开的 28.059 组合（`jeffemerson` 的打包 notebook 公布的 SHA256 清单）：
+
+| 任务 | 文件 | Q | T_mean | 官方成本（我们自己复核） |
+|---|---|--:|--:|--:|
+| invsqrt | `47b31838`（syed3000 v14） | **44** | 1,458.25 | **75,170.62**（200,540,928 shots PASS，worst/tol 0.9912） |
+| DQI | `46446af1`（syed3000 v14） | **890** | 368,699.85 | **347,904,227,556**（102,400 shots，0 value/0 phase errors） |
+| chemistry | marculera v6 | 427 | **14,712** | **294,800,582.44**（λ_eff 46.9276，78,080 shots PASS） |
+
+关键洞察：**DQI 的 Q 从 889 升到 890，但 T_mean 从 383,008 降到 368,699.85**，净成本 −3.4%——
+此前只盯 Q 的视角漏掉了这条"Q 变大、T 大幅变小"的换算法。
+
+提交路径：组装 kernel `qingyu1232/qcc-assemble-28059`（按 SHA256 在 `/kaggle/input` 定位 18/18 成员，
+逐个复核后打包 51,858,038 B）→ `create_code_competition_submission` → **ref 58392219**。
+自验证 kernel `jiyujia/qcc-verify-28059` 用未改动的官方 verifier 三件全 PASS（28 s / 630 s / 162 s）。
+
+分数：**28.05896**（此前 27.31541），单步 **+0.74355**；相对首提交 27.30661 为 **+0.75235**。
