@@ -1219,3 +1219,32 @@ n=  100000000   signed-correct 100/100      unsigned-bug 100/100
   `span{fp(c_i)}` 的秩是 **64/64**——即指纹在 64 位空间里是满秩的，
   按均匀模型每条线的随机碰撞期望约 946×(1.22e8)²/2⁶⁴ ≈ 0.008，**远小于 1**，
   所以"7-AND 为空"在真实分布下本来就极可能就是正确答案，只是**这一次没有被正确测量**。
+
+## 39. 公开件变动告警：`syed3000/vqcc-own-circuit-portfolio` 已不再提供 `invsqrt_source_zip`
+
+2026-11-15 复查该 dataset 的文件树（22 个文件）：
+
+```
+dfthcsos__angle_k_0..14.kmb   （15 个，407–418 KB）
+dfthcsos__submission.npz      1,847,692 B
+dqi.kmb                       486,989,273 B
+invsqrt.kmb                   200,369 B          <- 不是我们提交的 198,631 B
+LICENSE / NOTICE / README.md / SHA256SUMS
+```
+
+**`invsqrt_source_zip`（8.5 MB 的生成器源码包）已被移除**。影响：
+
+- 所有"运行时 `urlretrieve` 该 zip 再 build"的 kernel 现在都会 `HTTP 400`（本轮
+  `jiyujia/qcc-inv45s3-sevenand` 就是这样失败的）；
+- 已在运行中的 kernel 不受影响（它们启动时已下载）；
+- 仓库里保存的验证记录仍可复现，但**新的** invsqrt 构建必须另找源码来源
+  （`busyaprime`/`manwithacat` 等包，或本机缓存的
+  `/private/var/folders/.../qcc_upgrade_src/invsqrt/invsqrt_source`）。
+
+同时注意：该 dataset 里的 `invsqrt.kmb` 现在是 **200,369 B**，而我们提交的是 **198,631 B**
+（`1ba197b0`）。它不是同一个文件，不能直接替换。
+
+### 39.1 本机缓存
+
+`/private/var/folders/9s/sdk1x32s58g8dycwh6c74bqc0000gp/T/opencode/qcc_upgrade_src/invsqrt/invsqrt_source`
+仍是完整可用的源码树（本会话早前解压），后续构建应以它为源，并记录其 SHA256SUMS。
