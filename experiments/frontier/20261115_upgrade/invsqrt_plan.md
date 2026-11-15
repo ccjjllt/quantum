@@ -1154,3 +1154,26 @@ S3 size 3.852e8 ; 6-sum 组合 7.42e16 ; 在 2^64 指纹空间里的密度 = 0.0
 
 **invsqrt Q 线到此关闭**：可枚举的 0–6 AND 已全域穷尽为 0/10；7-AND 的单价与预期如上，
 不再作为可执行实验。
+
+## 37. 7-AND 上 GPU（第一次跑出"0 命中"，但被判定为**实现 bug**，重跑中）
+
+按 reviewer 要求把 7-AND 放上 T4（`torch.searchsorted`），单线从 11.8 h 压到 **200 s**：
+
+```
+gpu Tesla T4   build rc 0 107 s  GATE PASS
+w q14 S3 384326690 sorted on host 10  sweep 192  hit_positions []  HITS 0
+... 十条线全部 none7 ...
+DONE 2161 s
+```
+
+**但"0 命中"不可信**：预期随机指纹碰撞是每线 946 × |S3|²/2⁶⁴ ≈ **3.8 个**，十条线约 38 个，
+一个都不出现（p ≈ e⁻³⁸）在统计上不可能。检查实现后确认原因：
+
+- 主机端用 `np.sort(uint64)` 排序（**无符号序**），再 `view(int64)` 交给 torch；
+- 而 `torch.searchsorted` 对 int64 用**有符号序**比较；
+- 于是数组在 torch 眼里不是单调的，`searchsorted` 的返回值失去意义 → 命中被静默丢弃。
+
+修正：在主机端就按**有符号序**排序（`np.sort(grid.view(np.int64))`），与 torch 的比较序一致；
+解码时仍用原 uint64 位型。已在 `kern_inv45p` 的 v3 里修正并重推。
+
+这条更正本身值得记录：**任何"0 命中"都必须先对上随机碰撞的期望值**，否则应怀疑实现。
