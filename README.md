@@ -8,7 +8,7 @@
 
 | 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 **28.09486**（ref 58424363；无在研自研线，前沿推进中） |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 COMPLETE **28.10154**（ref 58436763）；已提交 **28.12769**（ref 58442668 PENDING） |
 | invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | DQI | `codex/dqi-research` | `.worktree/dqi/` | 已停止；见 [总览](docs/abandoned-research.md) |
