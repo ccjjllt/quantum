@@ -1,0 +1,162 @@
+[
+ {
+  "cut": 430,
+  "target": 22,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 430,
+  "target": 23,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 430,
+  "target": 24,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 430,
+  "target": 25,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 6610,
+  "target": 22,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 6610,
+  "target": 23,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 6610,
+  "target": 24,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 6610,
+  "target": 25,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7305,
+  "target": 22,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7305,
+  "target": 23,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7305,
+  "target": 24,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7305,
+  "target": 25,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7350,
+  "target": 22,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7350,
+  "target": 23,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7350,
+  "target": 24,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 7350,
+  "target": 25,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 20500,
+  "target": 22,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 20500,
+  "target": 23,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 20500,
+  "target": 24,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ },
+ {
+  "cut": 20500,
+  "target": 25,
+  "affine": false,
+  "k": null,
+  "and": null,
+  "aff": null
+ }
+]

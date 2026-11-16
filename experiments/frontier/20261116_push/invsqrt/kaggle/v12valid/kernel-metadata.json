@@ -1,0 +1,20 @@
+{
+ "id": "jiyujia/qcc-v12-loader-validated",
+ "title": "qcc v12 loader validated",
+ "code_file": "v12valid.py",
+ "language": "python",
+ "kernel_type": "script",
+ "is_private": true,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": false,
+ "keywords": [],
+ "dataset_sources": [
+  "jiyujia/qcc-invsqrt-v12-generator-source"
+ ],
+ "kernel_sources": [],
+ "competition_sources": [
+  "google-verifiable-quantum-circuit-compilation"
+ ],
+ "model_sources": []
+}

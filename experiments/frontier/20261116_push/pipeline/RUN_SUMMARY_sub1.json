@@ -1,0 +1,26 @@
+{
+  "decision": "HOLD_TIE",
+  "gm": 28.094873280048187,
+  "expected_gm": 28.094873,
+  "scores": {
+    "chem": 294762697.43843937,
+    "dqi": 347375470571.73334,
+    "invsqrt": 75006.37653863191
+  },
+  "zip": {
+    "path": "/kaggle/working/submission.zip",
+    "size": 51855472,
+    "sha256": "906f7d1f3c7d9cebeb5213d21ad49da1bd5e8bd5d0ff769ddd1649a1e94912d6",
+    "members": 18
+  },
+  "verifier_status": {
+    "chem": "PASS",
+    "dqi": "PASS",
+    "invsqrt": "PASS"
+  },
+  "verifier_seconds": {
+    "chem": 26.27,
+    "dqi": 138.63,
+    "invsqrt": 603.04
+  }
+}

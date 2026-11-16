@@ -1,0 +1,21 @@
+{
+  "id": "qingyu1232/qcc-frontier-28094-verify",
+  "title": "QCC frontier 28094 verify",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "machine_shape": "",
+  "dataset_sources": [
+    "qingyu1232/qcc-chem-bdae-weights",
+    "maoxin123/qcc-frontier-dqi-chem-mirror"
+  ],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}

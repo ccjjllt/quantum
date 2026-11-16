@@ -1,0 +1,18 @@
+{
+  "id": "zhuating/qcc-dqi890-kmbsurgery",
+  "title": "QCC DQI890 kmbsurgery",
+  "code_file": "main_built.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "hayatohikawa/qcc-c8-milestone-portfolio"
+  ],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": []
+}

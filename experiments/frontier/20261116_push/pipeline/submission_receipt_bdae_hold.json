@@ -1,0 +1,33 @@
+{
+  "candidate": "bdae",
+  "submitted": false,
+  "submission_ref": null,
+  "decision": "HOLD_TIE",
+  "reason": "measured GM 28.0948753565 < 28.09490; 28.09486 is a 185-team plateau (ranks 93-277) and a later tie submission would worsen our in-tie rank",
+  "gm": 28.094875356506638,
+  "min_gm": 28.0949,
+  "scores": {
+    "chem": 294762632.0817748,
+    "dqi": 347375470571.73334,
+    "invsqrt": 75006.37653863191
+  },
+  "verifier_status": {
+    "chem": "PASS",
+    "dqi": "PASS",
+    "invsqrt": "PASS"
+  },
+  "kernel": "qingyu1232/qcc-frontier-28094-verify",
+  "kernel_version": 4,
+  "zip": {
+    "size": 51854649,
+    "sha256": "34b5f3c84125fe31e4261c2baa934a0b9ad12f32e4a690ae2afa1fdb9e562c28",
+    "members": 18
+  },
+  "note": "v4 receipt was generated with the temporary 28.094870 threshold and says SUBMIT; that threshold is superseded. Current pipeline gate is 28.09490. Do not submit this package.",
+  "evidence": {
+    "kernel_receipt": "receipt_bdae_v4.json",
+    "run_summary": "RUN_SUMMARY_bdae_v4.json",
+    "result": "RESULT_bdae.md",
+    "member_manifest": "members.json"
+  }
+}
