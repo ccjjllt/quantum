@@ -1,0 +1,18 @@
+{
+  "id": "zhuating/qcc-dqi-v12stage",
+  "title": "QCC DQI v12stage",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "dataset_sources": [
+    "zhuating/qcc-dqi-source-v12"
+  ],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": []
+}

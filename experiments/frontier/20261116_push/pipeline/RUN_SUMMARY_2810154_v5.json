@@ -1,0 +1,26 @@
+{
+  "decision": "SUBMIT",
+  "gm": 28.101541927289862,
+  "expected_gm": 28.10154149,
+  "scores": {
+    "chem": 294762632.0817748,
+    "dqi": 347128304010.81165,
+    "invsqrt": 75006.37653863191
+  },
+  "zip": {
+    "path": "/kaggle/working/submission.zip",
+    "size": 51278743,
+    "sha256": "c0ff1bf0a65c408bcb30e3d134d96f0f7f288cd4e8dd24ea32ab04faf053783b",
+    "members": 18
+  },
+  "verifier_status": {
+    "chem": "PASS",
+    "dqi": "PASS",
+    "invsqrt": "PASS"
+  },
+  "verifier_seconds": {
+    "chem": 27.98,
+    "dqi": 138.63,
+    "invsqrt": 606.26
+  }
+}

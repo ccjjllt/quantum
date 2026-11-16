@@ -1,0 +1,12 @@
+bound modules last_return_retained_norm direct_carry_arithmetic gf24_nested_norm
+patched restore_with_shared_norm on last_return_retained_norm
+emit 205s
+Q 901 final_alloc 840 static_T 382701 delta_vs_384003 -1302
+opcodes {"BIT_INVERT": 15439990, "BIT_STORE0": 1527327, "BIT_STORE1": 54936, "CCX": 363317, "CCZ": 7000, "CSWAP": 12384, "CX": 31251088, "CZ": 538932, "HMR": 71531, "POP_CONDITION": 1519774, "PUSH_CONDITION": 1519774, "R": 48210, "SWAP": 378664, "X": 108090, "Z": 46469}
+max allocated Q over stages 877
+stage Q peaks [{"stage": "odd_full_preimage", "Q": 877}, {"stage": "shared_seam_finish_return_live_inverse", "Q": 877}, {"stage": "{\"cosets\": 1, \"point_tests\": 0, \"public_positions\": 31, \"stage\": \"adaptive64_scan\"}", "Q": 875}, {"stage": "{\"cosets\": 2, \"point_tests\": 0, \"public_positions\": 63, \"stage\": \"adaptive64_scan\"}", "Q": 875}, {"stage": "{\"cosets\": 3, \"point_tests\": 26, \"public_positions\": 95, \"stage\": \"adaptive64_scan\"}", "Q": 875}, {"stage": "{\"cosets\": 4, \"point_tests\": 58, \"public_positions\": 127, \"stage\": \"adaptive64_scan\"}", "Q": 875}]
+expected saving 1302 observed 1302
+SHA a113e3402aac3162439c389462b950d9a640589c994833e2ff86e0259bbc6d18 bytes 455194495
+VERIFY retain salt='' 132s Q 901 T 381854.4763 score 369278647729.746 err 0/0 sha a113e3402aac3162 dscore +8545367297.805 (+2.368888%)
+VERIFY retain_salt2 salt='dqi-salt-2' 130s Q 901 T 381854.1535 score 370974299201.836 err 1/0 sha a113e3402aac3162 dscore +10241018769.896 (+2.838945%)
+VERIFY retain_salt3 salt='dqi-salt-3' 137s Q 901 T 381854.1450 score 369278327303.993 err 0/0 sha a113e3402aac3162 dscore +8545046872.052 (+2.368799%)

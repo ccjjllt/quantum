@@ -1,0 +1,73 @@
+configured
+counter installed
+emit 138s
+TOTAL bc 946043 builder ids 1 top builder [(136702139393200, 927081)]
+
+CALL SITES by summed bc
+  tower_inverse.py:154:ccz                                       n= 485434 bc=  485434 bc-hist[1x485434]  b[1] q[1] q[1]
+  field_tensor.py:159:ccx                                        n= 335784 bc=  335784 bc-hist[1x335784]  q[1] q[1] q[1]
+  scan10.py:19:init_and                                          n=  36234 bc=   36234 bc-hist[1x36234]  q[1] q[1] q[1]
+  scan10.py:22:del_and                                           n=  36234 bc=   36234 bc-hist[1x36234]  q[1] q[1] q[1]
+  narrow_field130.py:46:ccz                                      n=   6714 bc=    6714 bc-hist[1x6714]  q[1] q[1] q[1]
+  transpose14_core.py:45:cswap                                   n=    544 bc=    6528 bc-hist[12x544]  q[1] array[12] array[12]
+  scan10.py:17:init_and                                          n=   4026 bc=    4026 bc-hist[1x4026]  q[1] q[1] q[1]
+  scan10.py:23:del_and                                           n=   4026 bc=    4026 bc-hist[1x4026]  q[1] q[1] q[1]
+  inverse_phase27.py:128:ccz                                     n=   2832 bc=    2832 bc-hist[1x2832]  b[1] q[1] q[1]
+  coherent_border.py:20:init_and                                 n=   1611 bc=    1611 bc-hist[1x1611]  q[1] q[1] q[1]
+  coherent_border.py:22:del_and                                  n=   1611 bc=    1611 bc-hist[1x1611]  q[1] q[1] q[1]
+  quantum_reciprocal.py:75:ccx                                   n=   1534 bc=    1534 bc-hist[1x1534]  q[1] q[1] q[1]
+  gauge_park_virtual.py:72:init_and                              n=    104 bc=    1248 bc-hist[12x104]  q[1] array[12] array[12]
+  gauge_park_virtual.py:81:del_and                               n=    104 bc=    1248 bc-hist[12x104]  q[1] array[12] array[12]
+  cubic_inverse130.py:130:init_and                               n=   1016 bc=    1016 bc-hist[1x1016]  q[1] q[1] q[1]
+  cubic_inverse130.py:165:del_and                                n=   1016 bc=    1016 bc-hist[1x1016]  q[1] q[1] q[1]
+  cubic_inverse130.py:185:ccx                                    n=    981 bc=     981 bc-hist[1x981]  q[1] q[1] q[1]
+  rolling_tail.py:48:init_and                                    n=    879 bc=     879 bc-hist[1x879]  q[1] q[1] q[1]
+  rolling_tail.py:51:del_and                                     n=    879 bc=     879 bc-hist[1x879]  q[1] q[1] q[1]
+  transpose14_window.py:54:cswap                                 n=     64 bc=     768 bc-hist[12x64]  q[1] array[12] array[12]
+  transpose14_core.py:94:cswap                                   n=     64 bc=     768 bc-hist[12x64]  q[1] array[12] array[12]
+  transpose14_core.py:157:cswap                                  n=     56 bc=     672 bc-hist[12x56]  q[1] array[12] array[12]
+  transpose14_core.py:42:cswap                                   n=     48 bc=     576 bc-hist[12x48]  q[1] array[12] array[12]
+  cubic_inverse130.py:110:ccz                                    n=    508 bc=     508 bc-hist[1x508]  b[1] q[1] q[1]
+  rolling_tail_deferred.py:60:cswap                              n=     20 bc=     480 bc-hist[24x20]  q[1] array[24] array[24]
+  rolling_tail_deferred.py:98:cswap                              n=     20 bc=     480 bc-hist[24x20]  q[1] array[24] array[24]
+  rolling_tail_conditional.py:35:init_and                        n=    450 bc=     450 bc-hist[1x450]  q[1] q[1] q[1]
+  rolling_tail_conditional.py:38:del_and                         n=    450 bc=     450 bc-hist[1x450]  q[1] q[1] q[1]
+  gauge_park_virtual.py:63:init_and                              n=     36 bc=     432 bc-hist[12x36]  q[1] array[12] array[12]
+  gauge_park_virtual.py:68:del_and                               n=     36 bc=     432 bc-hist[12x36]  q[1] array[12] array[12]
+  phase_inverse12.py:29:init_and                                 n=    400 bc=     400 bc-hist[1x400]  q[1] q[1] q[1]
+  phase_inverse12.py:47:del_and                                  n=    400 bc=     400 bc-hist[1x400]  q[1] q[1] q[1]
+  transpose14_core.py:90:init_and                                n=     32 bc=     384 bc-hist[12x32]  q[1] array[12] array[12]
+  transpose14_core.py:92:del_and                                 n=     32 bc=     384 bc-hist[12x32]  q[1] array[12] array[12]
+  transpose14_core.py:107:cswap                                  n=     32 bc=     384 bc-hist[12x32]  q[1] array[12] array[12]
+  transpose14_core.py:123:cswap                                  n=     32 bc=     384 bc-hist[12x32]  q[1] array[12] array[12]
+  cubic_inverse130.py:115:ccx                                    n=    381 bc=     381 bc-hist[1x381]  q[1] q[1] q[1]
+  lowspace_field.py:40:ccx                                       n=    342 bc=     342 bc-hist[1x342]  q[1] q[1] q[1]
+  gauge_park_virtual.py:29:init_and                              n=     28 bc=     336 bc-hist[12x28]  q[1] array[12] array[12]
+  gauge_park_virtual.py:34:del_and                               n=     28 bc=     336 bc-hist[12x28]  q[1] array[12] array[12]
+
+CALL SITES by call count
+  tower_inverse.py:154:ccz                                       n=  485434 bc=   485434 bc/call=  1.00
+  field_tensor.py:159:ccx                                        n=  335784 bc=   335784 bc/call=  1.00
+  scan10.py:19:init_and                                          n=   36234 bc=    36234 bc/call=  1.00
+  scan10.py:22:del_and                                           n=   36234 bc=    36234 bc/call=  1.00
+  narrow_field130.py:46:ccz                                      n=    6714 bc=     6714 bc/call=  1.00
+  scan10.py:17:init_and                                          n=    4026 bc=     4026 bc/call=  1.00
+  scan10.py:23:del_and                                           n=    4026 bc=     4026 bc/call=  1.00
+  inverse_phase27.py:128:ccz                                     n=    2832 bc=     2832 bc/call=  1.00
+  coherent_border.py:20:init_and                                 n=    1611 bc=     1611 bc/call=  1.00
+  coherent_border.py:22:del_and                                  n=    1611 bc=     1611 bc/call=  1.00
+  quantum_reciprocal.py:75:ccx                                   n=    1534 bc=     1534 bc/call=  1.00
+  cubic_inverse130.py:130:init_and                               n=    1016 bc=     1016 bc/call=  1.00
+  cubic_inverse130.py:165:del_and                                n=    1016 bc=     1016 bc/call=  1.00
+  cubic_inverse130.py:185:ccx                                    n=     981 bc=      981 bc/call=  1.00
+  rolling_tail.py:48:init_and                                    n=     879 bc=      879 bc/call=  1.00
+  rolling_tail.py:51:del_and                                     n=     879 bc=      879 bc/call=  1.00
+  transpose14_core.py:45:cswap                                   n=     544 bc=     6528 bc/call= 12.00
+  cubic_inverse130.py:110:ccz                                    n=     508 bc=      508 bc/call=  1.00
+  rolling_tail_conditional.py:35:init_and                        n=     450 bc=      450 bc/call=  1.00
+  rolling_tail_conditional.py:38:del_and                         n=     450 bc=      450 bc/call=  1.00
+  phase_inverse12.py:29:init_and                                 n=     400 bc=      400 bc/call=  1.00
+  phase_inverse12.py:47:del_and                                  n=     400 bc=      400 bc/call=  1.00
+  cubic_inverse130.py:115:ccx                                    n=     381 bc=      381 bc/call=  1.00
+  lowspace_field.py:40:ccx                                       n=     342 bc=      342 bc/call=  1.00
+  coherent_border.py:19:init_and                                 n=     179 bc=      179 bc/call=  1.00
