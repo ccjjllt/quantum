@@ -11,7 +11,8 @@
   "machine_shape": "",
   "dataset_sources": [
     "qingyu1232/qcc-chem-bdae-weights",
-    "maoxin123/qcc-frontier-dqi-chem-mirror"
+    "maoxin123/qcc-frontier-dqi-chem-mirror",
+    "balramsrinivasan/vqcc-28-10-norm-preserving-dqi-closings"
   ],
   "competition_sources": [
     "google-verifiable-quantum-circuit-compilation"

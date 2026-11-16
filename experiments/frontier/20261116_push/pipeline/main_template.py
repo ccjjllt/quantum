@@ -1,8 +1,9 @@
-"""Assemble and grade the 2026-11-16 bdae candidate on a Kaggle CPU kernel.
+"""Assemble and grade the 2026-11-16 28.12769 candidate on a Kaggle CPU kernel.
 
 Candidate (all public, credited by the publishers):
-  invsqrt.kmb          maoxin123 f2cdab0b 44Q, cost 75,006.38 (embedded below, zlib/base64)
-  dqi.kmb              ccc2ab84 890Q, published by hayatohikawa / ozertuu / boristown lineage
+  invsqrt.kmb          maoxin123/atakan 0af21cb8 44Q, cost 74,797.37 (embedded below, zlib/base64)
+  dqi.kmb              balramsrinivasan 66b4f18b 890Q, norm-preserving DQI closings,
+                       cost 347,128,304,010.81 (was ccc2ab84; 66b4 verified k18 PASS 0/0)
   dfthcsos/*           maoxin123 frontier coded-word table + loaders, with
                        boristown bdae290f W / H2_I weight refit (only those two arrays change)
 
@@ -38,14 +39,14 @@ from datetime import datetime, timezone
 # --------------------------------------------------------------------------------------
 MEMBERS = {
     "invsqrt.kmb": {
-        "sha256": "f2cdab0b7afc2e76aca12451113ef618e6f7e575a35a29f58264602dafb48726",
-        "size": 179768,
-        "source": "embedded zlib/base64, maoxin123 f2cdab0b",
+        "sha256": "0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b",
+        "size": 180382,
+        "source": "embedded zlib/base64, maoxin123/atakan 0af21cb8",
     },
     "dqi.kmb": {
-        "sha256": "ccc2ab84ed713901c5642c58890fc664a16a4842c1ebdc80edb56b11c96d6c8d",
-        "size": 486988897,
-        "source": "maoxin123/qcc-frontier-dqi-chem-mirror dqi.kmb.xz",
+        "sha256": "66b4f18b85273bdc0b325500c43a810aba2772275b977f371731cfc400a315c2",
+        "size": 480411479,
+        "source": "balramsrinivasan/vqcc-28-10-norm-preserving-dqi-closings dqi.kmb",
     },
     "dfthcsos/submission.npz": {
         "sha256": "bdae290f5d6ba5282d3c91c9d4c96479c6dce8c161a8dbf92332a38723dd935b",
@@ -82,10 +83,10 @@ for _i, _h in enumerate([
 INV_B64 = "__INV_B64__"
 
 EXPECTED = {
-    "invsqrt": 75006.38,
-    "dqi": 347375470572.0,
+    "invsqrt": 74797.37,
+    "dqi": 347128304010.81,
     "chem": 294762632.08,
-    "gm": 28.0948754,
+    "gm": 28.127692911,
 }
 REFERENCE = {
     "invsqrt": 2076774.233715,
@@ -370,9 +371,10 @@ def main() -> None:
     receipt = {
         "generated_utc": utc_now(),
         "started_utc": started,
-        "candidate": "bdae",
+        "candidate": "0af-66b4-bdae-2812769",
         "description": (
-            "invsqrt f2cdab0b (44Q) + DQI ccc2ab84 (890Q) + chemistry frontier table/loaders "
+            "invsqrt 0af21cb8 (44Q) + DQI 66b4f18b (890Q, norm-preserving closings) + "
+            "chemistry frontier table/loaders "
             "with boristown bdae290f W/H2_I refit (427Q, T=14712, cost 294762632.08); "
             "official default salts"
         ),

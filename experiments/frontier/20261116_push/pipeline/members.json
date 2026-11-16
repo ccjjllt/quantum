@@ -1,12 +1,12 @@
 {
-  "candidate": "bdae",
-  "created_utc": "2026-11-16T08:00:00Z",
-  "description": "invsqrt f2cdab0b (44Q) + DQI ccc2ab84 (890Q) + chemistry frontier table/loaders with boristown bdae290f W/H2_I refit (427Q, T=14712, cost 294762632.08)",
+  "candidate": "0af-66b4-bdae-2812769",
+  "created_utc": "2026-11-16T19:45:00Z",
+  "description": "invsqrt 0af21cb8 (44Q) + DQI 66b4f18b norm-preserving closings (890Q) + chemistry frontier table/loaders with boristown bdae290f W/H2_I refit (427Q, T=14712, cost 294762632.08)",
   "expected": {
-    "invsqrt_cost": 75006.38,
-    "dqi_cost": 347375470572.0,
+    "invsqrt_cost": 74797.37,
+    "dqi_cost": 347128304010.81,
     "chemistry_cost": 294762632.08,
-    "geometric_mean": 28.0948754,
+    "geometric_mean": 28.127692911,
     "current_public": 28.09486,
     "silver_line_2026_11_16": 28.09486,
     "min_gm_for_submit": 28.0949,
@@ -26,14 +26,14 @@
   },
   "members": {
     "invsqrt.kmb": {
-      "sha256": "f2cdab0b7afc2e76aca12451113ef618e6f7e575a35a29f58264602dafb48726",
-      "size": 179768,
-      "source": "embedded zlib/base64; maoxin123 f2cdab0b; decoded from drpatrickchan notebook"
+      "sha256": "0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b",
+      "size": 180382,
+      "source": "embedded zlib/base64; maoxin123 14:51 / atakanaldemir 16:33 rerun 0af21cb8; extracted from maoxin123/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier submission.zip"
     },
     "dqi.kmb": {
-      "sha256": "ccc2ab84ed713901c5642c58890fc664a16a4842c1ebdc80edb56b11c96d6c8d",
-      "size": 486988897,
-      "source": "maoxin123/qcc-frontier-dqi-chem-mirror dqi.kmb.xz"
+      "sha256": "66b4f18b85273bdc0b325500c43a810aba2772275b977f371731cfc400a315c2",
+      "size": 480411479,
+      "source": "balramsrinivasan/vqcc-28-10-norm-preserving-dqi-closings dqi.kmb"
     },
     "dfthcsos/submission.npz": {
       "sha256": "bdae290f5d6ba5282d3c91c9d4c96479c6dce8c161a8dbf92332a38723dd935b",
