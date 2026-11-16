@@ -401,3 +401,9 @@ Q=45 需要 ≥8-AND 或 SAT 综合，不属于"再跑一次"的范围。
 自验证 kernel `jiyujia/qcc-verify-28059` 用未改动的官方 verifier 三件全 PASS（28 s / 630 s / 162 s）。
 
 分数：**28.05896**（此前 27.31541），单步 **+0.74355**；相对首提交 27.30661 为 **+0.75235**。
+
+## 2026-11-16 收口（补充）：十线 7-AND 全空
+
+`jiyujia/qcc-inv45u-sevenand-atlas`（GPU，1,695 s）以 atlas kmx 重建 46Q 件，
+`POSITIVE_CONTROL 300/300`，q14–q25 十条 idle 线 **VERIFIED 0**。与 CPU 版 q22
+（200/200，9,025 s）合并，invsqrt 的 0–7 AND 阶梯在十条线上全部实测为空。

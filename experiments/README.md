@@ -4,6 +4,13 @@
 > `frontier/20261112_rescan/` 这一份公开前沿来源记录；历史实验目录已删除，
 > 概况、放弃原因和删除清单见 [docs/abandoned-research.md](../docs/abandoned-research.md)。
 > 各研究分支只保留入口 README、`ABANDONED.md`、系统性复盘和可复用载体。
+>
+> 2026-11-16：换用公开 28.059 组合（ref 58392219，**28.05896**）后，又删除了
+> `artifacts/` 下已关闭研究的候选件、`.worktree/dfthcsos` 的训练权重快照、全部 18 个
+> 历史提交 ZIP（872.5 MB）与临时工作区（124 MB），合计约 **1.10 GB**。
+> 当前只保留研究记录、公开源清单、当前最佳的组装/复核脚本
+> （`frontier/20261115_upgrade/stack_28059/kernels/`）和 invsqrt 生成器源码包。
+> 详细清单见 [docs/abandoned-research.md §7](../docs/abandoned-research.md)。
 
 main 保留公开前沿来源和 submission 回执。若未来恢复研究，新增 invsqrt、化学、DQI
 实验分别写入 `.worktree/invsqrt`、`.worktree/dfthcsos`、`.worktree/dqi` 的对应

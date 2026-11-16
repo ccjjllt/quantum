@@ -8,7 +8,7 @@
 
 | 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 27.00209（ref 58299045） |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 **28.05896**（ref 58392219；无在研自研线） |
 | invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | DQI | `codex/dqi-research` | `.worktree/dqi/` | 已停止；见 [总览](docs/abandoned-research.md) |
@@ -68,10 +68,12 @@ gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧�
 历史组合与证据：
 
 - 每个历史提交的机器回执、来源、SHA-256 和验证范围保留在 `submissions/<日期_方案>/README.md`。
-- 原始候选、公开源解包、重复 ZIP 和中间产物已于 2026-11-13 清理；当前最佳候选固定为
-  `submissions/20261113_27_078/submission.zip`（SHA-256 `63c5a077…657c`，18 文件）。
+- 2026-11-13 清理了原始候选、公开源解包和中间产物；**2026-11-16 又删除了全部 18 个历史
+  `submission.zip`（872.5 MB）与已关闭研究的二进制产物（合计回收约 1.10 GB）**。本地不再保存
+  提交 ZIP；当前最佳由 `qingyu1232/qcc-assemble-28059` v1 按 18 个 SHA-256 逐字节重建，
+  脚本在 `experiments/frontier/20261115_upgrade/stack_28059/kernels/`。
 - 官方公开源清单保留在 `references/frontier-20261112/`；被删除目录的概况、大小和放弃原因
-  见 [已停止研究总览](docs/abandoned-research.md)。
+  见 [已停止研究总览](docs/abandoned-research.md)（§7 为 11-16 清理清单）。
 
 ## 公开前沿升级（2026-11-15）
 

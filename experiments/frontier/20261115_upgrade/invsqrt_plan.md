@@ -1290,3 +1290,21 @@ T 轴同样关闭（重建件 614 对 / 提交件 645 对可重算，0 可 hold�
 `distinct S3 = 122,233,720`（不是 385M 条目）。均匀模型下 7-AND 的随机碰撞期望为
 `946 × (1.22e8)² / 2^64 ≈ 0.008` 每线——这解释了为什么 946 次探测一次都没撞上，
 也说明**"7-AND 为空"本来就是最可能的结果**，此前的两次"空"只是把对的事情算错了。
+
+## 41. 收口（2026-11-16）：7-AND 十条线全空，invsqrt Q 线彻底关闭
+
+`jiyujia/qcc-inv45u-sevenand-atlas`（GPU/T4，COMPLETE，1,695 s）用 atlas 的
+`kmx/invsqrt/321aff836362.kmx` + 内联 kmsim 重建同一份 46Q 构建，绕开了被删除的源码包：
+
+```
+kmx /kaggle/input/.../kmx/invsqrt/321aff836362.kmx 375193
+ops 34789  official inputs 3133452
+SNAPSHOT_MATCHES_RECORDED_BUILD True
+POSITIVE_CONTROL 300 /300
+q22 q14 q15 q16 q17 q18 q19 q23 q24 q25  -> 全部 VERIFIED 0
+SUMMARY [[q22,none7],[q14,none7],...,[q25,none7]]
+```
+
+加上 CPU 版 q22 的 200/200 控制、9,025 s 全扫，**十条 idle 线在 7-AND 内全部为空**。
+Q 线（0–7 AND）与 T 轴（0 可 hold）至此都是**实测关闭**，不再有"再跑一次"的余地。
+Q=45 需要 ≥8-AND 或 SAT 综合，属于新算法族；当前采用公开 44Q 件（75,170.62）。

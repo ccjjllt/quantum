@@ -1,8 +1,9 @@
-# 已停止研究：概况、放弃原因与 2026-11-13 清理记录
+# 已停止研究：概况、放弃原因与两次清理记录（2026-11-13 / 2026-11-16）
 
-本文件是 2026-11-13 清理后的**唯一总览**。三条研究线（invsqrt、DQI、dfthcsos/化学）
-在本日停止推进；各分支入口 README 与 `ABANDONED.md` 仍保留，但已关闭实验的详细文档、
-脚本和大型产物按本记录删除。
+本文件是已停止研究的**唯一总览**。三条研究线（invsqrt、DQI、dfthcsos/化学）
+在 2026-11-13 停止推进；2026-11-16 换用公开 28.059 组合后，三条线连同其脚本、
+二进制产物和重复打包一并清理（见 §7）。各分支入口 README 与 `ABANDONED.md` 仍保留，
+关键结论与恢复口径按本记录执行。
 
 ## 0. 结论与判定依据
 
@@ -227,3 +228,72 @@ dfthcsos 135 files / 15,100 lines；这些文档仍可从各分支历史恢复�
 - 当前最佳提交包固定为 `submissions/20261113_27_078/submission.zip`，
   SHA-256 `63c5a0776bb1d91490c2e50e4c04607c78b91472f9da45247901ea4af314657c`，
   18 个文件，与 Kaggle ref 58299045 对应。
+
+## 7. 2026-11-16 清理：换栈之后删除全部已关闭研究的产物
+
+### 7.1 触发点
+
+2026-11-16 采用公开 **28.059 组合**（本账号 ref `58392219`，COMPLETE **28.05896**，
+rank 91/3114）：invsqrt `47b31838`（44Q，75,170.62）+ DQI `46446af1`（890Q，
+347,904,227,556）+ marculera v6 化学（427Q，T=14,712，294,800,582.44）。
+三件全部是公开电路，本仓库不再产生候选电路；三条自研线的最后判决也都是实测 no-go：
+
+| 线 | 最后判决 | 结果 | 记录位置 |
+|---|---|---|---|
+| invsqrt Q45 | 7-AND 全域判定，十条 idle 线 | **全空**（CPU q22 控制 200/200；GPU 十线控制 300/300） | `invsqrt_plan.md` §40–§41 |
+| invsqrt T 轴 | 614/645 对可 hold 扫描 | **0 可 hold**，maxlive 46 | `invsqrt_plan.md` §37–§38 |
+| DQI Q888 | 24→23 位乘积 scratch | **代数不可能**（乘积像满 24 维，23 位不可达） | `dqi_plan.md` §20 |
+| DQI Q888 | 三堵墙（尾标志 / 第三 pivot / 24 位乘积） | 运行时补丁只能省 24 T，墙 ③ 无可用 bank | `dqi_plan.md` §11–§19 |
+| 化学 | B/C/Adam/from-scratch 四条重训 | 全部 > 20 mHa 门（最好 40.24 mHa） | `chem_c_axis/PLAN.md` |
+
+Q=45 需要 ≥8-AND 或 SAT 综合，DQI 需要换解码器族，化学需要新 factorization/训练范式，
+都不是本比赛窗口内的增量工作。因此删除其可执行目录、二进制产物和重复打包。
+
+### 7.2 删除清单（2026-11-16 实测，单位 KB）
+
+| 位置 | 清理前 | 清理后 | 删除内容与原因 |
+|---|---:|---:|---|
+| `submissions/**/submission.zip`（18 个） | 893,564 | 72 | 872.5 MB。全部被 28.059 组合取代；ref/分数/ZIP SHA 已逐条写在 `submissions/*/README.md`，ZIP 本身可由组装 kernel + 两个公开 dataset 重建 |
+| `artifacts/20261115_invsqrt/` | 27,252 | 2,506 | 24,746。删除展开的生成器树（19 MB）、候选 `invsqrt.kmb`、`meta/` 扫描表、`mwac/others/hedge/xianyu/heliosli` 候选；只留压缩源码包与 `SHA256SUMS`（见 7.3） |
+| `artifacts/20261115_chem/` | 7,240 | 0 | 7,240。化学 A/B 的 `chem4033` 候选件，已被 marculera v6 取代 |
+| `artifacts/20261115_frontier/` | 5,472 | 0 | 5,472。27.31 时代的公开前沿候选（hw26/jm_f/mason），已全部被 28.059 取代 |
+| `.worktree/dfthcsos/artifacts/20261110_gputrain/` | 66,912 | 0 | 66,912（`prob_r5.npz`）。化学训练盆地的权重快照，B/C/Adam/from-scratch 已实测关闭 |
+| `.worktree/invstmp/` | 4 | 0 | 4。空临时目录 |
+| `/private/var/.../opencode/` 临时工作区 | 140,144 | 13,188 | 126,956。删除重复的提交 ZIP（`qcc_27312_submission.zip`、`submitted_58350759.zip` 各 47 MB）、展开的 invsqrt 源码（12.4 MB）、`dqi_src`、`ntl_pull`、`spo_rebind_probe`、`pull/`、全部 `kern_*` 目录、旧日志与 009 快照；只保留 `kgcli`（Kaggle CLI） |
+
+合计实测回收 **1,124,720 KB ≈ 1.10 GB（1.05 GiB）**：仓库 2,149,568 → 1,151,804 KB，
+临时工作区 140,144 → 13,188 KB。
+
+### 7.3 保留清单及理由
+
+| 保留 | 大小 | 理由 |
+|---|---:|---|
+| `data/competition/` | 994 MB | 官方原始数据与**未修改**的 verifier，是本地复核的唯一基准；`sample_submission/dqi.kmb`（845 MB）是其中最大的单文件，verifier 不使用，但属于官方数据，未删 |
+| `.venv/` | 110 MB | `uv sync` 环境，删了要重建 |
+| `references/` | 8.8 MB | 公开方案固定版本与来源清单 |
+| `experiments/frontier/20261115_upgrade/` | 600 KB | 研究概况、判决数字与放弃原因（本文件的主要依据） |
+| `experiments/.../stack_28059/kernels/` | 20 KB | **新增**：当前最佳的组装/复核脚本（`assemble_28059.py`、`verify_28059.py` 及 metadata），从临时目录收回仓库 |
+| `artifacts/20261115_invsqrt/syed/invsqrt_source_zip` + `SHA256SUMS` | 2.5 MB | 46Q invsqrt 的**生成器源码压缩包**。`syed3000` 已从 dataset 删除该文件（§`invsqrt_plan.md` 39），这是本地唯一副本；按 AGENTS.md“保留可复现电路的生成代码”留存 |
+| `submissions/*/README.md` | 72 KB | 18 个提交回执（ref、分数、ZIP SHA-256、验证范围） |
+| `.worktree/{invsqrt,dqi,dfthcsos}/` | 1.1 MB | 三个研究分支的入口 README、`ABANDONED.md` 与复盘；分支历史仍在 Git 中 |
+
+### 7.4 当前最佳的可复现路径
+
+```text
+ref 58392219   28.05896   COMPLETE   rank 91/3114
+kernel  qingyu1232/qcc-assemble-28059 v1   -> submission.zip 51,858,038 B
+sha     87703019f2a950341201f4cc69420761464fd17365b448c7808ece0bbac30800
+18 members matched by SHA-256 (invsqrt 47b31838 / dqi 46446af1 / 15 chem kmb + npz)
+verify  jiyujia/qcc-verify-28059 v1        -> PASS 28 s / 630 s / 162 s
+scripts experiments/frontier/20261115_upgrade/stack_28059/kernels/
+```
+
+删除本地 ZIP 不影响已入账的 Kaggle 提交；需要提交文件时重跑组装 kernel 即可逐字节重建。
+
+### 7.5 恢复口径
+
+- 被删的**文档与脚本**在 Git 历史中：`git log --all -- <path>`、`git show <commit>:<path>`。
+- `submissions/*/submission.zip` 与 `artifacts/` 二进制未入 Git，**不可从 Git 恢复**；
+  但前者由 `qcc-assemble-28059` + 两个公开 dataset 按 SHA 重建，后者中的公开候选可按
+  `references/frontier-20261112/` 清单重新下载。
+- 保留的 `invsqrt_source_zip` 是上游已删除文件的唯一本地副本，请不要随下次清理删除。

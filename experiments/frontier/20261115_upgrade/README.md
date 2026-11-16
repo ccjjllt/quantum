@@ -1,6 +1,13 @@
 # 20261115 公开前沿升级
 
-## 当前状态
+> **2026-11-16 结局**：本目录记录的自研升级（27.31 系列）已被公开 **28.059 组合**取代，
+> 当前最佳 ref **58392219**，public **28.05896**（rank 91/3114），见
+> [stack_28059/REPORT.md](stack_28059/REPORT.md)。三条自研线（invsqrt Q45/T 轴、
+> DQI Q888、化学 B/C/Adam/from-scratch）均已实测关闭；本目录的候选件、二进制产物与
+> 历史提交 ZIP 已删除，清单见 [docs/abandoned-research.md §7](../../../docs/abandoned-research.md)。
+> 当前最佳的组装/复核脚本保留在 [stack_28059/kernels/](stack_28059/kernels/)。
+
+## 当前状态（2026-11-15，历史记录）
 
 - 本账号上一版：ref 58299045，public **27.00209**（46Q invsqrt `321aff83` + 889Q DQI
   `7cbe8ecf` cutoff17 + 4074T chem `6418ec8e`）。

@@ -1,0 +1,16 @@
+{
+  "id": "qingyu1232/qcc-assemble-28059",
+  "title": "QCC assemble 28059",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "machine_shape": "",
+  "dataset_sources": ["syed3000/vqcc-own-circuit-portfolio", "marculera/dfthc-c44-build"],
+  "competition_sources": ["google-verifiable-quantum-circuit-compilation"],
+  "kernel_sources": [],
+  "model_sources": []
+}
