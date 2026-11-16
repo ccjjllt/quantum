@@ -8,7 +8,7 @@
 
 | 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 **28.05896**（ref 58392219；无在研自研线） |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 **28.09486**（ref 58424363；无在研自研线，前沿推进中） |
 | invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | 已停止；见 [总览](docs/abandoned-research.md) |
 | DQI | `codex/dqi-research` | `.worktree/dqi/` | 已停止；见 [总览](docs/abandoned-research.md) |
@@ -47,13 +47,15 @@
 | 2026-11-16 | [换栈：28.059 公开组合（44Q invsqrt + 890Q DQI + marculera v6 化学）](experiments/frontier/20261115_upgrade/stack_28059/REPORT.md) | 58392219 | 28.05896，COMPLETE（当时 rank 91/3114） |
 | 2026-11-16 | [换件：最高的真实公开包（Atakan v15，GM 28.07503）](experiments/frontier/20261115_upgrade/stack_28075/REPORT.md) | 58410043 | 28.07502，COMPLETE |
 | 2026-11-16 | [换件：公开最高真实包（Ozertuu 28.091）](experiments/frontier/20261115_upgrade/stack_28091/REPORT.md) | 58420406 | **28.09090，COMPLETE（rank 255/3152）** |
+| 2026-11-16 | [换件：28.09486 sub1（f2cdab0b + ccc2ab84 + sub1，三件官方 verifier 全 PASS）](experiments/frontier/20261116_push/pipeline/RESULT.md) | 58424363 | **28.09486，COMPLETE（rank 188/3160）** |
 
-当前采用组合为 **Ozertuu 28.091 公开包（本账号 `58420406`，COMPLETE 28.09090，rank 255/3152）**：
-`8b410e77` invsqrt（44Q，75,038.13）+ `ccc2ab84` DQI（890Q，347,375,470,571.73）+
-`f6e12f02` 化学（427Q，T=14,712，294,762,732.98）。三件由官方 verifier 在本账号复核 PASS
-（chem 28 s、invsqrt 636 s / 200,540,928 shots、DQI 160 s / 102,400 shots，0 value / 0 phase）。
-注意 invsqrt 的 worst/tol = **0.99984**，余量仅 0.016%。
-上一版 **28.07502**（`58410043`）为：`2c125b39` invsqrt + `4b350932` DQI + `881d9dae` 化学。
+当前采用组合为 **28.09486 sub1 包（本账号 `58424363`，COMPLETE 28.09486，rank 188/3160）**：
+`f2cdab0b` invsqrt（44Q，75,006.38）+ `ccc2ab84` DQI（890Q，347,375,470,571.73）+
+`sub1` 化学（427Q，T=14,712，294,762,697.44）。三件由官方 verifier 在本账号复核 PASS
+（chem 78,080 shots、invsqrt 200,540,928 shots / worst-tol 0.99956、DQI 102,400 shots，0 value / 0 phase）。
+28.09486 已扩成 185+ 队并列，银线 rank 156 在并列内部；本账号 rank 188，尚未拿银。
+上一版 **28.09090**（`58420406`）为：`8b410e77` invsqrt + `ccc2ab84` DQI + `f6e12f02` 化学。
+再上一版 **28.07502**（`58410043`）为：`2c125b39` invsqrt + `4b350932` DQI + `881d9dae` 化学。
 历史：`58382097` 27.31541 → `58350759` 27.31193 → `58349843` 27.30661。
 invsqrt `1ba197b02771`（46Q，78,673.569211；未修改官方 verifier 200,540,928 shots PASS，
 worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 errors）、
