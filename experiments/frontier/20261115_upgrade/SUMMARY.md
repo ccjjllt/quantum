@@ -407,3 +407,17 @@ Q=45 需要 ≥8-AND 或 SAT 综合，不属于"再跑一次"的范围。
 `jiyujia/qcc-inv45u-sevenand-atlas`（GPU，1,695 s）以 atlas kmx 重建 46Q 件，
 `POSITIVE_CONTROL 300/300`，q14–q25 十条 idle 线 **VERIFIED 0**。与 CPU 版 q22
 （200/200，9,025 s）合并，invsqrt 的 0–7 AND 阶梯在十条线上全部实测为空。
+
+## 2026-11-16 **28.07502（COMPLETE，rank 181/3138）**
+
+采用当前最高的**真实**公开包 `atakanaldemir/qcc-terminal-readout-and-phase-folds`（Atakan v15）：
+invsqrt `2c125b39` 75,082.0925（44Q）+ DQI `4b350932` 347,760,709,936.55（890Q，0/0 errors）
++ 化学 `881d9dae` 294,763,525.68（427Q，T=14,712），本地 GM **28.07503**。
+
+自建 kernel `qingyu1232/qcc-adopt-28075` 按 zip SHA 取件、断言 18 个成员哈希，再用未修改的
+官方 verifier 三件复核（28 s / 634 s / 139 s，全 PASS），重新打包后提交 **ref 58410043**，
+回执 **COMPLETE 28.07502**。相对 28.05896 为 **+0.01606**，排名 314 → 181。
+
+甄别结论：2026-11-15 晚的 28.0x "SOTA" notebook 多数是 ~700 B 占位假件
+（`ozertuu` 658 B、`boristown` 680 B），`yorixum` 的 28.58 脚本含 `NameError` 从未跑通；
+真实公开天花板就是这份 28.075 包（见 `stack_28075/REPORT.md` §1）。
