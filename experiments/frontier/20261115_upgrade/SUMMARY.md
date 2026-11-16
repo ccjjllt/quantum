@@ -421,3 +421,18 @@ invsqrt `2c125b39` 75,082.0925（44Q）+ DQI `4b350932` 347,760,709,936.55（890
 甄别结论：2026-11-15 晚的 28.0x "SOTA" notebook 多数是 ~700 B 占位假件
 （`ozertuu` 658 B、`boristown` 680 B），`yorixum` 的 28.58 脚本含 `NameError` 从未跑通；
 真实公开天花板就是这份 28.075 包（见 `stack_28075/REPORT.md` §1）。
+
+## 2026-11-16 **28.09090（COMPLETE，rank 255/3152）**
+
+公开最高真实包升到 Ozertuu 28.091（`ozertuu/vqcc-super-sota-verified-portfolio-28-091`）：
+invsqrt `8b410e77` 75,038.134（44Q，worst/tol **0.99984**）+ DQI `ccc2ab84`
+347,375,470,571.73（890Q，0/0）+ 化学 `f6e12f02` 294,762,732.98（427Q，T=14,712），
+本地 GM 28.09091。
+
+`qingyu1232/qcc-adopt-28091` 按 zip SHA 取件、断言 18 成员哈希，未修改官方 verifier
+三件复核（28 s / 636 s / 160 s，全 PASS），提交 **ref 58420406** → **COMPLETE 28.09090**。
+比 28.07502 +0.01588；但同期榜单继续上涨，rank 181 → 255。
+
+同期公开件甄别：`kawh1111/qcomp-harvest-2806` 输出 86 MB 但电路与本包相同；
+`jezzlin/vqcc-verified-portfolio-20261116-v2` 私有不可取；`boristown`/`ozertuu 28-082`
+仍是 ~700 B 占位件。

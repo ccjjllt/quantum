@@ -45,14 +45,15 @@
 | 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | 27.31193，COMPLETE |
 | 2026-11-15 | [化学换件：4030 loader + 新权重 refit](experiments/frontier/20261115_upgrade/chem_ab/REPORT.md) | 58382097 | 27.31541，COMPLETE |
 | 2026-11-16 | [换栈：28.059 公开组合（44Q invsqrt + 890Q DQI + marculera v6 化学）](experiments/frontier/20261115_upgrade/stack_28059/REPORT.md) | 58392219 | 28.05896，COMPLETE（当时 rank 91/3114） |
-| 2026-11-16 | [换件：最高的真实公开包（Atakan v15，GM 28.07503）](experiments/frontier/20261115_upgrade/stack_28075/REPORT.md) | 58410043 | **28.07502，COMPLETE（rank 181/3138）** |
+| 2026-11-16 | [换件：最高的真实公开包（Atakan v15，GM 28.07503）](experiments/frontier/20261115_upgrade/stack_28075/REPORT.md) | 58410043 | 28.07502，COMPLETE |
+| 2026-11-16 | [换件：公开最高真实包（Ozertuu 28.091）](experiments/frontier/20261115_upgrade/stack_28091/REPORT.md) | 58420406 | **28.09090，COMPLETE（rank 255/3152）** |
 
-当前采用组合为 **Atakan v15 公开包（本账号 `58410043`，COMPLETE 28.07502，rank 181/3138）**：
-`2c125b39` invsqrt（44Q，75,082.09）+ `4b350932` DQI（890Q，347,760,709,936.55）+
-`881d9dae` 化学（427Q，T=14,712，294,763,525.68）。三件由官方 verifier 在本账号复核 PASS
-（chem 28 s、invsqrt 634 s / 200,540,928 shots、DQI 139 s / 102,400 shots，0 value / 0 phase）。
-上一版 **28.059 公开组合**（`58392219`，28.05896）为：`47b31838` invsqrt（44Q，75,170.62）+
-`46446af1` DQI（890Q，347,904,227,556）+ marculera v6 化学（427Q，T=14,712，294,800,582.44）。
+当前采用组合为 **Ozertuu 28.091 公开包（本账号 `58420406`，COMPLETE 28.09090，rank 255/3152）**：
+`8b410e77` invsqrt（44Q，75,038.13）+ `ccc2ab84` DQI（890Q，347,375,470,571.73）+
+`f6e12f02` 化学（427Q，T=14,712，294,762,732.98）。三件由官方 verifier 在本账号复核 PASS
+（chem 28 s、invsqrt 636 s / 200,540,928 shots、DQI 160 s / 102,400 shots，0 value / 0 phase）。
+注意 invsqrt 的 worst/tol = **0.99984**，余量仅 0.016%。
+上一版 **28.07502**（`58410043`）为：`2c125b39` invsqrt + `4b350932` DQI + `881d9dae` 化学。
 历史：`58382097` 27.31541 → `58350759` 27.31193 → `58349843` 27.30661。
 invsqrt `1ba197b02771`（46Q，78,673.569211；未修改官方 verifier 200,540,928 shots PASS，
 worst/tol 0.9986660009）、DQI `821bf8d1`（889Q，360,209,905,486.02，0 errors）、
