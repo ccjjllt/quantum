@@ -48,8 +48,11 @@
 | 2026-11-16 | [换件：最高的真实公开包（Atakan v15，GM 28.07503）](experiments/frontier/20261115_upgrade/stack_28075/REPORT.md) | 58410043 | 28.07502，COMPLETE |
 | 2026-11-16 | [换件：公开最高真实包（Ozertuu 28.091）](experiments/frontier/20261115_upgrade/stack_28091/REPORT.md) | 58420406 | **28.09090，COMPLETE（rank 255/3152）** |
 | 2026-11-16 | [换件：28.09486 sub1（f2cdab0b + ccc2ab84 + sub1，三件官方 verifier 全 PASS）](experiments/frontier/20261116_push/pipeline/RESULT.md) | 58424363 | **28.09486，COMPLETE（rank 188/3160）** |
+| 2026-11-17 | [换 DQI：61c8348d → 575b043f（+4 个已证明 product-retention closings，mean T 367,116.06）](submissions/20261117_deep_575b043f/README.md) | 58464076 | **28.15094，COMPLETE（rank 156，silver 线内）** |
 
-当前采用组合为 **28.09486 sub1 包（本账号 `58424363`，COMPLETE 28.09486，rank 188/3160）**：
+当前采用组合为 **28.15094 包（本账号 `58464076`，COMPLETE，rank 156）**：
+`0af21cb8` invsqrt + `575b043f` DQI + `a73b25d2` chemistry
+（更早的 28.15083 包为 `58454232`）：
 `f2cdab0b` invsqrt（44Q，75,006.38）+ `ccc2ab84` DQI（890Q，347,375,470,571.73）+
 `sub1` 化学（427Q，T=14,712，294,762,697.44）。三件由官方 verifier 在本账号复核 PASS
 （chem 78,080 shots、invsqrt 200,540,928 shots / worst-tol 0.99956、DQI 102,400 shots，0 value / 0 phase）。
