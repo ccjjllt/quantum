@@ -96,6 +96,25 @@ New integrator `qingyu1232/qcc-integrator-281806` v1 (expected GM 28.180659; the
 extracts the `.xz` and matches the sha). The LB draw for `575b043f` is already known clean
 from submission 58464076, so the expected LB score is 28.18 if the salt is per-file.
 
+## 4c. invsqrt circuit census (2026-11-18, local parse only, no simulation)
+
+`563d0583.kmb`: 179,308 B, 44 qubits, 20,659 instructions.
+Static counts: `CX 12,297 · CCX 1,518 · CZ 1,502 · HMR 1,277 · Z 1,010 · X 946 ·
+PUSH/POP_CONDITION 674 each · CZ_IF 593 · Z_POW 43 · CCZ 30 · SWAP 12`.
+`mean_toffolis()` = **1,454.0008 exactly** (static 1,548 -> 94 saved by classical
+conditions). 33 of the 43 Z_POW are non-Clifford (T=962.256).
+
+Pair analysis (compute/uncompute candidates): only **6 clean adjacent CCX pairs**
+(same controls+target, nothing touching the target between) and 8 with only Clifford
+touches between. So the CCX->HMR rewrite is **not** a large lever on this circuit —
+it already uses HMR 1,277 times. The Toffoli-count lever must come from a different
+arithmetic/approximation, not from uncomputation pairs.
+
+U/tree facts for the chem tree line: `U` is (8,143,76) -> 1,144 two-body rows, every
+row is a unit vector (norm 1.000000); `tree_edges` is not a chain (degrees 1..7, 44
+leaves); `reconstruct_u_vectors` applies the 75 Givens rotations in `tree_edges`
+order from e_0.
+
 ## 5. Submission plan
 
 Quota resets 2026-11-18 08:00 Beijing. Submit the best verified package then and
