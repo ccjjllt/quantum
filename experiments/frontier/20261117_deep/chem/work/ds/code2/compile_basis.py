@@ -52,7 +52,7 @@ def plan_one(target, seeds=(7,), trials=40, verbose=True, time_limit=600, generi
             continue
         B = inverse15(rows)
         tt = transform_target(target, B)
-        bp = BlockPlan(tt, PARTS5, [], per_coord=True, hmax=76)
+        bp = BlockPlan(tt, PARTS5, [], per_coord=True, hmax=len(target) - 1)
         path = descend_smart(bp, seed=seed, per_block=PER_BLOCK, time_limit=600) if SMART else descend_path(bp, seed=seed, trials=trials)
         perfect = [c for c, (R, d, r) in path.items() if r == d and d % 2 == 0]
         if not perfect:
@@ -67,7 +67,7 @@ def plan_one(target, seeds=(7,), trials=40, verbose=True, time_limit=600, generi
             cuts = local_search(bp, cuts, seconds=LS_SECONDS, seed=seed + 3, verbose=False)
             c = sum(map(len, cuts)); d = NDIM - c
         phys = physical_cuts(PARTS5, cuts, Binv=rows)
-        F = solve_padding(phys, target[76])
+        F = solve_padding(phys, target[len(target) - 1])
         if verbose:
             print(f'   seed {seed}: full {[len(f) for f in bp.full]} perfect at sum c {c} -> products {d // 2}; padding {"ok" if F is not None else "UNSOLVABLE"} ({time.time()-t0:.0f}s)', flush=True)
         if F is None:
@@ -97,8 +97,8 @@ def compile_one(W, k, outdir, seeds=(7, 8), trials=40, verbose=True, generic=Fal
          'explicit_certificate': dict(cert, method='own planner: rank-74 low basis (MinRank kernel attack), 75-slice annihilators, '
                                       'rank-guided top-down cuts, v18 matching; off-domain slice by GF(2) padding solve',
                                       sum_cuts=int(best['sum_c']), low_basis_dual_rows=[int(x) for x in best['rows']]),
-         'padding_completion': {'version': 1, 'first_unused_address': 1220, 'word_width': 75,
-                                'words': Wpad[1220:].astype(int).tolist(), 'real_word_prefix_sha256': prefix}}
+         'padding_completion': {'version': 1, 'first_unused_address': len(W), 'word_width': 75,
+                                'words': Wpad[len(W):].astype(int).tolist(), 'real_word_prefix_sha256': prefix}}
     outdir.mkdir(parents=True, exist_ok=True)
     kmx = outdir / f'angle_k_{k}.kmx'
     rep = emit(s, Wc, kmx)

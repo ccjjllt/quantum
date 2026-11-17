@@ -32,7 +32,7 @@ def build(k, state_path, outdir):
     # sanity: every cut really annihilates the 75 determined slices, in the low basis it was found in
     from planner import basis, reduce, BlockPlan
     tt = transform_target(target, B)
-    bp = BlockPlan(tt, parts, [], per_coord=True, hmax=76)
+    bp = BlockPlan(tt, parts, [], per_coord=True, hmax=len(target) - 1)
     for pi in range(len(parts)):
         bb = basis(bp.full[pi])
         for c in cuts[pi]:
@@ -47,8 +47,8 @@ def build(k, state_path, outdir):
          'explicit_certificate': dict(cert, method='shipped rank-74 low basis + planner descent on the '
                                       'marculera table (this experiment)', sum_cuts=int(st['sum_cuts']),
                                       low_basis_dual_rows=[int(x) for x in rows]),
-         'padding_completion': {'version': 1, 'first_unused_address': 1220, 'word_width': 75,
-                                'words': Wpad[1220:].astype(int).tolist(),
+         'padding_completion': {'version': 1, 'first_unused_address': len(W), 'word_width': 75,
+                                'words': Wpad[len(W):].astype(int).tolist(),
                                 'real_word_prefix_sha256': prefix}}
     outdir = Path(outdir)
     outdir.mkdir(parents=True, exist_ok=True)

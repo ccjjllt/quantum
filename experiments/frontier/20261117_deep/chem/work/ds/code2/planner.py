@@ -19,24 +19,42 @@ REL_LSB = [1 << (7 * z) for z in range(5)]
 REL_P1 = sum(1 << (7 * z + 1) for z in range(5))
 
 
-def complete_words(words):
-    """rebuild.py's completion: zero ANF at (h=76, l>=4)."""
-    a = np.zeros((1232, 75), dtype=np.uint8); a[:1220] = words
-    f = a.reshape(77, 16, 75)
+def _addr_shape(rows):
+    """Rows -> (nh, rem, N, hbits) for the (h, l) address decomposition.
+
+    1220 -> nh 77, rem 4, N 1232, hbits 7 (the shipped shape; the historical constants).
+    """
+    nh = (rows + 15) // 16
+    rem = rows - 16 * (nh - 1)
+    return nh, rem, nh * 16, (nh - 1).bit_length()
+
+
+def complete_words(words, rows=None):
+    """rebuild.py's completion: zero ANF at (h=nh-1, l>=rem).
+
+    `rows` defaults to len(words); at rows=1220 this is byte-identical to the historical
+    hard-coded 1232/77/76/4 version (verified), and it generalises to other row counts
+    (791 -> nh 50 rem 7, 756 -> nh 48 rem 4, 648 -> nh 41 rem 8).
+    """
+    words = np.asarray(words, dtype=np.uint8)
+    rows = len(words) if rows is None else rows
+    nh, rem, N, hbits = _addr_shape(rows)
+    a = np.zeros((N, 75), dtype=np.uint8); a[:rows] = words
+    f = a.reshape(nh, 16, 75)
     for b in range(4):
         for l in range(16):
             if l & (1 << b): f[:, l] ^= f[:, l ^ (1 << b)]
-    for b in range(7):
-        for h in range(77):
+    for b in range(hbits):
+        for h in range(nh):
             if h & (1 << b): f[h] ^= f[h ^ (1 << b)]
-    f[76, 4:] = 0
-    for b in range(7):
-        for h in range(77):
+    f[nh - 1, rem:] = 0
+    for b in range(hbits):
+        for h in range(nh):
             if h & (1 << b): f[h] ^= f[h ^ (1 << b)]
     for b in range(4):
         for l in range(16):
             if l & (1 << b): f[:, l] ^= f[:, l ^ (1 << b)]
-    assert np.array_equal(a[:1220], words)
+    assert np.array_equal(a[:rows], words)
     return a
 
 
@@ -385,19 +403,22 @@ def solve_padding(phys_cuts, D):
     return None if sol is None else sol << (3 * NOUT)
 
 
-def padded_words(W, k, F):
-    """Completed 1232 x 75 table whose loader-k delta has ANF coefficients F on (76, l' >= 4)."""
-    Wc = complete_words(np.asarray(W, dtype=np.uint8)).astype(np.int64)
+def padded_words(W, k, F, rows=None):
+    """Completed N x 75 table whose loader-k delta has ANF coefficients F on (nh-1, l' >= rem)."""
+    W = np.asarray(W, dtype=np.uint8)
+    rows = len(W) if rows is None else rows
+    nh, rem, N, _ = _addr_shape(rows)
+    Wc = complete_words(W, rows=rows).astype(np.int64)
     M = (1 << NOUT) - 1
     Fm = {m + 1: (F >> (NOUT * m)) & M for m in range(3, 15)}       # low monomial l' -> 35-bit vector
-    for l in range(4, 16):
+    for l in range(rem, 16):
         acc = 0
         for lp, v in Fm.items():
             if (lp & l) == lp:
                 acc ^= v
         if not acc:
             continue
-        a = 16 * 76 + l
+        a = 16 * (nh - 1) + l
         for j in range(5):
             t = 5 * k + j
             old = int(Wc[a, t]); helper = ((old >> 7) ^ (old >> 6)) & 1

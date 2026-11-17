@@ -4,19 +4,23 @@ from pathlib import Path
 from parity_recover import state,basis,reduce,outer,NOUT
 BASE=Path(__file__).resolve().parent
 
-def cross_tensor(words,k):
+def cross_tensor(words,k,rows=None):
+    words=np.asarray(words)
+    rows=len(words) if rows is None else rows
+    nh=(rows+15)//16
+    hbits=(nh-1).bit_length()
     delta=words[:,5*k:5*k+5].copy()
     if k:delta^=words[:,5*k-5:5*k]
-    packed=np.zeros(1232,dtype=np.uint64)
+    packed=np.zeros(nh*16,dtype=np.uint64)
     for j in range(5):packed[:len(delta)]|=(delta[:,j].astype(np.uint64)&127)<<(7*j)
-    f=packed.reshape(77,16).copy()
+    f=packed.reshape(nh,16).copy()
     for b in range(4):
         for lo in range(16):
             if lo&(1<<b):f[:,lo]^=f[:,lo^(1<<b)]
-    for b in range(7):
-        for hi in range(77):
+    for b in range(hbits):
+        for hi in range(nh):
             if hi&(1<<b):f[hi]^=f[hi^(1<<b)]
-    return [sum(int(f[h,l])<<((l-1)*NOUT) for l in range(1,16)) for h in range(77)]
+    return [sum(int(f[h,l])<<((l-1)*NOUT) for l in range(1,16)) for h in range(nh)]
 
 if __name__=='__main__':
     old=np.load(BASE.parent/'input/chem_pack/v14/submission.npz')['angle_words']
