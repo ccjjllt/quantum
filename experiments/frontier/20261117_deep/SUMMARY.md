@@ -26,7 +26,8 @@
 | chemistry | 免费形状缩减 | **NO-GO** | `W` 无全零 copy 列 / base 行 / rank（最小列 Σ\|w\|=0.717） |
 | chemistry | Λ 的公开基线 | **NO-GO** | starter kit 只有 FeMoCo 一个可提交：Λ=308.45 / λ_eff=49.25 / e2=16.13 mHa，全面劣于我们 283.15 / 46.92 / 20.00 |
 | chemistry | **loader 的 T 轴** | **NO-GO** | 15 个 loader 全是 `CX+CCX+R+HMR+CZ+Z`，**0 PUSH/POP、0 CCZ、0 条件 Toffoli** ⇒ `mean T = static T = 268.1`，没有条件化面；每条 Toffoli 都是无条件 CCX，77 条 ancilla 各被写 1 次再 HMR 免费清掉 ⇒ **MBU 无可回收对象**；表双稠密（比特密度 50.0%、ANF 满支撑 2,048/2,048、953/bit）⇒ 无代数捷径。shipped 是「共享乘积网络」，**比唯一公开构造便宜 4.6×**（4,022 vs 18,270 per pass）。金线要求 angles −10%（每电路 212 vs 265–292）|
-| chemistry | **Λ 的 \|W\| 集中杠杆** | **有算术价值，交付待定** | `lam_h2 = 0.25Σ(a+|W|)²` 里 **52% 是 cross 项** `2Σa|W| = 452.6`；`W` 不进 e2，只进 `h1_prime`/`E_SOS`。把 `\|W\|` 集中到最小 a 的 k 个 cell：Λ 283→195（k=44）/ 174（k=1）⇒ **λ_eff 38.8/36.7 ⇒ GM 29.99/30.56**。卡点：①`E_gap` 恰在 floor；②76 条 one-body 行须重量化且 e1 ≤ 20 mHa；③**没有公开 emitter** 能同成本重建 15 个 loader（唯一公开的 `taylorclark637/dfthcsos-generator` 是 1,218/电路 = ×2.94），只能外科式改写前 5 个 16-块 |
+| chemistry | **Λ 的 \|W\| 集中杠杆** | **算术 +0.6~+2.7 GM，交付成本在盈亏线两侧** | `lam_h2 = 0.25Σ(a+|W|)²` 里 **52% 是 cross 项** `2Σa|W| = 452.6`；`W` 不进 e2，只进 `h1_prime`/`E_SOS`。把 `\|W\|` 集中到最小 a 的 k 个 cell：Λ 283→195（k=44）/ 174（k=1）⇒ **λ_eff 38.8/36.7 ⇒ GM 29.99/30.56**。三个卡点：①`E_gap` 恰在 floor（需 `sign(W)` 搜索补偿）；②76 条 one-body 行须重量化且 e1 ≤ 20 mHa（现件贴门无余量）；③**没有公开 emitter** 能同成本重建 15 个 loader（唯一公开的 `taylorclark637/dfthcsos-generator` 是 1,218/电路 = ×2.94），且 **0 成本改 CX 已否证**：292 个 Toffoli 里 80 个是地址乘积、**212 个与表相关**（操作数是 ancilla∧ancilla），块局部改写需 **+40…+200 CCX/电路**，而**盈亏平衡是 +120/电路** |
+
 | **侦察** | 公开新字节 | 无价值 | 唯一新 DQI `575b043f`：346,409,762,292.72（3 salts 3/3 PASS）→ 组合 GM **28.15093204（+0.00010）**，且有已知 weight-35 见证错误 → 不占提交名额 |
 | 侦察 | 开源/论文 | 无可用代码 | arXiv 2610.23832 / 2610.22367 / 2502.15882 均无代码；`alexchilton/qcc-schur-dqi-rebuild` 是 24.94 时代；`Agnuxo1/qvc-chemistry-compiler` composite 26.98–27.02 更差 |
 

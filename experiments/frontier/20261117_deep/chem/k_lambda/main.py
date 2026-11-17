@@ -182,9 +182,18 @@ if feas:
             v2, s2 = objective(W2)
             if v2 < val - 1e-10:
                 Wb, val, s = W2, v2, s2
-    r = minimize(lambda z: objective(z.reshape(R, C))[0], Wb.ravel(), method='Powell',
-                 options=dict(maxiter=4000, xtol=1e-8, ftol=1e-10))
-    Wp = r.x.reshape(R, C)
+    zk = Wb.ravel()[idx].copy()
+
+    def obj_k(zkk):
+        Wz = np.zeros(R * C)
+        Wz[idx] = zkk
+        return objective(Wz.reshape(R, C))[0]
+
+    r = minimize(obj_k, zk, method='Powell',
+                 options=dict(maxiter=2, xtol=1e-6, ftol=1e-9))
+    Wp = np.zeros(R * C)
+    Wp[idx] = r.x
+    Wp = Wp.reshape(R, C)
     v, sp = objective(Wp)
     log(f'  polished: lam_eff {sp["lam_eff"]:.4f} Lambda {sp["Lambda"]:.4f} '
         f'lam_h1 {sp["lam_h1"]:.4f} E_gap {sp["E_gap"]:.9f} sumW2 {sp["sumW2"]:.3f} '
