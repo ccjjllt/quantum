@@ -262,3 +262,15 @@ lever remains Q=44->43/42 (+0.22/+0.44), which needs a cheaper retirement than t
   at 46 by 485 one-wire spikes.
 * New official receipt: shipped file, 1 shot/x PASS, score **74,560.71496**, toffoli 1,453.9968.
 * Verdict: **invsqrt is finished at 74,560.9**; only a generator-level rewrite could move it.
+
+## 4m. DQI candidate + region split (measured, 2026-11-18 ~02:10)
+
+* Candidate `dqi_cond.kmb` (condition-block finder output, `zhuating/qcc-dqi-condfind-1118`):
+  default salt **PASS 346,406,882,459.21** (toffoli 367,113.005, Q 890, 0/0 errors) vs
+  shipped 346,409,762,292.72 -> only **-2,879,833 (-3.05 T)**; the two fresh salts each lose
+  1 value error (cost 348.0e9). Negligible gain and worse salt robustness: **do not ship**.
+* Static region split of `575b043f` (57,520,821 ops): A (ops 0..30,335,416) 153,186 Toffoli;
+  B = Chien region (30,335,416..35,627,262, j=7..4094) **44,264 Toffoli (12.0%)**;
+  C (35,627,262..end) 170,539 Toffoli. So the Chien search is only 12% of T: **the EEA
+  regions A+C (88%) dominate**, and a 28% T cut must come from the EEA, not the Chien search.
+  GF-mult block census shows many uniform 42-CCX blocks in A (1,542 blocks of 42).
