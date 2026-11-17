@@ -480,3 +480,17 @@ the 29.98-31.43 tier. The 31+ tier needs a *new EEA-family generation*: in-place
 boundaries for our tape family are: 866Q leaves zero product pool (rebuild floor 116,894 T
 vs +20,630 T break-even), and the multiply is already at the 42-AND symmetric frontier.
 This is generator-level work, not reachable from the .kmb.
+
+## 4z. New lever under test: Chien/Forney phase without Toffolis (dqi_chien, 02:52)
+
+The Chien/Forney region is 44,264 static T = **10 CCX + 1 CCZ per codeword position** (4,025
+positions). But the required operation is the phase
+`(-1) ** sum_j popcount(error[j] & error_mbuc[j])`, and `error_mbuc` = the `E0..E4094`
+registers are **classical bits** (km.b). If the decoded error value `e_j` is materialised in a
+computational-basis register at the phase point, the phase is just `Z(e_j[b])` for every b with
+`M_j[b] = 1` — a classically conditioned Clifford gate (0 Toffoli, 0 T). The tape instead pays
+the `gf2_phase_by_product` / measured-AND idiom (10 CCX + 1 CCZ).
+
+If that idiom is replaceable, the saving is **40,240 T = +1.1 GM** (T 367,116 -> 326,876,
+cost 308.3e9, GM ~29.3). `dqi_chien` is dumping one position window on Kaggle CPU to decide.
+This is the last structural lever not yet attacked head-on.
