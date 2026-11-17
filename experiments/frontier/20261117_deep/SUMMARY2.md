@@ -387,3 +387,32 @@ C=40 要压到 4.76（−48%）。**C ≤ 38 在数学上不可能**（floor 已
 (8,136,44) 是唯一在成本上划算的降 rows 形状（+0.25），但连续 21.61 → 量化后 ~24.4，超门 22%，
 而且它还要 1,164 行的新 loader plan（发射器在 1,220 行上对 k0/k1 就找不到基）。
 (8,136,96) 更贵：为买精度把 RC 抬到 768，T_h 直接 +4,000，**反而比出厂贵 25%**。
+
+## 17. 重要口径：DQI 的分数是"电路哈希 + salt"的确定性抽样，本地与榜单 salt 不同
+
+`dqi/verify_submission_dqi.py`：
+
+```python
+base_seed = _initial_seed(circuit_hash, salt)      # sha256(f'{circuit_hash}{salt}')
+seeds = np.random.SeedSequence(base_seed, ...)     # 每次抽样的 RNG
+eps_plus = clopper_pearson_upper_bound(errors, num_shots, log2_delta=-128)
+rep_factor = repetition_overhead(eps_plus)
+score = rep_factor * num_qubits**2 * toffolis
+```
+
+所以**同一份 tape 的分数由 salt 决定**（默认 `salt=''`）。实测差异：
+
+| 场景 | DQI 分数 | GM |
+|---|---:|---:|
+| 榜单/出货口径（台账用值） | 346,409,762,292.72 | 28.15094 |
+| 本地 integrator 默认 salt（本次） | **348,246,849,661.48** | 28.13102 |
+| scout 记录的 48 次抽样最好 | 347.41e9 | — |
+
+**结论：本地 GM 与榜单 GM 不能直接比大小。** 本次 integrator 给出的 `DO_NOT_SUBMIT`
+是**假警报**：它拿"本地 salt 的 28.1310"去比"榜单 salt 的 28.15094"。正确做法是只看
+**未改动腿不变的 delta**：DQI tape 完全没动，榜单那一项就是原来的 346.4098e9，
+所以只应用 invsqrt 的 `(74560.90687/74797.365357)^(−1/3) = ×1.001054`
+⇒ **28.15094 × 1.001054 ≈ 28.1806**。
+
+三条腿本次 integrator 全部 **PASS**（chem 294,643,137.73 / dqi 348,246,849,661.48 /
+invsqrt 74,560.90687），zip 85,200,406 B sha `cd24b38a…c992`，18/18 成员。
