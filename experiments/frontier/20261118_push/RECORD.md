@@ -440,3 +440,23 @@ frontier literature puts this at the known symmetric bilinear-complexity bound:
 **So there is no rank<=35 GF(2^12) multiplier to patch in.** The DQI multiply-rank axis is
 closed at 42, the tape is already at the frontier, and the whole DQI leg is closed at
 Q=890 / T=367,116 (cost 346,409,762,292.72). The `dqi_mult` line is stopped.
+
+## 4x. General decomposition lands on the SAME 188 products (gendecomp final)
+
+`gendecomp/RESULT.md` (measured, cross-checked against my Kaggle kernels):
+* A product's ANF is `L1*L2 + L1*H2 + H1*L2 + H1*H2`: i.e. exactly **two rectangles
+  `H2 x L1` and `H1 x L2` carrying the same 35-bit label**. `products = sum over labels
+  ceil(t_v/2)`.
+* The target is maximally unstructured: k4 has **1,143 nonzero ANF cells, all 1,143 values
+  distinct** (k2 the same); per-row rank 15 for all 75 rows; per-column ranks sum 454;
+  pairwise column-difference ranks 28..35 -> **no equal-value pairing, no common prefix
+  chain, no sharing across coordinates**.
+* The chunk-vector census: **dim W = 0** (all 4,943 subsets |L|<=5) -> the `products >= 38`
+  floor is a phantom; the natural chunk-vector product space has dimension
+  `sum_B dim pi_B(R) = 375` -> **>= 188 products**, and k4..k8 are exactly there (376 terms).
+* Two independent derivations (cut architecture `(525-cuts)/2` with cuts<=149; general
+  architecture 375-dim chunk space) both give **188**. k0/k1's 219/213 -> 188 would be
+  +0.103 GM but the block census shows it unreachable (block 0 needs 76 dims, pool 42).
+
+**Loader product-count axis closed at 188; general decomposition gives +0 at the shipped
+point.** Chemistry is finished at 294,643,137.73 (lambda 46.9216, T 14,706, Q 427).
