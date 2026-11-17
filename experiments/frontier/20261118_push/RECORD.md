@@ -376,3 +376,14 @@ headroom from the weak loaders.
 * **arXiv:2510.10967 (Khattar et al.)**: the competition's reference decoder is 1,893Q /
   5,725,108 mean T (verified by us on `sample_submission/dqi.kmb`); our tape is 2.1x narrower
   and 15.6x cheaper in T.
+
+## 4t. Block-architecture probe (gendecomp, in flight 02:24)
+
+The full-h replicated-vector test (dim W=0) does not close the shipped *block* architecture,
+because a product with a partial h-mask contributes to the projection of R onto a 3-low-coordinate
+block without being in R globally. `probe_block3.py` therefore computes, per 3-coordinate block B:
+`V_L = {v : e_L (x) v in pi_B(R)}` for every nonempty L in the block (7 subsets), the pool of
+chunk-vectors inside pi_B(R), and a greedy spanning set. The total term count over the 5 blocks
+is the architecture's product count; 188 is the shipped cut/pairing count, and anything below
+188 with an emitted plan would be a chem win (75 terms -> Toffoli ~150/loader -> chem ~215M ->
++2.4 GM). This is the decisive remaining measurement for the loader axis.
