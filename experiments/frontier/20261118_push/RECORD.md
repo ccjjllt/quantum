@@ -233,3 +233,12 @@ the E_gap floor. Record: `experiments/frontier/20261118_push/chem/RESULT.md`.
   come in under 4,022.
 * Prize: -80 Toffoli (all remaining loader headroom) = **+0.051 GM**; -174.5 (absolute
   ceiling) = +0.112 GM. Closed.
+
+## 4k. invsqrt rotation retune (measured, 2026-11-18 ~02:05)
+
+`jiyujia/qcc-invsqrt-rotlp-563d0583` retuned the 33 rotation eps to the margin boundary:
+OFFICIAL PASS, score **74,560.71496** vs shipped 74,560.90687 (-0.192, 2.6e-6 relative),
+toffoli 1,453.9968, t_count 2.4985, margin 31,789,809 (shipped 31,789,811). GM gain
+~1e-6. The 33 rotations are the dyadic-ladder floor (model line); the only real invsqrt
+lever remains Q=44->43/42 (+0.22/+0.44), which needs a cheaper retirement than the
+>=132 C per pair measured earlier against an 80.7 C budget.
