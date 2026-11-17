@@ -14,8 +14,8 @@ Gold = 28.71339. Target here: **Λ ≤ 250 ⇒ λ_eff 44.0695 (−6.08 %) ⇒ ch
 | # | question | status |
 |---|---|---|
 | **B** | keep the shipped 76 one-body rows, move only `W` → Λ down, `error_1 ≤ 20 mHa` | **analytically dead** (§1) |
-| **A** | Λ_min(W) with `error_1` free (i.e. allow re-encoding the 76 rows) | measured in the kernel (§5) — value unknown yet |
-| **C** | if A is good: is it *deliverable*? (a) 8-bit re-encode of 76 rows reaches `error_1 ≤ 20 mHa`; (b) the 15 loaders can be rebuilt | (a) measured in the kernel; (b) **blocked**: the shipped emitter covers batches 0–8 only, k9–k14 have no equivalent implementation in the tree (`pipeline/CODE2_STATUS.md`, quoted in §3) |
+| **A** | Λ_min(W) with `error_1` free | **closed by exact identities, §6.2**: `lam_h2 >= 270.066` vs 270.115 shipped (0.018 % headroom), `Λ >= 283.095` vs 283.144 → **+0.0003 GM**, no lever |
+| **C** | if A were good: deliverable? | moot (A is closed); and independently blocked: the shipped emitter covers batches 0–8 only, k9–k14 have no implementation in the tree (`pipeline/CODE2_STATUS.md`, §3) |
 
 **`Λ_min` and "deliverable" are reported separately everywhere below.** A low
 `Λ_min` alone is not a candidate.
@@ -63,8 +63,9 @@ a result:
 | 44 | 48.82 | 181.72 | 194.75 | 38.84 | 29.87 |
 | 352 (actual) | 226.32 | 270.12 | 283.14 | 46.92 | 28.15 |
 
-**Decision rule: only the kernel's numerically solved `Λ` (explicit `E_gap = floor`,
-real `eigvalsh`) counts.** If it disagrees with this table, the kernel wins; the
+**This table is void: it assumed `W = H2_I`. The verifier's offsets are
+`W = H2_I − Σ_b w`, whose norm is 1079.846, and that lands exactly on the `E_gap`
+corner — see §6.2 for the closed bound.** If it disagrees with this table, the kernel wins; the
 disagreement is `lam_h1(W)` moving.
 
 ## 3. Deliverability gates  (independent of Λ)
@@ -102,6 +103,89 @@ cross, `E_gap`, `λ_eff`, `error_1` (both variants).
 
 Measured output goes in §6. Nothing in §6 is assumed.
 
-## 6. Measured output
+## 6. Measured output — the lever is arithmetically closed
 
-_(pending — kernel v3)_
+### 6.1 The kernel run is INVALID (bug found and diagnosed, recorded so it is not repeated)
+
+`qingyu1232/qcc-chem-lambda-offset-min` (COMPLETE) reproduced the shipped point as
+`lam_h1 = 532.028`, `tr h1 = −532.028`, `E_gap = 557.655`, `Λ = 802.227`,
+`error_1 = 18,371 mHa` — all wrong, so **none of its Λ numbers may be used**.
+
+Bug: the offsets that enter `H1_prime` / `E_SOS` are **not** `npz["H2_I"]`. The
+verifier's `native_inputs` does
+
+```
+w   = npz["W"]                       # (R,B,C) cell weights
+W   = npz["H2_I"] - np.sum(w, axis=1)   # <-- the offsets, (R,C)
+```
+
+so `lam_h2` sees `w_B = W + Σ_b w = npz["H2_I"]`, while `H1_prime` and `E_SOS` see
+`W = npz["H2_I"] − s`, `s_rc = Σ_b w_rcb`. The kernel passed `H2_I` as `W`, i.e. it
+was off by exactly `+Σ s² = 521.96` in `tr H1p` — which is why `tr h1` came out
+`−532` instead of ≈ −10. (β₁ itself was right: `β₁ = H1_I − tr(S)/2 = 4.955105`,
+`tr(S) = −6.892404`.)
+
+Diagnostic chain for any re-run: `lam_h1 = 13.0289`, `tr h1` single-digit,
+`error_1(shipped rows) = 19.9999985 mHa`, `Λ = 283.14396`, `E_gap = 3.914898`,
+`lam_h2 = 270.115`. Five of five, or nothing else is meaningful.
+
+### 6.2 The lever is closed by two exact identities (this supersedes the kernel)
+
+With the correct decomposition (all numbers exact, from the shipped npz):
+
+```
+a_rc = sum_b |w_rcb|      sum a^2 = 522.565      a_min 0.7175  a_mean 1.180
+s_rc = sum_b  w_rcb       sum s^2 = 521.960      (signed)
+H2_I = W + s              sum H2_I^2 = 105.4407  sum H2_I*s = -226.2223
+W   = H2_I - s            sum W^2   = 1079.8456  (= the verifier's sum W^2)
+lam_h2(actual)            = 270.1151             (= 0.25 sum (a+|H2_I|)^2)
+```
+
+**(1) `E_gap` pins the pair `(Nneg, ΣW²)` to a corner.** `2·Nneg + 0.5·ΣW² = 540.0`
+(the shipped point satisfies it with `Nneg ≈ 0.01`). Since `Nneg ≥ 0`:
+
+```
+Sigma W^2 <= 1080.0     (equality iff Nneg = 0)
+```
+
+The shipped `ΣW² = 1079.8456` is **99.99 % of that ceiling** → there is no room to
+move `ΣW²` up (which would need `Nneg < 0`) and moving it down costs
+`Λ += 0.75 per unit` (0.25 saved in `lam_h2`, 1.0 paid in `2Nneg`).
+
+**(2) `lam_h2` is 0.018 % above its constrained lower bound.**
+
+```
+lam_h2 = 0.25 [ sum a^2 + 2*sum a|H2_I| + sum H2_I^2 ]
+       >= 0.25 [ sum a^2 + 2*|sum s*H2_I| + sum H2_I^2 ]     (a >= |s| cellwise)
+       =  0.25 [ 522.565 + 2*226.222 + 105.441 ] = 270.066
+```
+
+and the shipped `sum a|H2_I| = 226.320` is within **0.04 %** of the Cauchy–Schwarz
+floor `|Σ s·H2_I| = 226.222` (the anti-alignment `|corr|/sqrt(T·Σs²) = 0.964` is at
+96 % of its own cap). So:
+
+```
+lam_h2 >= 270.066     shipped 270.115     headroom 0.049  (0.018 %)
+lam_h1 >= 13.0289     shipped 13.0289     headroom 0
+Lambda >= 283.095     shipped 283.144      headroom 0.049  (0.014 %)
+```
+
+**The sign of `W` cannot be used either**: `H2_I = W + s`, so flipping a sign of `W`
+moves `H2_I` and therefore `lam_h2`; the sign freedom is not free at fixed `|H2_I|`,
+and the shipped point already sits on the `lam_h2` floor. (`lam_h1 ≥ |tr h1|` binds
+too: `tr h1 ≈ −10` at the shipped point, single-digit, exactly as the E_gap corner
+requires.)
+
+### 6.3 Consequence
+
+`Λ` cannot be moved by more than **0.05 units (0.014 %)** at this shape with
+`w`, `U`, and the `E_gap` floor fixed → `λ_eff` −0.0001 %, chem cost −0.0001 %,
+**GM +0.0003**. The `|W|`-concentration idea (including the closed-form `Λ = 173.67`
+row) is an artefact of the wrong `W` definition: with `W = H2_I` the "offsets" look
+like a free 352-vector, but the verifier's offsets are `H2_I − Σ_b w`, whose norm is
+1079.85 (not 105.44) and which the `E_gap` corner pins at its ceiling.
+
+**Verdict: chemistry Λ is arithmetically closed. No candidate, no re-encode, no
+loader rebuild, no submission.** The remaining chemistry value stays where
+`LAMBDA.md` left it: the 0.13 % λ ceiling, which is also unreachable.
+
