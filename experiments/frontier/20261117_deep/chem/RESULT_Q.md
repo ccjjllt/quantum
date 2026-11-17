@@ -430,3 +430,33 @@ not a redundant double-write.
 This is consistent with §3: rows = `N + R*B`, so the only way to cut rows is to cut
 `R*B`, which trades directly against `error_2` (pinned at 0.0199999985, 1.5e-9 under the
 0.02 gate).
+
+## 7. 发射器已按行数通用化并端到端验证（2026-11-17）
+
+为了让更少 rows 的形状（R=5 ⇒ 791、R=4 ⇒ 648）能出货，把历史写死 1,220 行的发射器参数化：
+
+| 位置 | 原 | 现 |
+|---|---|---|
+| `planner.complete_words` | `zeros((1232,75))`, `reshape(77,16,75)`, `f[76,4:]=0`, 7 位 h 变换 | `nh=(rows+15)//16`、`rem`、`hbits=(nh-1).bit_length()`，默认 `rows=len(words)` |
+| `planner.padded_words` | `a = 16*76 + l`，`range(4,16)` | `a = 16*(nh-1)+l`，`range(rem,16)` |
+| `compiler.gauge_plan_fit.cross_tensor` | 写死 1232/77/16 | 同参数化，返回 `nh` 个 h 切片 |
+| `compile_basis` / `emit_from_basis` | `hmax=76`、`target[76]`、`first_unused_address=1220` | `len(target)-1`、`target[len(target)-1]`、`len(W)` |
+
+**等价性证明（本地）**：`complete_words`、`padded_words(F=0)`、`cross_tensor` 与历史实现
+在 1,220 行上**逐字节相同**（15 条 loader 全比过）。
+
+**端到端验证（Kaggle CPU，`qingyu1232/qcc-chem-emit-regress`）**：用补丁后的发射器
+从存储 plan `basis_plan_k2.json` 重发 k=2 → `cuts=133, toffoli=271, qubits=126`，
+`.kmx→.kmb` 374,585 B，组装 16 成员，**官方 verifier PASS**：
+
+```json
+{"status":"PASS","score":294723280.03,"lambda_eff":46.9217168,"toffoli_count":14710.0,
+ "num_qubits":427,"angles_toffoli_per_pass":4024.0,"angles_toffoli":8048.0,
+ "angles_within_cap":true,
+ "metrics":{"error_1":0.01999999973,"error_2":0.01999999973,"Lambda":283.1458,
+            "E_gap":3.9149,"lambda_eff":46.9217168}}
+```
+
+（这条 loader 是 271 而非出厂 269，所以总分 294.72 M 略差——这是**回归测试**，不是候选。）
+
+**含义：R=5/R=4 形状的 loader 已经可以发射**，剩下的唯一门槛是 (R,B,C) 的拟合精度。
