@@ -157,3 +157,34 @@ chem 侧同理：`rows = 76 + R·B`，而精度按 **B/C 比**标定（实测锚
 `experiments/frontier/20261117_deep/chem/assemble_final.py`（本轮写好并干跑通过）：
 给 `--orig`（出厂 `dfthcsos/`）、若干 `--kernels` 输出目录、`--npz`，自动取每条 loader
 的最小者并组装到 `--out/dfthcsos/`，打印 Toffoli 表与 T 账。干跑结果与出厂 16 成员一致。
+
+## 8. 两个"看起来免费"的口子，实测都关闭
+
+### 8.1 loader 用更多 qubit 换更少 Toffoli？——不行
+
+chem 成本只按 **loader 的 Toffoli** 计（`T = 2·ΣToffoli + T_h`），loader 自身的 qubit 数
+*不进* Q，理论上可以拿 qubit 换 Toffoli。但 `code2/calib_emit.json` 实测：
+
+```
+k=0: product_count 213, toffoli_count 293, num_qubits 128
+```
+
+**loader 已经用满 128 qubit 上限**（`angles_qubits = 11 + J·brot + ANG_TEMP = 11+40+77 = 128`，
+其中 77 就是临时/scratch）。没有余量可换。**关闭。**
+
+### 8.2 DQI 的 Q 是"声明宽度" —— 但会计入全部 ancilla
+
+`dqi/verify_submission_dqi.py:417-420`：
+
+```python
+num_qubits = circuit.num_qubits
+'score': rep_factor * (num_qubits ** 2) * toffolis
+```
+
+- Q 取 **circuit.num_qubits（声明值）**，不是最高用到的 wire → 理论上"分配但不用"的 wire 可以免费压掉。
+- 但同一文件 226–230 行把**所有非 syndrome 的 qubit 都当 ancilla**，384–385 行
+  `sim.read_across_shots(ancilla_qubits)` 要求它们逐 shot 回到 `|0>` → 每条 ancilla 都真的被用到。
+- `rep_factor = repetition_overhead(eps_plus)`，`eps_plus` 是 0 错误 / 102,400 shots 的
+  Clopper–Pearson 上界（8.6606e-4）→ **R 是常数，无杠杆**（与 §3 一致）。
+
+所以 DQI 的唯一下降通道仍是"少 ancilla"，只能靠 liveness 实测（子代理在做）或换一代电路。
