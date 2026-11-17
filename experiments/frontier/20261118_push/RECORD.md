@@ -532,3 +532,17 @@ Chien-phase lever is closed**: 44,217 T is at its idiom minimum.
   i.e. only the 70 syndrome words; the algorithm needs n+3 words, so it is structurally
   impossible for this decoder family. **DQI width is closed at 866Q minimum**, and 866Q is
   already unprofitable (rebuild floor 116,894 T vs +20,630 T break-even).
+
+## 5c. New lever opened: barrel-shifter initial alignment (dqi_align, 03:12)
+
+The dqi_bm line's by-product: the tape's 367,116 T = 159,300 multiply ANDs (43.3%) +
+44,217 Chien (12.0%) + **242,201 non-multiply**, concentrated in 93 small clusters plus
+**one 65,774 T cluster**. The reference's `_initial_shift_loop`
+(`dqi_reference_circuit.py:140-164`) left-aligns the syndrome polynomial with **69 sequential
+steps**, each a controlled rotation-by-1 over ~68 words x 12 lanes (~816 CSWAPs/step, ~56k
+CSWAPs) — the size matches the 65,774 T cluster.
+
+Replacement: compute the leading-zero count once, then rotate by that quantum count with a
+**barrel shifter** (~7 stages x 68 x 12 = 5,712 CSWAPs -> ~6-8k T). Estimated saving ~58k T =
+**+0.6 GM** (T -> ~309k, GM ~28.8). `dqi_align` is testing the cluster identity and, if it
+holds, the patch + 3-salt verification. This is the first DQI lever not yet measured closed.
