@@ -1,0 +1,103 @@
+{
+ "candidates": {
+  "P1_lastClusterAndWrap": {
+   "path": "dqi_P1_lastClusterAndWrap.kmb",
+   "sha256": "35e4a7c6d4a815620077280f2a32be325859c9e1bf62b68aed36669f939e9a03",
+   "num_ops": 56941878,
+   "num_qubits": 890,
+   "static_toffoli": 364649,
+   "deleted_static_toffoli": 3340,
+   "default_salt": {
+    "status": "ERROR",
+    "score": null,
+    "toffoli_count": null,
+    "num_qubits": null,
+    "value_errors": null,
+    "phase_errors": null,
+    "verified_shots": null,
+    "effective_error_rate": null,
+    "repetition_factor": null,
+    "circuit_sha256": null
+   }
+  },
+  "P2_lastCluster": {
+   "path": "dqi_P2_lastCluster.kmb",
+   "sha256": "d53ddd2e063baf9a8bf83ff06e72d4c156319cdd5c92b0812f99b0c45433175d",
+   "num_ops": 57471294,
+   "num_qubits": 890,
+   "static_toffoli": 366444,
+   "deleted_static_toffoli": 1545,
+   "default_salt": {
+    "status": "ERROR",
+    "score": null,
+    "toffoli_count": null,
+    "num_qubits": null,
+    "value_errors": null,
+    "phase_errors": null,
+    "verified_shots": null,
+    "effective_error_rate": null,
+    "repetition_factor": null,
+    "circuit_sha256": null
+   }
+  },
+  "P3_last3ClustersAndWrap": {
+   "path": "dqi_P3_last3ClustersAndWrap.kmb",
+   "sha256": "6c719b8efce26e9eb51ae65f20c163e0a28d5b79c973fb90b2b7a3d654ef9f90",
+   "num_ops": 56432919,
+   "num_qubits": 890,
+   "static_toffoli": 358738,
+   "deleted_static_toffoli": 9251,
+   "default_salt": {
+    "status": "ERROR",
+    "score": null,
+    "toffoli_count": null,
+    "num_qubits": null,
+    "value_errors": null,
+    "phase_errors": null,
+    "verified_shots": null,
+    "effective_error_rate": null,
+    "repetition_factor": null,
+    "circuit_sha256": null
+   }
+  }
+ },
+ "base_sha256": "575b043f4fee91a0fc3a9fd6fc1e9290e7b2a0669cae79886be2bf999f7ec155",
+ "base_bytes": 479128738,
+ "num_ops": 57520821,
+ "num_qubits": 890,
+ "static_toffoli": 367989,
+ "roundtrip_sha256": "575b043f4fee91a0fc3a9fd6fc1e9290e7b2a0669cae79886be2bf999f7ec155",
+ "roundtrip_ok": true,
+ "cut_depths": {
+  "P1_lastClusterAndWrap": [
+   [
+    29756473,
+    30335416,
+    0,
+    0
+   ]
+  ],
+  "P2_lastCluster": [
+   [
+    29756473,
+    29806000,
+    0,
+    0
+   ]
+  ],
+  "P3_last3ClustersAndWrap": [
+   [
+    29247514,
+    30335416,
+    0,
+    0
+   ]
+  ]
+ },
+ "deleted_static_toffoli": {
+  "P1_lastClusterAndWrap": 3340,
+  "P2_lastCluster": 1545,
+  "P3_last3ClustersAndWrap": 9251
+ },
+ "seconds": 385.0
+}

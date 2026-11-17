@@ -404,3 +404,20 @@ shipped cut/pairing's **188 products**. The shipped products pair *across* the f
 (l1/l2 masks span all 15 low coordinates), which the per-block decomposition cannot see.
 **The loader axis is closed at 188** (the 150-cut / 188-product floor), and the only remaining
 headroom is the weak loaders' +0.05..0.11 GM.
+
+## 4v. DQI iteration axis: truncation probe FAILS (measured with base control)
+
+`zhuating/qcc-dqi-algo-trunc2` (COMPLETE): cut the unmodified tape at depth-0 boundaries
+(round-trip reproduces `575b043f` byte-exactly), then truncate.
+
+| candidate | T | verifier |
+|---|---:|---|
+| control `575b043f` | 367,116.057 | **PASS**, 0/102,400 value errors, 0 phase |
+| `P1` = last forward multiply cluster + wrap (-3,340 T, sha 35e4a7c6…) | 363,776 | **FAIL, value_errors 102,400/102,400** |
+
+Every shot wrong => the trailing chunk is not identity => no k>=1 truncation can pass.
+Both EEA passes run ~34 degree-driven rounds (forward +1 ladder 4->34; reverse ends with
+the mirror ladder 34,34,33..,3), which is the minimum (degree 69 -> <35, >=1 per step).
+**Iteration axis closed.** The only remaining DQI lever is the 12x12 GF(2) multiply rank
+(42 -> 23, +1.99 GM ceiling), which needs the generator or a successful in-place patch
+(`dqi_mult` line, running).
