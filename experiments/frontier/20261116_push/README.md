@@ -21,9 +21,9 @@
 
 | 目录 | 负责 | 目标 |
 |---|---|---|
-| `intel/` | 公开前沿侦察 | 找出任何真实超过 28.09 的公开件；反推 29+/30+ 的组件成本 |
-| `invsqrt/` | invsqrt Q/T | f2cdab0b 44Q 已证明 Q=44 硬地板、0 Toffoli 可删。**新路径**：v12 46Q 源码的 Q=45 只差 1 条线/1 个 block（`product_forward` 45+1），Q=42 只差 4 条；静态 live 41 / occupied 46，14,076 个 46-peak op 里大量 dead wire，可 one-time XOR zeroing。Q=42 在 v12 C=1742.7 下 cost 73,193 / GM **28.321**；若带上 f2cdab0b 的 C 缩减则 **28.53**。见 `invsqrt/RESULT2.md` |
-| `dqi/` | DQI Q/T | **Q/T peephole、v15 调度、decoder-level、structural 全部关闭**：RESULT5 exact T=384,003，decision machine <1T，retain +2.369%更差；RESULT6 out-of-place 需 4 sites 全改（v15 redesign）、v13 backport T delta 0、1,184-product ladder 不可约，k15/k16/k17 官方验证对照 0/0,0/0,1/0 PASS。见 `dqi/RESULT5.md`、`RESULT6.md` |
+| `intel/` | 公开前沿侦察 | 11-16 19:27→23:27 UTC 扫到 4 新字节：DQI `f425ea20`（kernel 内嵌官方 JSON 346,992,317,312.82，组 0af+chem 可达 GM 28.13137，待独立验证）、`b0983d55`（engine claim）、chem `a970f175`（未评分）、`93326853`（隐含 ~294,762,409）。chem swap：`703843d3` 比 bdae 高 +3.79e-06 GM，不值 slot。见 `intel/RESULT_sweep2.md` |
+| `invsqrt/` | invsqrt Q/T | f2cdab0b Q44 硬地板；**0af21cb8 新机制已探明**：3 tail 转 HMR 双分支 −4.75 mean T；剩余 4 head（12139/12142/12596/13037，−2…−4 mean T / +0.01…+0.02 GM）但 v27 emitter 私有无公开重发点（R6 已证），手工不可构造。见 `invsqrt/RESULT5.md`、`RESULT6.md` |
+| `dqi/` | DQI Q/T | **Q/T peephole、v15 调度、decoder-level、structural、66b4 gadget 全部关闭**：RESULT5 exact T=384,003，decision <1T，retain +2.369%；RESULT6 out-of-place/v13/ladder 不可；RESULT8：66b4 gadget 每 site −20T 共 −820T，k19 全磁带普查 G1 41/41、G0 0/0，无剩余可转。见 `dqi/RESULT5.md`–`RESULT8.md` |
 | `chem/` | chemistry T | **R=8/R=5/λ/code/新words/C轴/emitter/新R=7,9,10,12 均已关闭**：RESULT4 re-code floor 36.16/63.24 mHa，C=43/42 floor 21.23/23.26 mHa；RESULT5 emitter k9 +2/k10 +3/k12 +4/k14 +4；RESULT6 R7 cont 53.35/quant 66.16，R9 40.84/53.31，R10 41.46/56.21 + Q697，R12 47.30/61.75 + Q697。冻结 294,762,632.08。见 `chem/RESULT4.md`–`RESULT6.md` |
 | `chem/CODE2` | loader code search | **已关闭（2026-11-16）**：k=9/10/12/14 的 145-cut basis 并没有比 shipped 更好——shipped products 是 189/190/191（不是 193）；k9 亏、k10/k12 平、k14 −1 不可发射（bit7 XOR bit6 helper / six-AND 独立性失败）。混合包作为负控制 e1=61,130 mHa、e2=11,659 mHa。4,025 保持。见 `pipeline/CODE2_STATUS.md` |
 | `pipeline/` | CPU 复核/打包/提交 | 先复核公开 28.09486 件；只有 **>=28.09490** 才提交，避免落在 143 队并列末尾 |
