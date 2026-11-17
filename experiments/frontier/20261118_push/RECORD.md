@@ -387,3 +387,20 @@ chunk-vectors inside pi_B(R), and a greedy spanning set. The total term count ov
 is the architecture's product count; 188 is the shipped cut/pairing count, and anything below
 188 with an emitted plan would be a chem win (75 terms -> Toffoli ~150/loader -> chem ~215M ->
 +2.4 GM). This is the decisive remaining measurement for the loader axis.
+
+## 4u. Block-architecture probe: NEGATIVE (measured, jiyujia/qcc-chem-block3 + gendecomp)
+
+Two independent computations agree. Per 3-low-coordinate block, `dim pi_B(R) = 75` and the
+minimum number of chunk vectors `e_L (x) v` spanning it is:
+
+| k | block 0 | block 1 | block 2 | block 3 | block 4 | total terms |
+|---|---:|---:|---:|---:|---:|---:|
+| 4 | 54 | 75 | 75 | 75 | 75 | **354** |
+| 2 | 50 | 74 | 74 | 75 | 75 | **348** |
+| agent (all k) | 42-55 | 35-75 | 35-75 | 35-75 | 35-75 | **375-376** |
+
+So the block-restricted chunk-vector architecture needs **348-376 terms**, far worse than the
+shipped cut/pairing's **188 products**. The shipped products pair *across* the five blocks
+(l1/l2 masks span all 15 low coordinates), which the per-block decomposition cannot see.
+**The loader axis is closed at 188** (the 150-cut / 188-product floor), and the only remaining
+headroom is the weak loaders' +0.05..0.11 GM.
