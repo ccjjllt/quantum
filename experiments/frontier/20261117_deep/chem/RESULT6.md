@@ -49,3 +49,17 @@ nothing was assembled or verified (the kernel's own guard skipped the verifier).
 
 All numbers above are printed by the kernel; no verifier run happened (nothing to
 verify), nothing was submitted. The base64-inline technique is the reusable result.
+
+## 4. Long-budget run left in flight
+
+`qingyu1232/qcc-chem-emit-k2k3` **v2** re-runs the same, self-contained kernel with
+`time_limit=5400` per loader, `seeds=(7,8,9,11,13)`, `trials=120`, `LS_SECONDS=600`
+and a fixed competition-data locator (`parents[1..3]`), so a full plan has ~6× the
+budget that failed above. If it finds a plan it prints `COMPILED` with
+`toffoli_count`, converts `.kmx → .kmb`, assembles `dfthcsos/` (npz + 13 shipped +
+2 new) and runs the unchanged official verifier (78,080 shots) in the same kernel.
+
+Gate for the next submission slot (UTC 00:00 reset): chemistry `toffoli_count ≤ 14,696`
+and PASS; then rebuild the 18-member manifest with
+`experiments/frontier/20261117_deep/integration/make_members.py`, regenerate
+`main.py` with `make_main.py --min-gm 28.15094`, push the integrator, and submit.

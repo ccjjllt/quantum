@@ -28,8 +28,11 @@ WORK = pathlib.Path("/tmp/work")
 OUT = pathlib.Path("/tmp/out")
 COMP = None
 for p in pathlib.Path("/kaggle/input").rglob("FeMoCo76o113e.fcidump"):
-    if (p.parents[1] / "kickmix").is_dir():
-        COMP = p.parents[1]
+    for up in (p.parents[1], p.parents[2], p.parents[3]):
+        if (up / "kickmix").is_dir():
+            COMP = up
+            break
+    if COMP:
         break
 
 
@@ -60,14 +63,14 @@ def shipped_zip() -> pathlib.Path:
 def main() -> None:
     log("competition:", COMP)
     port = unzip_port()
-    os.environ["LS_SECONDS"] = "120"
+    os.environ["LS_SECONDS"] = "600"
     import compile_basis as CB
     from planner import complete_words, cross_tensor
     from emit_from_basis import build
     import numpy as np
 
     CB.STOP_AT = 145
-    CB.LS_SECONDS = 120
+    CB.LS_SECONDS = 600
 
     zpath = shipped_zip()
     log("shipped zip:", zpath)
@@ -85,7 +88,7 @@ def main() -> None:
     for k in (2, 3):
         t0 = time.time()
         target = cross_tensor(Wc, k)
-        best = CB.plan_one(target, seeds=(7, 8, 9), trials=60, time_limit=900, verbose=True)
+        best = CB.plan_one(target, seeds=(7, 8, 9, 11, 13), trials=120, time_limit=5400, verbose=True)
         if best is None:
             log(f"k{k}: planner found nothing")
             results[k] = None
