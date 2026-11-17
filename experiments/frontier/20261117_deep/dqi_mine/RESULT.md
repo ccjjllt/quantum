@@ -64,3 +64,14 @@ python3 scripts/kgpu.py push --dir experiments/frontier/20261117_deep/dqi_mine -
 
 工具包布局（数据集 README 要求）：`tools/qc/__init__.py`、`tools/qc/passes/__init__.py` 空；
 `vqcc_ir.py → qc/ir.py`；`vqcc_bitsim.py → qc/bitsim.py`；`vqcc_measure_out.py → qc/passes/measure_out.py`。
+
+## 3. 结论（两条都关闭）
+
+1. **`575b043f` 的 retention 机制已饱和**：`free` 0 个；3,978 个重复乘积对**全部**因跨度内无干净 wire
+   而不可用；`--retain --symclean` 重写 0 次（sha/Toffoli/Q 全不变）。
+2. **「加 wire 买 retention」在每一个 k 上净亏**：每加 1 条 wire 只买到 **162** 次保留，
+   盈亏需要 **826** 次（**5.1× 亏**）；k=16 时 2,264 vs 13,216（5.8× 亏）。
+   逐 k 的 cost 比值 k=1 = **1.00181（+0.18%）**，k=16 = **1.02988（+3.0%）**。
+
+所以本轮 +0.00011（4 个 closings）就是 DQI closing 轴的全部剩余空间；
+按「−122 DQI Toffoli ≈ +0.011 GM」的汇率，**DQI 这边再无可挖项**。
