@@ -42,7 +42,10 @@ def run_verifier(root: pathlib.Path, circuit: pathlib.Path, salt: str):
     if salt:
         cmd += ["--salt", salt]
     env = dict(os.environ)
-    env["PYTHONPATH"] = str(root) + os.pathsep + env.get("PYTHONPATH", "")
+    # The competition ships kickmix as a bare extension module (kickmix/kickmix.so,
+    # no __init__.py). Putting the root on sys.path makes `kickmix` a namespace
+    # package that shadows the .so; the .so's own directory must be the path entry.
+    env["PYTHONPATH"] = str(root / "kickmix") + os.pathsep + env.get("PYTHONPATH", "")
     env["JAX_PLATFORMS"] = "cpu"
     proc = subprocess.run(cmd, cwd=str(root), capture_output=True, text=True, env=env)
     out = (proc.stdout or "").strip()
@@ -62,6 +65,13 @@ def run_verifier(root: pathlib.Path, circuit: pathlib.Path, salt: str):
 
 def main() -> None:
     root = find_competition_root()
+    preflight = subprocess.run(
+        [sys.executable, "-c", "import kickmix as km; print(km.__file__, hasattr(km, 'Circuit'))"],
+        capture_output=True, text=True,
+        env={**os.environ, "PYTHONPATH": str(root / "kickmix")},
+    )
+    print(json.dumps({"kickmix_preflight": (preflight.stdout or "").strip(),
+                      "preflight_err": (preflight.stderr or "").strip()[-500:]}), flush=True)
     pins = {}
     for rel in ("verifiers/dqi/verify_submission_dqi.py", "kickmix/kickmix.so"):
         p = root / rel

@@ -136,7 +136,8 @@ MIN_GM = 28.15082863
 ZIP_CAP = 200 * 1024 * 1024  # do not extract archives larger than this
 
 WORK = pathlib.Path("/kaggle/working")
-STAGE = WORK / "stage"
+SCRATCH = pathlib.Path("/tmp/qcc_deep")  # staged bytes must NOT become kernel output
+STAGE = SCRATCH / "stage"
 INPUT = pathlib.Path("/kaggle/input")
 
 
@@ -169,7 +170,7 @@ def find_competition() -> pathlib.Path:
 
 
 def unpack_archives() -> None:
-    out = WORK / "unz"
+    out = SCRATCH / "unz"
     out.mkdir(parents=True, exist_ok=True)
     for p in sorted(INPUT.rglob("*")):
         if not p.is_file() or p.name.startswith("._"):
@@ -235,7 +236,7 @@ def stage_all(comp: pathlib.Path) -> dict[str, str]:
         sizes = {m["size"] for m in todo.values()}
         by_sha = {m["sha256"]: n for n, m in todo.items()}
         scanned = 0
-        for root in (WORK / "unz", INPUT):
+        for root in (SCRATCH / "unz", INPUT):
             if not todo:
                 break
             for p in sorted(root.rglob("*")):
@@ -267,16 +268,27 @@ def stage_all(comp: pathlib.Path) -> dict[str, str]:
     return found
 
 
-def run(cmd: list[str]) -> dict:
+def run(cmd: list[str], comp: pathlib.Path) -> dict:
     t0 = time.time()
-    p = subprocess.run(cmd, capture_output=True, text=True)
+    env = dict(
+        os.environ,
+        JAX_PLATFORMS="cpu",
+        OMP_NUM_THREADS="4",
+        PYTHONPATH=f"{comp / 'kickmix'}:{comp / 'verifiers'}",
+    )
+    p = subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=str(comp / "verifiers"))
     out = (p.stdout or "").strip()
     payload = None
-    for line in reversed(out.splitlines()):
-        line = line.strip()
-        if line.startswith("{"):
+    # The official verifiers pretty-print their summary as the whole stdout.
+    try:
+        payload = json.loads(out)
+    except json.JSONDecodeError:
+        dec = json.JSONDecoder()
+        for i, ch in enumerate(out):
+            if ch != "{":
+                continue
             try:
-                payload = json.loads(line)
+                payload, _ = dec.raw_decode(out[i:])
                 break
             except json.JSONDecodeError:
                 continue
@@ -294,15 +306,16 @@ def main() -> None:
     print(f"candidate {LABEL}", flush=True)
     comp = find_competition()
     print("competition:", comp, flush=True)
+    SCRATCH.mkdir(parents=True, exist_ok=True)
     unpack_archives()
     print("staging", flush=True)
     found = stage_all(comp)
     py = sys.executable
     print("running unchanged official verifiers (full default shots)", flush=True)
     verifiers = {
-        "chem": run([py, str(comp / "verifiers/dfthcsos/verify.py"), str(STAGE / "dfthcsos")]),
-        "dqi": run([py, str(comp / "verifiers/dqi/verify_submission_dqi.py"), str(STAGE / "dqi.kmb")]),
-        "invsqrt": run([py, str(comp / "verifiers/invsqrt/verify_submission_invsqrt.py"), str(STAGE / "invsqrt.kmb")]),
+        "chem": run([py, str(comp / "verifiers/dfthcsos/verify.py"), str(STAGE / "dfthcsos")], comp),
+        "dqi": run([py, str(comp / "verifiers/dqi/verify_submission_dqi.py"), str(STAGE / "dqi.kmb")], comp),
+        "invsqrt": run([py, str(comp / "verifiers/invsqrt/verify_submission_invsqrt.py"), str(STAGE / "invsqrt.kmb")], comp),
     }
     scores, status, gm = {}, {}, None
     for k, v in verifiers.items():
@@ -339,6 +352,7 @@ def main() -> None:
         "verifiers": verifiers,
         "found": found,
         "zip": zip_info,
+        "kickmix_sha256": sha256_file(comp / "kickmix/kickmix.so"),
         "min_gm_to_submit": MIN_GM,
         "decision": "SUBMIT" if (gm is not None and gm > MIN_GM) else "DO_NOT_SUBMIT",
     }
