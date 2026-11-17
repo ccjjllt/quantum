@@ -1,0 +1,10 @@
+[   4.9s] A0 dqi_575b043f.kmb.xz bytes 479128738 sha 575b043f4fee91a0 -> 575b043f
+[   9.2s] A1 Q=890 n=57520821 staticT=367989
+[  18.0s] B0 wires 890; wires with 0 touches 1; min touches 0 at q890
+[  18.0s] B1 first-use span 351793..21603772; last-use span 52775866..53166106
+[  18.6s] B2 M0 (one interval per wire, [first,last]): peak simultaneous 890 at 31172095 ops
+[  23.5s] C0 M1 window: windows 73867, trimmed windows 0, PEAK live 890 -> Q 890, ops at peak 2760430, span 21603819..52638306
+[  23.9s] C1 M1 window occupancy histogram (top of the distribution): 890:2760430, 889:5785765, 888:626427, 887:356511, 886:153842, 885:29998, 884:198037, 883:166587, 882:62388, 881:26449, 880:473737, 879:230552
+[  25.6s] C2 at the M1 peak ops: pool live 50..50, syndrome live 840..840, total 890..890
+[  31.5s] C0 M2 window+dead-tail: windows 73867, trimmed windows 0, PEAK live 890 -> Q 890, ops at peak 2685724, span 21603819..46209336
+[  31.9s] C1 M2 window+dead-tail occupancy histogram (top of the distribution): 890:2685724, 889:5560077, 888:370725, 887:81650, 886:71628, 885:22442, 884:52686, 883:161404, 882:55348, 881:22372, 880:441135, 879:191343

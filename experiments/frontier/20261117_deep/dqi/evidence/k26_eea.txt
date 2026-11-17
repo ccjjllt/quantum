@@ -1,0 +1,89 @@
+[   2.8s] A0 dqi_575b043f.kmb.xz bytes 479128738 sha 575b043f4fee91a0 -> 575b043f
+[   5.0s] A1 Q=890 n=57520821 staticT=367989
+[   6.4s] B0 ops touching a pool wire 8079126
+[   6.6s] B1 CCX: 234854 pool ops [A,B,C] -> (syn,syn,W840-851) 57774 | (W840-851,syn,syn) 24360 | (syn,syn,W876-887) 17570 | (syn,syn,W864-875) 14167 | (W876-887,syn,W864-875) 12939 | (W864-875,syn,W876-887) 9292
+[   6.7s] B1 CX: 7269486 pool ops [A,B,C] -> (syn,syn,W840-851) 2135290 | (W840-851,syn,W840-851) 1100277 | (W840-851,syn,W852-863) 584332 | (W864-875,syn,W876-887) 389151 | (W876-887,syn,W864-875) 388201 | (W864-875,syn,W864-875) 378119
+[   6.8s] B1 SWAP: 208531 pool ops [A,B,C] -> (W840-851,syn,syn) 60564 | (W840-851,syn,W840-851) 34357 | (W840-851,syn,W852-863) 30240 | (W864-875,syn,W876-887) 10877 | (W864-875,syn,W864-875) 10157 | (W876-887,syn,W864-875) 10133
+[   6.8s] B1 CCZ: 5977 pool ops [A,B,C] -> (F888-889,syn,syn) 3776 | (W864-875,syn,W840-851) 686 | (W876-887,syn,W840-851) 550 | (F888-889,syn,W840-851) 149 | (W864-875,W876-887,syn) 135 | (F888-889,W852-863,syn) 125
+[   6.9s] B1 CZ: 213737 pool ops [A,B,C] -> (syn,syn,W876-887) 33747 | (syn,syn,W864-875) 31437 | (W876-887,syn,syn) 29515 | (syn,syn,W840-851) 26932 | (W864-875,syn,syn) 25516 | (W840-851,syn,syn) 25124
+[   7.6s] B2 SWAP touching pool 208531: same word adjacent bit 11472, same word other offset 48003, two words same bit 5074, two words other bit 54282, pool<->syndrome 89700
+[   7.8s] B3 CX touching pool 7269486: pool->pool 3727758, pool->syndrome 870258, syndrome->pool 2671470
+[   8.0s] B4 CCX targeting the pool 191118: both controls in pool 14691, one in pool 80599, none in pool 95828
+[  13.7s] C0 touch pairs 63371620
+[  16.0s] D0 [window] per-group live peak W840-851 12, W852-863 12, W864-875 12, W876-887 12, F888-889 2; TOTAL pool live peak 50 -> Q 890
+[  16.1s] D1 [window] W840-851 live-count histogram 0:22219663 1:175 2:31 3:32 4:32 5:244 6:28 7:68 8:491 9:345 10:400 11:2330 12:35296982
+[  16.2s] D1 [window] W852-863 live-count histogram 0:22219822 1:3 2:28 3:215 4:385 5:757 6:48138 7:125 8:156 9:89 10:339 11:837 12:35249927
+[  16.3s] D1 [window] W864-875 live-count histogram 0:32446108 1:2875312 2:2363005 3:2369382 4:1517105 5:1413508 6:1866302 7:1886848 8:524575 9:542683 10:314761 11:1403987 12:7997245
+[  16.5s] D1 [window] W876-887 live-count histogram 0:25896094 1:8054605 2:2088403 3:1243204 4:2238927 5:2232597 6:2362594 7:2341466 8:599726 9:603267 10:265139 11:1036834 12:8557965
+[  16.6s] D1 [window] F888-889 live-count histogram 0:36972948 1:14385626 2:6162247
+[  16.7s] D2 [window] W840-851+W852-863: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  16.7s] D2 [window] W840-851+W864-875: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  16.8s] D2 [window] W840-851+W876-887: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  16.8s] D2 [window] W840-851+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  16.9s] D2 [window] W852-863+W864-875: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  16.9s] D2 [window] W852-863+W876-887: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  16.9s] D2 [window] W852-863+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  17.0s] D2 [window] W864-875+W876-887: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  17.0s] D2 [window] W864-875+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  17.1s] D2 [window] W876-887+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  17.1s] D3 pool-live peak 50, ops at peak 2760430
+[  19.4s] D0 [consumer-trimmed] per-group live peak W840-851 12, W852-863 12, W864-875 12, W876-887 12, F888-889 2; TOTAL pool live peak 49 -> Q 889
+[  19.5s] D1 [consumer-trimmed] W840-851 live-count histogram 0:22419453 1:206 2:269 3:761 4:174 5:6192 6:69 7:952 8:106087 9:249 10:12 11:9 12:34986388
+[  19.6s] D1 [consumer-trimmed] W852-863 live-count histogram 0:22241093 1:10 2:60 3:160 4:27792 5:935 6:51938 7:130 8:27 9:34 10:593580 11:201833 12:34403229
+[  19.8s] D1 [consumer-trimmed] W864-875 live-count histogram 0:33713195 1:4747964 2:2750854 3:3798153 4:2102429 5:989034 6:523763 7:1256297 8:330555 9:374007 10:440677 11:1487743 12:5006150
+[  19.9s] D1 [consumer-trimmed] W876-887 live-count histogram 0:34367144 1:3160721 2:3558146 3:3185067 4:2119987 5:2483870 6:764238 7:368803 8:271162 9:371337 10:691779 11:5843170 12:335397
+[  20.0s] D1 [consumer-trimmed] F888-889 live-count histogram 0:44171331 1:11466289 2:1883201
+[  20.1s] D2 [consumer-trimmed] W840-851+W852-863: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  20.1s] D2 [consumer-trimmed] W840-851+W864-875: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  20.2s] D2 [consumer-trimmed] W840-851+W876-887: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  20.2s] D2 [consumer-trimmed] W840-851+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  20.2s] D2 [consumer-trimmed] W852-863+W864-875: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  20.3s] D2 [consumer-trimmed] W852-863+W876-887: max simultaneous live 24 -> merged 24 wires vs separate 24 -> saves 0
+[  20.3s] D2 [consumer-trimmed] W852-863+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  20.4s] D2 [consumer-trimmed] W864-875+W876-887: max simultaneous live 23 -> merged 23 wires vs separate 24 -> saves 1
+[  20.4s] D2 [consumer-trimmed] W864-875+F888-889: max simultaneous live 14 -> merged 14 wires vs separate 14 -> saves 0
+[  20.5s] D2 [consumer-trimmed] W876-887+F888-889: max simultaneous live 13 -> merged 13 wires vs separate 14 -> saves 1
+[  24.0s] E0 gaps 11946398; length p50 5 p90 93 p99 980 max 24975433
+[  24.0s] E1 first-write-operand-kept (necessary for any replay) 1832823/11946398 (15.34%)
+[  24.0s] E1   gaps kept with length >=      0:  1832823 (of 11946398 gaps that long)
+[  24.0s] E1   gaps kept with length >=    100:    99775 (of  1145822 gaps that long)
+[  24.0s] E1   gaps kept with length >=   1000:     4562 (of   118819 gaps that long)
+[  24.0s] E1   gaps kept with length >=  10000:      643 (of    18684 gaps that long)
+[  24.0s] E1   gaps kept with length >= 100000:      122 (of     1222 gaps that long)
+[  27.0s] E2 plateau ops inside >=1 gap: all gaps 2760430/2760430; first-operand-kept gaps 1556973/2760430
+[  27.8s] E3 k=1 min cover, ALL gaps: 28 refills replayT 259 status 1
+[  28.0s] E4 k=1 min cover, first-operand-kept gaps only: refills 62 replayT 5 status -1
+[  28.0s] E5 full-chain replay check on the k=1 picks (chain = the whole window prefix):
+[  28.0s] E5   q882 [21382768,46358201) len 24975433 window-from 21382632 chain 26 T 26 | checked writes 27 (T 27 CX 0) operands stale 27 first-op-kept False
+[  28.0s] E5   q851 [46358472,46388112) len 29640 window-from 46087231 chain 2262 T 7 | checked writes 2263 (T 7 CX 2243) operands stale 1608 first-op-kept False
+[  28.0s] E5   q889 [46387085,46535889) len 148804 window-from 46110078 chain 85 T 2 | checked writes 86 (T 3 CX 82) operands stale 84 first-op-kept False
+[  28.0s] E5   q851 [46912251,46941891) len 29640 window-from 46087231 chain 6037 T 9 | checked writes 6038 (T 9 CX 6014) operands stale 4934 first-op-kept False
+[  28.0s] E5   q889 [46940864,47139721) len 198857 window-from 46536121 chain 4 T 2 | checked writes 5 (T 3 CX 1) operands stale 3 first-op-kept False
+[  28.1s] E5   q851 [47491714,47521354) len 29640 window-from 46087231 chain 9635 T 11 | checked writes 9636 (T 11 CX 9608) operands stale 8082 first-op-kept False
+[  28.1s] E5   q889 [47520327,47719184) len 198857 window-from 47139953 chain 4 T 2 | checked writes 5 (T 3 CX 1) operands stale 3 first-op-kept False
+[  28.1s] E5   q851 [48048724,48078364) len 29640 window-from 46087231 chain 12970 T 13 | checked writes 12971 (T 13 CX 12939) operands stale 10954 first-op-kept False
+[  28.1s] E5   q889 [48077337,48276194) len 198857 window-from 47719416 chain 4 T 2 | checked writes 5 (T 3 CX 1) operands stale 3 first-op-kept False
+[  28.1s] E5   q889 [48609623,48808480) len 198857 window-from 48276426 chain 4 T 2 | checked writes 5 (T 3 CX 1) operands stale 3 first-op-kept False
+[  28.2s] E5   q851 [49089078,49118718) len 29640 window-from 46087231 chain 18934 T 17 | checked writes 18935 (T 17 CX 18895) operands stale 16016 first-op-kept False
+[  28.2s] E5   q889 [49117691,49316548) len 198857 window-from 48808712 chain 4 T 2 | checked writes 5 (T 3 CX 1) operands stale 3 first-op-kept False
+[  28.2s] E5   q889 [49601927,49800784) len 198857 window-from 49316780 chain 4 T 2 | checked writes 5 (T 3 CX 1) operands stale 3 first-op-kept False
+[  28.3s] E5   q851 [50032806,50062446) len 29640 window-from 46087231 chain 24124 T 21 | checked writes 24125 (T 21 CX 24077) operands stale 20343 first-op-kept False
+[  28.3s] E6 k-fold cover, all gaps (distinct intervals):
+[  28.8s] E6   k= 1: refills 28 (+28) replayT 259 (+259) -> 259.0 T/qubit
+[  31.3s] E6   k= 2: refills 204 (+176) replayT 309639 (+309380) -> 154819.5 T/qubit
+[  33.9s] E6   k= 3: refills 382 (+178) replayT 454871 (+145232) -> 151623.7 T/qubit
+[  39.2s] E6   k= 5: refills 738 (+178) replayT 849231 (+243108) -> 169846.2 T/qubit
+[  52.1s] E6   k=10: refills 1628 (+178) replayT 1140422 (+71122) -> 114042.2 T/qubit
+[  73.2s] E6   k=15: refills 3119 (+575) replayT 2338300 (+213937) -> 155886.7 T/qubit
+[ 122.3s] E6   k=20: refills 6624 (+758) replayT 2881685 (+79133) -> 144084.2 T/qubit
+[ 188.0s] E6   k=25: refills 11178 (+1047) replayT 4258559 (+670605) -> 170342.4 T/qubit
+[ 189.7s] E6 layer 26 FAILED (status -1)
+[ 189.7s] E6 layers completed 25
+[ 189.7s] 
+[ 189.7s] SUMMARY  k  Q   refills  replayT  T/qubit   (all gaps, unconstrained)
+[ 189.7s] SUM  1  889       28      259     259.0
+[ 189.7s] SUM  3  887      382   454871  151623.7
+[ 189.7s] SUM  5  885      738   849231  169846.2
+[ 189.7s] SUM 10  880     1628  1140422  114042.2
+[ 189.7s] SUM 25  865    11178  4258559  170342.4
+[ 189.7s] done
