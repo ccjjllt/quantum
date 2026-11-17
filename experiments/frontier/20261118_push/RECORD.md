@@ -242,3 +242,23 @@ toffoli 1,453.9968, t_count 2.4985, margin 31,789,809 (shipped 31,789,811). GM g
 ~1e-6. The 33 rotations are the dyadic-ladder floor (model line); the only real invsqrt
 lever remains Q=44->43/42 (+0.22/+0.44), which needs a cheaper retirement than the
 >=132 C per pair measured earlier against an 80.7 C budget.
+
+## 4l. invsqrt line closed (invsqrt agent, measured, 2026-11-18 ~02:10)
+
+* Public sweep by sha256 + published official receipts: **our `563d0583` is the public floor**
+  (the junmiaotiao frontier notebook ships the identical bytes); next best f2cdab0b 75,006.38,
+  8b410e77 75,038.13, 0af21cb8 74,797.37.
+* Toffoli at Q=44: census splits the 1,548 static into 7 regions; the conditional discount is
+  fully explained (176 depth-1 + 8 depth-2 -> 1,454.0 exactly). Hash-consed product accounting:
+  1,479 distinct products, only 4 ever recomputed, 35 removed by CCX, **1,277 recycled by HMR**
+  -> **no paid compute->CCX-uncompute pair anywhere**. A phase-fold search found 0 sites.
+  Karatsuba does not apply (table+interpolation, not a wide multiplier).
+* Rotations: worst x=231, ratio 0.99956056, margin 31,789,811 units (0.044% of tol); dropping
+  the smallest rotation and retuning fails at 1.2495; the verifier's own objective (absolute
+  margin) returns lambda=1.0 -> shipped angle set is locally optimal. The 240.56 C rotation
+  block is a floor.
+* Width: 42Q needs Toffoli <= 1,534.69 (+80.69); observed frontier slope 13.4 Toffoli/wire,
+  42Q needs 40.3/wire. Syed's 46Q circuit (1,480.8 Toffoli) would win at 42 wires but is pinned
+  at 46 by 485 one-wire spikes.
+* New official receipt: shipped file, 1 shot/x PASS, score **74,560.71496**, toffoli 1,453.9968.
+* Verdict: **invsqrt is finished at 74,560.9**; only a generator-level rewrite could move it.

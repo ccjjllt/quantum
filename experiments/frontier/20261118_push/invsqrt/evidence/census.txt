@@ -1,0 +1,17 @@
+invsqrt 563d0583 (sha256 563d0583f736afc2d8111f376bc1bd5ce6aef686525b0dd281fc1f2b4eb09321)
+body ops 20659 (23 header lines stripped from 20682 kmx lines)
+
+region                              ops Toffoli   CCX  CCZ   HMR     CX    CZ Z_POW
+normalize / in-place shift         2500     171   171    0   109   1919   115     4
+mantissa/table/interpolation       4000     423   423    0   392   2897    89     0
+phase stage (33 rotations)         1000     128   128    0    50    507   115    34
+post-phase corrections             7000     416   399   17   373   4114   633     5
+second arithmetic pass             3500     262   262    0   240   2016   230     0
+Clifford phase tail                1500      13    11    2    25    163   810     0
+restore x                          1159     135   124   11    88    681   103     0
+TOTAL static                      20659    1548
+
+CCX total 1518; target on x wire 508; on scratch 1010
+CCX with an x wire as control: 1159
+Toffoli by condition depth: {0: 1364, 1: 176, 2: 8}
+expected mean = 1548 - 94.0 = 1454.0 (official measured 1454.0008)
