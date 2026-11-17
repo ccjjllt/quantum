@@ -336,3 +336,25 @@ dqi_algo RESULT.md (measured):
   size; the tape has no tags and every multiply is fused into a ~1,250-CX rotation scaffold).
 * Rejected: schoolbook (+412k T), kickmix ixor_gf2_mul (+91k), Toom-3 (+19k), Berlekamp-Massey
   (3.3x multiplies), Welch-Berlekamp (77x), windowed EEA (bilinear rank additive).
+
+## 4r. General-decomposition key experiment: NEGATIVE (measured, jiyujia/qcc-chem-span-rep)
+
+The decisive test: is the 75-dim target span R spanned by "replicated" vectors
+`outer(L, v)` (v placed on every low coordinate in L, i.e. a product with the full h-mask)?
+Measured on the shipped table, k=4 and k=2:
+
+```
+dim R = 75
+|L|<=1  15 subsets   nullspace dim 0   dim W = 0
+|L|<=2 120 subsets   nullspace dim 0   dim W = 0
+|L|<=3 575 subsets   nullspace dim 0   dim W = 0
+|L|<=4 1940 subsets  nullspace dim 0   dim W = 0
+|L|<=5 4943 subsets  nullspace dim 0   dim W = 0
+```
+
+**dim W = 0**: there is no nonzero v with outer(L,v) in R for any L up to size 5. The
+"only ~75 products" shortcut is dead. The cut/pairing products (188) use partial h-masks
+(h1/h2 rectangles), which is a genuinely harder combinatorial problem; the hard floor
+`products >= 38` is not reachable by the replicated-vector construction. The loader axis
+stays at 150 cuts / 188 products / 263 Toffoli per loader, with the bounded +0.05..0.11 GM
+headroom from the weak loaders.
