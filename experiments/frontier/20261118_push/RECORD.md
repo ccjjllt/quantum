@@ -215,3 +215,21 @@ the E_gap floor. Record: `experiments/frontier/20261118_push/chem/RESULT.md`.
   `ceil(dim/2) = 38` products (Toffoli ~113/loader), 5x below what the cut/pairing route
   can reach. A general GF(2) product decomposition (not the cut/pairing route) is the
   only way to that floor; a new line has been opened on it.
+
+## 4j. Tree axis closed (tree agent, measured, 2026-11-18 ~02:00)
+
+* The exact inverse of `reconstruct_u_vectors` reproduces the shipped U to 2e-14; the
+  shipped words decode with row norms 1+-2e-16.
+* Free exact levers: per-(row,edge) sign branches (theta->theta+pi, still a grid point)
+  and edge permutations that keep each node's child order (residual 0.0, bit-identical U
+  -> the column-permutation lever). Sibling-reordering permutations are not free (0.63).
+* 263 trees (chain/star/bushy/attach/Prufer/deep/heap/chain relabellings): loader floor
+  total 2,687..2,805 (median 2,780, sd 24.9) -- best is +321 above the shipped.
+  12 free value-preserving permutations: 2,447..2,454 (+81).
+* Shipped per-loader Toffoli (kickmix metadata): [292,287,269,269,263,263,263,263,263,
+  264,265,265,265,265,266], sum 4,022 -> T = 14,706 exactly.
+* Planner probes: shipped table k=4/k=9 at 120 s -> max cuts 150, no perfect pairing;
+  a canonical re-encoding of the same U at 420 s -> no plan. No alternative table can
+  come in under 4,022.
+* Prize: -80 Toffoli (all remaining loader headroom) = **+0.051 GM**; -174.5 (absolute
+  ceiling) = +0.112 GM. Closed.
