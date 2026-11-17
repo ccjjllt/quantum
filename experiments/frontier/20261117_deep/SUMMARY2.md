@@ -93,3 +93,43 @@ seed 11 在 v2 里**已经找到合法 plan**（"perfect at sum c 133 → produc
 
 **本代电路（公开件 + 全轴实测下限）的天花板 = 28.1635**（chem loader −20 T）。
 金线需要 DQI 换一代（≤864Q），这是 3–6 周的电路生成工作，不是重排字节能做到的。
+
+## 5. loader 程序（本代唯一可交付的增量）
+
+15 条 loader 的 Toffoli：`[294, 288, 269, 269, 263×5, 264, 265×4, 266]`，合计 **4,025**，
+而实测 `T_angles = 8,044 = 2 × 4,025`（compute + uncompute 各一遍，误差 6 T 来自
+非 Toffoli 的 T 门）。所以 **−1 Toffoli = −2 T**，chem 每 −1 T = **+0.00064 GM**。
+
+| 内核 | 索引 | 现状 | 目标 | ΔT | ΔGM |
+|---|---:|---:|---:|---:|---:|
+| `qcc-chem-emit-k0b` | 0 | 294 | 264 | −60 | +0.038 |
+| `qcc-chem-emit-k1b` | 1 | 288 | 264 | −48 | +0.031 |
+| `qcc-chem-emit-k2b` | 2 | 269 | 264 | −10 | +0.006 |
+| `qcc-chem-emit-k3b` | 3 | 269 | 264 | −10 | +0.006 |
+| 合计 | | | | **−128** | **+0.082** |
+
+叠加上 scout 找到的 λ refit（`ratnachand/vqcc-verified-public-floor : dfthcsos/submission.npz`，
+λ 46.92158337，`angle_words`/`tree_edges` **与本仓库逐字节相同**，`|U|` 相同到 1e-16、
+仅每行符号规范不同 → 可与我们的 loader 任意组合）：+0.00003。
+
+**最好情况 GM ≈ 28.2331。** k9–k14 还有 −12 Toffoli（−24 T，+0.015），优先级低。
+
+### 收尾步骤（UTC 00:00 名额重置后）
+
+1. `kaggle kernels output` 取 4 个内核的 `run/dfthcsos/angle_k_{0,1,2,3}.kmb`（各自已跑过官方 verifier）。
+2. 组装：`ratnachand` 的 `submission.npz` + 我方另外 11 条 loader + 4 条新 loader。
+3. `integration/make_members.py` → `make_main.py`（invsqrt `0af21cb8`、DQI `575b043f`）→ 推 integrator，端到端官方验证。
+4. 提交并记回执。
+
+## 6. 为什么金线在本代不可达（结构性，不是没找到）
+
+DQI 合同下限 **Q = 840 = 70 × 12**（70 个 syndrome 寄存器 × 12 bit，GF(2^12)）。
+成本 ∝ `Q²·T`，所以：
+
+- `Q = 866`（已发表 2nb+2 方案）即使 T 不变也只到 **28.6687**；加 chem −128 T 到 **28.682**。
+- 金线要 `Q ≤ 864`（2nb 且几乎没有 flag wire）或 `Q = 840` 且 `T ≤ +5.8%`。
+  两者都需要重写 EEA 工作集（3–6 周），不是重排 tap e 能做到的。
+
+chem 侧同理：`rows = 76 + R·B`，而精度按 **B/C 比**标定（实测锚点 3.25→20 mHa、
+2.93→19.83(量化后 FAIL)、1.93→40.24、1.58→73.07），所以 `rows ≈ 76 + 3.25·K`，
+**与 R 的拆分无关**；K=352 是精度所需 → rows 钉在 1,220。这条轴在数学上被关死。
