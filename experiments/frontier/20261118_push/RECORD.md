@@ -274,3 +274,17 @@ lever remains Q=44->43/42 (+0.22/+0.44), which needs a cheaper retirement than t
   C (35,627,262..end) 170,539 Toffoli. So the Chien search is only 12% of T: **the EEA
   regions A+C (88%) dominate**, and a 28% T cut must come from the EEA, not the Chien search.
   GF-mult block census shows many uniform 42-CCX blocks in A (1,542 blocks of 42).
+
+## 4n. DQI region split details (measured, `region_split.json`)
+
+| region | ops | Toffoli | CCX | CCZ | dynamics mean | mult blocks >=12 | target mix |
+|---|---:|---:|---:|---:|---:|---:|---|
+| A (forward EEA) | 30.3M | 153,186 | 153,185 | 1 | 153,180.1 | 2,702 (1,542 of size 42) | syndrome 85,406 / pool 67,779 |
+| B (Chien/Forney) | 5.29M | 44,264 | 40,240 | 4,024 | 44,217.0 | 0 | pool 40,240 |
+| C (reverse EEA) | 21.9M | 170,539 | 168,587 | 1,952 | 169,719.2 | 2,602 (1,526 of size 42) | syndrome 85,488 / pool 83,099 |
+
+Dynamic mean 367,116.3 vs static 367,989: every block fires (no gating surplus). The 42-CCX
+blocks are GF(2^12) multipliers: A ~2,702 mult-blocks, C ~2,602. The reference generator's
+`default_n_iters(n) = 3(n+1)+9 = 222` is a loose bound; if the tape's per-pass iteration count
+is smaller (order 37-50) it may or may not carry surplus. The truncation test (delete last k
+forward + first k reverse iterations, verify 3 salts) is with the dqi_algo line.
