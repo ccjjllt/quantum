@@ -1,0 +1,518 @@
+{
+ "totals": {
+  "touches": 12066322,
+  "reads": 5181492,
+  "writes": 6884830,
+  "toffoli_writes": 191118,
+  "resets": 119917,
+  "windows": 119959
+ },
+ "whole_tape": {
+  "R": 48043,
+  "HMR": 71874,
+  "toffoli": 362012,
+  "ops": 57520821
+ },
+ "wires": {
+  "840": {
+   "touches": 1506017,
+   "reads": 901798,
+   "writes": 604219,
+   "toffoli_writes": 28804,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576193,
+   "last": 52912644
+  },
+  "841": {
+   "touches": 787889,
+   "reads": 406632,
+   "writes": 381257,
+   "toffoli_writes": 14824,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576220,
+   "last": 52908892
+  },
+  "842": {
+   "touches": 546938,
+   "reads": 241518,
+   "writes": 305420,
+   "toffoli_writes": 8252,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576199,
+   "last": 52908893
+  },
+  "843": {
+   "touches": 376315,
+   "reads": 128940,
+   "writes": 247375,
+   "toffoli_writes": 3368,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576364,
+   "last": 52908894
+  },
+  "844": {
+   "touches": 370868,
+   "reads": 101447,
+   "writes": 269421,
+   "toffoli_writes": 2012,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576200,
+   "last": 52908895
+  },
+  "845": {
+   "touches": 340613,
+   "reads": 75261,
+   "writes": 265352,
+   "toffoli_writes": 460,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576201,
+   "last": 52908896
+  },
+  "846": {
+   "touches": 309522,
+   "reads": 76826,
+   "writes": 232696,
+   "toffoli_writes": 460,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576202,
+   "last": 52908897
+  },
+  "847": {
+   "touches": 293833,
+   "reads": 60072,
+   "writes": 233761,
+   "toffoli_writes": 130,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576223,
+   "last": 52908898
+  },
+  "848": {
+   "touches": 293703,
+   "reads": 58232,
+   "writes": 235471,
+   "toffoli_writes": 270,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576203,
+   "last": 52908899
+  },
+  "849": {
+   "touches": 285175,
+   "reads": 62389,
+   "writes": 222786,
+   "toffoli_writes": 50,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576204,
+   "last": 52908900
+  },
+  "850": {
+   "touches": 278714,
+   "reads": 51288,
+   "writes": 227426,
+   "toffoli_writes": 10,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576225,
+   "last": 52908901
+  },
+  "851": {
+   "touches": 269228,
+   "reads": 44715,
+   "writes": 224513,
+   "toffoli_writes": 10,
+   "resets": 16,
+   "windows": 17,
+   "first": 17576205,
+   "last": 52908902
+  },
+  "852": {
+   "touches": 220432,
+   "reads": 81187,
+   "writes": 139245,
+   "toffoli_writes": 3290,
+   "resets": 14,
+   "windows": 15,
+   "first": 17577683,
+   "last": 52909299
+  },
+  "853": {
+   "touches": 170250,
+   "reads": 56812,
+   "writes": 113438,
+   "toffoli_writes": 1378,
+   "resets": 14,
+   "windows": 15,
+   "first": 17577670,
+   "last": 52909300
+  },
+  "854": {
+   "touches": 152618,
+   "reads": 51105,
+   "writes": 101513,
+   "toffoli_writes": 722,
+   "resets": 14,
+   "windows": 15,
+   "first": 17577705,
+   "last": 52909301
+  },
+  "855": {
+   "touches": 138544,
+   "reads": 48377,
+   "writes": 90167,
+   "toffoli_writes": 624,
+   "resets": 14,
+   "windows": 15,
+   "first": 17577670,
+   "last": 52909302
+  },
+  "856": {
+   "touches": 141124,
+   "reads": 46232,
+   "writes": 94892,
+   "toffoli_writes": 198,
+   "resets": 14,
+   "windows": 15,
+   "first": 17577761,
+   "last": 52909303
+  },
+  "857": {
+   "touches": 141139,
+   "reads": 48037,
+   "writes": 93102,
+   "toffoli_writes": 52,
+   "resets": 14,
+   "windows": 15,
+   "first": 17577671,
+   "last": 52909304
+  },
+  "858": {
+   "touches": 141403,
+   "reads": 48132,
+   "writes": 93271,
+   "toffoli_writes": 124,
+   "resets": 14,
+   "windows": 15,
+   "first": 17578160,
+   "last": 52911178
+  },
+  "859": {
+   "touches": 139393,
+   "reads": 44580,
+   "writes": 94813,
+   "toffoli_writes": 88,
+   "resets": 14,
+   "windows": 15,
+   "first": 17578160,
+   "last": 52911179
+  },
+  "860": {
+   "touches": 143004,
+   "reads": 46859,
+   "writes": 96145,
+   "toffoli_writes": 52,
+   "resets": 14,
+   "windows": 15,
+   "first": 17578214,
+   "last": 52911180
+  },
+  "861": {
+   "touches": 138987,
+   "reads": 49747,
+   "writes": 89240,
+   "toffoli_writes": 52,
+   "resets": 14,
+   "windows": 15,
+   "first": 17578161,
+   "last": 52911181
+  },
+  "862": {
+   "touches": 142911,
+   "reads": 49223,
+   "writes": 93688,
+   "toffoli_writes": 52,
+   "resets": 14,
+   "windows": 15,
+   "first": 17578162,
+   "last": 52911182
+  },
+  "863": {
+   "touches": 127080,
+   "reads": 45550,
+   "writes": 81530,
+   "toffoli_writes": 52,
+   "resets": 14,
+   "windows": 15,
+   "first": 17578163,
+   "last": 52911183
+  },
+  "864": {
+   "touches": 202445,
+   "reads": 103922,
+   "writes": 98523,
+   "toffoli_writes": 7214,
+   "resets": 9400,
+   "windows": 9401,
+   "first": 17605591,
+   "last": 52911450
+  },
+  "865": {
+   "touches": 162848,
+   "reads": 80102,
+   "writes": 82746,
+   "toffoli_writes": 2774,
+   "resets": 1608,
+   "windows": 1608,
+   "first": 17577877,
+   "last": 52911447
+  },
+  "866": {
+   "touches": 167664,
+   "reads": 89001,
+   "writes": 78663,
+   "toffoli_writes": 3359,
+   "resets": 1587,
+   "windows": 1587,
+   "first": 17577893,
+   "last": 52911455
+  },
+  "867": {
+   "touches": 175069,
+   "reads": 91299,
+   "writes": 83770,
+   "toffoli_writes": 3466,
+   "resets": 1602,
+   "windows": 1602,
+   "first": 17577921,
+   "last": 52911444
+  },
+  "868": {
+   "touches": 184995,
+   "reads": 94722,
+   "writes": 90273,
+   "toffoli_writes": 3352,
+   "resets": 1645,
+   "windows": 1645,
+   "first": 17577940,
+   "last": 52906635
+  },
+  "869": {
+   "touches": 185748,
+   "reads": 99240,
+   "writes": 86508,
+   "toffoli_writes": 7520,
+   "resets": 9499,
+   "windows": 9499,
+   "first": 17577954,
+   "last": 52911172
+  },
+  "870": {
+   "touches": 195749,
+   "reads": 93589,
+   "writes": 102160,
+   "toffoli_writes": 7376,
+   "resets": 9682,
+   "windows": 9682,
+   "first": 17577974,
+   "last": 52906634
+  },
+  "871": {
+   "touches": 192507,
+   "reads": 94509,
+   "writes": 97998,
+   "toffoli_writes": 7624,
+   "resets": 9760,
+   "windows": 9760,
+   "first": 17577991,
+   "last": 52906636
+  },
+  "872": {
+   "touches": 177775,
+   "reads": 91810,
+   "writes": 85965,
+   "toffoli_writes": 3450,
+   "resets": 1619,
+   "windows": 1619,
+   "first": 17578004,
+   "last": 52911163
+  },
+  "873": {
+   "touches": 173500,
+   "reads": 92157,
+   "writes": 81343,
+   "toffoli_writes": 4088,
+   "resets": 1455,
+   "windows": 1456,
+   "first": 17578011,
+   "last": 52911139
+  },
+  "874": {
+   "touches": 191859,
+   "reads": 96231,
+   "writes": 95628,
+   "toffoli_writes": 3987,
+   "resets": 1718,
+   "windows": 1719,
+   "first": 17578017,
+   "last": 52911139
+  },
+  "875": {
+   "touches": 174438,
+   "reads": 94853,
+   "writes": 79585,
+   "toffoli_writes": 3490,
+   "resets": 1555,
+   "windows": 1556,
+   "first": 17578883,
+   "last": 52911446
+  },
+  "876": {
+   "touches": 206281,
+   "reads": 102160,
+   "writes": 104121,
+   "toffoli_writes": 7564,
+   "resets": 9681,
+   "windows": 9682,
+   "first": 17578793,
+   "last": 52911453
+  },
+  "877": {
+   "touches": 196400,
+   "reads": 104742,
+   "writes": 91658,
+   "toffoli_writes": 7965,
+   "resets": 9714,
+   "windows": 9715,
+   "first": 17579097,
+   "last": 52906631
+  },
+  "878": {
+   "touches": 209472,
+   "reads": 105842,
+   "writes": 103630,
+   "toffoli_writes": 7466,
+   "resets": 9674,
+   "windows": 9675,
+   "first": 17579118,
+   "last": 52911172
+  },
+  "879": {
+   "touches": 207105,
+   "reads": 102352,
+   "writes": 104753,
+   "toffoli_writes": 7389,
+   "resets": 9602,
+   "windows": 9603,
+   "first": 17579097,
+   "last": 52911445
+  },
+  "880": {
+   "touches": 150349,
+   "reads": 77960,
+   "writes": 72389,
+   "toffoli_writes": 2835,
+   "resets": 1424,
+   "windows": 1425,
+   "first": 17579262,
+   "last": 52775866
+  },
+  "881": {
+   "touches": 209058,
+   "reads": 110382,
+   "writes": 98676,
+   "toffoli_writes": 8056,
+   "resets": 9661,
+   "windows": 9662,
+   "first": 17579098,
+   "last": 52911452
+  },
+  "882": {
+   "touches": 85514,
+   "reads": 46800,
+   "writes": 38714,
+   "toffoli_writes": 1970,
+   "resets": 387,
+   "windows": 388,
+   "first": 17579099,
+   "last": 52911451
+  },
+  "883": {
+   "touches": 199516,
+   "reads": 100909,
+   "writes": 98607,
+   "toffoli_writes": 3492,
+   "resets": 1480,
+   "windows": 1481,
+   "first": 17579100,
+   "last": 52911448
+  },
+  "884": {
+   "touches": 169439,
+   "reads": 86006,
+   "writes": 83433,
+   "toffoli_writes": 3262,
+   "resets": 1630,
+   "windows": 1631,
+   "first": 17579121,
+   "last": 52871510
+  },
+  "885": {
+   "touches": 165281,
+   "reads": 86975,
+   "writes": 78306,
+   "toffoli_writes": 3033,
+   "resets": 1368,
+   "windows": 1369,
+   "first": 17579101,
+   "last": 52906632
+  },
+  "886": {
+   "touches": 166920,
+   "reads": 82287,
+   "writes": 84633,
+   "toffoli_writes": 2935,
+   "resets": 1492,
+   "windows": 1493,
+   "first": 17579102,
+   "last": 52911163
+  },
+  "887": {
+   "touches": 184966,
+   "reads": 93252,
+   "writes": 91714,
+   "toffoli_writes": 3227,
+   "resets": 1582,
+   "windows": 1583,
+   "first": 17579123,
+   "last": 52906633
+  },
+  "888": {
+   "touches": 181063,
+   "reads": 85582,
+   "writes": 95481,
+   "toffoli_writes": 7057,
+   "resets": 9589,
+   "windows": 9590,
+   "first": 17579103,
+   "last": 52911454
+  },
+  "889": {
+   "touches": 94661,
+   "reads": 49849,
+   "writes": 44812,
+   "toffoli_writes": 1833,
+   "resets": 1143,
+   "windows": 1144,
+   "first": 21603772,
+   "last": 52911449
+  }
+ }
+}

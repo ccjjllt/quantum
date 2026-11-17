@@ -288,3 +288,21 @@ blocks are GF(2^12) multipliers: A ~2,702 mult-blocks, C ~2,602. The reference g
 `default_n_iters(n) = 3(n+1)+9 = 222` is a loose bound; if the tape's per-pass iteration count
 is smaller (order 37-50) it may or may not carry surplus. The truncation test (delete last k
 forward + first k reverse iterations, verify 3 salts) is with the dqi_algo line.
+
+## 4o. DQI tape axes closed (dqi agent, measured, 2026-11-18 ~02:15)
+
+* All five public DQI files verified at 3 salts, phase_errors 0 everywhere:
+  61c8348d 348,004,440,260.46 (loses a shot on ALL 3 salts), **575b043f 346,409,762,292.72
+  (0/1/0)**, 66b4f18b 347,128,304,010.81, ccc2ab84 347,375,470,571.73, d54d3387
+  347,340,788,307.83. Our file is the best; it is 4 static Toffolis below 61c8348d and
+  also more salt-robust.
+* Inside-condition-block pair finder (their open item #3) built: 44,422 conditioned CCX,
+  4,184 retention pairs, 206 conditioned, 44 with a clean wire, **3 servable** ->
+  367,989 -> 367,986 static. The candidate passes 0/0 at the default salt but loses a shot
+  at 2 of 3 salts -> +0.000078 GM clean vs -0.0429 GM on a lost shot. **Reject; keep 575b043f.**
+* Free Toffolis (void/zero/held/dead-condition incl. all 44,422 conditioned CCX): **0**;
+  plain cancels: **0**. Extra-wire curve: 1 wire buys 180 retentions vs an 825 T break-even;
+  14 wires buy 2,366 vs 11,556 -> +2.5% cost. Unaffordable at every k.
+* Q axis: 51.94% of all Toffolis are written into the 50 pool wires; 26 persistent 12-bit EEA
+  words + 2 flags + 24 product-pool wires. 866Q leaves zero product pool with a rebuild
+  floor >=116,894 T vs a +20,630 T break-even. Closed.
