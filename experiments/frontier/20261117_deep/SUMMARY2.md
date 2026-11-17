@@ -249,3 +249,20 @@ dead-tail 能删的 Toffoli 也是 0**。满宽只占 4.80% 的 op。
 → **合并省 0 条 wire**。barrel shift 确实 0 T，但禁止它的是 liveness 不是 T。
 
 **DQI 宽度轴关闭。金线在本代不可达，已由三轮独立实测确认。**
+
+## 11. loader cut 轴：k0/k1 实测无 basis，轴关闭
+
+`qcc-chem-emit-k0b` / `-k1b`（各 5 个种子、共 38 分钟规划预算）全部失败：
+
+```
+seed 11/7/9/8/13: no rank-74 basis found   → k0: planner found nothing → SUMMARY {"0": null}
+```
+
+不是 cut 数不够，而是**连 rank-74 低基都不存在**。这说明 k0/k1 的 target 与 k2–k14 结构不同
+（也解释了它们出厂只有 87/99 cuts）。`k2/k3` 出厂已 137 cuts，而本仓库搜索 2,321s 只到 133
+（→ Toffoli 271，比出厂 269 还差），同样无收益。
+
+**结论：loader 轴的 15 条全部到顶，本代 chem 的 T 就钉在 14,706。这条轴彻底关闭。**
+
+至此本代三条腿全部关闭：invsqrt（liveness 44 + C 到顶）、DQI（liveness 890 + 无可恢复覆盖）、
+chem（Q 427 + rows 1,220 + loader 4,025）。剩下的唯一希望是**换 chem 的形状代际**（见 §12）。
