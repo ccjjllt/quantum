@@ -421,3 +421,22 @@ the mirror ladder 34,34,33..,3), which is the minimum (degree 69 -> <35, >=1 per
 **Iteration axis closed.** The only remaining DQI lever is the 12x12 GF(2) multiply rank
 (42 -> 23, +1.99 GM ceiling), which needs the generator or a successful in-place patch
 (`dqi_mult` line, running).
+
+## 4w. Multiply-rank axis closed by the literature (2026-11-18 02:35)
+
+The tape's GF(2^12) multiply is Toom-4 = 7 evaluations x 6 leaf rank = **42 ANDs**. The
+frontier literature puts this at the known symmetric bilinear-complexity bound:
+
+* Ballet & Pieltant, arXiv:1601.00126, list **mu_sym_2(12) <= 42** (symmetric tensor rank of
+  multiplication in GF(2^12) over GF(2)).
+* The Waterloo/Montgomery-style CRT table ("Comments on Montgomery's Five, Six, and
+  Seven-Term Karatsuba-Like Formulae") gives the full degree-11 polynomial product
+  **M(12) = 44**, i.e. the tape's 42 is already better than the CRT construction and matches
+  the best symmetric field bound.
+* The lower bound is 2n-1 = 23 (Fiduccia-Zalcstein/Winograd); no construction between 23 and
+  42 is known at this size (the exhaustive searches of Barbulescu-Detrey-Estibals-Zimmermann
+  and Covanov cover only much smaller tensors).
+
+**So there is no rank<=35 GF(2^12) multiplier to patch in.** The DQI multiply-rank axis is
+closed at 42, the tape is already at the frontier, and the whole DQI leg is closed at
+Q=890 / T=367,116 (cost 346,409,762,292.72). The `dqi_mult` line is stopped.
