@@ -21,6 +21,7 @@
 | invsqrt | 宽度 Q44 | **NO-GO** | 令牌峰值 **44 @ op 1689**，44 条线全部承载令牌；**0 对** scratch 生命期不相交；x 线本身被当 AND 工作区（503/1526 CCX 目标 + 360 HMR） |
 | invsqrt | Toffoli 面复查 | **NO-GO** | 0 相邻对消 / 0 死 CCX / 0 CCX→CX 降级；唯一量化发现（2 个「死」CCZ）被官方 verifier 全 shots **FAIL 证伪**（`x=12: phase error 0.5 turns`） |
 | invsqrt | **Q43**（+0.217 GM） | **NO-GO** | 逐线定价表（22 行）：预算 **+158.2 T**，而最近的两条也超 —— q25 **≥77 Toffoli = 308 T（1.95×）**、q24 ≥220 T（1.39×），其余 4.1×–957×。按 q25 造的 Q43 候选被官方 verifier 判 **FAIL: `x was not restored`**（kernel `jiyujia/qcc-invsqrt-q43-retire-q25` v2），原因已定位（holder 语义须为「支集**等于** {atom}」，按精确语义 77/80 个读点没有 holder） |
+| invsqrt | **Q42/Q40 压实**（只改编号，门表不变） | **NO-GO（结构性，搜索空间已穷尽）** | 三套独立判据同值：**活跃峰值 44 @ op 1689**（`CCX q16 q17 q43`，44/44 条线全部有非恒定活值；4,195 条 op 处于 44）；**946 对 wire 全查，0 对生命期不相交**；1,308 个复位段做区间图着色，**最小物理线数 = 44** ⇒ 42Q/40Q 重命名**不存在**。要 42Q 只能消掉 2 个活值（最便宜 q24+q25 **≥132 C**），而 42Q 盈亏平衡余量只有 **80.95 C（1.63×）**。另：**42Q 即使零成本也不到金线**（GM 28.5909 < 28.71339，纯宽度需 ≤41Q，那里金线只给 +19.25 C 而 3 条退役 ≥293 C）。官方 `kickmix.so` 在 Kaggle CPU 静态复算一致（`qingyu1232/qcc-invsqrt-liveness-compaction` v1，`.kmb`/`.kmx` 双 sha 对齐；未跑 verifier——无候选可验） |
 | **chemistry** | 形状（rows = 76 + K·B/C） | **NO-GO** | `B ≤ 128` → `inner_temp` 从 303 跳到 510–575 ⇒ **Q ≥ 629（+47%）**；唯一保 Q=427 的是 `B∈[129,255]`，K=352 时最小 rows=1,108，最好只 +0.16 GM，且 `(8,129,44)` 连续 e2 19.83 已超门 |
 | chemistry | brot=7 | **NO-GO** | `inner_state_prep` 不依赖 β，β 只进 Givens(−300 T) 与 Q(−5) ⇒ 真实收益 **+0.30 GM** 而非 +0.6；7-bit 网格把量化罚从 13.7 翻到 ~27 mHa |
 | chemistry | 免费形状缩减 | **NO-GO** | `W` 无全零 copy 列 / base 行 / rank（最小列 Σ\|w\|=0.717） |
