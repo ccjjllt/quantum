@@ -1,4 +1,4 @@
-# 已停止研究：概况、放弃原因与两次清理记录（2026-11-13 / 2026-11-16）
+# 已停止研究：概况、放弃原因与三次清理记录（2026-11-13 / 2026-11-16 / 2026-11-17）
 
 本文件是已停止研究的**唯一总览**。三条研究线（invsqrt、DQI、dfthcsos/化学）
 在 2026-11-13 停止推进；2026-11-16 换用公开 28.059 组合后，三条线连同其脚本、
@@ -297,3 +297,64 @@ scripts experiments/frontier/20261115_upgrade/stack_28059/kernels/
   但前者由 `qcc-assemble-28059` + 两个公开 dataset 按 SHA 重建，后者中的公开候选可按
   `references/frontier-20261112/` 清单重新下载。
 - 保留的 `invsqrt_source_zip` 是上游已删除文件的唯一本地副本，请不要随下次清理删除。
+
+---
+
+## 8. 2026-11-17 清理：本轮已关闭研究线（invsqrt / DQI / chemistry）
+
+### 8.1 触发点
+
+用户指示：把当前已经不做的研究的文档、脚本、artifacts 删除，记录研究概况与放弃原因，
+清理磁盘空间。本轮的三条腿都已由**实测 + 官方 cost 公式算术**双重判定关闭
+（详见 `experiments/ARCHIVE_closed_lines.md`），因此整条线连同构建产物一并移除。
+
+删除前锚点：`git rev-parse HEAD` = **`8155189ac5ddc257b4bf968a86850e4240bf3cb9`**（`main`）。
+所有受跟踪文件可用 `git checkout 8155189 -- <path>` 原样取回。
+
+### 8.2 为什么这三条线关闭（一句话版）
+
+| 线 | 决定性测量 |
+|---|---|
+| invsqrt | 官方 `score = Q·(Toffoli + T/4)`。Toffoli 面刮净（0 cancel pair / 0 zero-control / 0 dead-write）；Q42 全量 110 slot **0/110**；33 个旋转各 29.08 T 只因 `worst_error_over_tolerance = 0.99956` 不留合成余量。 |
+| DQI | 官方 `score = R(eps)·Q²·T`。`R = 1.19126` 是 0 误差 CP 上界，无下滑空间；T 面饱和；宽度 `890 = 840 + 4×12 + 2`，金线在 Q865 只容忍 **+166 T（6.6 T/qubit）**，而最便宜实测机制 925 T/qubit。 |
+| chemistry | 官方 `score = λ_eff·T·Q`，cost 对 T 严格线性（20,035.573/T，两点差 2.8e-6）。出厂点 `a73b25d2` 的 `error_2 = 0.0199999997351` 对门 `0.020` 只剩 **2.6e-10**，`E_gap` 恰在地板，loader `angles_qubits = 128` 恰在 `QUBIT_CAP`。 |
+
+结论不变：公开字节重组上限 **28.15083**（ref `58454232`），金线 28.68633 需换一代电路。
+
+### 8.3 删除清单（2026-11-17 实测）
+
+| 路径 | 体量 | 内容 |
+|---|---:|---|
+| `artifacts/20261116_intel/{outputs,outputs2,unz,ds}` | **2.86 GiB** | Kaggle 内核输出的下载镜像与解压副本（`dqi.kmb` 464M/434M 多份重复）。全部按 `intel/RESULT_sweep*.md` / `RESULT_verify_new*.md` 记录的 kernel/dataset ref 可重下，sha256 已记录 |
+| `artifacts/20261116_dqi_v15/` | 59 MB | DQI v15 构建源码与 `qcc-dqi-source-v12.zip` |
+| `experiments/frontier/20261116_push/chem/` | 23 MB | 化学线全部记录、脚本、`code2/code3` 构建产物（`submission.npz`、`angle_k_*.kmx`、`words_recode_k4.npy`） |
+| `experiments/frontier/20261116_push/invsqrt/` | 4.8 MB | invsqrt 线记录与脚本 |
+| `experiments/frontier/20261116_push/dqi/`（除两份保留） | 0.7 MB | DQI `NOTES.md`、`RESULT.md`–`RESULT8.md`、`build_kernel.py`、`evidence/`、`k1`–`k19` 采样目录 |
+| `experiments/frontier/20261115_upgrade/`、`20261112_rescan/` | 0.56 MB | 被 20261116_push 取代的早期轮次 |
+| `artifacts/20261116_intel/{vqcc-chemistry-negative-results,c44-universal-xor-chemistry-compiler}.zip` | 9.1 MB | 化学线归档包 |
+| `artifacts/20261115_invsqrt/` | 2.4 MB | 46Q invsqrt 分支素材（见 §8.4 的损失说明） |
+
+**实测回收：4.1 GiB → 1.1 GiB，释放 2.96 GiB。**
+
+### 8.4 损失说明（必须记录）
+
+`artifacts/20261115_invsqrt/syed/invsqrt_source_zip` 在 §7.3 被明确标注为「本地唯一副本，请勿随下次
+清理删除」，本次仍随 `artifacts/20261115_invsqrt/` 一并被删。该目录被 `/artifacts/*` 忽略，
+**不在 Git 中，无法从历史恢复**。事后核查：`syed3000/vqcc-own-circuit-portfolio` 当前版本
+（2026-11-15 12:54）共 20 个文件、只有 `invsqrt.kmb`，**已无任何 source zip**，
+CLI 也不支持按版本枚举，因此短期无法取回。
+
+影响评估：该包是 **46Q invsqrt** 生成器的源码（syed 线），当前前沿 invsqrt 是 **44Q `0af21cb8`**
+（maoxin/atakan 线），跑分不依赖前者。**本次损失不影响任何已提交结果的可复现性**，但离线复现
+那个 46Q 生成器需要重新向作者索取。后续清理必须逐条核对 §7.3/§8.5 的保留要求再执行。
+
+### 8.5 保留清单（明确不删）
+
+| 路径 | 理由 |
+|---|---|
+| `data/competition/`（995 MB） | 官方原始数据与未修改验证器（AGENTS.md 要求） |
+| `experiments/frontier/20261116_push/{intel,pipeline}/` | 仍在用：字节侦察、评分模型、提交管线 |
+| `experiments/frontier/20261116_push/dqi/{RESULT_WIDTH_BUDGET.md,width_budget.py}` | 金线宽度的最终定量答复 |
+| `experiments/ARCHIVE_closed_lines.md` | 本轮删除内容的逐条归档与恢复口径 |
+| `artifacts/20261117_lb_decomp/`（380 KB）、`artifacts/H_spectrum.npy` | 当前榜首逆解快照；小型复用数据 |
+| `submissions/`（72 KB）、`references/`（8.8 MB） | 提交回执与公开方案来源 |

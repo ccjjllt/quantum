@@ -1,16 +1,27 @@
 # 实验记录
 
-> 2026-11-13：三条自研线（invsqrt、DQI、dfthcsos）已停止推进。main 只保留
-> `frontier/20261112_rescan/` 这一份公开前沿来源记录；历史实验目录已删除，
+> 2026-11-13：三条自研线（invsqrt、DQI、dfthcsos）已停止推进（当时 main 只保留
+> `frontier/20261112_rescan/` 一份公开前沿来源记录，该目录已在 2026-11-17 清理中删除）；
 > 概况、放弃原因和删除清单见 [docs/abandoned-research.md](../docs/abandoned-research.md)。
 > 各研究分支只保留入口 README、`ABANDONED.md`、系统性复盘和可复用载体。
 >
 > 2026-11-16：换用公开 28.059 组合（ref 58392219，**28.05896**）后，又删除了
 > `artifacts/` 下已关闭研究的候选件、`.worktree/dfthcsos` 的训练权重快照、全部 18 个
 > 历史提交 ZIP（872.5 MB）与临时工作区（124 MB），合计约 **1.10 GB**。
-> 当前只保留研究记录、公开源清单、当前最佳的组装/复核脚本
-> （`frontier/20261115_upgrade/stack_28059/kernels/`）和 invsqrt 生成器源码包。
 > 详细清单见 [docs/abandoned-research.md §7](../docs/abandoned-research.md)。
+>
+> **2026-11-17：** 再次清理。三条腿都已由实测 + 官方 cost 公式算术判定关闭，
+> 删除 `frontier/20261116_push/{invsqrt,dqi,chem}/` 的文档/脚本/构建产物、
+> `frontier/20261112_rescan/`、`frontier/20261115_upgrade/`，以及 `artifacts/` 下
+> **2.86 GB** 的 Kaggle 内核输出下载镜像（`20261116_intel/{outputs,outputs2,unz,ds}`）
+> 与 DQI v15 源码（59 MB）。**合计回收 2.96 GB（4.1 GB → 1.1 GB）。**
+> 删除前锚点 `8155189`，受跟踪文件用 `git checkout 8155189 -- <path>` 取回。
+> 逐条归档、放弃原因与一次误删说明见
+> [experiments/ARCHIVE_closed_lines.md](ARCHIVE_closed_lines.md)
+> 和 [docs/abandoned-research.md §8](../docs/abandoned-research.md)。
+> 当前只保留：`frontier/20261116_push/{intel,pipeline}/`（侦察 + 提交管线）、
+> `frontier/20261116_push/dqi/{RESULT_WIDTH_BUDGET.md,width_budget.py}`、
+> 公开源清单 `references/`、提交回执 `submissions/`、官方数据 `data/competition/`。
 
 main 保留公开前沿来源和 submission 回执。若未来恢复研究，新增 invsqrt、化学、DQI
 实验分别写入 `.worktree/invsqrt`、`.worktree/dfthcsos`、`.worktree/dqi` 的对应

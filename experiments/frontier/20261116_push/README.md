@@ -1,5 +1,10 @@
 # 2026-11-16 大幅提分推进
 
+> **2026-11-17 清理**：`invsqrt/`、`dqi/`（除两份宽度预算文件）、`chem/` 三条已关闭研究线的
+> 文档/脚本/构建产物已删除，回收 2.96 GiB（4.1G → 1.1G）。研究概况与放弃原因见
+> `experiments/ARCHIVE_closed_lines.md`、`docs/abandoned-research.md` §8；
+> 受跟踪文件可用 `git checkout 8155189 -- <path>` 取回。
+
 目标：在公开 28.09 组合之上做原创改进，优先攻击单项大杠杆，全部电路实验在 Kaggle CPU 上执行。
 
 ## 实时基线
@@ -27,9 +32,9 @@
 | 目录 | 负责 | 目标 |
 |---|---|---|
 | `intel/` | 公开前沿侦察 | 11-16 19:27→23:27 UTC 扫到 4 新字节：DQI `f425ea20`（内嵌官方 JSON 346,992,317,312.82，组 0af+chem 可达 GM 28.13137，待独立验证）、`b0983d55`、chem `a970f175`、`93326853`；swap `703843d3`+3.79e-6 不值 slot（`RESULT_sweep2.md`）。顶线 11-17 00:55 UTC：榜首 30.96223，金 28.68633；112 队 28.12769 并列（rank 228）；28.13790×13/28.14703×7 需 f-class+额外（`RESULT_topline.md`）。11-17 01:01 UTC sweep3：DQI `61c8348d`（claim 346,413,287,873.06，组 0af+chem 可达 GM 28.14704，待独立验证）、`957d6733`（engine claim，不及基线）；asterios finer-refit 无新字节。见 `intel/RESULT_sweep3.md` |
-| `invsqrt/` | invsqrt Q/T | f2cdab0b Q44 硬地板；**0af21cb8 新机制已探明**：3 tail 转 HMR 双分支 −4.75 mean T；剩余 4 head（12139/12142/12596/13037，−2…−4 mean T / +0.01…+0.02 GM）但 v27 emitter 私有无公开重发点（R6 已证），手工不可构造。见 `invsqrt/RESULT5.md`、`RESULT6.md` |
-| `dqi/` | DQI Q/T | **Q/T peephole、v15 调度、decoder-level、structural、66b4 gadget 全部关闭**：RESULT5 exact T=384,003，decision <1T，retain +2.369%；RESULT6 out-of-place/v13/ladder 不可；RESULT8：66b4 gadget 每 site −20T 共 −820T，k19 全磁带普查 G1 41/41、G0 0/0，无剩余可转。见 `dqi/RESULT5.md`–`RESULT8.md` |
-| `chem/` | chemistry T | **R=8/R=5/λ/code/新words/C轴/emitter/新R/coded 全关**：RESULT4 re-code floor 36.16/63.24，C43/42 floor 21.23/23.26；RESULT5 emitter +2…+4；RESULT6 R7 53.35/66.16，R9 40.84/53.31，R10/12 +Q697；RESULT7 coded (a) e2 floor 21.216（cuts 71→55），(b) 36.229/floor 35.89 + T_heur 13,631。冻结 294,762,632.08。见 `chem/RESULT4.md`–`RESULT7.md` |
+| `invsqrt/` | invsqrt Q/T | f2cdab0b Q44 硬地板；**0af21cb8 新机制已探明**：3 tail 转 HMR 双分支 −4.75 mean T；剩余 4 head（12139/12142/12596/13037，−2…−4 mean T / +0.01…+0.02 GM）但 v27 emitter 私有无公开重发点（R6 已证），手工不可构造。记录已归档（`experiments/ARCHIVE_closed_lines.md` §1，git `8155189`） |
+| `dqi/` | DQI Q/T | **Q/T peephole、v15 调度、decoder-level、structural、66b4 gadget 全部关闭**：RESULT5 exact T=384,003，decision <1T，retain +2.369%；RESULT6 out-of-place/v13/ladder 不可；RESULT8：66b4 gadget 每 site −20T 共 −820T，k19 全磁带普查 G1 41/41、G0 0/0，无剩余可转。记录已归档（`experiments/ARCHIVE_closed_lines.md` §2，git `8155189`）；宽度预算保留在 `dqi/RESULT_WIDTH_BUDGET.md` |
+| `chem/` | chemistry T | **R=8/R=5/λ/code/新words/C轴/emitter/新R/coded 全关**：RESULT4 re-code floor 36.16/63.24，C43/42 floor 21.23/23.26；RESULT5 emitter +2…+4；RESULT6 R7 53.35/66.16，R9 40.84/53.31，R10/12 +Q697；RESULT7 coded (a) e2 floor 21.216（cuts 71→55），(b) 36.229/floor 35.89 + T_heur 13,631。冻结 294,762,632.08。记录已归档（`experiments/ARCHIVE_closed_lines.md` §3，git `8155189`） |
 | `chem/CODE2` | loader code search | **已关闭（2026-11-16）**：k=9/10/12/14 的 145-cut basis 并没有比 shipped 更好——shipped products 是 189/190/191（不是 193）；k9 亏、k10/k12 平、k14 −1 不可发射（bit7 XOR bit6 helper / six-AND 独立性失败）。混合包作为负控制 e1=61,130 mHa、e2=11,659 mHa。4,025 保持。见 `pipeline/CODE2_STATUS.md` |
 | `pipeline/` | CPU 复核/打包/提交 | 先复核公开 28.09486 件；只有 **>=28.09490** 才提交，避免落在 143 队并列末尾 |
 
