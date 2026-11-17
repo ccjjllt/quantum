@@ -80,6 +80,22 @@ Brief: `experiments/frontier/20261118_push/BRIEF.md`.
 | harvest | ccjjllt_check | new public components + top-team intel + papers |
 | model | zhuating | full audit of submission-controlled parameters in all three verifiers |
 
+## 4b. Packaging bug found and corrected (2026-11-18 00:55)
+
+The "28.1806" package built by `qingyu1232/qcc-integrator-inv563d0583` v2 is **wrong**:
+its `receipt.json` shows `dqi.kmb` sha `957d6733…` with **value_errors 1** on the default
+salt, cost 348,246,849,661.48, GM **28.1310187** — below the current LB 28.15094.
+`members_2818066.json` itself carries the wrong DQI sha; the "salt false alarm" note in
+SUMMARY2 §17 was masking a manifest error.
+
+Corrected manifest `integration/members_281806_correct.json`: same invsqrt (`563d0583`)
+and same chem 18-member set, DQI replaced by `575b043f`
+(sha `575b043f4fee…`, 479,128,738 B) from
+`grantprater/vqcc-dqi-61c8348d-merged-closings : dqi_575b043f.kmb.xz`.
+New integrator `qingyu1232/qcc-integrator-281806` v1 (expected GM 28.180659; the kernel
+extracts the `.xz` and matches the sha). The LB draw for `575b043f` is already known clean
+from submission 58464076, so the expected LB score is 28.18 if the salt is per-file.
+
 ## 5. Submission plan
 
 Quota resets 2026-11-18 08:00 Beijing. Submit the best verified package then and
