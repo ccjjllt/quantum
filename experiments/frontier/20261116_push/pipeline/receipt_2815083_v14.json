@@ -1,0 +1,314 @@
+{
+  "generated_utc": "2026-11-17T03:06:01Z",
+  "started_utc": "2026-11-17T02:52:45Z",
+  "candidate": "0af-61c8348d-a73b25d2-2815083",
+  "description": "invsqrt 0af21cb8 (44Q) + DQI 61c8348d (890Q, grantprater merged-closings) + chemistry a73b25d2 chem-shape move with 15 SMALL loaders (427Q, T=14706, depth 177, cost 294643137.73); official default salts",
+  "decision": "SUBMIT",
+  "gm": 28.107867052932725,
+  "expected_gm": 28.15082863,
+  "current_public": 28.09486,
+  "tie_plateau_gm": 28.09486,
+  "next_public_gm": 28.09498,
+  "min_gm": 28.0949,
+  "policy": "Submit only when all official verifiers PASS and GM >= 28.09490. 28.09486 is a 185-team plateau (ranks 93-277) and is held; 28.09487 is also below the gate. Do not replace our existing tie entry with a later submission that would worsen the in-tie rank.",
+  "scores": {
+    "chem": 294643137.73357135,
+    "dqi": 348004440260.464,
+    "invsqrt": 74797.36535717871
+  },
+  "ratios": {
+    "invsqrt": 27.76533937790204,
+    "dqi": 70.22744757331604,
+    "chem": 11.388690787530951
+  },
+  "members": {
+    "invsqrt.kmb": {
+      "sha256": "0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b",
+      "size": 180382,
+      "source": "embedded zlib/base64, maoxin123/atakan 0af21cb8",
+      "found_at": "embedded zlib/base64",
+      "staged_sha256": "0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b"
+    },
+    "dqi.kmb": {
+      "sha256": "61c8348d6e85bb0259c4b89f14be9a2834c77bf8a680cf79959bf5e1089cf5de",
+      "size": 479128630,
+      "source": "grantprater/vqcc-dqi-61c8348d-merged-closings dqi.kmb (grantprater 23:45 kernel byte-identical; parents 66b4f18b+d54d3387 shipped)",
+      "found_at": "/kaggle/input/vqcc-dqi-61c8348d-merged-closings/dqi.kmb",
+      "staged_sha256": "61c8348d6e85bb0259c4b89f14be9a2834c77bf8a680cf79959bf5e1089cf5de"
+    },
+    "dfthcsos/submission.npz": {
+      "sha256": "a73b25d27caec65dba2b0ad6c49b34afbdb2343f4ef94f3b4ad0536dee0077f3",
+      "size": 1847552,
+      "source": "maoxin123/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier submission.zip (sibling-identical to qcc-28-14-4-022-toffoli-chemistry-loaders 02:16 kernel; T14706 chem-shape move)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/submission.npz",
+      "staged_sha256": "a73b25d27caec65dba2b0ad6c49b34afbdb2343f4ef94f3b4ad0536dee0077f3"
+    },
+    "dfthcsos/angle_k_0.kmb": {
+      "sha256": "ed6487084d30b0c772e8bd1109b56b501945d2bc708a343fd8bdf3551f3b7538",
+      "size": 180436,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_0.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_0.kmb",
+      "staged_sha256": "ed6487084d30b0c772e8bd1109b56b501945d2bc708a343fd8bdf3551f3b7538"
+    },
+    "dfthcsos/angle_k_1.kmb": {
+      "sha256": "8e3a04e0e0450dbaa4725dc421708291ad4cec1522611e363936c90121885fbd",
+      "size": 151084,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_1.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_1.kmb",
+      "staged_sha256": "8e3a04e0e0450dbaa4725dc421708291ad4cec1522611e363936c90121885fbd"
+    },
+    "dfthcsos/angle_k_2.kmb": {
+      "sha256": "e620e957a4942bb9ddb1b246519d177f9de104ae27c95261a88bd9e7ed99303f",
+      "size": 135545,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_2.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_2.kmb",
+      "staged_sha256": "e620e957a4942bb9ddb1b246519d177f9de104ae27c95261a88bd9e7ed99303f"
+    },
+    "dfthcsos/angle_k_3.kmb": {
+      "sha256": "b1f4286282ab66463a4b7bd4513a7b3ecf67cdd8ede1bd86293169aa17cce76e",
+      "size": 134697,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_3.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_3.kmb",
+      "staged_sha256": "b1f4286282ab66463a4b7bd4513a7b3ecf67cdd8ede1bd86293169aa17cce76e"
+    },
+    "dfthcsos/angle_k_4.kmb": {
+      "sha256": "ee54d6f926f72276cd28439352b0d994bb77a3ed91b9d915291293192ceca07d",
+      "size": 130825,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_4.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_4.kmb",
+      "staged_sha256": "ee54d6f926f72276cd28439352b0d994bb77a3ed91b9d915291293192ceca07d"
+    },
+    "dfthcsos/angle_k_5.kmb": {
+      "sha256": "21b49673d23b09dbd3ad45e620cb799d54c64ebe5b4850bd17ac163a9b2a2856",
+      "size": 130454,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_5.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_5.kmb",
+      "staged_sha256": "21b49673d23b09dbd3ad45e620cb799d54c64ebe5b4850bd17ac163a9b2a2856"
+    },
+    "dfthcsos/angle_k_6.kmb": {
+      "sha256": "1ae55a71e6877ce23c671df157a532b594694001a9623cc7315cc332306973e1",
+      "size": 129631,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_6.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_6.kmb",
+      "staged_sha256": "1ae55a71e6877ce23c671df157a532b594694001a9623cc7315cc332306973e1"
+    },
+    "dfthcsos/angle_k_7.kmb": {
+      "sha256": "8ccf17b0113fb5451f64bd1df02dd8de262c7976f98fc8f621551a0430fbe8f0",
+      "size": 130875,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_7.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_7.kmb",
+      "staged_sha256": "8ccf17b0113fb5451f64bd1df02dd8de262c7976f98fc8f621551a0430fbe8f0"
+    },
+    "dfthcsos/angle_k_8.kmb": {
+      "sha256": "0ace34e6eab90c9f2a0165671cca4dd1f4cc94e18f7d517a39c3156629234563",
+      "size": 130222,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_8.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_8.kmb",
+      "staged_sha256": "0ace34e6eab90c9f2a0165671cca4dd1f4cc94e18f7d517a39c3156629234563"
+    },
+    "dfthcsos/angle_k_9.kmb": {
+      "sha256": "b4a2d0ce4bc3c5fa8055a4f386507bc7d35dccdcb68f5545cc7970843c85da71",
+      "size": 130054,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_9.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_9.kmb",
+      "staged_sha256": "b4a2d0ce4bc3c5fa8055a4f386507bc7d35dccdcb68f5545cc7970843c85da71"
+    },
+    "dfthcsos/angle_k_10.kmb": {
+      "sha256": "41069152b81cbd62f0f00d24990d69db58a5ef2bcee099c078c811b1ed4286a6",
+      "size": 131074,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_10.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_10.kmb",
+      "staged_sha256": "41069152b81cbd62f0f00d24990d69db58a5ef2bcee099c078c811b1ed4286a6"
+    },
+    "dfthcsos/angle_k_11.kmb": {
+      "sha256": "76c24260f8ec945e01de34ab8185f2ce0d7608f45da6f05101a47fb7136a9aca",
+      "size": 130646,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_11.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_11.kmb",
+      "staged_sha256": "76c24260f8ec945e01de34ab8185f2ce0d7608f45da6f05101a47fb7136a9aca"
+    },
+    "dfthcsos/angle_k_12.kmb": {
+      "sha256": "e8ed58a46db6500c0b0f0b2d5b8dd674d965de268683343ab942e6235b672f7f",
+      "size": 129613,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_12.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_12.kmb",
+      "staged_sha256": "e8ed58a46db6500c0b0f0b2d5b8dd674d965de268683343ab942e6235b672f7f"
+    },
+    "dfthcsos/angle_k_13.kmb": {
+      "sha256": "9e415e21dacce531c03d5c9322b5aa57f641ae7990b3426ad5574a6c1f9d93d8",
+      "size": 130455,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_13.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_13.kmb",
+      "staged_sha256": "9e415e21dacce531c03d5c9322b5aa57f641ae7990b3426ad5574a6c1f9d93d8"
+    },
+    "dfthcsos/angle_k_14.kmb": {
+      "sha256": "fe94999841456f828d26c6b375d632f3b28f0f64def2a3bfffdc79873e3a928f",
+      "size": 130774,
+      "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_14.kmb (SMALL family; must pair with a73b25d2)",
+      "found_at": "/kaggle/input/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier/submission.zip:dfthcsos/angle_k_14.kmb",
+      "staged_sha256": "fe94999841456f828d26c6b375d632f3b28f0f64def2a3bfffdc79873e3a928f"
+    }
+  },
+  "official_verifiers": {
+    "verifiers/dfthcsos/verify.py": "0775be7a528922367caebe9e4d051d6199811f1aefeaa4b793eaaa4621b8ec9d",
+    "verifiers/dqi/verify_submission_dqi.py": "f14274bc0943fb9769ddb01131be6063191a15009fe1caf1d4bdd9fd25194e65",
+    "verifiers/invsqrt/verify_submission_invsqrt.py": "ddef520dec6b68d1cf0a6f328ddd36d79eb84570b9192cf3f7acaf073f06733a"
+  },
+  "kickmix_sha256": "c66b3216c4029e0cdfd09054306aa0feadf53ab2f50c1164e37f752874e5005e",
+  "verifiers": {
+    "chem": {
+      "command": [
+        "/usr/bin/python3",
+        "/kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/verifiers/dfthcsos/verify.py",
+        "/kaggle/working/stage/dfthcsos"
+      ],
+      "cwd": "/kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/verifiers/dfthcsos",
+      "returncode": 0,
+      "seconds": 25.95,
+      "json": {
+        "status": "PASS",
+        "score": 294643137.73357135,
+        "lambda_eff": 46.92171681802857,
+        "toffoli_count": 14706.0,
+        "num_qubits": 427,
+        "brot": 8,
+        "batch_size": 5,
+        "num_circuits": 15,
+        "reaction_depth": 177,
+        "num_ops": 224256,
+        "verified_shots": 78080,
+        "submission_sha256": "1e6c9f65453e9bde3e5148c99be8749f9b45faec06b9b0e57e529c09b3ff0e45",
+        "resources": {
+          "brot": 8,
+          "keep_bits": 10,
+          "angles_toffoli_per_pass": 4022.0,
+          "angles_toffoli": 8044.0,
+          "angles_qubits": 128,
+          "angles_selection_qubits": 11,
+          "angles_persistent_qubits": 40,
+          "angles_temporary_qubits": 77,
+          "outer_state_prep_toffoli": 317,
+          "inner_state_prep_toffoli": 4095,
+          "givens_rotations_toffoli": 2250,
+          "outer_state_prep_persistent_qubits": 40,
+          "outer_state_prep_temporary_qubits": 90,
+          "outer_state_prep_qubits": 130,
+          "inner_state_prep_persistent_qubits": 44,
+          "inner_state_prep_temporary_qubits": 303,
+          "inner_state_prep_qubits": 347,
+          "heuristic_persistent_qubits": 84,
+          "heuristic_temporary_qubits": 303,
+          "heuristic_toffoli": 6662,
+          "heuristic_qubits": 387,
+          "persistent_qubits": 124,
+          "temporary_qubits": 303,
+          "toffoli": 14706.0,
+          "qubits": 427,
+          "angles_within_cap": true
+        },
+        "metrics": {
+          "error_1": 0.01999999973509546,
+          "error_2": 0.019999999735098823,
+          "Lambda": 283.1458106129289,
+          "E_SOS": -22144.188248000264,
+          "E_gap": 3.9148980002646567,
+          "lambda_eff": 46.92171681802857,
+          "gap_in_domain": true
+        }
+      },
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"score\": 294643137.73357135,\n  \"lambda_eff\": 46.92171681802857,\n  \"toffoli_count\": 14706.0,\n  \"num_qubits\": 427,\n  \"brot\": 8,\n  \"batch_size\": 5,\n  \"num_circuits\": 15,\n  \"reaction_depth\": 177,\n  \"num_ops\": 224256,\n  \"verified_shots\": 78080,\n  \"submission_sha256\": \"1e6c9f65453e9bde3e5148c99be8749f9b45faec06b9b0e57e529c09b3ff0e45\",\n  \"resources\": {\n    \"brot\": 8,\n    \"keep_bits\": 10,\n    \"angles_toffoli_per_pass\": 4022.0,\n    \"angles_toffoli\": 8044.0,\n    \"angles_qubits\": 128,\n    \"angles_selection_qubits\": 11,\n    \"angles_persistent_qubits\": 40,\n    \"angles_temporary_qubits\": 77,\n    \"outer_state_prep_toffoli\": 317,\n    \"inner_state_prep_toffoli\": 4095,\n    \"givens_rotations_toffoli\": 2250,\n    \"outer_state_prep_persistent_qubits\": 40,\n    \"outer_state_prep_temporary_qubits\": 90,\n    \"outer_state_prep_qubits\": 130,\n    \"inner_state_prep_persistent_qubits\": 44,\n    \"inner_state_prep_temporary_qubits\": 303,\n    \"inner_state_prep_qubits\": 347,\n    \"heuristic_persistent_qubits\": 84,\n    \"heuristic_temporary_qubits\": 303,\n    \"heuristic_toffoli\": 6662,\n    \"heuristic_qubits\": 387,\n    \"persistent_qubits\": 124,\n    \"temporary_qubits\": 303,\n    \"toffoli\": 14706.0,\n    \"qubits\": 427,\n    \"angles_within_cap\": true\n  },\n  \"metrics\": {\n    \"error_1\": 0.01999999973509546,\n    \"error_2\": 0.019999999735098823,\n    \"Lambda\": 283.1458106129289,\n    \"E_SOS\": -22144.188248000264,\n    \"E_gap\": 3.9148980002646567,\n    \"lambda_eff\": 46.92171681802857,\n    \"gap_in_domain\": true\n  }\n}\n",
+      "stderr": "",
+      "stdout_sha256": "70cbecb200509948735d4624a1a64db891e6861e029a11c9c8a575abcce79862"
+    },
+    "dqi": {
+      "command": [
+        "/usr/bin/python3",
+        "/kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/verifiers/dqi/verify_submission_dqi.py",
+        "/kaggle/working/stage/dqi.kmb"
+      ],
+      "cwd": "/kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/verifiers/dqi",
+      "returncode": 0,
+      "seconds": 131.97,
+      "json": {
+        "status": "PASS",
+        "score": 348004440260.464,
+        "m": 4095,
+        "n": 70,
+        "degree": 12,
+        "r": 2016,
+        "verified_shots": 102400,
+        "value_errors": 1,
+        "phase_errors": 0,
+        "empirical_error_rate": 9.765625e-06,
+        "effective_error_rate": 0.0009104197583220583,
+        "log2_delta": -128.0,
+        "repetition_factor": 1.1967314991687559,
+        "mean_error_weight": 31.046737331746634,
+        "toffoli_count": 367120.0042382812,
+        "max_toffoli_count": 367993,
+        "reaction_depth": 40148,
+        "num_ops": 57520809,
+        "shot_operation_counts": {
+          "NEG": 102367,
+          "BIT_INVERT": 570220908229,
+          "BIT_STORE0": 286534478518,
+          "BIT_STORE1": 2997320999,
+          "X": 10998102194,
+          "Z": 2067039803,
+          "R": 4880052561,
+          "HMR": 7315006329,
+          "CX": 3059012603136,
+          "CZ": 26896159391,
+          "SWAP": 25843986956,
+          "CCX": 36983537629,
+          "CCZ": 609550805,
+          "POP_CONDITION": 261991731200,
+          "PUSH_CONDITION": 261991731200
+        },
+        "num_qubits": 890,
+        "num_bits": 66722,
+        "circuit_sha256": "61c8348d6e85bb0259c4b89f14be9a2834c77bf8a680cf79959bf5e1089cf5de"
+      },
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"score\": 348004440260.464,\n  \"m\": 4095,\n  \"n\": 70,\n  \"degree\": 12,\n  \"r\": 2016,\n  \"verified_shots\": 102400,\n  \"value_errors\": 1,\n  \"phase_errors\": 0,\n  \"empirical_error_rate\": 9.765625e-06,\n  \"effective_error_rate\": 0.0009104197583220583,\n  \"log2_delta\": -128.0,\n  \"repetition_factor\": 1.1967314991687559,\n  \"mean_error_weight\": 31.046737331746634,\n  \"toffoli_count\": 367120.0042382812,\n  \"max_toffoli_count\": 367993,\n  \"reaction_depth\": 40148,\n  \"num_ops\": 57520809,\n  \"shot_operation_counts\": {\n    \"NEG\": 102367,\n    \"BIT_INVERT\": 570220908229,\n    \"BIT_STORE0\": 286534478518,\n    \"BIT_STORE1\": 2997320999,\n    \"X\": 10998102194,\n    \"Z\": 2067039803,\n    \"R\": 4880052561,\n    \"HMR\": 7315006329,\n    \"CX\": 3059012603136,\n    \"CZ\": 26896159391,\n    \"SWAP\": 25843986956,\n    \"CCX\": 36983537629,\n    \"CCZ\": 609550805,\n    \"POP_CONDITION\": 261991731200,\n    \"PUSH_CONDITION\": 261991731200\n  },\n  \"num_qubits\": 890,\n  \"num_bits\": 66722,\n  \"circuit_sha256\": \"61c8348d6e85bb0259c4b89f14be9a2834c77bf8a680cf79959bf5e1089cf5de\"\n}\n",
+      "stderr": "",
+      "stdout_sha256": "649572f6847ab7d9cf900e264a1f949cd670efc21b1f838fd3902ba02bbdfc5b"
+    },
+    "invsqrt": {
+      "command": [
+        "/usr/bin/python3",
+        "/kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/verifiers/invsqrt/verify_submission_invsqrt.py",
+        "/kaggle/working/stage/invsqrt.kmb"
+      ],
+      "cwd": "/kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/verifiers/invsqrt",
+      "returncode": 0,
+      "seconds": 613.43,
+      "json": {
+        "status": "PASS",
+        "score": 74797.36535717871,
+        "toffoli_equivalent": 1699.9401217540617,
+        "toffoli_count": 1459.3748802688297,
+        "max_toffoli_count": 1560,
+        "t_count": 2.499900279707492,
+        "rotation_count": 33.0,
+        "rotation_eps": 1.6406054738480745e-13,
+        "num_qubits": 44,
+        "reaction_depth": 1233,
+        "num_ops": 20833,
+        "verified_shots": 200540928,
+        "worst_error_over_tolerance": 0.9995605646154175,
+        "worst_x": 231,
+        "circuit_sha256": "0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b"
+      },
+      "stdout": "{\n  \"status\": \"PASS\",\n  \"score\": 74797.36535717871,\n  \"toffoli_equivalent\": 1699.9401217540617,\n  \"toffoli_count\": 1459.3748802688297,\n  \"max_toffoli_count\": 1560,\n  \"t_count\": 2.499900279707492,\n  \"rotation_count\": 33.0,\n  \"rotation_eps\": 1.6406054738480745e-13,\n  \"num_qubits\": 44,\n  \"reaction_depth\": 1233,\n  \"num_ops\": 20833,\n  \"verified_shots\": 200540928,\n  \"worst_error_over_tolerance\": 0.9995605646154175,\n  \"worst_x\": 231,\n  \"circuit_sha256\": \"0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b\"\n}\n",
+      "stderr": "",
+      "stdout_sha256": "4eb979bbe3fdef0b8146878e1e2fcb1ec1b994695be89425ee865122d4f6751c"
+    }
+  },
+  "zip": {
+    "path": "/kaggle/working/submission.zip",
+    "size": 50990328,
+    "sha256": "d287f792555737ab504d8e95ff7597bf1a3873128287de9a887bd34893f57f15",
+    "members": 18
+  },
+  "apache_2_0_attribution": "Submission description and notes credit Syed Asad Ali (Apache-2.0 invsqrt/DQI generator lineage), Ali Haydar Ozdag (64-row table), Ertugrul Ozer, Asterios Panoras, James Barlow, Leo Tang, Hayato Hikawa (C8 milestone), maoxin, grantprater, boristown (merge patches), ratnachand (verified public floor), Lera/marculera and the c44 chemistry lineage, and Google Quantum AI / Qualtran for kickmix and the verifiers."
+}

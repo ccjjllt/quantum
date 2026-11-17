@@ -1,0 +1,115 @@
+{
+  "candidate": "0af-61c8348d-a73b25d2-2815083",
+  "description": "invsqrt 0af21cb8 (44Q) + DQI 61c8348d (890Q, grantprater merged-closings) + chemistry a73b25d2 T14706 + 15 SMALL loaders (427Q)",
+  "expected": {
+    "invsqrt_cost": 74797.36535717871,
+    "dqi_cost_clean": 346413579540.4963,
+    "dqi_cost_default_draw": 348004440260.464,
+    "chemistry_cost": 294643137.73357135,
+    "geometric_mean_clean": 28.15082863,
+    "geometric_mean_default_draw": 28.10786705,
+    "min_gm_for_submit": 28.0949
+  },
+  "reference": {
+    "invsqrt": 2076774.233715,
+    "dqi": 24439463583672.93,
+    "chem": 3355599588.3155375
+  },
+  "official_verifiers": {
+    "verifiers/dfthcsos/verify.py": "0775be7a528922367caebe9e4d051d6199811f1aefeaa4b793eaaa4621b8ec9d",
+    "verifiers/dqi/verify_submission_dqi.py": "f14274bc0943fb9769ddb01131be6063191a15009fe1caf1d4bdd9fd25194e65",
+    "verifiers/invsqrt/verify_submission_invsqrt.py": "ddef520dec6b68d1cf0a6f328ddd36d79eb84570b9192cf3f7acaf073f06733a"
+  },
+  "members": {
+    "invsqrt.kmb": {
+      "sha256": "0af21cb823328f6d91fbd62d6c09e48900cc5e36e343ed31681b5e87a8856b1b",
+      "size": 180382,
+      "source": "embedded zlib/base64, maoxin123/atakan 0af21cb8"
+    },
+    "dqi.kmb": {
+      "sha256": "61c8348d6e85bb0259c4b89f14be9a2834c77bf8a680cf79959bf5e1089cf5de",
+      "size": 479128630,
+      "source": "grantprater/vqcc-dqi-61c8348d-merged-closings dqi.kmb"
+    },
+    "dfthcsos/submission.npz": {
+      "sha256": "a73b25d27caec65dba2b0ad6c49b34afbdb2343f4ef94f3b4ad0536dee0077f3",
+      "size": 1847552,
+      "source": "maoxin123 v27 02:04 kernel submission.zip (sibling-identical to 02:16 loaders kernel)"
+    },
+    "dfthcsos/angle_k_0.kmb": {
+      "sha256": "ed6487084d30b0c772e8bd1109b56b501945d2bc708a343fd8bdf3551f3b7538",
+      "size": 180436,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_0.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_1.kmb": {
+      "sha256": "8e3a04e0e0450dbaa4725dc421708291ad4cec1522611e363936c90121885fbd",
+      "size": 151084,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_1.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_2.kmb": {
+      "sha256": "e620e957a4942bb9ddb1b246519d177f9de104ae27c95261a88bd9e7ed99303f",
+      "size": 135545,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_2.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_3.kmb": {
+      "sha256": "b1f4286282ab66463a4b7bd4513a7b3ecf67cdd8ede1bd86293169aa17cce76e",
+      "size": 134697,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_3.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_4.kmb": {
+      "sha256": "ee54d6f926f72276cd28439352b0d994bb77a3ed91b9d915291293192ceca07d",
+      "size": 130825,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_4.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_5.kmb": {
+      "sha256": "21b49673d23b09dbd3ad45e620cb799d54c64ebe5b4850bd17ac163a9b2a2856",
+      "size": 130454,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_5.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_6.kmb": {
+      "sha256": "1ae55a71e6877ce23c671df157a532b594694001a9623cc7315cc332306973e1",
+      "size": 129631,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_6.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_7.kmb": {
+      "sha256": "8ccf17b0113fb5451f64bd1df02dd8de262c7976f98fc8f621551a0430fbe8f0",
+      "size": 130875,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_7.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_8.kmb": {
+      "sha256": "0ace34e6eab90c9f2a0165671cca4dd1f4cc94e18f7d517a39c3156629234563",
+      "size": 130222,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_8.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_9.kmb": {
+      "sha256": "b4a2d0ce4bc3c5fa8055a4f386507bc7d35dccdcb68f5545cc7970843c85da71",
+      "size": 130054,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_9.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_10.kmb": {
+      "sha256": "41069152b81cbd62f0f00d24990d69db58a5ef2bcee099c078c811b1ed4286a6",
+      "size": 131074,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_10.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_11.kmb": {
+      "sha256": "76c24260f8ec945e01de34ab8185f2ce0d7608f45da6f05101a47fb7136a9aca",
+      "size": 130646,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_11.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_12.kmb": {
+      "sha256": "e8ed58a46db6500c0b0f0b2d5b8dd674d965de268683343ab942e6235b672f7f",
+      "size": 129613,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_12.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_13.kmb": {
+      "sha256": "9e415e21dacce531c03d5c9322b5aa57f641ae7990b3426ad5574a6c1f9d93d8",
+      "size": 130455,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_13.kmb (SMALL family)"
+    },
+    "dfthcsos/angle_k_14.kmb": {
+      "sha256": "fe94999841456f828d26c6b375d632f3b28f0f64def2a3bfffdc79873e3a928f",
+      "size": 130774,
+      "source": "maoxin123 v27 sibling submission.zip angle_k_14.kmb (SMALL family)"
+    }
+  }
+}

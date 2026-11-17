@@ -1,0 +1,6 @@
+Submission Ref:  58452435
+Status:          PENDING
+Public Score:    
+Private Score:   
+Description:     28.10407: invsqrt 0af21cb8 44Q PASS 74797.37 + DQI 61c8348d 890Q PASS 348004440260.46 (default draw 1/0; clean-draw cap 346413579540.50, GM 28.14703) + chem 93326853 427Q T14712 PASS 294762512.64; all 18 SHA-256 asserted; unchanged official verifiers PASS; GM 28.10407. Apache-2.0 credits: Syed Asad Ali, maoxin, grantprater, boristown, ratnachand, Lera/marculera, Google Quantum AI/Qualtran.
+Submission Date: 2026-11-17 02:13:28.787000
