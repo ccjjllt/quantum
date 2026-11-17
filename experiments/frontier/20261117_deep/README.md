@@ -62,4 +62,6 @@ invsqrt 的 zlib/base64 生成自包含脚本；新候选只需换 manifest。
 
 | kernel | 用途 | 状态 |
 |---|---|---|
-| `qingyu1232/qcc-deep-integrator-re-verify-28-15083` | 端到端复验当前 28.15083 三件 + 打包 | 见 `integration/RESULT.md` |
+| `qingyu1232/qcc-deep-integrator-re-verify-28-15083` v3 | 端到端复验当前 28.15083 三件 + 打包 | **COMPLETE**：三腿官方 verifier 全 PASS，18/18 成员按 SHA-256 定位；默认盐 DQI 抽到 dirty draw → 本次 GM 28.10786705（公开榜 58454232 为 clean draw 28.15083）。见 [integration/RESULT.md](integration/RESULT.md) |
+| `qingyu1232/qcc-scout-verify-dqi-575b043f` v2 | 侦察到的新 DQI 字节复核 | COMPLETE：`575b043f` cost 346,409,762,292.72（3 salts 3/3 PASS），组合 GM 28.15093204（**+0.00010**，不值一个提交名额，且有已知 weight-35 见证错误） |
+| `qingyu1232/qcc-scout-dfthc-baselines` v2 | dfthc-sos starter kit 8 个基线 | COMPLETE：只有 FeMoCo 一个可提交，Λ=308.45 / λ_eff=49.25，**全面劣于我们**；不存在公开低 Λ 分解 |
