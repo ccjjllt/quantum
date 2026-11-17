@@ -172,3 +172,28 @@ problem, not optimiser); `tree_edges` provably cannot move T_h/Q (the heuristic 
 no tree); J=5 optimal; the public "4,022-Toffoli loaders" are byte-identical to ours
 (sha ed6487084d30b0c7...). The shipped point sits 2.6e-10 from both error gates and
 the E_gap floor. Record: `experiments/frontier/20261118_push/chem/RESULT.md`.
+
+## 4h. Public frontier = our package; loader ceiling measured (2026-11-18 ~01:50)
+
+* `atakanaldemir/qcc-shared-products-and-controlled-refits` reports **observed public score
+  28.18070** — exactly our verified 28.180659 package (same invsqrt 563d, DQI 575b, chem
+  703843d3 + the 4,022 loaders). The public frontier is therefore where we already are;
+  everything above it is private work.
+* The loader line's own probes give the **true cut ceiling**: at the 4-bit split the five
+  3-coordinate blocks have dim 105 and rank **75** (not 30), so nullity = **150 cuts** ->
+  `products_ceiling 187.5` -> `toffoli_est 256.5` per loader. The shipped best loaders
+  (k4-k8) already have **149 cuts / 263 Toffoli**. Remaining realistic saving: weak
+  loaders k0 (87 cuts), k1 (99), k2/k3 (137), k9-14 (143-147) up to 263 ->
+  about **-80 Toffoli total = -160 T = +0.10 GM**. My earlier 375-cut / +2.7 GM estimate
+  was wrong (it used rank 30 instead of 75).
+* Row/tree/column permutations do **not** move the ceiling: the block ranks stay
+  [75,75,75,75,75] for identity/reverse/sort/nearest-neighbour/random, and non-identity
+  permutations break the emitter's `helper_low_high_ok` structure.
+* The 5-low-bit split lowers the estimate to 231.5 Toffoli but has **0 form-pair
+  candidates** at saturation (`probe_split_pairs`), so it is unreachable; 3-low-bit is
+  worse (254).
+* Consequence: the achievable stack today is invsqrt 42Q (+0.44 if a cheaper retirement
+  exists), DQI cuts (+0.06 at 686 T, more only with a new pair finder), loaders (+0.10),
+  chem lambda floor (+0.03) -> roughly **28.7-28.8**. The leaderboard's 29.98-31.43 tier
+  must come from a fundamentally cheaper DQI decoder (a 32% mean-T cut at 890Q, or
+  <=840Q), which is the only remaining large lever.
