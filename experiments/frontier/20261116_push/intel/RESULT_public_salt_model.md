@@ -2,7 +2,7 @@
 
 Scope: **zero compute**. Local arithmetic over (a) the submission ledger
 (`kaggle competitions submissions -c google-verifiable-quantum-circuit-compilation --csv`,
-account qingyu1232, read 2026-11-17 ~10:5x local) and (b) costs already recorded in
+account qingyu1232, read 2026-11-17) and (b) costs already recorded in
 `intel/RESULT_verify_new{,2,3,4}.md`, `intel/RESULT_stability.md`,
 `pipeline/RESULT_2814703.md`, `pipeline/RESULT_2812994.md`, `pipeline/RESULT_2815083.md`.
 No simulation, no verifier runs, no downloads, no submission.
@@ -15,8 +15,8 @@ Refs throughout R1 = 2076774.233715, R2 = 24439463583672.93, R3 = 3355599588.315
    rows invert to a DQI cost that lands within **1.5e-6** of either that file's clean cost
    or clean x 1.0045926 (one lost shot). Separation is 4.59e-3, i.e. ~3000x the
    measurement ambiguity. Four same-file pairs across submissions agree to 5.5e-7 / 1.1e-7 /
-   4.6e-7 / 0. **No ratio anywhere is neither ~1.0000000 nor ~1.0045925** — no 2-lost-shot
-   file and no second penalty value has ever been observed.
+   4.6e-7 / 0. **Every ratio is either ~1.0000000 or ~1.0045925 — no 2-lost-shot file and
+   no second penalty value has ever been observed.**
 2. **Two DQI legs were already revealed LOST before 58453168 was spent.** `f425ea20`
    (58451475 -> 28.08843) and — decisively — **`b0983d55` itself, whose public cost is
    348,639,035,601.5 = clean x 1.00459254, i.e. LOST**, giving exactly the observed
@@ -220,11 +220,12 @@ public/clean. `class` threshold +/-1.5e-6 (§1.3).
 **Anomaly scan: none.** No ratio falls outside `{1 +/- 1.5e-6}` ∪ `{1.0045926 +/- 1.5e-6}`
 ∪ `{0.9954281 +/- 1.5e-6}`. In particular:
 
-- **No 2-lost-shot file.** `rho^2 = 1.0092064` would show as a GM 0.086 below clean, four
-  times the one-shot signature, and nothing in the 25.2-28.15 history shows it.
-- **No alternative penalty.** Every lost observation is the same `R(1)/R(0)` to 1e-6, on
-  four different files (`61c8348d`, `f425ea20`, `957d6733`, `b0983d55`) plus the
-  publisher's `46446af1` report. The penalty is a property of the verifier, not the file.
+- **No 2-lost-shot file.** `rho^2 = 1.0092064` would show as a GM 0.086 below clean —
+  twice the one-shot signature — and nothing in the 25.2-28.15 history shows it.
+- **No alternative penalty.** Every lost observation is the same `R(1)/R(0)` to 1e-6:
+  two from the public board (`f425ea20`, `b0983d55`), two from the lab (`61c8348d`,
+  `957d6733`), plus the publisher's own `46446af1` two-salt report. The penalty is a
+  property of the verifier, not of the file.
 
 **Revealed public tally: 7 CLEAN / 2 LOST / 0 double-lost over 9 distinct files.**
 That implies per-draw `P(clean) ~ 0.78`, `P(1 error) ~ 0.19`, `P(2+ errors) <~ 0.03`,
@@ -392,7 +393,7 @@ public rate (§4) the posterior for a 3/3 file is P(public clean) ~ 0.83, and ev
 that prior seriously:
 
 ```
-E[b0983d55 | 3/3] = 0.833 x 28.13374 + 0.167 x 28.09081 = 28.12658
+E[b0983d55 | 3/3] = 0.833 x 28.13374 + 0.167 x 28.09080 = 28.12658
 E[61c8348d | 1/3] = 0.667 x 28.15083 + 0.333 x 28.08701 = 28.13651
 ```
 
@@ -459,7 +460,8 @@ Open items that would change predictions:
    No slot should be spent on them.
 2. **`821bf8d1` is fixed but unclassified** — its clean cost was never recorded. Three
    submissions agree on it (proof 3), so the constant is established; only the label is
-   missing. It is far above the frontier (370e9-class) and irrelevant.
+   missing. It is irrelevant regardless: its best combo scores 27.32, i.e. ~9% of cost
+   away from the frontier.
 3. **No double-lost draw has ever been observed.** If one occurs on a frontier file the GM
    drops ~0.086, twice the familiar -0.043. Prediction intervals should carry that tail
    (`P <~ 3%` per grading at the empirical rate).
