@@ -115,6 +115,40 @@ row is a unit vector (norm 1.000000); `tree_edges` is not a chain (degrees 1..7,
 leaves); `reconstruct_u_vectors` applies the 75 Givens rotations in `tree_edges`
 order from e_0.
 
+### 4d. Gauge freedom is NOT free for the loader line (checked 2026-11-18 01:20)
+
+The DF-THC metric is invariant under an orthogonal `b`-gauge `U' = U G`, `W' = W G^T`,
+so it looked like a free way to reshape the angle table. But the score factor is
+`lambda_h2 = 1/4 sum_(rho c) (|w|_1 + |w_B|)^2` (verifier `dfthc_math.py:88-96`),
+which is an **L1** functional and therefore **not** gauge-invariant. The shipped
+`lambda_eff` 46.9216 is already the lambda-minimal point (floor 46.786), so a general
+orthogonal gauge will raise Lambda and cost more than it can save on loaders.
+Only permutation/sign gauges keep L1 exactly — those are the row-permutation lever
+already handed to the loader line. Do not spend time on continuous gauges.
+
+## 4e. Model audit results (2026-11-18 ~01:25, measured on Kaggle CPU)
+
+* **`brot 8->7` is DEAD (measured).** On the shipped `a73b25d2` table the verifier gives
+  brot=7: error_1 2047 mHa, error_2 419.5 mHa, Lambda 289.11, lambda_eff 74.94 -> FAIL;
+  brot=6 worse. Re-quantisation costs ~x21 per bit on error_2 against a 20 mHa budget,
+  and lambda_eff would rise ~60% anyway. `brot 8` is a floor, not a knob. My earlier
+  +0.30 GM estimate is refuted.
+* **`Q_total = 387 + J*brot` is exact** (J=5 -> 427); `J` changes no metric; J=14 is
+  rejected (>128 angle-circuit qubits); J=5 is the optimum.
+* **Angle-circuit workspace is free** up to the 128-qubit cap (padding 61->128 leaves
+  Q_total and score bit-identical).
+* **Row order is a legal free degree of freedom, but only jointly**: permute `(w, u)`
+  together inside each rho block (1211/1220 rows moved, metrics identical to 1e-14).
+  Permuting words alone explodes to 27,133 mHa.
+* invsqrt: 33 rotations is within 1 of the provable dyadic-ladder floor; marginal
+  rotation +0.041 GM; **1 qubit = +0.213 GM** is the only real path.
+* dqi: a failed shot costs 0.459%, so a rewrite saving >1,678 T may lose one shot and
+  still win; `num_shots`/`log2_delta`/`(m,n,degree,r)` are CLI-only; E0..E4094 are
+  never read back (49,140 free classical bits); **no Z-basis measurement exists**.
+* Flagged but NOT used: the receipts suggest the grader may run without `--salt`
+  (seed = circuit hash); the public DQI author says the leaderboard uses a secret salt.
+  Unconfirmed, contract-sensitive, and not part of any plan here.
+
 ## 5. Submission plan
 
 Quota resets 2026-11-18 08:00 Beijing. Submit the best verified package then and
