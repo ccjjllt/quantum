@@ -1,0 +1,54 @@
+# DQI `575b043f`：grantprater 自己的 finder 跑完，closings 已到顶（0 个新增）
+
+日期 2026-11-17。目的：按「−122 DQI Toffoli ≈ +0.011 GM」的汇率，在已提交的 `575b043f`
+上继续找 **product-retention pairs** 与 **free Toffoli**。全部在 Kaggle CPU
+（kernel `zhuating/qcc-dqi-mine-575b043f`），使用 grantprater 数据集里**他自己的工具**
+（`vqcc_measure_out.py` / `vqcc_ir.py` / `vqcc_bitsim.py`，按数据集 README 的包布局摆放）。
+
+## 0. v2 结果（决定性）
+
+```
+free  : Toffoli-likes 367,989; free gates by class: {}      ← 0 个「不需要 Toffoli 也不需要 wire」的门
+count : 1,498 unconditioned duplicate-product pairs, 0 served (no free wire over the span)
+count --retain          : 3,978 pairs, 0 served
+count --retain --symclean: 3,978 pairs, 0 served
+rewrite --retain --symclean: 0 measure-outs applied
+   → sha 575b043f4fee 不变, Toffoli-likes 367,989 不变, qubits 890 不变
+```
+
+**结论：`575b043f` 在「保留乘积（measure-out）」这条机制上已经完全饱和。**
+3,978 个重复乘积对里**没有一个**在跨度内拥有干净 wire，`free` 类也是 0。
+这解释了为什么 grantprater 只拿到 4 个（那 4 个已在 `575b043f` 里，`pairs_4_on_61c8348d.json`）；
+它也是本轮 +0.00011 那一步的全部剩余空间。
+
+附带的两个计数（同样有用）：
+- `miss: a control written between, its function changed: 236,504`
+- `miss: another condition context: 41,456`
+- `of the pairs, a control written between and restored (equal symbols): 1,402`
+
+## 1. 正在测的唯一剩余方向：**加 wire 买 retention**
+
+`--retain` 的 3,978 对全部因为「跨度内没有干净 wire」而不可用 —— 也就是说，如果**多加几条 wire**，
+它们就可用。而 DQI 的 cost 是 `R·Q²·T`，所以这是一个可以做算术的交换：
+
+```
+cost ∝ Q² · T
+Q → Q+k :  +2k/Q  (k=1: +0.225%, 预算 +826 T)
+T → T−K :  −K/T
+盈亏：K > 826·k   (k=1 需 >826 次保留；k=4 需 >3,304)
+```
+
+已提交：`count --retain --extra {1,2,4,8,12,16}` 的扫描（kernel v3），用来量出「k 条额外 wire
+能服务多少对」。若 `extra 1 ≥ 900` 或 `extra 4 ≥ 3,400`，就值得做；否则这条也关闭。
+
+## 2. 复现
+
+```bash
+# 本机只读小文件（工具的源码），不跑仿真
+cd /private/var/.../gp && kaggle datasets download grantprater/vqcc-dqi-61c8348d-merged-closings -f vqcc_measure_out.py --unzip
+# Kaggle CPU
+python3 scripts/kgpu.py push --dir experiments/frontier/20261117_deep/dqi_mine --account zhuating
+```
+
+工具包布局（数据集 README 要求）：`tools/qc/__init__.py`、`tools/qc/passes/__init__.py` 空；
+`vqcc_ir.py → qc/ir.py`；`vqcc_bitsim.py → qc/bitsim.py`；`vqcc_measure_out.py → qc/passes/measure_out.py`。
