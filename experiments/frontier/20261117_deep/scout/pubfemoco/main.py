@@ -76,7 +76,7 @@ print('dataset root:', root, flush=True)
 print('\n== files ==', flush=True)
 if root is not None:
     for p in sorted(root.rglob('*')):
-        if p.is_file() and p.suffix.in_({'.npz', '.csv', '.py', '.kmb', '.xz'}):
+        if p.is_file() and p.suffix in {'.npz', '.csv', '.py', '.kmb', '.xz'}:
             print(f'{p.stat().st_size:>10d}  {p.relative_to(root)}', flush=True)
 
 # ---- every npz: shape -> cost --------------------------------------------------
@@ -110,7 +110,22 @@ if root is not None:
         except Exception as exc:  # noqa: BLE001
             print(f'   ERROR {type(exc).__name__}: {exc}', flush=True)
 
-# ---- is the R=5 source a fitter or an emitter? ---------------------------------
+# ---- dump the DQI / chemistry generator sources --------------------------------
+print('\n== circuit_sources text ==', flush=True)
+if root is not None:
+    src_dir = root / 'circuit_sources'
+    files = sorted(src_dir.rglob('*.py')) if src_dir.is_dir() else []
+    print(f'{len(files)} source files', flush=True)
+    for f in files:
+        try:
+            txt = f.read_text(errors='replace')
+        except Exception as exc:  # noqa: BLE001
+            print(f'--- {f} ERROR {exc}', flush=True)
+            continue
+        print(f'\n===== BEGIN {f.relative_to(root)} ({len(txt)} chars) =====', flush=True)
+        print(txt, flush=True)
+        print(f'===== END {f.relative_to(root)} =====', flush=True)
+
 print('\n== circuit_sources/chemistry_r5.py ==', flush=True)
 if root is not None:
     src = root / 'circuit_sources' / 'chemistry_r5.py'

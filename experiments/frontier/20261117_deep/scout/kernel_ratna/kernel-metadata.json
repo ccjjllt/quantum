@@ -1,0 +1,20 @@
+{
+  "id": "qingyu1232/qcc-scout-ratnachand-floor",
+  "title": "Qcc Scout Ratnachand Floor",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "machine_shape": "",
+  "dataset_sources": [
+    "ratnachand/vqcc-verified-public-floor"
+  ],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}
