@@ -306,3 +306,14 @@ forward + first k reverse iterations, verify 3 salts) is with the dqi_algo line.
 * Q axis: 51.94% of all Toffolis are written into the 50 pool wires; 26 persistent 12-bit EEA
   words + 2 flags + 24 product-pool wires. 866Q leaves zero product pool with a rebuild
   floor >=116,894 T vs a +20,630 T break-even. Closed.
+
+## 4p. The general-decomposition KEY EXPERIMENT (gendecomp, in flight 02:05)
+
+The loader's 525-bit slice space contains the target span R (dim 75). A product of the
+emitter's form contributes `outer(L, v)` = the 35-bit value `v` placed on every low coordinate
+in L. **If R has a basis of such replicated vectors, the loader needs only ~dim R = 75 products
+(Toffoli ~150) instead of 188**, i.e. -113 Toffoli/loader -> -1,695 total -> -3,390 T ->
+chem ~215M -> **GM ~29.8 (+1.6)**. The experiment computes, for every low-coordinate subset L
+with |L| <= LMAX, the exact subspace V_L = {v : outer(L,v) in R}, accumulates W = span of all
+replicated vectors, and reports dim W vs dim R. `probe_span_rep.py` is that computation; a
+dim W = 75 result would open the general decomposition, a small dim W closes it.
