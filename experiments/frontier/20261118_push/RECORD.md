@@ -153,3 +153,12 @@ already handed to the loader line. Do not spend time on continuous gauges.
 
 Quota resets 2026-11-18 08:00 Beijing. Submit the best verified package then and
 record the public score + submission ref here and in `submissions/`.
+
+## 4f. C axis final (2026-11-18 ~01:40, measured on Kaggle CPU)
+
+Frozen-U joint `w` refit at each C (3 starts + polish, exact full-space objective):
+C=44 19.8276 mHa (shipped is 0.87% above the C=44 frontier), C=43 21.2264 (+1.23 over
+gate), C=42 23.2501 (+3.25), C=40 27.83, C=38 32.98. The structural excess rises with
+each removed column, and the C<44 basins are not lambda-lean (Lambda 534 vs 283,
+lambda_eff ~65 against break-even 47.2/47.4). **C axis closed.** Record:
+`experiments/frontier/20261117_deep/chem/LAMBDA_MEASURE/RESULT3.md`.
