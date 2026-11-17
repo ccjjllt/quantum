@@ -317,3 +317,22 @@ chem ~215M -> **GM ~29.8 (+1.6)**. The experiment computes, for every low-coordi
 with |L| <= LMAX, the exact subspace V_L = {v : outer(L,v) in R}, accumulates W = span of all
 replicated vectors, and reports dim W vs dim R. `probe_span_rep.py` is that computation; a
 dim W = 75 result would open the general decomposition, a small dim W closes it.
+
+## 4q. DQI algorithmic axis: EEA is tight; the only arithmetic lever is the multiplier rank
+
+dqi_algo RESULT.md (measured):
+* Region split calibrated to the official 367,116.06: EEA fwd 153,180 / Chien 44,217 /
+  EEA rev 169,719. **EEA = 87.9%**, Chien 12.0%.
+* The tape runs **34-35 division rounds per pass** (degree argument: deg 69 -> <35, at least
+  one degree per round). The reference's `default_n_iters = 222` is `3(n+1)+9` on a 4-phase
+  counter, i.e. ~55 full steps -- the tape is already tight. **No surplus iterations to
+  truncate**; mean/static 99.76% confirms nothing is gated off.
+* Arithmetic census: 3,969 real multiply blocks (159,300 CCX = 43.3% of T), mean rank 40.1,
+  mode 42 (Toom-4). Control logic + 12-bit AND chains = 164,425 (44.7%); Chien 11.0 T/position
+  (already at its idiom minimum; a per-position inverse would cost 315 T).
+* **The entire arithmetic-substitution budget of the DQI leg is 68,022 T = 18.5% = +1.99 GM**,
+  all of it in the bilinear rank of the 12x12 GF(2) multiply (42 -> floor 23). A rank-35
+  multiply would be +0.57 GM but needs regeneration (no rank-35 construction known at this
+  size; the tape has no tags and every multiply is fused into a ~1,250-CX rotation scaffold).
+* Rejected: schoolbook (+412k T), kickmix ixor_gf2_mul (+91k), Toom-3 (+19k), Berlekamp-Massey
+  (3.3x multiplies), Welch-Berlekamp (77x), windowed EEA (bilinear rank additive).
