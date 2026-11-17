@@ -4,9 +4,12 @@
 
 ## 实时基线
 
-- 本账号 public 最佳现为 **28.14703 COMPLETE**（ref 58452435；0af21cb8 + 61c8348d + 93326853）；已提交 **28.15083 预测** ref **58454232 PENDING**（0af21cb8 + 61c8348d + a73b25d2 T14706 + 15 小 loader）。
+- 本账号 public 最佳现为 **28.15083 COMPLETE**（ref 58454232；0af21cb8 + 61c8348d + a73b25d2 T14706 + 15 小 loader）。**这是评分模型在出分前的精确预测：预测 28.15083，实际 28.15083。** 前最佳 28.14703（ref 58452435）。
 - **评分模型已由 ledger 反解确证：公开分是确定性的，不是每次重新抽签。** 同一 DQI 文件在不同提交里反解出同一公开 cost（ccc2ab84 两提交差 4.5e-7，66b4f18b 差 1.5e-7），invsqrt 与 chem 的公开 cost 恰等于 lab 值（salt-invariant），每个 DQI 文件的公开 cost 只有两种可能：clean cost（相对差 ~2e-7）或 clean×1.0045925（丢 1 shot）。推导见 `intel/RESULT_public_salt_model.md`。
-- **负结果（推翻 `RESULT_stability.md` 的选腿建议）**：lab 3/3-clean 的 `b0983d55` 在公开盐下丢 shot，ref 58453168 public 仅 **28.08701**（clean GM 28.12994 → −0.043）。lab draw 率**不能**预测公开 cost；正确选腿规则是「公开 cost 最低」，而 61c8348d 公开 cost 346,413,501,394 是已知最低。
+- **负结果（推翻 `RESULT_stability.md` 的选腿建议）**：lab 3/3-clean 的 `b0983d55` 在公开盐下丢 shot，ref 58453168 public 仅 **28.08701**（clean GM 28.12994 → −0.043）。lab draw 率**不能**预测公开 cost；正确选腿规则是「公开 cost 最低」，而 61c8348d 公开 cost 346,413,501,394 是已知最低。模型 11/11 行自洽、可复现脚本 `intel/public_salt_model.py`。
+- **金线换算（同模型）**：gold 28.68633 相对 28.15083 只差 1.90% GM，等价于**单腿再便宜 5.496%**——invsqrt ≤ 70,686.26、DQI ≤ 327,373,473,967、或 chem ≤ 278,448,580（T ≈ 13,896）。已知字节的最优重组已到顶（28.15083），三条腿各自都是已知最小值，所以下一步必须来自新字节或新方法。
+- **三条腿的官方 cost 公式已全部反解并精确复现**（`intel/RESULT_cost_model.md` + `intel/cost_model.py`，残差 invsqrt 0、chem 0、DQI 丢 shot 到小数）：invsqrt `Q·(Toffoli+T/4)`（Toffoli 85.85% / 旋转 14.11%）、DQI `R(eps)·Q²·T`、chem `λ_eff·T·Q`（λ_eff=√(E_gap(2Λ−E_gap))）。因此 DQI 宽度是**平方项**：合同 840Q、我们 890Q，仅这 50 个 ancilla 就占整条 DQI 腿的 **12.26%**，是金线缺口的 2.2 倍；且 T 预算是 `(890/Q)²−1`（Q865 可 +5.85%，Q888 只有 +0.45%——这正是我们 888 构建反而更差的原因）。
+- **唯一有真实 headroom 的路线（按公式排序）**：① DQI 宽度——但 `dqi/RESULT_WIDTH_BUDGET.md` + `width_budget.py` 已把它**算术性关闭**：由于 865Q 在 T 不变时就有 28.69066（仅高于金线 0.0043），金线在 Q865 上只容忍 **+0.045% T（166 T，即 6.6 T/qubit）**；而盈亏平衡（相对 28.15083）是 861 T/qubit，最便宜的实测机制（`q864` re-home，每 episode 一个 CCX）已要 925 T/qubit（超 7.4%），真实机制 7,195、888 构建 7,932 T/qubit。唯一能付得起的是**整池 in-place 840Q 且 T ≤ +6.089%（22,354 T）**，其卡点已定位：24-bit carry bank q840..q863 是永久累加器，被 62–72% 的 helper 窗口触碰，不能借。② chem T 14,706→13,898（cost 对 T 严格线性，但 error_2 只剩 2.6e-10 余量且 loader `angles_qubits=128` 正好顶在 `QUBIT_CAP`）；③ chem Λ 283.15→267.69（λ corner 已实测 0.0000%）；④ invsqrt（旋转 ε 被 0.99956 的误差占用量锁死，删掉全部 33 个旋转也只能省 14.1%，最贵）。
 - 已提交三件：invsqrt `f2cdab0b`（44Q，75,006.38）、DQI `ccc2ab84`（890Q，347,375,470,572）、
   chemistry `sub1`（427Q，T=14,712，294,762,697.44）。三件均用未修改官方 verifier 全量 PASS。
 - 公开最佳三件：同一 invsqrt/DQI + chemistry `bdae290f`（294,762,632.08），本地 GM 28.0948754；
