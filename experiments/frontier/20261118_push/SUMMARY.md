@@ -55,3 +55,16 @@ sha256 `2271b861eb44628f45e2bcbf836c1f41b8bc34446389849776817328ba800eb5`。
 
 **正在跑的最后两条大杠杆线**：`dqi_mult`（把 42-CCX 乘法块原地换成 ≤35 秩的双线性算法，+0.55～+1.5 GM）与
 `gendecomp`（非 cut 导出的矩形覆盖，若 <188 products 则 chem +up to 2.4 GM）。其它全部实测关闭。
+
+## 提交执行清单（UTC 00:00 / 北京 08:00 名额重置后）
+
+1. 确认 zip：`/tmp/int_correct/submission.zip`，85,016,504 B，
+   sha256 `2271b861eb44628f45e2bcbf836c1f41b8bc34446389849776817328ba800eb5`，
+   18 成员；receipt `submissions/20261118_281806/receipt.json`。
+2. 提交：
+   `kaggle competitions submit -c google-verifiable-quantum-circuit-compilation \
+      -k qingyu1232/qcc-integrator-281806 -v 1 -f submission.zip`
+3. 记录 ref / publicScore 到 `submissions/20261118_281806/README.md`；
+   若 DQI 在榜单 salt 上掉拍（score ≈ 28.13），用当天剩余名额重提（salt 可能按提交抽取）。
+4. 若 `dqi_mult` 线在截止前交付通过验证的低秩乘法候选，重建 manifest + integrator
+   并优先提交该包（预期 +0.55～+1.5 GM）。
