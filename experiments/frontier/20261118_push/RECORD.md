@@ -460,3 +460,23 @@ Q=890 / T=367,116 (cost 346,409,762,292.72). The `dqi_mult` line is stopped.
 
 **Loader product-count axis closed at 188; general decomposition gives +0 at the shipped
 point.** Chemistry is finished at 294,643,137.73 (lambda 46.9216, T 14,706, Q 427).
+
+## 4y. BM decoder at 890Q: structurally impossible (space argument)
+
+The Berlekamp-Massey decoder needs **two arrays live at once**: the syndrome array
+`S_0..S_{n-1}` (70 words, read repeatedly because the locator changes every round) and the
+locator/auxiliary array (`Lambda`, `B`, discrepancy). That is the published `2nb` space
+optimum = 1,680 qubits for n=70, b=12, and the Anthropic/Claude circuit sits at 1,837Q
+(2nb + history/overhead). It is 5.1x worse than our tape in Q^2*T.
+
+Our tape reaches **890 Q = 840 + 50** precisely because the synchronized EEA is *in place*
+on the syndrome array (the 840 syndrome qubits double as one of the two EEA arrays, and the
+reverse pass restores them). The BM data flow cannot do that: the syndromes are re-read with
+different locators, so they must persist while the locator is built.
+
+**Therefore no BM decoder can reach <=890 Q**, and the frontier BM result is not a route to
+the 29.98-31.43 tier. The 31+ tier needs a *new EEA-family generation*: in-place, <=864 Q
+(840 + <=24 pool) with a mean T <= ~300k, or 866-890 Q with T <= ~264k. The measured
+boundaries for our tape family are: 866Q leaves zero product pool (rebuild floor 116,894 T
+vs +20,630 T break-even), and the multiply is already at the 42-AND symmetric frontier.
+This is generator-level work, not reachable from the .kmb.
