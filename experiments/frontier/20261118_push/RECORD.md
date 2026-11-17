@@ -518,3 +518,17 @@ tape's 10 CCX + 1 CCZ/position is therefore the cheap form of this step (it skip
 per-position inverse that costs 315 T in the reference idiom). The only way to remove the
 10 ANDs would be a quantum-controlled phase-by-product, which is more expensive. **The
 Chien-phase lever is closed**: 44,217 T is at its idiom minimum.
+
+## 5b. EEA round structure and 1nb packing (dqi_bm rounds.json, measured)
+
+* Forward EEA ladder: **28 rounds**, window w = 3..30; per-round cost fits
+  `T(w) = 109.3 + 41.0*w` (r² = 0.999), ladder total 22,001 T. The rest of the forward
+  region (153,186 T) is the pre-ladder alignment (one 132-multiply cluster) plus shifts/swaps.
+* The EEA's target words are **2..74 (73 words)**; `forward_target_words_ge70 = [70,71,72,73,74]`.
+  So the EEA really operates **in place** on the syndrome array and needs only **5 pool words**
+  (70..74). This confirms the 1nb packing is real: Q = 840 syndromes + 50 pool, with the pool
+  = 5 EEA words (60 bits) + flags/product scratch compressed into 50 wires.
+* Consequence: a <=864Q variant (840 + <=24) would have to run the EEA with **no 5-word pool**,
+  i.e. only the 70 syndrome words; the algorithm needs n+3 words, so it is structurally
+  impossible for this decoder family. **DQI width is closed at 866Q minimum**, and 866Q is
+  already unprofitable (rebuild floor 116,894 T vs +20,630 T break-even).
