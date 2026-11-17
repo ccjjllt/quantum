@@ -52,7 +52,8 @@ def main() -> None:
         a = next(iter(s))
         if a == CONST:
             return CONST
-        cands = sorted(holder[a] - {q} - set(exclude))
+        cands = sorted(w for w in holder[a] - {q} - set(exclude)
+                       if support[w] == frozenset({a}))
         if not cands:
             collisions.append((q, sorted(holder[a] - {q}), exclude))
             return min(holder[a] - {q})

@@ -20,10 +20,13 @@
 | **invsqrt** | compute/uncompute（MBU） | **NO-GO** | 付费 uncompute 只占 **≤6.7%**（52 对镜像 CCX / 1560）；**1,276 个 HMR 已把 83.6% 的 AND 用测量回收**，630/697 条件块只含相位门 ⇒ 这条路线已经用尽 |
 | invsqrt | 宽度 Q44 | **NO-GO** | 令牌峰值 **44 @ op 1689**，44 条线全部承载令牌；**0 对** scratch 生命期不相交；x 线本身被当 AND 工作区（503/1526 CCX 目标 + 360 HMR） |
 | invsqrt | Toffoli 面复查 | **NO-GO** | 0 相邻对消 / 0 死 CCX / 0 CCX→CX 降级；唯一量化发现（2 个「死」CCZ）被官方 verifier 全 shots **FAIL 证伪**（`x=12: phase error 0.5 turns`） |
+| invsqrt | **Q43**（+0.217 GM） | **NO-GO** | 逐线定价表（22 行）：预算 **+158.2 T**，而最近的两条也超 —— q25 **≥77 Toffoli = 308 T（1.95×）**、q24 ≥220 T（1.39×），其余 4.1×–957×。按 q25 造的 Q43 候选被官方 verifier 判 **FAIL: `x was not restored`**（kernel `jiyujia/qcc-invsqrt-q43-retire-q25` v2），原因已定位（holder 语义须为「支集**等于** {atom}」，按精确语义 77/80 个读点没有 holder） |
 | **chemistry** | 形状（rows = 76 + K·B/C） | **NO-GO** | `B ≤ 128` → `inner_temp` 从 303 跳到 510–575 ⇒ **Q ≥ 629（+47%）**；唯一保 Q=427 的是 `B∈[129,255]`，K=352 时最小 rows=1,108，最好只 +0.16 GM，且 `(8,129,44)` 连续 e2 19.83 已超门 |
 | chemistry | brot=7 | **NO-GO** | `inner_state_prep` 不依赖 β，β 只进 Givens(−300 T) 与 Q(−5) ⇒ 真实收益 **+0.30 GM** 而非 +0.6；7-bit 网格把量化罚从 13.7 翻到 ~27 mHa |
 | chemistry | 免费形状缩减 | **NO-GO** | `W` 无全零 copy 列 / base 行 / rank（最小列 Σ\|w\|=0.717） |
 | chemistry | Λ 的公开基线 | **NO-GO** | starter kit 只有 FeMoCo 一个可提交：Λ=308.45 / λ_eff=49.25 / e2=16.13 mHa，全面劣于我们 283.15 / 46.92 / 20.00 |
+| chemistry | **loader 的 T 轴** | **NO-GO** | 15 个 loader 全是 `CX+CCX+R+HMR+CZ+Z`，**0 PUSH/POP、0 CCZ、0 条件 Toffoli** ⇒ `mean T = static T = 268.1`，没有条件化面；每条 Toffoli 都是无条件 CCX，77 条 ancilla 各被写 1 次再 HMR 免费清掉 ⇒ **MBU 无可回收对象**；表双稠密（比特密度 50.0%、ANF 满支撑 2,048/2,048、953/bit）⇒ 无代数捷径。shipped 是「共享乘积网络」，**比唯一公开构造便宜 4.6×**（4,022 vs 18,270 per pass）。金线要求 angles −10%（每电路 212 vs 265–292）|
+| chemistry | **Λ 的 \|W\| 集中杠杆** | **有算术价值，交付待定** | `lam_h2 = 0.25Σ(a+|W|)²` 里 **52% 是 cross 项** `2Σa|W| = 452.6`；`W` 不进 e2，只进 `h1_prime`/`E_SOS`。把 `\|W\|` 集中到最小 a 的 k 个 cell：Λ 283→195（k=44）/ 174（k=1）⇒ **λ_eff 38.8/36.7 ⇒ GM 29.99/30.56**。卡点：①`E_gap` 恰在 floor；②76 条 one-body 行须重量化且 e1 ≤ 20 mHa；③**没有公开 emitter** 能同成本重建 15 个 loader（唯一公开的 `taylorclark637/dfthcsos-generator` 是 1,218/电路 = ×2.94），只能外科式改写前 5 个 16-块 |
 | **侦察** | 公开新字节 | 无价值 | 唯一新 DQI `575b043f`：346,409,762,292.72（3 salts 3/3 PASS）→ 组合 GM **28.15093204（+0.00010）**，且有已知 weight-35 见证错误 → 不占提交名额 |
 | 侦察 | 开源/论文 | 无可用代码 | arXiv 2610.23832 / 2610.22367 / 2502.15882 均无代码；`alexchilton/qcc-schur-dqi-rebuild` 是 24.94 时代；`Agnuxo1/qvc-chemistry-compiler` composite 26.98–27.02 更差 |
 
