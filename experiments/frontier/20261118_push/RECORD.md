@@ -546,3 +546,20 @@ Replacement: compute the leading-zero count once, then rotate by that quantum co
 **barrel shifter** (~7 stages x 68 x 12 = 5,712 CSWAPs -> ~6-8k T). Estimated saving ~58k T =
 **+0.6 GM** (T -> ~309k, GM ~28.8). `dqi_align` is testing the cluster identity and, if it
 holds, the patch + 3-salt verification. This is the first DQI lever not yet measured closed.
+
+## 5d. The two clusters that hold 93% of the 890Q prize (dqi_bm measured, 03:14)
+
+The 890-qubit target cut is T -> 264,691, i.e. -102,425 T. Two clusters hold **95,317 T**:
+
+| cluster | total T | multiply blocks | T in mults | T in CCX blocks < 12 |
+|---|---:|---:|---:|---:|
+| forward op 19,508,954 | 29,543 | 3 | 126 | **20,723** |
+| reverse op 46,230,185 | 65,774 | 66 | 2,772 | **46,966** |
+
+So **93.1% of the needed cut sits in two clusters whose cost is almost entirely small-CCX
+gadgets** (the tape has CSWAP = 0, so controlled rotations are built from CCX+CX). Hypothesis
+(dqi_align is dumping them): these are the forward/reverse of the **initial syndrome
+alignment** — 69 sequential controlled rotation-by-1 steps over the syndrome lanes
+(`reg_a[3+step:m]`, ~68 words x 12 lanes). Replacement: leading-zero count once + a
+**barrel shifter** (~7 stages), estimated ~2-3k T per direction vs 20.7k + 47k ->
+**~85k T saved = about +0.9 GM** (T ~282k, GM ~29.9). This is the last large 890Q lever.
