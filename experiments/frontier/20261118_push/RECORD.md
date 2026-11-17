@@ -197,3 +197,21 @@ the E_gap floor. Record: `experiments/frontier/20261118_push/chem/RESULT.md`.
   chem lambda floor (+0.03) -> roughly **28.7-28.8**. The leaderboard's 29.98-31.43 tier
   must come from a fundamentally cheaper DQI decoder (a 32% mean-T cut at 890Q, or
   <=840Q), which is the only remaining large lever.
+
+## 4i. Loader line final (loaders agent, measured, 2026-11-18 ~01:55)
+
+* True block rank is **75**, nullity 30 -> **150 cuts**, `products >= 188` (dim 375 odd),
+  `Toffoli >= 263`. The shipped k4-k8 sit exactly on that floor.
+* Block partition (>=4 coords), (h,l) L=5 split, and row order are each measured closed:
+  saturation has 0 form-pair candidates for the alternative partitions; L=5 has 32-CCX
+  high cache but 0 pairing candidates; every non-identity row order breaks the
+  `bit7^bit6` helper's low/high decomposition; block-rank proxy is 75 for all orders.
+* k0/k1 are structurally stuck: per-coordinate projection ranks [35]x15 (no relations),
+  so the minrank attack has nothing to exploit. k>=9 cannot be re-emitted from this
+  table (word group 0's helper table differs).
+* Bounded upside from pushing the weak loaders to 263: **-80 Toffoli = -160 T ->
+  chem 291,437,446 / GM 28.2836 (+0.103)**.
+* The decisive remaining fact: the hard product floor for ANY product architecture is
+  `ceil(dim/2) = 38` products (Toffoli ~113/loader), 5x below what the cut/pairing route
+  can reach. A general GF(2) product decomposition (not the cut/pairing route) is the
+  only way to that floor; a new line has been opened on it.
