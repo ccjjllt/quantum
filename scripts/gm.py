@@ -18,7 +18,7 @@ REFERENCE = {
     "dqi": 24439463583672.93,
     "chem": 3355599588.3155375,
 }
-CURRENT = {"invsqrt": 74797.36535717871, "dqi": 346413579540.50, "chem": 294643137.73}
+CURRENT = {"invsqrt": 74797.36535717871, "dqi": 346409762292.7187, "chem": 294643137.73}  # 58464076
 GOLD = 28.71339
 SILVER_CUT = 28.14702
 
@@ -43,7 +43,7 @@ def main() -> None:
     print(f"costs   : " + "  ".join(f"{k}={costs[k]:.6f}" for k in REFERENCE))
     print(f"ratios  : " + "  ".join(f"{k}={REFERENCE[k]/costs[k]:.6f}" for k in REFERENCE))
     print(f"GM      : {g:.8f}")
-    print(f"vs current 28.15083 : {g - 28.15082863:+.5f}")
+    print(f"vs current 28.15094 : {g - 28.15094:+.5f}   (local model of 58464076: 28.150932)")
     print(f"vs gold {GOLD}     : {g - GOLD:+.5f}  "
           f"({'ABOVE' if g >= GOLD else 'below'})")
     print(f"vs silver {SILVER_CUT}: {g - SILVER_CUT:+.5f}")
