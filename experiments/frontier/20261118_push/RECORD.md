@@ -162,3 +162,13 @@ gate), C=42 23.2501 (+3.25), C=40 27.83, C=38 32.98. The structural excess rises
 each removed column, and the C<44 basins are not lambda-lean (Lambda 534 vs 283,
 lambda_eff ~65 against break-even 47.2/47.4). **C axis closed.** Record:
 `experiments/frontier/20261117_deep/chem/LAMBDA_MEASURE/RESULT3.md`.
+
+## 4g. Chemistry line closed on everything except loaders (2026-11-18 ~01:40)
+
+Chem agent (measured, official verifier): baseline rebuilt bit-identical (score
+294,643,137.73, T 14,706, Q 427); **brot dead** (7-bit: error_2 0.426064, lambda_eff
+72.67, cost +49.9%; a full 50,336-parameter L-BFGS refit moves it only -0.02% -> grid
+problem, not optimiser); `tree_edges` provably cannot move T_h/Q (the heuristic takes
+no tree); J=5 optimal; the public "4,022-Toffoli loaders" are byte-identical to ours
+(sha ed6487084d30b0c7...). The shipped point sits 2.6e-10 from both error gates and
+the E_gap floor. Record: `experiments/frontier/20261118_push/chem/RESULT.md`.
