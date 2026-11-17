@@ -97,7 +97,7 @@ rng = np.random.default_rng(0)
 idx = [(rng.integers(R), rng.integers(B), rng.integers(C)) for _ in range(8)]
 gnorm = float(np.linalg.norm(g_0))
 gdir = g_0 / gnorm
-for h in (1e-6, 3e-6):
+for h in (3e-6, 1e-6):
     num = (e2_and_grad(w0 + h * gdir)[0] - e2_0) / h
     drel = abs(num - gnorm) / gnorm
     log(f'directional check h={h:g}: num {num:.6e} ana {gnorm:.6e} rel {drel:.2e}')

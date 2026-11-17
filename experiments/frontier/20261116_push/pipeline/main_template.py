@@ -1,11 +1,15 @@
-"""Assemble and grade the 2026-11-16 28.12769 candidate on a Kaggle CPU kernel.
+"""Assemble and grade the 2026-11-17 28.15083 candidate on a Kaggle CPU kernel.
 
 Candidate (all public, credited by the publishers):
   invsqrt.kmb          maoxin123/atakan 0af21cb8 44Q, cost 74,797.37 (embedded below, zlib/base64)
-  dqi.kmb              balramsrinivasan 66b4f18b 890Q, norm-preserving DQI closings,
-                       cost 347,128,304,010.81 (was ccc2ab84; 66b4 verified k18 PASS 0/0)
-  dfthcsos/*           maoxin123 frontier coded-word table + loaders, with
-                       boristown bdae290f W / H2_I weight refit (only those two arrays change)
+  dqi.kmb              61c8348d 890Q (grantprater merged-closings: 66b4f18b+d54d3387 parents),
+                       clean-draw cost 346,413,579,540.50 (verified PASS 0/0 salt-8ad413d9;
+                       default-salt draw loses one shot: 348,004,440,260.46, still PASS)
+  dfthcsos/*           a73b25d2 chem-shape move (maoxin123 v27 02:04 kernel, sibling-identical
+                       loaders 02:16 kernel): submission.npz + 15 SMALL angle loaders
+                       (T=14706, depth 177, cost 294,643,137.73; 3/3 salt-invariant PASS).
+                       The SMALL loader family MUST pair with this npz, not the standard
+                       415169...362314 set.
 
 Every member is located by SHA-256 under /kaggle/input, its hash is asserted, and the
 UNCHANGED official competition verifiers are run with their default salts and shot counts:
@@ -44,49 +48,51 @@ MEMBERS = {
         "source": "embedded zlib/base64, maoxin123/atakan 0af21cb8",
     },
     "dqi.kmb": {
-        "sha256": "66b4f18b85273bdc0b325500c43a810aba2772275b977f371731cfc400a315c2",
-        "size": 480411479,
-        "source": "balramsrinivasan/vqcc-28-10-norm-preserving-dqi-closings dqi.kmb",
+        "sha256": "61c8348d6e85bb0259c4b89f14be9a2834c77bf8a680cf79959bf5e1089cf5de",
+        "size": 479128630,
+        "source": "grantprater/vqcc-dqi-61c8348d-merged-closings dqi.kmb (grantprater 23:45 kernel byte-identical; parents 66b4f18b+d54d3387 shipped)",
     },
     "dfthcsos/submission.npz": {
-        "sha256": "bdae290f5d6ba5282d3c91c9d4c96479c6dce8c161a8dbf92332a38723dd935b",
-        "size": 1847692,
-        "source": "qingyu1232/qcc-chem-bdae-weights submission.npz (from boristown output)",
+        "sha256": "a73b25d27caec65dba2b0ad6c49b34afbdb2343f4ef94f3b4ad0536dee0077f3",
+        "size": 1847552,
+        "source": "maoxin123/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier submission.zip (sibling-identical to qcc-28-14-4-022-toffoli-chemistry-loaders 02:16 kernel; T14706 chem-shape move)",
     },
 }
 for _i, _h in enumerate([
-    "aed6aa7cde8cefae06376546c276208a667a1a402ebfe9e57cb33881868ab089",
-    "72b79b56514e657650ed3258d90e7a533568ade86db407990a34bfb4380b6e60",
-    "42ea507daa22d0464e16d8f8d8f091e684d025998a32b574fee34672414b18ad",
-    "423968d4ab8219b164a27284c4b889b67a864ead9322b7703599fc839d7d8035",
-    "cf7c413468b0fe51cfb7ff457b1f9ab76dc80df01dbfba87cd190c9686078d68",
-    "8c8a6281407052dbc2bfaa2a90d7cc34f936b406ad83b11a3a0586f2d32f1896",
-    "0ebb575aef372a33941a1a9b8e317351dda7746389ec31c1b52f40f2280ad329",
-    "77c35bb2ee9c699693ee581a510b53f0c9cf4a3c3a58b02882913ca048fd09ab",
-    "9c5ced81d9a7378b763603f0bdd61322369e1bc3c72628a224b0445486e48663",
-    "611fe155e4e060d0cca795236b0f1abd6e41225b7bbca135cfaec8da5a4334f9",
-    "2926a709c9d0ed2824073bef29347d2beee6282e1e08aff5b982512e345f6220",
-    "7aed38f94ef86b504f985dcee98ed33dd6b341114147c55d0407b88495a1015d",
-    "d73ee72ed6661082acd273d3bbf4d3511330d688bec8e64e6a8d647a975b9655",
-    "38b56f2fc07b7bd5a378c7d25650f62a430fe42d5595d6184d5ae930b258bec3",
-    "ab06b98fc22fce8a33b591db9caf73e93d407342a6c0f3d2e2e1416dffffdfd7",
+    "ed6487084d30b0c772e8bd1109b56b501945d2bc708a343fd8bdf3551f3b7538",
+    "8e3a04e0e0450dbaa4725dc421708291ad4cec1522611e363936c90121885fbd",
+    "e620e957a4942bb9ddb1b246519d177f9de104ae27c95261a88bd9e7ed99303f",
+    "b1f4286282ab66463a4b7bd4513a7b3ecf67cdd8ede1bd86293169aa17cce76e",
+    "ee54d6f926f72276cd28439352b0d994bb77a3ed91b9d915291293192ceca07d",
+    "21b49673d23b09dbd3ad45e620cb799d54c64ebe5b4850bd17ac163a9b2a2856",
+    "1ae55a71e6877ce23c671df157a532b594694001a9623cc7315cc332306973e1",
+    "8ccf17b0113fb5451f64bd1df02dd8de262c7976f98fc8f621551a0430fbe8f0",
+    "0ace34e6eab90c9f2a0165671cca4dd1f4cc94e18f7d517a39c3156629234563",
+    "b4a2d0ce4bc3c5fa8055a4f386507bc7d35dccdcb68f5545cc7970843c85da71",
+    "41069152b81cbd62f0f00d24990d69db58a5ef2bcee099c078c811b1ed4286a6",
+    "76c24260f8ec945e01de34ab8185f2ce0d7608f45da6f05101a47fb7136a9aca",
+    "e8ed58a46db6500c0b0f0b2d5b8dd674d965de268683343ab942e6235b672f7f",
+    "9e415e21dacce531c03d5c9322b5aa57f641ae7990b3426ad5574a6c1f9d93d8",
+    "fe94999841456f828d26c6b375d632f3b28f0f64def2a3bfffdc79873e3a928f",
 ]):
     MEMBERS[f"dfthcsos/angle_k_{_i}.kmb"] = {
         "sha256": _h,
         "size": [
-            415169, 421737, 371346, 368418, 356845, 354694, 350614, 352233,
-            357510, 354915, 357811, 354943, 353554, 353477, 362314,
+            180436, 151084, 135545, 134697, 130825, 130454, 129631, 130875,
+            130222, 130054, 131074, 130646, 129613, 130455, 130774,
         ][_i],
-        "source": "maoxin123/qcc-frontier-dqi-chem-mirror angle_k_%d.kmb" % _i,
+        "source": "maoxin123/qcc-v27 sibling submission.zip angle_k_%d.kmb (SMALL family; must pair with a73b25d2)" % _i,
     }
 
 INV_B64 = "__INV_B64__"
 
 EXPECTED = {
     "invsqrt": 74797.37,
-    "dqi": 347128304010.81,
-    "chem": 294762632.08,
-    "gm": 28.127692911,
+    "dqi": 346413579540.50,
+    "chem": 294643137.73,
+    "gm": 28.15082863,
+    "dqi_draw": 348004440260.46,
+    "gm_draw": 28.10786705,
 }
 REFERENCE = {
     "invsqrt": 2076774.233715,
@@ -173,17 +179,37 @@ def stage_members() -> dict[str, str]:
     remaining_sizes = {m["size"] for name, m in MEMBERS.items() if name not in found}
     files = sorted(p for p in INPUT.rglob("*") if p.is_file() and not p.name.startswith("._"))
 
+    # Diagnostic trail: `kaggle kernels logs` is retrievable even on failure,
+    # so record every size-matching candidate and every unreadable file.
+    size_hits: list[str] = []
+    unreadable: list[str] = []
     for p in files:
         if len(found) == len(MEMBERS):
             break
         suffix = p.suffix.lower()
         try:
             if suffix in (".kmb", ".npz"):
-                size = p.stat().st_size
+                try:
+                    size = p.stat().st_size
+                except OSError as e:
+                    unreadable.append(f"{p}: stat failed: {e}")
+                    continue
                 if size not in remaining_sizes:
                     continue
-                digest = sha256_file(p)
+                digest = None
+                last_err = ""
+                for _ in range(4):
+                    try:
+                        digest = sha256_file(p)
+                        break
+                    except OSError as e:
+                        last_err = str(e)
+                        time.sleep(10)
+                if digest is None:
+                    unreadable.append(f"{p}: hash failed 4x, last: {last_err}")
+                    continue
                 name = by_sha.get(digest)
+                size_hits.append(f"{size} {digest[:16]} -> {name}  {p}")
                 if name is None or name in found:
                     continue
                 dst = STAGE / name
@@ -226,6 +252,13 @@ def stage_members() -> dict[str, str]:
             continue
 
     missing = sorted(set(MEMBERS) - set(found))
+    print(f"\nSIZE-HIT CANDIDATES ({len(size_hits)}):", flush=True)
+    for h in size_hits:
+        print(f"  {h}", flush=True)
+    if unreadable:
+        print(f"\nUNREADABLE ({len(unreadable)}):", flush=True)
+        for u in unreadable:
+            print(f"  {u}", flush=True)
     assert not missing, f"not found under /kaggle/input: {missing}"
     for name, meta in MEMBERS.items():
         path = STAGE / name
@@ -371,12 +404,11 @@ def main() -> None:
     receipt = {
         "generated_utc": utc_now(),
         "started_utc": started,
-        "candidate": "0af-66b4-bdae-2812769",
+        "candidate": "0af-61c8348d-a73b25d2-2815083",
         "description": (
-            "invsqrt 0af21cb8 (44Q) + DQI 66b4f18b (890Q, norm-preserving closings) + "
-            "chemistry frontier table/loaders "
-            "with boristown bdae290f W/H2_I refit (427Q, T=14712, cost 294762632.08); "
-            "official default salts"
+            "invsqrt 0af21cb8 (44Q) + DQI 61c8348d (890Q, grantprater merged-closings) + "
+            "chemistry a73b25d2 chem-shape move with 15 SMALL loaders (427Q, T=14706, "
+            "depth 177, cost 294643137.73); official default salts"
         ),
         "decision": decision,
         "gm": gm,
@@ -406,7 +438,8 @@ def main() -> None:
         "apache_2_0_attribution": (
             "Submission description and notes credit Syed Asad Ali (Apache-2.0 invsqrt/DQI generator "
             "lineage), Ali Haydar Ozdag (64-row table), Ertugrul Ozer, Asterios Panoras, James Barlow, "
-            "Leo Tang, Hayato Hikawa (C8 milestone), boristown (merge patches), Lera/marculera and the "
+            "Leo Tang, Hayato Hikawa (C8 milestone), maoxin, grantprater, boristown (merge patches), "
+            "ratnachand (verified public floor), Lera/marculera and the "
             "c44 chemistry lineage, and Google Quantum AI / Qualtran for kickmix and the verifiers."
         ),
     }
