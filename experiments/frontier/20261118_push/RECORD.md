@@ -494,3 +494,27 @@ the `gf2_phase_by_product` / measured-AND idiom (10 CCX + 1 CCZ).
 If that idiom is replaceable, the saving is **40,240 T = +1.1 GM** (T 367,116 -> 326,876,
 cost 308.3e9, GM ~29.3). `dqi_chien` is dumping one position window on Kaggle CPU to decide.
 This is the last structural lever not yet attacked head-on.
+
+## 5a. Chien phase mechanism (read from the reference generator, 02:59)
+
+`dqi_reference_circuit.py::_chien_search_and_forney_mbuc` (lines 522-600) shows the intended
+per-position Forney step:
+
+```
+bit_store(is_error, True, control=error_mbuc[j]); push_condition(is_error)
+cx(fwd_src, fwd_dst)                              # CX-only Horner evaluation
+flip_if_equal(sigma, 0, target=is_sigma_zero)     # quantum predicate: is position a root?
+init_gf2_inverse_with_scaffold(sigma_prime, ...)  # expensive per-position inverse
+init_and(is_sigma_zero, omega, located)           # located = [sigma=0] AND omega  (12 ANDs)
+gf2_phase_by_product(located, sigma_prime_inv, mask=error_mbuc[j])
+del_and(...); del_gf2_inverse...
+cx(rev_src, rev_dst); pop_condition
+```
+
+So the ANDs are **not** a redundant encoding of the classical mask: they gate the error
+numerator on the *quantum* predicate `sigma(alpha^j) == 0` (the position actually carries an
+error). The phase itself is already the 0-Toffoli `gf2_phase_by_product(..., mask=M_j)`. Our
+tape's 10 CCX + 1 CCZ/position is therefore the cheap form of this step (it skips the
+per-position inverse that costs 315 T in the reference idiom). The only way to remove the
+10 ANDs would be a quantum-controlled phase-by-product, which is more expensive. **The
+Chien-phase lever is closed**: 44,217 T is at its idiom minimum.
