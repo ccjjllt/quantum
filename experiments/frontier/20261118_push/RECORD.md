@@ -358,3 +358,21 @@ dim R = 75
 `products >= 38` is not reachable by the replicated-vector construction. The loader axis
 stays at 150 cuts / 188 products / 263 Toffoli per loader, with the bounded +0.05..0.11 GM
 headroom from the weak loaders.
+
+## 4s. Frontier literature (web, 2026-11-18 02:25)
+
+* **arXiv:2610.22367 / Anthropic (Oct 2026)**: an LLM-discovered Reed-Solomon decoder using
+  **Berlekamp-Massey** instead of EEA: 440,000 Toffoli at 1,837 peak qubits vs the EEA baseline
+  5.1M at 1,938. In this competition's score (`Q^2 * T`) that is **5.1x WORSE than our tape**
+  (890^2*367,116 = 2.91e11 vs 1837^2*440,000 = 1.49e12), because Q^2 dominates. But the
+  paper's locator-solve numbers (BM ~140k Toffoli vs synchronized EEA ~1.9M) confirm that a
+  BM decoder *narrow enough* would beat our EEA; ours is already 890Q/367k T, so a BM decoder
+  would need <= ~890Q and <= ~367k T to matter. Not buildable from our tape; recorded as the
+  frontier direction.
+* **arXiv:2602.15285 (Oct 2026)**: "Tensor Decomposition for Non-Clifford Gate Minimization" --
+  algebraic minimisation of the CCZ/Toffoli count in CNOT+CCZ phase circuits via tensor
+  decomposition over F2. This is the right tool for both open lines: the DQI's rank-42
+  GF(2^12) multiply block (floor 23) and the chem loader product cover (188 today).
+* **arXiv:2510.10967 (Khattar et al.)**: the competition's reference decoder is 1,893Q /
+  5,725,108 mean T (verified by us on `sample_submission/dqi.kmb`); our tape is 2.1x narrower
+  and 15.6x cheaper in T.
