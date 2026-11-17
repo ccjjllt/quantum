@@ -6656,7 +6656,7 @@ CX q2 q39
 CCX q1 q39 q2
 CX q2 q39
 CX q1 q38
-CCX q1 q38 q1
+CCX q4 q38 q1
 CX q1 q38
 CX q0 q36
 CCX q1 q36 q0
@@ -7270,7 +7270,7 @@ CX q2 q39
 CCX q1 q39 q2
 CX q2 q39
 CX q1 q38
-CCX q1 q38 q1
+CCX q4 q38 q1
 CX q1 q38
 CX q0 q36
 CCX q1 q36 q0

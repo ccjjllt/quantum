@@ -31,7 +31,8 @@ CONST = -1
 def main() -> None:
     ops, meta = parse(KMX)
     nq = 44
-    support: list[frozenset[int]] = [frozenset() for _ in range(nq)]  # start |0> = XOR of nothing
+    support: list[frozenset[int]] = [frozenset({-(i + 2)}) for i in range(22)]
+    support += [frozenset() for _ in range(nq - 22)]   # x wires start at their INPUT bit  # start |0> = XOR of nothing
     holder: dict[int, set[int]] = collections.defaultdict(set)        # atom -> wires
     next_atom = 0
     depth = 0

@@ -29,7 +29,8 @@ COPY_WIRE = 43          # dead since op 19144
 def main() -> None:
     ops, meta = parse(KMX)
     nq = 44
-    support: list[frozenset[int]] = [frozenset() for _ in range(nq)]
+    support: list[frozenset[int]] = [frozenset({-(i + 2)}) for i in range(22)]
+    support += [frozenset() for _ in range(nq - 22)]   # x wires start at their INPUT bit
     holder: dict[int, set[int]] = collections.defaultdict(set)
     next_atom = 0
     depth = 0
@@ -43,13 +44,19 @@ def main() -> None:
         for a in s:
             holder[a].add(q)
 
-    def pick(q: int) -> int:
+    collisions = []
+
+    def pick(q: int, exclude: tuple[int, ...] = ()) -> int:
         s = support[q]
         assert len(s) == 1, (q, sorted(s))
         a = next(iter(s))
         if a == CONST:
             return CONST
-        return min(holder[a] - {q})
+        cands = sorted(holder[a] - {q} - set(exclude))
+        if not cands:
+            collisions.append((q, sorted(holder[a] - {q}), exclude))
+            return min(holder[a] - {q})
+        return cands[0]
 
     for op in ops:
         n = op.name
@@ -62,12 +69,12 @@ def main() -> None:
         q = list(op.qubits)
         if n in ('Z', 'Z_POW'):
             if q[0] == RETIRE:
-                h = pick(RETIRE)
+                h = pick(RETIRE, ())
                 rewrite[op.index] = f'{n} q{h}' if h != CONST else f'{n} q0  # CONST1 (unexpected)'
             continue
         if n in ('CZ', 'CCZ'):
             if RETIRE in q:
-                h = pick(RETIRE)
+                h = pick(RETIRE, tuple(w for w in q if w != RETIRE))
                 qq = [h if w == RETIRE else w for w in q]
                 rewrite[op.index] = n + ' ' + ' '.join(f'q{w}' for w in qq)
             continue
@@ -103,7 +110,7 @@ def main() -> None:
         if n == 'CX':
             a, b = q
             if a == RETIRE:
-                h = pick(RETIRE)
+                h = pick(RETIRE, (b,))
                 rewrite[op.index] = f'CX q{h} q{b}' if h != CONST else f'X q{b}'
             if b == RETIRE:
                 drop.add(op.index)
@@ -116,7 +123,7 @@ def main() -> None:
         if n == 'CCX':
             a, b, t = q
             if a == RETIRE or b == RETIRE:
-                h = pick(RETIRE)
+                h = pick(RETIRE, tuple(w for w in (a, b, t) if w != RETIRE))
                 aa, bb = (h if a == RETIRE else a), (h if b == RETIRE else b)
                 rewrite[op.index] = f'CCX q{aa} q{bb} q{t}' if h != CONST else f'CX q{bb} q{t}'
             if t == RETIRE:
@@ -131,6 +138,7 @@ def main() -> None:
     for i in drop:
         assert 'q25' in ops[i].raw
     leftovers = [op.raw for op in ops if 'q25' in op.raw and op.index not in rewrite and op.index not in drop]
+    print('collisions (no alternative holder):', len(collisions), collisions[:5])
     print('leftover q25 mentions:', leftovers)
     assert not leftovers
 

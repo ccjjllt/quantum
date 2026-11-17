@@ -1,0 +1,42 @@
+A0 angle_words (1220, 75) rows 1220 words 75 circuits 15 addr 2048
+B 0 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 292
+B 0 outbits 40 ANFmonomials  40906 perBit 1022.65  deg1  212 deg2 1102 deg3 3311 deg4 6669 deg>=5 29590
+B 1 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 287
+B 1 outbits 40 ANFmonomials  40908 perBit 1022.70  deg1  221 deg2 1097 deg3 3229 deg4 6700 deg>=5 29646
+B 2 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 269
+B 2 outbits 40 ANFmonomials  37482 perBit 937.05  deg1  209 deg2 1092 deg3 3141 deg4 6276 deg>=5 26741
+B 3 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 269
+B 3 outbits 40 ANFmonomials  37602 perBit 940.05  deg1  233 deg2 1091 deg3 3166 deg4 6198 deg>=5 26898
+B 4 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 263
+B 4 outbits 40 ANFmonomials  37930 perBit 948.25  deg1  244 deg2 1091 deg3 3243 deg4 6294 deg>=5 27037
+B 5 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 263
+B 5 outbits 40 ANFmonomials  37290 perBit 932.25  deg1  204 deg2 1057 deg3 3144 deg4 6125 deg>=5 26738
+B 6 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 263
+B 6 outbits 40 ANFmonomials  37760 perBit 944.00  deg1  200 deg2 1056 deg3 3246 deg4 6302 deg>=5 26943
+B 7 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 263
+B 7 outbits 40 ANFmonomials  37582 perBit 939.55  deg1  214 deg2 1064 deg3 3265 deg4 6171 deg>=5 26845
+B 8 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 263
+B 8 outbits 40 ANFmonomials  37566 perBit 939.15  deg1  202 deg2 1125 deg3 3199 deg4 6201 deg>=5 26820
+B 9 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 264
+B 9 outbits 40 ANFmonomials  37598 perBit 939.95  deg1  219 deg2 1039 deg3 3146 deg4 6187 deg>=5 26983
+B10 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 265
+B10 outbits 40 ANFmonomials  37790 perBit 944.75  deg1  233 deg2 1102 deg3 3224 deg4 6251 deg>=5 26961
+B11 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 265
+B11 outbits 40 ANFmonomials  37768 perBit 944.20  deg1  210 deg2 1078 deg3 3219 deg4 6212 deg>=5 27031
+B12 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 265
+B12 outbits 40 ANFmonomials  37648 perBit 941.20  deg1  192 deg2 1059 deg3 3145 deg4 6236 deg>=5 26996
+B13 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 265
+B13 outbits 40 ANFmonomials  37876 perBit 946.90  deg1  220 deg2 1076 deg3 3146 deg4 6170 deg>=5 27244
+B14 UNION monomials  2048  after 40 greedy don't-care sweeps  2048  shipped T 266
+B14 outbits 40 ANFmonomials  37864 perBit 946.60  deg1  225 deg2 1065 deg3 3179 deg4 6122 deg>=5 27254
+
+C0 ANF monomials over 15 circuits 571570  (per pass); shipped static Toffoli per pass 4,022  ratio 0.007
+C1 shipped per circuit [292,287,269,269,263,263,263,263,263,264,265,265,265,265,266]
+C2 degree histogram (all circuits) {0: 294, 1: 3238, 2: 16194, 3: 48003, 4: 94114, 5: 128940, 6: 126703, 7: 90455, 8: 45219, 9: 15186, 10: 2979, 11: 245}
+C3 rows 1220 addr 2048 don't-cares 828
+C4 per-circuit ANF monomials [40906, 40908, 37482, 37602, 37930, 37290, 37760, 37582, 37566, 37598, 37790, 37768, 37648, 37876, 37864]
+C7 per-circuit UNION (shared across the 40 bits) [2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048]
+C8 per-circuit UNION after don't-care search [2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048, 2048]
+C9 sum of C8 30720 vs shipped 4,022 -> ratio 0.131
+C5 floor if each monomial needs >=1 CCX: 571570; shipped is 0.007x that
+C6 ratio shipped/ANF per circuit [0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007, 0.007]
