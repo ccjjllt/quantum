@@ -1,8 +1,9 @@
 # 2026-11-18 候选包：invsqrt `563d0583` + DQI `575b043f` + chem（18 成员官方 PASS）
 
-**状态：已端到端官方验证 PASS，等待提交名额（UTC 00:00 = 北京 08:00 重置）。**
-内核 `qingyu1232/qcc-integrator-281806` v1，manifest
-`experiments/frontier/20261117_deep/integration/members_281806_correct.json`。
+**状态：已提交，ref `58487952`（2026-11-18T00:47:06Z），清理读取时榜单仍为 PENDING。**
+本包端到端官方验证 PASS；本地 GM 28.180659，预期 LB 28.1807，**不把预期写成已通过**。
+内核 `qingyu1232/qcc-integrator-281806` v1；manifest 随 2026-11-18 清理删除，
+可从锚点 `b754ef5` 取回（`.../20261117_deep/integration/members_281806_correct.json`）。
 
 ## 三条腿（installer 实测 JSON，未改动官方 verifier）
 
@@ -41,12 +42,14 @@ kaggle competitions submit -c google-verifiable-quantum-circuit-compilation \
 tape 的 Toffoli **100% 闭合**：EEA 两趟 317,748（7,565 个 GF(2¹²) 域乘法 × 42）
 + Chien 44,264（4,024 × 11）+ 相位 5,977 = 367,989。乘法秩 42 是 F₂ 上最好已知值
 （33 是 F₄ 的数），对齐/桶形移位不存在，块级冗余为 0。详见
-`experiments/frontier/20261118_push/SUMMARY_R3.md`。
+[已停止研究总览 §9](../../docs/abandoned-research.md) 与
+[逐轮归档 §7](../../experiments/ARCHIVE_closed_lines.md)。
 
 到 31.4 的缺口 = EEA 的**商项调度**：现役是整除调度（每步 δ+1 项、Σ(δ+1)=104/35 步），
 归一化 divstep（每步降 1 度、商恒为标量）把每趟乘法从 3,648 降到约 1,700–2,450，
 T ≈ 195k–259k ⇒ GM **31.5–34.2**（榜首 31.427 正落在这一档）。这是生成器级工作，
-落地的 tape 手术与验证通道已就绪（`dqi_patch/`，null-splice 逐字节可复现）。
+落地的 tape 手术与验证通道曾就绪（`dqi_patch/`，null-splice 逐字节可复现），
+目录已随 2026-11-18 清理删除，可从锚点 `b754ef5` 取回。
 
 提交前确认 receipt 中 `dqi.value_errors == 0`（本包已满足）。
 

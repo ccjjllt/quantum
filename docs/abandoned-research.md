@@ -1,9 +1,16 @@
-# 已停止研究：概况、放弃原因与三次清理记录（2026-11-13 / 2026-11-16 / 2026-11-17）
+# 已停止研究：概况、放弃原因与四次清理记录（2026-11-13 / 2026-11-16 / 2026-11-17 / 2026-11-18）
 
 本文件是已停止研究的**唯一总览**。三条研究线（invsqrt、DQI、dfthcsos/化学）
 在 2026-11-13 停止推进；2026-11-16 换用公开 28.059 组合后，三条线连同其脚本、
 二进制产物和重复打包一并清理（见 §7）。各分支入口 README 与 `ABANDONED.md` 仍保留，
 关键结论与恢复口径按本记录执行。
+
+2026-11-17/18 又做了一轮以公开件为基础的 frontier push，尝试把 28.15094 推到金牌线；
+14 条轴全部实测关闭后收尾（§9）。该轮的全部实验目录、脚本与 artifacts 已在
+2026-11-18 删除，最终提交回执保留在 `submissions/20261118_281806/`。
+
+> **当前状态（2026-11-18）：见 §9。** §0–§8 是历史轮次记录，其中的“当前采用方案”
+> 等表述指当时状态，不代表清理后的最终状态。
 
 ## 0. 结论与判定依据
 
@@ -358,3 +365,152 @@ CLI 也不支持按版本枚举，因此短期无法取回。
 | `experiments/ARCHIVE_closed_lines.md` | 本轮删除内容的逐条归档与恢复口径 |
 | `artifacts/20261117_lb_decomp/`（380 KB）、`artifacts/H_spectrum.npy` | 当前榜首逆解快照；小型复用数据 |
 | `submissions/`（72 KB）、`references/`（8.8 MB） | 提交回执与公开方案来源 |
+
+> 2026-11-18 更新：§8.5 中保留的 `experiments/frontier/20261116_push/{intel,pipeline,dqi}/`
+> 与 `artifacts/20261117_lb_decomp/`、`H_spectrum.npy` 已在 §9 清理；仍保留的只有
+> `submissions/`、`references/`、`data/competition/` 与本文/逐轮归档。
+
+---
+
+## 9. 2026-11-18 清理：frontier push 收尾（最后一轮）
+
+### 9.1 触发点与最终状态
+
+用户指示：把当前已经不做的研究的文档、脚本、artifacts 删除，记录研究概况与放弃原因，
+清理磁盘空间。2026-11-17/18 的最后一轮 push 已把 14 条可攻击轴全部实测关闭，
+没有可继续的增量路线，因此整轮研究目录与产物一并移除。
+
+删除前锚点：`git rev-parse HEAD` = **`b754ef52282705acfe8b78d32cb5d284ca212dca`**（`main`）。
+所有受跟踪文件可用 `git checkout b754ef5 -- <path>` 或 `git show b754ef5:<path>` 取回。
+
+| 项 | 值 |
+|---|---|
+| 最佳 COMPLETE | ref `58464076`，public **28.15094**（rank 156，silver 线内） |
+| 最终提交 | ref `58487952`，2026-11-18T00:47:06Z，本地 GM **28.18065942104198**，18 成员 SHA-256 固定 |
+| 最终提交状态 | 清理时读取仍无 `status`/`public_score`（PENDING）；预期 **28.1807**，不把未返回的成绩写成通过 |
+| 三条腿 | invsqrt `563d0583` 44Q 74,560.90687 / DQI `575b043f` 890Q 346,409,762,292.72（mean T 367,116.06，0/0）/ chem `a73b25d2` 427Q T14,706 294,643,137.73 |
+| 验证 | 未改动的官方 verifier 全量 PASS（invsqrt 200,540,928 shots；DQI 102,400 shots；chem 78,080 shots） |
+| 金线 | 28.71339；从 28.18066 起需单腿再降 **5.46%** |
+
+### 9.2 本轮研究概况（2026-11-18）
+
+目标：在不改公开件字节的前提下，把 28.15094 推近金线。共 25 条独立研究线
+（每条一份 `RESULT.md`，汇总 631 行实测日志），结论是**公开件已到算法下限**。
+14 条轴的判定与决定性数字：
+
+| # | 轴 | 决定性数字 |
+|---:|---|---|
+| 1 | 两个大 T 簇 = initial shift | 参考 loop 30,912 T，但 CX/CCX=30.3 vs 簇的 61.8；tape CSWAP opcode=0 |
+| 2 | 块级冗余 | 342/626/140 块内容哈希全不同，可删 T=0 |
+| 3 | 乘法秩 <42 | μ₂(12)=42 是 F₂ 最好已知；33 是 F₄ 的数；块张量实测 = GF(2¹²) 乘（模 `x¹²+x⁶+x⁴+x+1`=0x1053） |
+| 4 | 归一化 divstep | 原型与 textbook EEA 一致率 0%；真实参数上贵 12× |
+| 5 | 数组冗余（2 数组） | 每个 word 都被读（最少 798 次）；参考 2 数组 3,672 行/趟 ≈ tape 3,647 |
+| 6 | qubit 换 uncompute | 反向 EEA 170,528 T，打平上限 +326 q；最小可持有 420 q，差 2.4–2.7×；最乐观 GM 26.82 |
+| 7 | 参考 2 数组更便宜 | 每行 63/75 T vs 42 T，行数相同；照抄 960k T（GM 19.0） |
+| 8 | Chien 更便宜 | 4,025 ×（10 CCX + 1 CCZ）；12-control 合取下限 |
+| 9 | chem brot/C/J/loader | brot=7 的 error_2 大 21×、λ +54%；loader 乘积下限 188 |
+| 10 | `reset` 省 uncompute | `reset`=`R`（Z 基）；纯数据 0/16 相位翻转，`flip_if_*` 的 flag **12/16 翻转** ⇒ 2× 不可省 |
+| 11 | chem loader uncompute | 已是 MBUC（77 HMR + 77 CZ_IF，0 T） |
+| 12 | 反向多出的 367 行 | = pool（word 70–73）清理，契约要求 |
+| 13 | chem 形状 (R,B,C) | 秩 ≥1,144 下 (8,143,44) 的 T·Q 最低（6.279e6） |
+| 14 | chem C=45 / 其它因子分解 | 公开 (8,143,45) 10.413×；`M8x156x60_b8` 1.137×、`B239_b8` 1.353×（都更差） |
+
+**Toffoli 已 100% 对账**：CCX 362,012 = EEA 两趟 321,762 + Chien 40,250；
+CCZ 5,977 = Chien 4,025 + 反向 1,952；没有第 4 类。
+EEA 行数模型 `3 数组 × 35 步 × 36 字 × 42 T = 158,760/趟`，实测 3,647 行/趟 × 42 = 153,174
+（低 1.3%）。公开文献的六条路线（EEA 寄存器重叠、隐式 Bézout、测量擦除、容忍罕见失败、
+pebbling、低宽度 modexp）也全部因量级或契约关闭。
+
+### 9.3 为什么放弃
+
+- 14 条轴都是**实测 no-go**，不是"没试"：剩余空间在 Toffoli 对账后小于 1.3%。
+- 金牌需要单腿 −5.46%；唯一还有量级的路线是**新一代 DQI 解码器**
+  （每步 2 个逻辑数组、35 步、无每步除法、Chien 11 T/位置、Q≤890），是数周级生成器重写，
+  不在本轮窗口内。
+- 31.4 档需要 DQI T 再降 27.9%；公开负结果台账 295 条、16 位参赛者整体停在 28.0–28.5。
+- 化学 λ_eff 46.9217 已到硬下界 46.786 的 99.71%，Λ=283.146 距代数下界仅 0.055%；
+  DQI 的 T 已 100% 归因。没有"再调一下"的余量。
+
+结论：**28.180659 是本代公开件的终点**；继续需要换算法代际，不作为当前研究线保留。
+
+### 9.4 删除清单（2026-11-18 实测）
+
+| 路径 | 体量 | 内容 / 可恢复性 |
+|---|---:|---|
+| `experiments/frontier/20261118_push/` | 23 MB | 25 条线的 `RESULT.md`、探测脚本、`dqi_patch/`、`tree/` 编译器；受 Git 跟踪，可从锚点取回 |
+| `experiments/frontier/20261117_deep/` | 10 MB | 上一轮 deep（宽度/合成/形状/侦察）记录与脚本；受 Git 跟踪 |
+| `experiments/frontier/20261116_push/` | 1.1 MB | `intel/` 评分模型与 `pipeline/` 出包脚本；受 Git 跟踪 |
+| `artifacts/20261118_push_dqi/` | 457 MB | `dqi_cond.kmb`（479,128,819 B，sha256 `327b0751…`，3 个 retention cut、static T 367,986 的条件候选，**未提交**）及日志；可由 Git 中的 condfind 脚本从 `575b043f` 重生成 |
+| `artifacts/20261117_lambda_measure/` | 112 MB | 化学 λ 拟合的 `.npz` 中间数组；由 Git 中 `LAMBDA_MEASURE` 脚本重跑生成 |
+| `artifacts/20261118_inv_sweep/` | 62 MB | 5 个公开 dataset/kernel 的下载镜像（`atakanaldemir/...`、`junmiaotiao/...`、`taylor_logshift`、`vumaniacom/...`、`negative_results`）；可按 slug 重下 |
+| `artifacts/dqi_gen/` | 3.8 MB | DQI 生成器探针与 `ref_15_6_4.kmb` |
+| `artifacts/20261118_push_dqi_{arrays,normeea,multrank,residual,mult}/` | 6.6 MB | 数组/divstep/乘法秩/残差探测输出 |
+| `artifacts/20261116_intel/` | 2.7 MB | 公开 kernel 镜像与 3 份 LB CSV |
+| `artifacts/20261117_{scout,deep_invsqrt,lb_decomp,lb_snapshot}/`、`20261118_caxis/` | 1.8 MB | 侦察、invsqrt 扫描、榜首反解快照、化学 C 轴 |
+| `artifacts/H_spectrum.npy` | 24 KB | 化学 Hamiltonian 谱 |
+| `.worktree/{invsqrt,dqi,dfthcsos}/` | 1.1 MB | 三条已停止研究线的 checkout；分支 `codex/*-research` 与提交全部保留 |
+| `.venv/`、`.uv-cache/` | 116 MB | 可复现环境与缓存；`uv sync` 重建 |
+| `docs/{ceiling-20261117,frontier-20261117,next-generation-plan,session-20261117}.md` | 50 KB | 本轮备忘/立项书/会话记录；结论已并入本节 |
+| `qcc-chem-emit-k2k3.log` | 3.5 KB | 化学 emitter 运行日志 |
+| `scripts/kgpu.py`、`scripts/__pycache__/` | 8 KB | Kaggle CPU 内核推送器（研究用）；`scripts/{gm,inspect_circuit,manual_verify,package_submission}.py` 保留 |
+
+合计约 **797 MB**（`du` 口径：661,044 + 34,944 + 1,084 + 116,640 + 1,976 + 小文件 KB）。
+
+### 9.5 保留清单（明确不删）
+
+| 路径 | 理由 |
+|---|---|
+| `data/competition/`（995 MB） | 官方原始数据与未修改验证器（AGENTS.md 要求） |
+| `submissions/`（136 KB） | 全部提交回执与最终包说明（`20261118_281806/` 含 receipt、submit log、提交脚本） |
+| `references/`（8.8 MB） | 公开方案的来源清单与固定版本记录 |
+| `docs/research-map.md`（82 KB） | 比赛契约、评分口径与公开资料快照 |
+| `docs/abandoned-research.md`、`experiments/ARCHIVE_closed_lines.md` | 本总览与逐轮删除归档 |
+| `experiments/README.md` | 实验记录约定与停止说明 |
+| `scripts/{gm,inspect_circuit,manual_verify,package_submission}.py` | 仅保留复核/打包入口；不运行验证器 |
+| `.git/`（23 MB） | 历史与恢复锚点 |
+
+### 9.6 恢复口径
+
+```bash
+# 受跟踪的研究文档/脚本（全部可从锚点取回）
+git checkout b754ef5 -- experiments/frontier/20261118_push
+git show b754ef5:experiments/frontier/20261118_push/SUMMARY_R3.md
+git checkout b754ef5 -- docs/frontier-20261117.md
+
+# 环境
+uv sync
+
+# 研究分支（worktree 删除后仍在）
+git branch -a | grep codex/
+git worktree add .worktree/dqi codex/dqi-research
+```
+
+`artifacts/` 被 `.gitignore` 忽略，**不能从 Git 恢复**。其中没有已提交的最终件：
+提交包本身在 Kaggle（ref `58487952` / `58464076`），18 成员 SHA-256 与 zip sha 已写入回执；
+`dqi_cond.kmb` 不是提交件；公开镜像可按上表 slug 重下；λ 数组可由 Git 中脚本重跑。
+本次没有 §8.4 那样的"唯一本地副本"损失。
+
+### 9.7 清理后实测（2026-11-18）
+
+```text
+# 清理前
+646M  artifacts        (661,044 KB，339 个文件)
+ 34M  experiments      (981 个文件)
+1.1M  .worktree
+114M  .venv
+1.9M  .uv-cache
+348Gi 已用 / 546Gi 可用
+
+# 清理后
+  0B  artifacts        (仅 .gitkeep)
+ 16K  experiments      (README + 本归档)
+  -   .worktree        (已删除，分支保留)
+  -   .venv / .uv-cache
+1.0G  .                (其中 data/competition 995M + .git 23M)
+347Gi 已用 / 546Gi 可用
+
+实测回收 815,751 KB ≈ 797 MiB (0.78 GiB)。
+```
+
+`df` 的 GiB 取整只显示 1Gi 变化；精确量以 `du -sk` 的 815,751 KB 为准。
+删除后 `git status` 有 825 项变更（820 个受跟踪文件 + 5 个 docs），全部可从锚点恢复。

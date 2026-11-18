@@ -1,6 +1,0 @@
-Submission Ref:  58436763
-Status:          PENDING
-Public Score:    
-Private Score:   
-Description:     28.10154: invsqrt f2cdab0b 44Q PASS 75006.38 + DQI 66b4f18b 890Q PASS 347128304010.81 (0/0) + chem bdae290f 427Q T14712 PASS 294762632.08; all 18 SHA-256 asserted; unchanged official verifiers PASS; GM 28.10154. Apache-2.0 credits: Syed Asad Ali, Ali Haydar Ozdag, Ertugrul Ozer, Asterios Panoras, James Barlow, Leo Tang, Hayato Hikawa, boristown, Lera/marculera, Balram Srinivasan, Google Quantum AI/Qualtran.
-Submission Date: 2026-11-16 16:08:25.610000

@@ -22,10 +22,22 @@
 > 当前只保留：`frontier/20261116_push/{intel,pipeline}/`（侦察 + 提交管线）、
 > `frontier/20261116_push/dqi/{RESULT_WIDTH_BUDGET.md,width_budget.py}`、
 > 公开源清单 `references/`、提交回执 `submissions/`、官方数据 `data/competition/`。
+>
+> **2026-11-18：** frontier push 收尾。14 条轴全部实测关闭（Toffoli 已 100% 对账，
+> 剩余空间 <1.3%），删除整个 `frontier/`（20261116/17/18 三轮，34 MB）、`artifacts/`
+> 全部产物（646 MB，含 479 MB 未提交的 `dqi_cond.kmb`）、`.worktree/` 三个 checkout、
+> `.venv` + `.uv-cache`（116 MB）、四份本轮备忘与会话文档、研究用 `scripts/kgpu.py`。
+> **合计回收 797 MB。** 删除前锚点 `b754ef5`，受跟踪文件可 `git checkout b754ef5 -- <path>` 取回。
+> 研究概况、14 条轴的决定性数字与恢复口径见
+> [docs/abandoned-research.md §9](../docs/abandoned-research.md)；逐条清单见
+> [ARCHIVE_closed_lines.md §7](ARCHIVE_closed_lines.md)。
+> 当前只保留：本文、逐轮归档、`scripts/{gm,inspect_circuit,manual_verify,package_submission}.py`、
+> 公开源清单 `references/`、提交回执 `submissions/`、官方数据 `data/competition/`。
 
 main 保留公开前沿来源和 submission 回执。若未来恢复研究，新增 invsqrt、化学、DQI
 实验分别写入 `.worktree/invsqrt`、`.worktree/dfthcsos`、`.worktree/dqi` 的对应
-`codex/` 分支；提交包与回执由 main 管理。
+`codex/` 分支；三个 worktree 已删除，但分支与提交保留，可用
+`git worktree add .worktree/dqi codex/dqi-research` 重建。提交包与回执由 main 管理。
 
 这里按 `invsqrt`、`dqi`、`dfthcsos` 分别保存研究笔记、小型探索脚本和结果。先完成实验，再决定是否值得抽成公共代码；不为一次性探索搭建测试或门控体系。
 

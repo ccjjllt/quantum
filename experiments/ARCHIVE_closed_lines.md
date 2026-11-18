@@ -115,6 +115,10 @@ code/loader 路径、C 轴截断（C43/C42/C41）、emitter k9–k14、新 R（7
 | `submissions/`（72K） | 最终包与提交回执 |
 | `references/`（8.8M） | 公开方案来源 |
 
+> 2026-11-18 更新：上表中 `experiments/frontier/20261116_push/{intel,pipeline}`、
+> `artifacts/20261117_lb_decomp/` 与 `H_spectrum.npy` 已在 §7 清理；
+> 当前保留清单以 §7.2 为准。
+
 ## 6. 恢复方法
 
 ```bash
@@ -125,3 +129,39 @@ git show 8155189:experiments/frontier/20261116_push/dqi/RESULT2.md
 # 重新下载镜像（示例）
 kaggle kernels output ozertuu/vqcc-super-sota-verified-portfolio-28-091 -p /tmp/out
 ```
+
+---
+
+## 7. 2026-11-18 清理：frontier push 收尾
+
+**触发**：14 条轴全部实测关闭，最后一轮 push 没有可继续的增量路线。
+删除前锚点 **`b754ef52282705acfe8b78d32cb5d284ca212dca`**（`main`）。
+研究概况、14 条轴的决定性数字与放弃原因见
+[`docs/abandoned-research.md §9`](../docs/abandoned-research.md)。
+
+### 7.1 删除清单（实测）
+
+| 路径 | 体量 | 内容 |
+|---|---:|---|
+| `experiments/frontier/20261118_push/` | 23 MB | 25 条线的 `RESULT.md`、探测脚本、`dqi_patch/`、`tree/` |
+| `experiments/frontier/20261117_deep/` | 10 MB | 宽度/合成/形状/侦察四条线的记录与脚本 |
+| `experiments/frontier/20261116_push/` | 1.1 MB | `intel/` 评分模型、`pipeline/` 出包脚本 |
+| `artifacts/20261118_push_dqi/` | 457 MB | `dqi_cond.kmb`（479,128,819 B，sha256 `327b07519606f7e7…`，static T 367,986，未提交）及日志 |
+| `artifacts/20261117_lambda_measure/` | 112 MB | λ 拟合 `.npz`（由 Git 中 `LAMBDA_MEASURE` 脚本重跑） |
+| `artifacts/20261118_inv_sweep/` | 62 MB | 公开 dataset/kernel 镜像（5 个 slug，可按名重下） |
+| `artifacts/dqi_gen/` | 3.8 MB | 生成器探针、`ref_15_6_4.kmb` |
+| `artifacts/20261118_push_dqi_*`（arrays/normeea/multrank/residual/mult） | 6.6 MB | 数组/divstep/乘法秩/残差输出 |
+| `artifacts/20261116_intel/`、`20261117_*`、`20261118_caxis/`、`H_spectrum.npy` | 4.5 MB | kernel 镜像、LB 快照、侦察与 C 轴数据 |
+| `.worktree/{invsqrt,dqi,dfthcsos}/` | 1.1 MB | 已停止研究线的 checkout；分支与提交保留 |
+| `.venv/`、`.uv-cache/` | 116 MB | `uv sync` 可重建 |
+| `docs/{ceiling,frontier,next-generation-plan,session}-2026*.md` | 50 KB | 结论已并入 `docs/abandoned-research.md §9` |
+| `qcc-chem-emit-k2k3.log`、`scripts/kgpu.py`、`scripts/__pycache__/` | 12 KB | 研究运行残留 |
+
+合计约 **797 MB**。`artifacts/` 不在 Git 中；受跟踪的研究文档/脚本可用
+`git checkout b754ef5 -- <path>` 取回。
+
+### 7.2 保留
+
+`data/competition/`（官方数据与验证器）、`submissions/`（回执）、`references/`（公开源）、
+`docs/research-map.md`（比赛契约）、`docs/abandoned-research.md`（总览）、
+`experiments/{README.md,ARCHIVE_closed_lines.md}`、`scripts/{gm,inspect_circuit,manual_verify,package_submission}.py`。

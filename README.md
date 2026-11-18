@@ -2,21 +2,22 @@
 
 本仓库用于 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation)。
 根工作区使用 **main**，负责公开优秀方案的来源与版本管理、比较选择、组合装配、submission 和提交回执。
-三个研究分支分别推进算法、电路与资源成本研究。
+三个研究分支曾分别推进算法、电路与资源成本研究；均已于 2026-11-13 停止，详见 [总览](docs/abandoned-research.md)。
 
 ## 分支与本地工作区
 
 | 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 当前最佳 COMPLETE **28.15083**（ref 58454232，公开字节重组上限）；gold 28.68633 需单腿再降 5.496% |
-| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt/` | 已停止；见 [总览](docs/abandoned-research.md) |
-| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos/` | 已停止；见 [总览](docs/abandoned-research.md) |
-| DQI | `codex/dqi-research` | `.worktree/dqi/` | 已停止；见 [总览](docs/abandoned-research.md) |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 最佳 COMPLETE **28.15094**（ref 58464076）；已提交 **28.180659** 包（ref 58487952，清理时 PENDING）；gold 28.71339 需单腿再降 5.46% |
+| invsqrt | `codex/invsqrt-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
+| 化学 / dfthcsos | `codex/dfthcsos-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
+| DQI | `codex/dqi-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
 
-工作区链接用于本机浏览，`.worktree/` 不进入 Git。三条研究线已于 2026-11-13 停止，
-只保留入口 README、`ABANDONED.md`、系统性复盘和可复用载体；已关闭实验的详细文档、
-脚本与大型 artifacts 已清理（见 [已停止研究总览](docs/abandoned-research.md)）。
-官方数据、原始公开包和已有 Python 环境可只读共用。
+三个研究 worktree 已于 2026-11-18 删除；分支 `codex/*-research` 与提交全部保留，
+可用 `git worktree add .worktree/dqi codex/dqi-research` 重建。三条研究线于 2026-11-13 停止，
+2026-11-17/18 的最后一轮 frontier push 也在 14 条轴全部实测关闭后收尾
+（见 [已停止研究总览 §9](docs/abandoned-research.md)）。已关闭实验的详细文档、脚本与
+大型 artifacts 已清理。官方数据与公开源清单保留；环境可用 `uv sync` 重建。
 采用研究成果时，main 记录实际选定的产物、来源、参数和验证范围，不整支混入研究过程。
 
 ## 已有提交记录
@@ -43,15 +44,19 @@
 | 2026-11-13 | [27.078 public-frontier trio（46Q invsqrt + 889Q DQI + 4,074T chem）](submissions/20261113_27_078/README.md) | 58299045 | **27.00209，COMPLETE** |
 | 2026-11-15 | [公开 27.30661 包（maoxin v27 4033 chem + 821bf8d1 DQI + 46Q invsqrt）](submissions/20261115_public_2731/README.md) | 58349843 | **27.30661，COMPLETE** |
 | 2026-11-15 | [HW-26 invsqrt + 4033 chem 升级包](submissions/20261115_public_2731/README.md) | 58350759 | 27.31193，COMPLETE |
-| 2026-11-15 | [化学换件：4030 loader + 新权重 refit](experiments/frontier/20261115_upgrade/chem_ab/REPORT.md) | 58382097 | 27.31541，COMPLETE |
-| 2026-11-16 | [换栈：28.059 公开组合（44Q invsqrt + 890Q DQI + marculera v6 化学）](experiments/frontier/20261115_upgrade/stack_28059/REPORT.md) | 58392219 | 28.05896，COMPLETE（当时 rank 91/3114） |
-| 2026-11-16 | [换件：最高的真实公开包（Atakan v15，GM 28.07503）](experiments/frontier/20261115_upgrade/stack_28075/REPORT.md) | 58410043 | 28.07502，COMPLETE |
-| 2026-11-16 | [换件：公开最高真实包（Ozertuu 28.091）](experiments/frontier/20261115_upgrade/stack_28091/REPORT.md) | 58420406 | **28.09090，COMPLETE（rank 255/3152）** |
-| 2026-11-16 | [换件：28.09486 sub1（f2cdab0b + ccc2ab84 + sub1，三件官方 verifier 全 PASS）](experiments/frontier/20261116_push/pipeline/RESULT.md) | 58424363 | **28.09486，COMPLETE（rank 188/3160）** |
+| 2026-11-15 | [化学换件：4030 loader + 新权重 refit](experiments/ARCHIVE_closed_lines.md) | 58382097 | 27.31541，COMPLETE |
+| 2026-11-16 | [换栈：28.059 公开组合（44Q invsqrt + 890Q DQI + marculera v6 化学）](experiments/ARCHIVE_closed_lines.md) | 58392219 | 28.05896，COMPLETE（当时 rank 91/3114） |
+| 2026-11-16 | [换件：最高的真实公开包（Atakan v15，GM 28.07503）](experiments/ARCHIVE_closed_lines.md) | 58410043 | 28.07502，COMPLETE |
+| 2026-11-16 | [换件：公开最高真实包（Ozertuu 28.091）](experiments/ARCHIVE_closed_lines.md) | 58420406 | **28.09090，COMPLETE（rank 255/3152）** |
+| 2026-11-16 | [换件：28.09486 sub1（f2cdab0b + ccc2ab84 + sub1，三件官方 verifier 全 PASS）](experiments/ARCHIVE_closed_lines.md) | 58424363 | **28.09486，COMPLETE（rank 188/3160）** |
 | 2026-11-17 | [换 DQI：61c8348d → 575b043f（+4 个已证明 product-retention closings，mean T 367,116.06）](submissions/20261117_deep_575b043f/README.md) | 58464076 | **28.15094，COMPLETE（rank 156，silver 线内）** |
+| 2026-11-18 | [28.1807 包：invsqrt 563d0583 + DQI 575b043f + chem a73b25d2](submissions/20261118_281806/README.md) | 58487952 | 已提交；清理读取时仍 PENDING，本地 GM **28.180659**（不写成已通过） |
 
-当前采用组合为 **28.15094 包（本账号 `58464076`，COMPLETE，rank 156）**：
-`0af21cb8` invsqrt + `575b043f` DQI + `a73b25d2` chemistry
+当前最佳 COMPLETE 为 **28.15094 包（本账号 `58464076`，rank 156）**：
+`0af21cb8` invsqrt + `575b043f` DQI + `a73b25d2` chemistry。
+2026-11-18 又提交 **28.180659** 包（ref `58487952`）：只把 invsqrt 换成 `563d0583`
+（44Q，74,560.91），DQI/chem 同件；18 成员 SHA-256 固定，未改动官方 verifier 全量 PASS。
+清理读取榜单时该提交仍为 PENDING，预期 28.1807，**不把预期写成已通过**。
 （更早的 28.15083 包为 `58454232`）：
 `f2cdab0b` invsqrt（44Q，75,006.38）+ `ccc2ab84` DQI（890Q，347,375,470,571.73）+
 `sub1` 化学（427Q，T=14,712，294,762,697.44）。三件由官方 verifier 在本账号复核 PASS
@@ -79,10 +84,10 @@ gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧�
 - 每个历史提交的机器回执、来源、SHA-256 和验证范围保留在 `submissions/<日期_方案>/README.md`。
 - 2026-11-13 清理了原始候选、公开源解包和中间产物；**2026-11-16 又删除了全部 18 个历史
   `submission.zip`（872.5 MB）与已关闭研究的二进制产物（合计回收约 1.10 GB）**。本地不再保存
-  提交 ZIP；当前最佳由 `qingyu1232/qcc-assemble-28059` v1 按 18 个 SHA-256 逐字节重建，
-  脚本在 `experiments/frontier/20261115_upgrade/stack_28059/kernels/`。
+  提交 ZIP；当前 28.180659 包由 `qingyu1232/qcc-integrator-281806` v1 重建，
+  历史组装脚本已随 2026-11-18 清理删除，可用 `git checkout b754ef5 -- <path>` 取回。
 - 官方公开源清单保留在 `references/frontier-20261112/`；被删除目录的概况、大小和放弃原因
-  见 [已停止研究总览](docs/abandoned-research.md)（§7 为 11-16 清理清单）。
+  见 [已停止研究总览](docs/abandoned-research.md)（§7 为 11-16、§9 为 11-18 清理清单）。
 
 ## 公开前沿升级（2026-11-15）
 
@@ -90,8 +95,9 @@ gengsr 25.2268、Syed V9、Public Frontier、Grimoire 33、Maoxin 4,097 等旧�
 4,033 chemistry + `821bf8d1` DQI + 46Q invsqrt），MCP 回执 **COMPLETE，27.30661**。
 随后提交 `58350759`（HW-26 invsqrt `1ba197b02771` + 同 DQI/化学），**COMPLETE 27.31193**。
 HW-26 已在 Kaggle 用未修改官方 verifier 独立 PASS（200,540,928 shots）。
-研究记录、公开前沿扫描和逐项判据见
-[experiments/frontier/20261115_upgrade](experiments/frontier/20261115_upgrade/README.md)。
+研究记录、公开前沿扫描和逐项判据已随 2026-11-18 清理删除；结论见
+[逐轮归档](experiments/ARCHIVE_closed_lines.md) 与
+[已停止研究总览 §9](docs/abandoned-research.md)。
 
 ## 自研线停止（2026-11-13）
 
@@ -126,18 +132,18 @@ uv sync
 ```
 
 macOS 使用 PyPI 原生 kickmix，不导入比赛数据包面向 Kaggle Linux 的 `kickmix.so`。
-已有本地环境为 Python 3.12.13 / kickmix1.0.0；安装完成不代表全量验证通过。
+本地 `.venv` 已在 2026-11-18 清理，运行任何脚本前先 `uv sync`；安装完成不代表全量验证通过。
 
 ```text
-.worktree/            三个已停止研究分支的入口/ABANDONED/复盘/可复用载体（不入 Git）
+.worktree/            已删除；分支 codex/*-research 保留，可 git worktree add 重建（不入 Git）
 data/competition/     官方原始数据和未修改的验证器（不入 Git）
 docs/research-map.md  比赛契约与公开资料的带日期快照
-docs/abandoned-research.md  已停止研究总览、放弃原因与清理记录
+docs/abandoned-research.md  已停止研究总览、放弃原因与四次清理记录
 references/          来源清单；frontier-20261112/ 保留当前最佳公开源清单
-experiments/          仅保留 frontier/20261112_rescan/；历史实验已清理
-artifacts/            历史大产物已清理（不入 Git）；当前最佳候选见 submissions/20261113_27_078/
-submissions/          最终 ZIP（不入 Git）及 README 回执
-scripts/             静态查看、手动验证和打包入口
+experiments/          仅保留 README.md 与 ARCHIVE_closed_lines.md；研究目录已清理
+artifacts/            已清空（仅 .gitkeep，不入 Git）
+submissions/          提交回执与 README；本地不保存 ZIP（不入 Git）
+scripts/             静态查看、手动验证、GM 复核和打包入口（kgpu.py 已删除）
 ```
 
 已有官方34个文件的来源清单见 [competition-manifest.json](references/competition-manifest.json)。
