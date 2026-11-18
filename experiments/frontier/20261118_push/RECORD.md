@@ -563,3 +563,69 @@ alignment** — 69 sequential controlled rotation-by-1 steps over the syndrome l
 (`reg_a[3+step:m]`, ~68 words x 12 lanes). Replacement: leading-zero count once + a
 **barrel shifter** (~7 stages), estimated ~2-3k T per direction vs 20.7k + 47k ->
 **~85k T saved = about +0.9 GM** (T ~282k, GM ~29.9). This is the last large 890Q lever.
+
+---
+
+# Round 3 (2026-11-18 03:15–05:55 Beijing) — tape 级杠杆全部关闭，缺口定位到 EEA 调度
+
+完整版在 `SUMMARY_R3.md`；这里只记决定性测量与命令。
+
+## 6a. 两个大簇不是 initial shift（三条独立证据）
+
+* CX/CCX：fwd 29,543 T / 1,826,827 CX = **61.8**；rev 65,774 T / 4,326,547 CX = **65.8**。
+  受控交换链只会有 2.0。
+* 符号化窗口（`dqi_align` 内核）：两个簇里 `CX+CCX+CX` 的 Fredkin 邻域 **0 个**；
+  窗口是 `CCX(a_i,b_i→s)` + `CX(s→输出位)` 的 AND→XOR 累加。
+* 参考侧复刻（`zhuating/qcc-dqi-refshift`，9.8 s）：官方 `_initial_shift_loop`（n=70,m=73）
+  = **30,912 T**（28,980 CSWAP 单 opcode + 1,932 CCX）。tape 的 CSWAP opcode = 0；
+  展开需 57,960 CX，实测是它的 31.5 倍。tape 的 EEA 第一 op 就是 `CCX(0,12,840)`（直接开除法），
+  **根本没有对齐段**（tape 是 70 词原地 EEA，不 padding 到 73）。
+* 因此桶形移位（7,940 T/趟）在 tape 里**无处可换**，收益 0（此前 +0.9 GM 的估计作废）。
+
+## 6b. 块级冗余为 0（内容哈希）
+
+`dqi_align/out/blocks.json`：span_fwd 342 块 / span_rev 626 / cluster132 140，
+`n_distinct_content` 分别 342 / 626 / 140，重复组 0，`T_deletable = 0`。
+与 dqi 线的 plain-cancel 0、自由门 0 一致。
+
+## 6c. 乘法秩 42 = F₂ 上最好已知（33 是 F₄ 的数）
+
+`dqi_multrank/RESULT.md`：WCC 2022 Table 2 的 deg-4 行 n=12 给 33，但该行是 q≥4
+（de Groote 紧界 `μ_q(n)=2n−1 ⟺ n ≤ q/2+1`；该行 n=3 给 5 就已判掉 q=2）；
+且 33 与 survey 的 `μ_sym_4(12)` 相等、无 `+` 标记。F₂ 上界仍是 **42**
+（Ballet–Pieltant 2021 Table 2；显式构造 = Toom-4 over F₈ = 7 × μ₂(3)=6）。
+另实测：第一个 forward 块的 42 项在 pad=12 窗口下精确复现 12×12 域乘法张量，
+模多项式 **0x1053**（x¹²+x⁶+x⁴+x+1）。所以「换更便宜张量」不存在。
+
+## 6d. 一个乘法块的实际解剖（`dqi_block/out/block_dump.json`）
+
+`[21,385,877, 21,387,169)`：1,292 ops = 41 CCX + 1,251 CX，word 三元组恒 (66,1,67)，
+**单一 scratch 位 67[0]**；每个 CCX 算一个秩-1 项后立刻 fan-out，下一个 CCX 直接 toggles 掉
+上一个积。**没有 2× uncompute、没有 ancilla 阵列**。块成本就是 42。
+
+## 6e. 成本 100% 闭合
+
+```
+EEA 两趟   317,748 CCX = 7,565 × 42   （fwd 区 153,205÷42=3,648；rev 区 168,587÷42=4,014）
+Chien      44,264 CCX = 4,024 × 11    （12-control 全零判定，11 是下限）
+相位        5,977 CCZ
+合计       367,989 = 实测静态 Toffoli（mean 367,116.06）
+```
+
+## 6f. 缺口的唯一定位：EEA 的商项调度
+
+现役是整除调度：35 步，Σ(δ+1)=104，平均有效字长 ~35 ⇒ 104×35 ≈ 3,640 乘法/趟。
+归一化 divstep（每步降 1 度、商恒为标量）= 69 步 × 平均 35 字 ≈ **2,415 乘法/趟**（0.66×）。
+两趟 ⇒ T ≈ 2×2,415×42 + 50,241 = **253,101** ⇒ GM **31.9**；
+保守（每步 70 字）⇒ 5,110 乘法 ⇒ T=264,861 ⇒ GM **31.42** —— 与榜首 31.42723 重合。
+
+由各档分数反解 DQI T（Q=890，其余两腿不变）：31.427→264.6k，30.285→293.6k，28.926→333.0k。
+所以 29.9–31.4 这一档**全部**落在「归一化 EEA + 现有 Chien」的区间内。
+
+## 6g. tape 手术通道（为下一步准备）
+
+`dqi_patch/`：`splice.py` 按 packet 做 numpy 拼接（不逐条解码 57.5M ops），带条件栈深度/宽度校验。
+`zhuating/qcc-dqi-null-splice`：四个切点（两个簇 + mid）null-splice 后 **逐字节相同**，
+depth 全 0。`zhuating/qcc-dqi-patch-verify`：拼接 → 写 → 用 `/usr/bin/python3` 跑官方
+verifier（每 salt ~160 s），只在 0/0 时输出新 tape。注意：Kaggle script 内核只带一个文件，
+`splice.py` 必须内联；verifier 的 kickmix 在 `/usr/bin/python3`，不是 `sys.executable`。
