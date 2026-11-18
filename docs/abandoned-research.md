@@ -534,3 +534,25 @@ git worktree add .worktree/dqi codex/dqi-research
 删除的 `/tmp/int_correct/submission.zip` 是最终包的本地副本；同一文件已上传 Kaggle
 （ref `58487952`），18 成员 SHA-256 与 zip sha 在回执中，可用 kernel
 `qingyu1232/qcc-integrator-281806` 重建。其余大件都是公开件/tape 的重复副本或可重跑中间产物。
+
+### 9.9 公开前沿复查（2026-11-18，Kaggle MCP）
+
+用 Kaggle MCP 查了当前榜单、公开 dataset 与 notebook。结论：**公开件确实有一个比本账号
+已提交包略高的组合，但只高 0.00018 GM（+0.00063%），没有 >28.2 的公开方案。**
+
+| 方案 | invsqrt | DQI | chem | GM（复算） |
+|---|---|---|---|---:|
+| 本账号 `58487952`（PENDING） | `563d0583` 74,560.906873 | `575b043f` 346,409,762,292.72 | `a73b25d2` 294,643,137.73 | **28.18065942** |
+| 公开 U（`junmiaotiao/qcc-frontier-20261118u`，榜单 ref `58482406`，28.181） | `563d0583` 同 | `5f901c55` 346,404,203,610 | `703843d3` 294,642,299.763 | **28.18083687** |
+| 公开 S（`junmiaotiao/qcc-frontier-20261118s`，ref `58477472`，28.181） | `563d0583` 同 | `575b043f` 同 | `0bd9c68f` 294,642,305.565 | **28.18068595** |
+
+- `5f901c55` = `575b043f` + boristown 的 6 个 retained product（−6 Toffoli）；U 的 notebook 报告
+  default salt 102,400 shots **0 value / 0 phase**，**未在本机复验**。
+- U 的化学 = maoxin 4,022-Toffoli loaders + boristown refit `703843d3`，比 `a73b25d2` 低 838
+  （−0.00028%）。
+- 采用 U 的收益：DQI −0.0016%、chem −0.00028%，合计 **+0.00018 GM**；而 DQI 一次失败约
+  −0.15%（−0.043 GM），风险收益比约 **1:240**。除非目标只是"持有最高公开包"标签，否则不建议重提。
+- 榜单当前顶部（`get_competition_leaderboard`）：`aadi_stonks` **31.50404**、
+  `Z³C¹oherence` **31.42723**、`Yicheng Guang & Taiseiu` **30.51176**、`Christoffer Thimsen`
+  **30.12713**；第 10 名 **29.14389**。这些队伍**没有公开对应电路/notebook**；公开 plateau
+  仍在 28.15–28.18，顶部与公开件的 11.8% 差距仍是私有代际。
