@@ -1,0 +1,397 @@
+# arXiv hits (submitted >= 2024-01-01)
+
+## rs_decoder  (`abs:"Reed-Solomon" AND abs:decod*`)
+- 2611.15128v2 [2026-11-11] Affine Combiners for Reed-Solomon Proximity Gaps
+  - Alessandro Chiesa +3; 
+- 2611.09366v1 [2026-11-06] Anchored Iterative Decoding of Reed-Solomon Product Codes for High-Rate Magnetic Tape Storage
+  - Alexander Chvanov +1; 
+- 2611.07607v1 [2026-11-05] Combinatorial limitations of list-decoding Reed-Solomon codes
+  - Omar Alrabiah +2; 24 pages
+- 2610.40204v1 [2026-10-29] Attack-Resilient Multi-Bit Image Watermarking Framework via Latent Coordinate Sign Clamping
+  - Marjan Beheshti +1; 
+- 2610.38862v1 [2026-10-28] Improved LCL Equivalences and Curve Decoding Alphabet Sizes
+  - Rohan Goyal +3; 60 pages
+- 2610.38022v1 [2026-10-27] An Improved Johnson Bound for List-Decoding with Hints
+  - Swastik Kopparty +1; 
+- 2610.36215v1 [2026-10-26] Explicit Reed-Solomon Subspace Designs: Optimal List and Line Decoding
+  - Omar Alrabiah +2; 
+- 2610.34511v1 [2026-10-25] Insdel Decoding Algorithms for Maximum Distance Separable Codes
+  - Bencheng Fan +2; 
+- 2610.34404v1 [2026-10-25] Maximum-Likelihood Decoding of Gabidulin Codes Is NP-Hard Even in Dimension One
+  - Philippe Gaborit +0; in submission
+- 2610.31922v2 [2026-10-22] Deterministic Constructions of Reed-Solomon Codes Beyond the Johnson Bound
+  - Abhranil Chatterjee +5; 
+- 2610.23832v2 [2026-10-16] Leveraging verifiable structure in quantum circuits to find more efficient compilations with agentic AI
+  - Tanuj Khattar +5; 
+- 2610.19691v2 [2026-10-14] Efficient construction of subspace design codes over constant alphabet
+  - Shu Liu +0; 
+- 2610.17711v1 [2026-10-13] Local Leakage Resilience of Shamir Secret Sharing: Below Half Threshold Rate
+  - Hai H. Nguyen +0; 
+- 2610.16087v1 [2026-10-12] Confidential Error-Correcting Codes
+  - Tianrui Wang +4; 
+- 2610.15815v1 [2026-10-11] Superpolynomial Lists for Reed-Solomon Codes over Binary Extension Fields
+  - Minshen Zhu +0; 
+- 2610.15701v1 [2026-10-11] Correcting Burst Errors with Applications to DNA-Based Data Storage
+  - Yuan-Pon Chen +1; 19 pages, 2 figures, 3 tables
+- 2610.15413v1 [2026-10-11] Insdel Reed-Solomon Decoding Algorithms up to the Half-Singleton Bound
+  - Bencheng Fan +2; 
+- 2610.12784v1 [2026-10-08] Low-Complexity SVD-Based Precoding over Zero-Padded ISI Channels
+  - Shuiyin Liu +1; 6 pages, 1 figure
+- 2610.12019v1 [2026-10-08] Thresholds for Local Coordinate-Wise Linear Properties of Random One-Point AG Codes
+  - Chen Yuan +1; 37 pages
+- 2610.11107v2 [2026-10-08] Accelerating HQC for Post-Quantum TLS 1.3 on x86 IoT Gateways
+  - Jihoon Jang +4; 15 pages, 4 figures, 9 tables. Submitted to IEEE Internet of Things Journal. Code: https://github.com/jihoonja
+- 2610.10236v1 [2026-10-07] q-ary GRAND
+  - Reza Dianat +2; Accepted, IEEE Comm Letters
+- 2610.08610v1 [2026-10-06] Reed-Solomon Codes at Capacity: Algorithmic List-Decoding and Proximity Gaps
+  - Prahladh Harsha +2; 
+- 2609.40262v1 [2026-09-30] Quantum List Recovery and Decoding: Achievability and Limitations
+  - Fernando Granha Jeronimo +1; 
+- 2609.31484v1 [2026-09-25] COFI-DQI: Curve-based Optimal Function Intersection via Decoded Quantum Interferometry
+  - Gretchen L. Matthews +1; 
+- 2609.29120v1 [2026-09-24] NP-Hardness of Bounded Distance Decoding for Reed-Solomon Codes
+  - Daqing Wan +1; 31 pages
+- 2609.19743v1 [2026-09-17] Syndrome Decoding for Silent Data Corruption in Quantized Integer GPU Arithmetic
+  - Pranav Napolean +2; 
+- 2609.17304v1 [2026-09-15] On Twisted Roth-Lempel Codes
+  - Huiyue Lei +3; 
+- 2609.08005v1 [2026-09-07] Algorithmic List Decoding of Reed-Solomon Codes up to Capacity
+  - Joshua Brakensiek +4; 27 pages. We are grateful to Omar Alrabiah, Rohan Goyal, and Venkat Guruswami for sharing their padding observ
+- 2609.05870v1 [2026-09-05] Algorithmic List Decoding at Capacity and Optimal Proximity Gaps for Reed-Solomon Codes
+  - Fernando Granha Jeronimo +0; 
+- 2608.27679v1 [2026-08-27] High-Dimensional Deterministic Secure Quantum Communication with Reed-Solomon Erasure Coding
+  - L. F. A. de Sousa Moura +3; 
+- 2608.07991v1 [2026-08-08] Error characterization and error correction approaches in combinatorial DNA-based storage
+  - Inbal Preuss +5; 
+- 2609.18948v1 [2026-08-06] Optimal Temporal Hiding in Correlated Quantum Reference-Frame Processes
+  - Maxim V. Churilov +0; 12 pages, 3 figures. Ancillary verification code included
+- 2608.05432v1 [2026-08-05] Diversity in Coded TE-QKD Channels: Achieving Infinite Diversity out of Finite System Resources
+  - Shaikha S. Al-Qahtani +2; The manuscript has 54 pages, 16 figures, and 8 tables. We intend to submit this manuscript to an IEEE journal
+- 2607.20305v2 [2026-07-22] Constant-time decoding of Gabidulin codes and their generalizations with application to RQC
+  - Nicolas Aragon +4; 
+- 2607.16648v1 [2026-07-18] Synchronization-Free Algebraic Fingerprints for Large Language Models: From Autoregressive to Diffusion Models
+  - Jaroslaw Janas +2; 
+- 2607.16541v2 [2026-07-17] Efficient Exact Quantum Sampling from the Sun-Wootters Distribution for Optimal Polynomial Intersection
+  - Sunghyeon Jo +0; 24 pages, 1 figure
+- 2607.13105v3 [2026-07-14] Biased-Noise Quantum Reed-Solomon Codes and a Tornado Concatenation for Cat Qubits
+  - Cheng-You Ho +4; All authors contributed equally. 12 pages, 3 figures, 2 tables. Winning project of MIT iQuHACK 2026, Alice & B
+- 2607.10572v1 [2026-07-12] List-Decoding Counterexamples Yield Lower Bounds on Mutual Correlated Agreement Error
+  - Yiwen Gao +3; 
+- 2607.08516v1 [2026-07-09] Locality of Curve-Decoding and Improved Proximity Gaps
+  - Rohan Goyal +3; 35 pages
+- 2606.22344v1 [2026-06-21] Random Reed--Solomon Codes Correcting Permutations, Insertions, and Deletions over Polynomial-Size Alphabets
+  - Yijun Zhang +3; 
+
+## bch_decoder  (`abs:"BCH" AND abs:"decoding"`)
+- 2611.19192v1 [2026-11-14] Zero-shot diffusion image compression with sectioned codebooks and one channel code
+  - Dinanath Padhya +0; 14 pages, 6 figures, 7 tables
+- 2611.16890v1 [2026-11-12] Look It Up: Multi-bit LLM Watermarking via Codebook Search
+  - Jarosław Janas +2; 16 pages, 8 figures, 6 tables. Submitted to IEEE Transactions on Information Forensics and Security. Code: htt
+- 2610.40204v1 [2026-10-29] Attack-Resilient Multi-Bit Image Watermarking Framework via Latent Coordinate Sign Clamping
+  - Marjan Beheshti +1; 
+- 2610.34142v1 [2026-10-25] Early Selection of Polar Ensemble Decoding with Successive Cancellation Style Component Decoder
+  - Pin-Jing Li +1; 
+- 2610.32807v1 [2026-10-23] Beam Search for Error-Correcting Codes via Conditional Diffusion
+  - Ziv Aharoni +1; 
+- 2609.00715v1 [2026-09-01] MaskCode: Mask Transformer for Feedback-Assisted Coding With Linear Block Codes
+  - Jonggyu Jang +4; 15 pages
+- 2608.05591v1 [2026-08-06] An Ordered-Reliability-Bits Chase Decoding Algorithm for BCH Codes
+  - Wenwu Zhu +2; submitted to 2026 IEEE Globecom workshop
+- 2608.05432v1 [2026-08-05] Diversity in Coded TE-QKD Channels: Achieving Infinite Diversity out of Finite System Resources
+  - Shaikha S. Al-Qahtani +2; The manuscript has 54 pages, 16 figures, and 8 tables. We intend to submit this manuscript to an IEEE journal
+- 2607.14589v1 [2026-07-16] Quasi-Belief Propagation and Neural-Network Check Node Processing for BCH Codes
+  - Guangwen Li +0; 6 pages, 3 figures, 1 table
+- 2607.05816v2 [2026-07-07] From Bit to Block: Capacity Achievement via Code Concatenation
+  - Bin Zhang +0; 6 pages, 0 figures
+- 2606.28030v1 [2026-06-26] Performance Analysis and Optimal Design of ORB-Type GRAND Algorithms
+  - Li Wan +1; 
+- 2606.17837v1 [2026-06-16] High-throughput Low-latency Hardware Implementation of BCH Decoders
+  - Jasper Lagendijk +5; 
+- 2606.11401v1 [2026-06-09] Maximum Coverage Chase Decoder for Optical Interconnects
+  - Alessandro Cardinale +5; 
+- 2605.08081v3 [2026-05-08] Chase-like Decoding: Test-Pattern Design and Performance Analysis
+  - Tim Janz +3; 9 pages, 4 figures, 1 table, accepted at IEEE ITW 2026
+- 2605.02296v1 [2026-05-04] Semantic Ordered Statistics Decoding
+  - Chentao Yue +2; 6 pages, submitted to IEEE Globecom for possible publication
+- 2604.06889v2 [2026-04-08] Affine Subcode Ensemble Decoding of Linear Block Codes
+  - Jonathan Mandelbaum +4; Accepted for publication in IEEE Transactions on Communications. This version incorporates revisions based on 
+- 2604.04066v1 [2026-04-05] Quasi-BP for BCH Codes and its Optimization
+  - Guangwen Li +0; 5 pages, 5 figures
+- 2602.23768v1 [2026-02-27] BCH Coding Assisted Imaging
+  - Hao Jiang +3; 
+- 2601.11373v2 [2026-01-16] Parallel Decoding of Binary Linear Block Codes via Equivalent Polar Transformation Class
+  - Pin-Jing Li +1; 6 pages, 4 figures
+- 2601.07137v1 [2026-01-12] Recovering polynomials over finite fields from noisy character values
+  - Swastik Kopparty +0; 45 pages
+- 2601.01137v1 [2026-01-03] Single-Shot and Few-Shot Decoding via Stabilizer Redundancy in Bivariate Bicycle Codes
+  - Mohammad Rowshan +0; 6 pages, 5 theorems, 5 figures
+- 2511.22539v1 [2025-11-27] TransCoder: A Neural-Enhancement Framework for Channel Codes
+  - Anastasiia Kurmukova +3; 
+- 2511.19812v2 [2025-11-25] Two-Step Decoding of Binary $2\times2$ Sum-Rank-Metric Codes
+  - Hao Wu +3; 17 pages
+- 2511.18412v2 [2025-11-23] ioPUF+: A PUF Based on I/O Pull-Up/Down Resistors for Secret Key Generation in IoT Nodes
+  - Dilli Babu Porlapothula +3; Added the introduction figure in Section I, corrected typos and grammatical errors
+- 2511.11256v2 [2025-11-14] SCL Decoding of Non-Binary Linear Block Codes
+  - Jingyu Lin +2; This paper has been submitted to IEEE Communications Letters
+- 2510.13882v1 [2025-10-14] Structure-Preserving Error-Correcting Codes for Polynomial Frames
+  - Baigang Chen +1; 
+- 2510.09220v1 [2025-10-10] Serial Polar Automorphism Ensemble Decoders for Physical Unclonable Functions
+  - Marvin Rübenacke +3; 7 Pages, 7 Figures, submitted to IEEE for possible publication
+- 2510.02020v2 [2025-10-02] The dimension and Bose distance of some BCH codes of length $\frac{q^{m}-1}λ$
+  - Run Zheng +2; 
+- 2509.25580v2 [2025-09-29] Neural-Model-Augmented Hybrid NMS-OSD Decoders for Near-ML in Short Block Codes
+  - Guangwen Li +1; 16 pages, 17 figures, 6 tables
+- 2509.24794v2 [2025-09-29] On the Error Rate of Binary BCH Codes under Error-and-erasure Decoding
+  - Sisi Miao +3; International Zurich Seminar (IZS) 2026
+- 2509.11081v1 [2025-09-14] Experimental Demonstration of Rate-Adaptation via Hybrid Polar-BCH Product Code for Flexible PON
+  - Yifan Ye +7; 4 Pages,2 figures
+- 2506.04839v1 [2025-06-05] Iterative Neural Rollback Chase-Pyndiah Decoding
+  - Dmitry Artemasov +4; This work has been submitted to the IEEE for possible publication
+- 2505.09978v1 [2025-05-15] Low-Complexity Decoding for Low-Rate Block Codes of Short Length Based on Concatenated Coding Structure
+  - Mao-Chao Lin +6; 
+- 2503.18758v1 [2025-03-24] On the Optimality of Single-label and Multi-label Neural Network Decoders
+  - Yunus Can Gültekin +4; 8 pages, 8 figures
+- 2503.01118v3 [2025-03-03] The dimension and Bose distance of certain primitive BCH codes
+  - Run Zheng +2; 
+- 2502.10728v1 [2025-02-15] Construction A Lattice Design Based on the Truncated Union Bound
+  - Jiajie Xue +2; 6 pages, 5 figures
+- 2502.03242v2 [2025-02-05] Constructions and decoding procedures for quantum CSS codes
+  - Yannick Saouter +2; 15 pages, 3 figures
+- 2501.07279v2 [2025-01-13] Toward Universal Decoding of Binary Linear Block Codes via Enhanced Polar Transformations
+  - Chien-Ying Lin +3; 
+- 2501.03961v1 [2025-01-07] Channel Coding based on Skew Polynomials and Multivariate Polynomials
+  - Hedongliang Liu +0; Dissertation from Technical University of Munich; Successfully defended in July 2024
+- 2412.20828v4 [2024-12-30] Effective Application of Normalized Min-Sum Decoding for Short BCH Codes
+  - Guangwen Li +1; 5 pages, 4 figures, 2 tables. This is the accepted version of the article to be published in IEEE Communicatio
+
+## alg_decoding_quantum  (`abs:"algebraic decoding" AND abs:"quantum"`)
+- 2608.05432v1 [2026-08-05] Diversity in Coded TE-QKD Channels: Achieving Infinite Diversity out of Finite System Resources
+  - Shaikha S. Al-Qahtani +2; The manuscript has 54 pages, 16 figures, and 8 tables. We intend to submit this manuscript to an IEEE journal
+- 2602.05462v2 [2026-02-05] Explicit List-Decodable Linearized Reed-Solomon and Folded Linearized Reed-Solomon Subcodes
+  - Kuo Shang +2; 28 pages
+- 2502.03242v2 [2025-02-05] Constructions and decoding procedures for quantum CSS codes
+  - Yannick Saouter +2; 15 pages, 3 figures
+
+## divstep  (`all:divstep`)
+- 2610.22367v1 [2026-10-15] Discovering state-of-the-art quantum circuits with large language models
+  - Andi Gu +3; 46 pages, 10 figures, 6 tables
+
+## safegcd  (`all:safegcd`)
+- 2609.28882v1 [2026-09-24] Efficient Record-and-Replay Arithmetic for Quantum Elliptic-Curve Point Addition
+  - Jieyi Long +35; 35 pages, 2 figures. Technical companion to arXiv:2609.09582. Reproducibility artifacts: https://github.com/ji
+- 2507.17956v1 [2025-07-23] Formal Verification of the Safegcd Implementation
+  - Russell O'Connor +1; 15 pages; Coq sources can be found at https://github.com/BlockstreamResearch/simplicity/tree/c1dddedd553b403da
+
+## extgcd_quantum  (`abs:"extended Euclidean" AND abs:quantum`)
+- 2610.35778v1 [2026-10-26] Quantum Field Theory on the Tangent Bundle
+  - Joachim Herrmann +0; 36 pages, to be submitted for publishing
+- 2607.13816v3 [2026-07-15] Quantum Algorithm for Elliptic Curve Discrete Logarithms with Space-Efficient Point Addition
+  - Han Luo +7; 46 pages, 15 figures, 6 tables. This paper supersedes our earlier preprint arXiv:2604.02311. Compared with the
+- 2604.02311v2 [2026-04-02] Space-Efficient Quantum Algorithm for Elliptic Curve Discrete Logarithms with Resource Estimation
+  - Han Luo +4; 35 pages
+- 2510.10967v1 [2025-10-13] Verifiable Quantum Advantage via Optimized DQI Circuits
+  - Tanuj Khattar +7; 52 pages
+
+## gcd_quantum  (`abs:"greatest common divisor" AND abs:quantum`)
+- 2611.15387v1 [2026-11-11] The Quantum Euclid Algorithm and its Application to Factoring
+  - Asma Al-Qasimi +1; 
+- 2610.19459v1 [2026-10-14] Quantum LDPC Codes from Polynomial Minors
+  - Vahid Nourozi +2; 
+- 2605.11642v2 [2026-05-12] Classifying Informative Subsets in Qudit Encrypted Cloning via Congruence Systems
+  - Chen-Ming Bai +2; 17 pages
+- 2601.01137v1 [2026-01-03] Single-Shot and Few-Shot Decoding via Stabilizer Redundancy in Bivariate Bicycle Codes
+  - Mohammad Rowshan +0; 6 pages, 5 theorems, 5 figures
+- 2412.12558v4 [2024-12-17] The Jacobi Factoring Circuit: Quantum Factoring with Near-Linear Gates and Sublinear Space and Depth
+  - Gregory D. Kahanamoku-Meyer +3; STOC 2025; minor updates
+
+## modinv_quantum  (`abs:"modular inversion" AND abs:quantum`)
+- 2610.22367v1 [2026-10-15] Discovering state-of-the-art quantum circuits with large language models
+  - Andi Gu +3; 46 pages, 10 figures, 6 tables
+- 2609.26258v1 [2026-08-13] CRT-Decomposed $Σ$-Protocols for CSIDH
+  - I. Dey +1; 
+- 2607.13816v3 [2026-07-15] Quantum Algorithm for Elliptic Curve Discrete Logarithms with Space-Efficient Point Addition
+  - Han Luo +7; 46 pages, 15 figures, 6 tables. This paper supersedes our earlier preprint arXiv:2604.02311. Compared with the
+- 2604.02311v2 [2026-04-02] Space-Efficient Quantum Algorithm for Elliptic Curve Discrete Logarithms with Resource Estimation
+  - Han Luo +4; 35 pages
+- 2507.03000v1 [2025-07-02] Deterministic Cryptographic Seed Generation via Cyclic Modular Inversion over $\mathbb{Z}/3^p\mathbb{Z}$
+  - Michael A. Idowu +0; 29 pages, 13 figures, 13 tables. Includes entropy analysis, symbolic residue formulation, empirical validation
+- 2412.12558v4 [2024-12-17] The Jacobi Factoring Circuit: Quantum Factoring with Near-Linear Gates and Sublinear Space and Depth
+  - Gregory D. Kahanamoku-Meyer +3; STOC 2025; minor updates
+
+## halfgcd  (`all:"half-gcd"`)
+- 2609.21051v1 [2026-09-17] Refined complexity bounds for rational reconstruction and XGCD through Padé approximants and Cauchy interpolants
+  - Vincent Neiger +2; 
+- 2608.17045v1 [2026-08-17] Prime-Exponent Transition Geometry and Divisor Barriers Between Consecutive Highly Composite Numbers
+  - Marco Mantovanelli +0; 29 pages, 2 figures, 4 tables. Accompanying reproducibility archive, version 1.0.0: https://doi.org/10.5281/ze
+- 2504.12948v3 [2025-04-17] Algorithms for the Shortest Vector Problem in $2$-dimensional Lattices, Revisited
+  - Lihao Zhao +4; 
+
+## mbuc  (`all:"measurement-based uncomputation"`)
+- 2611.02345v1 [2026-11-02] MBUndo: Sound, Automatic, and Efficient Measurement-Based Uncomputation for Quantum Circuits
+  - Shengyuan Yang +1; 
+- 2610.41142v1 [2026-10-30] Encoded reversible addition in constant Toffoli depth
+  - Aidan Epperly +2; 19 pages, 2 figures
+- 2610.37847v1 [2026-10-27] Exact verification of Givens rotation circuits for efficient quantum phase estimation of iron-sulfur clusters
+  - Lizhong Fu +1; 14 pages, 4 figures, 6 tables
+- 2610.23832v2 [2026-10-16] Leveraging verifiable structure in quantum circuits to find more efficient compilations with agentic AI
+  - Tanuj Khattar +5; 
+- 2609.31605v1 [2026-09-25] Measurement-Based Uncomputation from an Error Correction Perspective
+  - Minjun Jeon +2; 
+- 2607.11713v1 [2026-07-13] Quantum Arithmetic Circuits in Public-Key Cryptography
+  - Siyi Wang +6; 
+- 2512.24982v1 [2025-12-31] Any Clifford+T circuit can be controlled with constant T-depth overhead
+  - Isaac H. Kim +1; 14 pages
+- 2407.20167v1 [2024-07-29] Measurement-based uncomputation of quantum circuits for modular arithmetic
+  - Alessandro Luongo +3; 45 pages, 25 figures
+
+## uncompute_meas  (`abs:uncomputation AND abs:measurement`)
+- 2611.05355v4 [2026-11-03] Reading Why: Born-Measured Attention with Exact Word Evidence on Light and Qubits
+  - Teerawat Tongloy +2; 40 pages, 9 figures, 14 tables. v4: compute-uncompute runs on ibm_kingston, a proposition on the shots the evi
+- 2611.02345v1 [2026-11-02] MBUndo: Sound, Automatic, and Efficient Measurement-Based Uncomputation for Quantum Circuits
+  - Shengyuan Yang +1; 
+- 2611.00609v1 [2026-10-31] Compressed Oracle Duality: A simple framework for knowing what quantum adversaries know
+  - Matthew Ding +1; 34 pages
+- 2610.41142v1 [2026-10-30] Encoded reversible addition in constant Toffoli depth
+  - Aidan Epperly +2; 19 pages, 2 figures
+- 2610.40247v1 [2026-10-29] Parity-violating Møller scattering: complete two-loop corrections
+  - Andrzej Czarnecki +0; 6 pages, 1 figure, 2 tables; ancillary files (program, data, catalogue of diagrams), also at https://doi.org/1
+- 2610.37847v1 [2026-10-27] Exact verification of Givens rotation circuits for efficient quantum phase estimation of iron-sulfur clusters
+  - Lizhong Fu +1; 14 pages, 4 figures, 6 tables
+- 2610.26689v1 [2026-10-19] Measurement-efficient energy estimator for quantum chemistry of photodynamic materials
+  - Connor Lenihan +16; 89 pages total: 35-page main article and 54-page Supplementary Information; 31 figures and 8 tables
+- 2610.23832v2 [2026-10-16] Leveraging verifiable structure in quantum circuits to find more efficient compilations with agentic AI
+  - Tanuj Khattar +5; 
+- 2610.10454v3 [2026-10-07] Resolving Spectral Gaps of the Frustrated Spin-1/2 $J_1$-$J_2$ Chain via Dual Spin-Sector Variational Quantum Eigensolver
+  - Sk Saniur Rahaman +0; 12 pages
+- 2609.31605v1 [2026-09-25] Measurement-Based Uncomputation from an Error Correction Perspective
+  - Minjun Jeon +2; 
+- 2609.13953v1 [2026-09-12] Digital quantum lattice Boltzmann evolution by reversible compute and open-system reset
+  - Muhammad Idrees Khan +0; 32 pages, 16 figures
+- 2608.28021v2 [2026-08-28] Compared to What? A Human-Anchored Security Benchmark for LLM-Generated Infrastructure-as-Code
+  - Animesh Shaw +0; 14 pages, 12 figures, 10 tables. v2 corrects the prompt characterization: v1 called the scenarios functional-o
+- 2608.27430v2 [2026-08-27] Factorized Boolean representations for efficient quantum synthesis
+  - Mehul Shah +2; 20 pages, 4 figures. Code and data: https://github.com/mehulshah225/Research_Project
+- 2608.08576v2 [2026-08-09] Exact Conditional Distributions of Chi-Square-Family Statistics for Two-Way Contingency Tables, by Cell-Separable Dynamic Programming
+  - William J. Dwyer +0; 25 pages, 5 figures, 4 tables. Reproducible code, data, and the derivation companion (DH1-DH8) are openly arch
+- 2607.11713v1 [2026-07-13] Quantum Arithmetic Circuits in Public-Key Cryptography
+  - Siyi Wang +6; 
+- 2607.06219v4 [2026-07-07] Classical Reversible Computation by Quantum Coherence
+  - Daniel Loss +0; 59-page Supplementary Information attached as ancillary file. v4: corrects an error in the energy calibration 
+- 2605.18169v1 [2026-05-18] Adaptive Clifford+T Decomposition of Large Toffoli Gates with One Clean Ancilla
+  - Abhoy Kole +3; 
+- 2605.02175v2 [2026-05-04] Intervention Complexity as a Canonical Reward and a Measure of Intelligence
+  - Brendan McCane +0; 23 pages
+- 2604.05829v1 [2026-04-07] Bivariate Causal Discovery Using Rate-Distortion MDL: An Information Dimension Approach
+  - Tiago Brogueira +1; 22 pages
+- 2601.19762v1 [2026-01-27] Inter-branch message transfer on superconducting quantum processors: a multi-architecture benchmark
+  - Cameron V. Cogburn +0; 5 pages, 9 figures. Source includes reproducibility bundle (data, scripts, job IDs, calibration snapshots)
+- 2512.24982v1 [2025-12-31] Any Clifford+T circuit can be controlled with constant T-depth overhead
+  - Isaac H. Kim +1; 14 pages
+- 2510.09520v1 [2025-10-10] Big cats: entanglement in 120 qubits and beyond
+  - Ali Javadi-Abhari +4; 
+- 2505.07222v1 [2025-05-12] Compression, Regularity, Randomness and Emergent Structure: Rethinking Physical Complexity in the Data-Driven Era
+  - Nima Dehghani +0; 
+- 2407.20167v1 [2024-07-29] Measurement-based uncomputation of quantum circuits for modular arithmetic
+  - Alessandro Luongo +3; 45 pages, 25 figures
+- 2403.18927v3 [2024-03-27] Optimal Coherent Quantum Phase Estimation via Tapering
+  - Dhrumil Patel +3; 37 pages, 8 figures; Major additions in version 3: worst-case to average-case reduction using phase randomizat
+- 2403.13461v1 [2024-03-20] Quantum control by the environment: Turing uncomputability, Optimization over Stiefel manifolds, Reachable sets, and Incoherent GRAPE
+  - Alexander Pechen +0; 
+
+## bm_quantum  (`abs:"Berlekamp-Massey"`)
+- 2610.02392v1 [2026-10-01] Singer-Difference-Set Qudit Stabilizer Codes from Non-Degenerate Quadrics in PG(d,q)PG(d,q): Construction, Structural Theorems, and Monte-Carlo Performance
+  - Michel Kulhandjian +1; Accepted for publication in IEEE Open Journal of the Communications Society
+- 2609.21051v1 [2026-09-17] Refined complexity bounds for rational reconstruction and XGCD through Padé approximants and Cauchy interpolants
+  - Vincent Neiger +2; 
+- 2609.19743v1 [2026-09-17] Syndrome Decoding for Silent Data Corruption in Quantized Integer GPU Arithmetic
+  - Pranav Napolean +2; 
+- 2608.05591v1 [2026-08-06] An Ordered-Reliability-Bits Chase Decoding Algorithm for BCH Codes
+  - Wenwu Zhu +2; submitted to 2026 IEEE Globecom workshop
+- 2606.17837v1 [2026-06-16] High-throughput Low-latency Hardware Implementation of BCH Decoders
+  - Jasper Lagendijk +5; 
+- 2605.02296v1 [2026-05-04] Semantic Ordered Statistics Decoding
+  - Chentao Yue +2; 6 pages, submitted to IEEE Globecom for possible publication
+- 2509.17591v1 [2025-09-22] Hyperbolic Sets in Incomplete Tables
+  - J. J. Bernal +1; 
+- 2509.14835v1 [2025-09-18] Inference of unknown syndrome values in the implementation of the Berlekamp-Massey-Sakata algorithm
+  - J. J. Bernal +1; 
+- 2411.19101v1 [2024-11-28] Syndrome-Based Error-Erasure Decoding of Interleaved Linearized Reed-Solomon Codes
+  - Felicitas Hörmann +1; 33 pages, 3 figures
+- 2401.10527v1 [2024-01-19] A new approach to the Berlekamp-Massey-Sakata Algorithm. Improving Locator Decoding
+  - José Joaquín Bernal +1; 21 pages
+
+## syndrome_circuit  (`abs:"syndrome" AND abs:"quantum circuit" AND abs:decod*`)
+- 2611.19618v1 [2026-11-14] Latency-Preserving Rewrites and Translation Validation for Dynamic Quantum Circuits
+  - Rylan Malarchick +0; 
+- 2610.12400v1 [2026-10-08] Measure Now, Mitigate Later: Virtual Error Cancellation for Logical Quantum Circuits
+  - Oles Shtanko +3; 
+- 2610.03429v3 [2026-10-02] Fault tolerance of quantum circuits with tensor networks and symplectic geometry
+  - Soham Ghosh +2; 48 pages, 5 figures
+- 2610.03794v1 [2026-10-01] Generalised Bit-Vector Abstractions for Formal Verification of Quantum Error-Detection and Entanglement Circuits over {H,X,C-NOT}: CSS Constructions, Soundness, and Mutation-Based Validation
+  - Arun Govindankutty +0; Accepted for publication in SN Computer Science, final version will be available through journal once publishe
+- 2608.17189v1 [2026-08-17] Fast Nondestructive Readout for High-Clock-Rate Atom Array Quantum Processor
+  - Xu-Zhao-Qiu Zeng +20; 
+- 2607.10707v1 [2026-07-12] MDQEC-QAS: Meta-Decoding for Quantum Error Correction with Hardware-Aware VQC Search and Confidence-Gated Recovery
+  - Prashant Kumar Choudhary +3; 15 pages, 12 figures and 11 tables
+- 2603.19522v1 [2026-03-19] Preserving MWPM-Decodability in Fault-Equivalent Rewrites
+  - Maximilian Schweikart +3; 23 pages. Submitted to QPL 2026
+- 2603.19126v1 [2026-03-19] Low-weight quantum syndrome errors in belief propagation decoding
+  - Haggai Landa +0; 9 pages, 14 figures
+- 2603.18457v1 [2026-03-19] Simulating Quantum Error Correction beyond Pauli Stochastic Errors
+  - Jordan Hines +6; 11 pages+Appendices, 5+3 figures
+- 2603.00235v1 [2026-02-27] Theory of Magic Phase Transitions in Encoding-Decoding Circuits
+  - Piotr Sierant +1; 27 pages, 9 figures, comments welcome!
+- 2512.00682v1 [2025-11-30] Weighted Projective Line ZX Calculus: Quantized Orbifold Geometry for Quantum Compilation
+  - Gunhee Cho +2; 
+- 2509.16242v1 [2025-09-17] Machine Learning for Quantum Noise Reduction
+  - Karan Kendre +0; Code and data available at: https://github.com/KaranKendre11/MLforQuantumNoiseReduction/
+- 2509.09603v2 [2025-09-11] Fault-tolerant transformations of spacetime codes
+  - Arthur Pesah +3; 102 pages
+- 2508.13045v2 [2025-08-18] Dynamic syndrome decoder in volume-law phases of hybrid quantum circuits
+  - Dawid Paszko +2; 15 pages, 13 figures, 1 table
+- 2506.08331v1 [2025-06-10] Correcting a noisy quantum computer using a quantum computer
+  - Pan Zhang +0; 13 pages, 3 figures, comments are welcome
+- 2505.20261v1 [2025-05-26] Hardware-tailored logical Clifford circuits for stabilizer codes
+  - Eric J. Kuehnke +4; 10 + 6 pages, 4 figures, 2 + 1 tables
+
+## polynomial_arith_rev  (`abs:"polynomial arithmetic" AND abs:reversible`)
+
+## forney  (`abs:Forney AND abs:quantum`)
+
+## chien  (`abs:Chien AND abs:quantum`)
+- 2610.30998v2 [2026-10-22] A Personal History in Quantum Foundations: an Oral History Interview
+  - Yakir Aharonov +1; 29 pages, 2 figures. Oral history interview; accepted for publication in EPJ H
+- 2607.22747v1 [2026-07-23] Theory of Andreev reflection spectroscopy with anisotropic spin-dependent scattering
+  - Zhiyue Li +2; 15 pages, 5 figures
+- 2507.13582v1 [2025-07-18] Historical origins of quantum entanglement in particle physics
+  - Yu Shi +0; 25 pages
+- 2504.16978v1 [2025-04-23] Scientific Spirit of Chien-Shiung Wu: From Quantum Entanglement to Parity Nonconservation
+  - Yu Shi +0; 18 pages, translated transcript of the speech the author made at the International Symposium Commemorating the
+
+## reed_solomon_quantum_alg  (`abs:"Reed-Solomon" AND abs:"quantum algorithm"`)
+- 2610.23832v2 [2026-10-16] Leveraging verifiable structure in quantum circuits to find more efficient compilations with agentic AI
+  - Tanuj Khattar +5; 
+- 2609.31484v1 [2026-09-25] COFI-DQI: Curve-based Optimal Function Intersection via Decoded Quantum Interferometry
+  - Gretchen L. Matthews +1; 
+- 2605.03972v2 [2026-05-05] Regev's reduction as a candidate quantum algorithm for the discrete logarithm problem in finite abelian groups
+  - M. Isabel Franco Garrido +1; 
+- 2511.22691v1 [2025-11-27] OPI x Soft Decoders
+  - André Chailloux +0; v1 21p
+- 2411.12553v2 [2024-11-19] Quantum advantage from soft decoders
+  - André Chailloux +1; v2, 33 pages, acknowledgments added
+
+## toffoli_rs  (`abs:Toffoli AND abs:"Reed-Solomon"`)
+- 2510.10967v1 [2025-10-13] Verifiable Quantum Advantage via Optimized DQI Circuits
+  - Tanuj Khattar +7; 52 pages
+
+## quantum_ecc_decoder  (`abs:"quantum" AND abs:"decoder" AND abs:"Toffoli" AND abs:"code"`)
+- 2611.15794v1 [2026-11-11] On Multi-Constrained Path Finding utilizing Grover Search and Decoded Quantum Interferometry
+  - Dmitrii Chemodanov +0; 
+- 2610.20591v1 [2026-10-14] Logical CCZ state cultivation
+  - Yuta Hirasaki +1; 
+- 2607.16166v2 [2026-07-17] Fast logical operations in quantum LDPC codes using simple resource states
+  - Mark Webster +1; 14 pages, 4 figures
+- 2605.30455v1 [2026-05-28] A Denser Planar Surface Code
+  - Guang Hao Low +6; 105 pages, 70 figures, 27 tables
+- 2510.10967v1 [2025-10-13] Verifiable Quantum Advantage via Optimized DQI Circuits
+  - Tanuj Khattar +7; 52 pages

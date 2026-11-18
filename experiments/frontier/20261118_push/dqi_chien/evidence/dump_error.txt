@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/kaggle/src/script.py", line 336, in <module>
+    run()
+    ~~~^^
+  File "/kaggle/src/script.py", line 239, in run
+    zip(QB0[ccx_m][sel0], QB1[ccx_m][sel0], QB2[ccx_m][sel0])]
+        ~~~~~~~~~~^^^^^^
+IndexError: boolean index did not match indexed array along axis 0; size of axis is 40240 but size of corresponding boolean axis is 44264

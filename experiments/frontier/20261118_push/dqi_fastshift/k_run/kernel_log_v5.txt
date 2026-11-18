@@ -1,0 +1,31 @@
+[{"stream_name":"stdout","time":1.171338664,"data":"[    0.3s] competition root /kaggle/input/competitions/google-verifiable-quantum-circuit-compilation\n"}
+,{"stream_name":"stdout","time":1.2636528839999999,"data":"[    0.4s] vqcc_ir /kaggle/input/datasets/grantprater/vqcc-dqi-61c8348d-merged-closings/vqcc_ir.py kickmix /kaggle/input/competitions/google-verifiable-quantum-circuit-compilation/kickmix/kickmix.so\n"}
+,{"stream_name":"stdout","time":1.333413181,"data":"[    0.4s] decompress /kaggle/input/datasets/grantprater/vqcc-dqi-61c8348d-merged-closings/dqi_575b043f.kmb.xz\n"}
+,{"stream_name":"stdout","time":4.097014241,"data":"[    3.2s] tape /kaggle/working/tape.kmb bytes 479128738\n"}
+,{"stream_name":"stdout","time":4.290493461,"data":"[    3.4s] reference_shift fwd T 30912 CSWAP 28980 CCX 1932 CX 586 CXexp 58546 | adj T 30912 CXexp 58546\n"}
+,{"stream_name":"stdout","time":4.2905258459999995,"data":"[    3.4s] reference_shift_m7 fwd T 30774 CSWAP 28980 CCX 1794 CX 517 CXexp 58477 | adj T 30774 CXexp 58477\n"}
+,{"stream_name":"stdout","time":7.007033684,"data":"[    6.1s] tape 57520821 890 66726 575b043f4fee91a0\n"}
+,{"stream_name":"stdout","time":9.036308936,"data":"[    8.1s] registers {'n_registers': 4165, 'n_named_S': 70, 'S_index_range': [0, 69], 'S_not_12i_12i11': [], 'n_bad': 0}\n"}
+,{"stream_name":"stdout","time":10.617280314,"data":"[    9.7s] fwd0 scratch liveness 2900 window 17576193 17577670\n"}
+,{"stream_name":"stdout","time":10.617316392,"data":"[    9.7s] fwd0 0 1 70 window 17576193 17577670 A_rest True B_rest True bad 12 ones 821 eq_field False assoc False linA 59 linB 70 bilin_mismatch 64 anf True\n"}
+,{"stream_name":"stdout","time":12.223258772,"data":"[   11.3s] fwd1 scratch liveness 4898 window 17585904 17587379\n"}
+,{"stream_name":"stdout","time":12.223298465,"data":"[   11.3s] fwd1 2 3 70 window 17585904 17587379 A_rest True B_rest True bad 12 ones 821 eq_field False assoc False linA 59 linB 70 bilin_mismatch 64 anf True\n"}
+,{"stream_name":"stdout","time":13.931619447,"data":"[   13.0s] c132_0 scratch liveness 4999 window 21385761 21387283\n"}
+,{"stream_name":"stdout","time":13.931655712,"data":"[   13.0s] c132_0 66 1 67 window 21385761 21387283 A_rest True B_rest True bad 0 ones 628 eq_field False assoc False linA 0 linB 0 bilin_mismatch 0 anf True\n"}
+,{"stream_name":"stdout","time":15.642190045,"data":"[   14.7s] c132_1 scratch liveness 5524 window 21435041 21436572\n"}
+,{"stream_name":"stdout","time":15.642224329,"data":"[   14.7s] c132_1 66 33 67 window 21435041 21436572 A_rest True B_rest True bad 0 ones 954 eq_field False assoc False linA 0 linB 0 bilin_mismatch 0 anf True\n"}
+,{"stream_name":"stdout","time":17.99718355,"data":"[   17.1s] rev0 scratch liveness 3314 window 36295658 36296976\n"}
+,{"stream_name":"stdout","time":17.997218042,"data":"[   17.1s] rev0 0 3 2 window 36295658 36296976 A_rest True B_rest True bad 0 ones 363 eq_field True assoc True linA 0 linB 0 bilin_mismatch 0 anf True\n"}
+,{"stream_name":"stdout","time":20.516504137,"data":"[   19.6s] rev_mid scratch liveness 1306 window 40670400 40671724\n"}
+,{"stream_name":"stdout","time":20.516539213,"data":"[   19.6s] rev_mid 0 41 40 window 40670400 40671724 A_rest False B_rest True bad 2 ones 397 eq_field False assoc False linA 0 linB 0 bilin_mismatch 0 anf True\n"}
+,{"stream_name":"stdout","time":24.27781918,"data":"[   23.4s] fwd_cluster ops 1876923 CCX 29543 CX 1826827 CX/CCX 61.84\n"}
+,{"stream_name":"stdout","time":47.356348845,"data":"[   46.5s] rev_cluster ops 6612034 CCX 64050 CX 4323967 CX/CCX 67.51\n"}
+,{"stream_name":"stdout","time":47.358805884,"data":"[   46.5s] wrote /kaggle/working/dqi_fastshift.json 176233\n"}
+,{"stream_name":"stdout","time":47.358823177,"data":"[   46.5s] deleted /kaggle/working/tape.kmb\n"}
+,{"stream_name":"stderr","time":49.690025844,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":49.690055987,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":49.998995646,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":49.999030625,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":51.322186609,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":52.461140259,"data":"[NbConvertApp] Writing 428054 bytes to __results__.html\n"}
+]
