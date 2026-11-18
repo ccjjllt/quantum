@@ -30,7 +30,7 @@ PER_BLOCK = 10
 STOP_AT = 145          # stop trying seeds once a plan with this many cuts (190 products) is found
 
 
-def plan_one(target, seeds=(7,), trials=40, verbose=True, time_limit=600, generic=False):
+def plan_one(target, seeds=(7,), trials=40, verbose=True, time_limit=600, generic=False, basis_time=120):
     T = slices(target)
     best = None
     t0 = time.time()
@@ -41,7 +41,7 @@ def plan_one(target, seeds=(7,), trials=40, verbose=True, time_limit=600, generi
         rows = None
         for att in range(6):
             if generic or att >= 3:
-                rows = find_basis_generic(T, rng, verbose=False, time_limit=120)
+                rows = find_basis_generic(T, rng, verbose=False, time_limit=basis_time)
             else:
                 rows = find_basis(T, rng, max_xy=6000)
             if rows is not None:

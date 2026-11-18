@@ -1,0 +1,20 @@
+{
+  "id": "qingyu1232/qcc-chem-emit-k0b",
+  "title": "Qcc Chem Emit K0b",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "machine_shape": "",
+  "dataset_sources": [],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": [
+    "maoxin123/qcc-v27-a-44-qubit-invsqrt-on-the-28-09-frontier"
+  ],
+  "model_sources": []
+}
