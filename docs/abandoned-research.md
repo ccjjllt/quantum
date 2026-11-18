@@ -514,3 +514,23 @@ git worktree add .worktree/dqi codex/dqi-research
 
 `df` 的 GiB 取整只显示 1Gi 变化；精确量以 `du -sk` 的 815,751 KB 为准。
 删除后 `git status` 有 825 项变更（820 个受跟踪文件 + 5 个 docs），全部可从锚点恢复。
+
+### 9.8 `/tmp` 临时数据清理（同日）
+
+仓库清完后，又清了 `/tmp` 下**只属于本比赛研究**的临时目录。为免误删其他项目，
+只删名字或内容明确含 `qcc` / `dqi` / `chem` / `invsqrt` / `stage` / `kgpu` 的条目，
+逐项核对后执行；`ple-*`、`mist_audit`、`gdrive_pkg_out`、`campaign2`、`best_bank`、
+`gadget_kit`、`frontier_watch`、`smoke_merge`/`best_merge`、`ga_*`/`bank_*` 等
+非本比赛或仍在更新的目录**未动**。
+
+| 批次 | 条目 | 体量 | 主要内容 |
+|---|---:|---:|---|
+| 大件 | 143 | **20.72 GiB** | `dqi_sweep` 6.29G、`dqid` 1.79G、`sweep5` 1.67G、`k_patch_out` 887M、`sweep4dl` 612M、`int_correct` 542M、`dqitrunc` 490M、`qcc_dqi_info` 466M、`vfloor`/`stage_*`/`chemprobe`/`rm`/`dqireg` 各 ~460M、`p1_test.kmb` 452M、`q0.npy`/`q1.npy` 各 439M、`k12/k14/k16out` 各 435M、`trunc2` 420M、`dqifind` 359M、`bmr2` 344M、`ccxp.npy` 230M、`qcc_push` 195M、41 个 `kgpu_logs_*` 604M |
+| 小件 | 77 | 50.5 MiB | `stage_final`、`c45*`、`salts_out`、`arr_out`、`census_out`、`blk*`、`chien1`、`bmrounds*`、`rotlp*`、`intel2`、`cf1/cf2`、`merge`、`*.kmb`/`*.npy` 探针等 |
+
+**合计回收 21,777,944 KB ≈ 20.77 GiB。** `df` 从 347Gi 已用 / 546Gi 可用
+变为 **326Gi 已用 / 567Gi 可用**。
+
+删除的 `/tmp/int_correct/submission.zip` 是最终包的本地副本；同一文件已上传 Kaggle
+（ref `58487952`），18 成员 SHA-256 与 zip sha 在回执中，可用 kernel
+`qingyu1232/qcc-integrator-281806` 重建。其余大件都是公开件/tape 的重复副本或可重跑中间产物。

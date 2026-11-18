@@ -27,7 +27,8 @@
 > 剩余空间 <1.3%），删除整个 `frontier/`（20261116/17/18 三轮，34 MB）、`artifacts/`
 > 全部产物（646 MB，含 479 MB 未提交的 `dqi_cond.kmb`）、`.worktree/` 三个 checkout、
 > `.venv` + `.uv-cache`（116 MB）、四份本轮备忘与会话文档、研究用 `scripts/kgpu.py`。
-> **合计回收 797 MB。** 删除前锚点 `b754ef5`，受跟踪文件可 `git checkout b754ef5 -- <path>` 取回。
+> **合计回收 797 MB；另清理 `/tmp` 下本比赛的临时数据 20.77 GiB（非本比赛目录未动）。**
+> 删除前锚点 `b754ef5`，受跟踪文件可 `git checkout b754ef5 -- <path>` 取回。
 > 研究概况、14 条轴的决定性数字与恢复口径见
 > [docs/abandoned-research.md §9](../docs/abandoned-research.md)；逐条清单见
 > [ARCHIVE_closed_lines.md §7](ARCHIVE_closed_lines.md)。
