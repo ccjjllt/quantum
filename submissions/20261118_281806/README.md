@@ -1,7 +1,7 @@
 # 2026-11-18 候选包：invsqrt `563d0583` + DQI `575b043f` + chem（18 成员官方 PASS）
 
-**状态：已提交，ref `58487952`（2026-11-18T00:47:06Z），清理读取时榜单仍为 PENDING。**
-本包端到端官方验证 PASS；本地 GM 28.180659，预期 LB 28.1807，**不把预期写成已通过**。
+**状态：COMPLETE，public 28.18067，ref `58487952`（2026-11-18T00:47:06Z）。**
+本包端到端官方验证 PASS；本地 GM 28.180659，与榜单四舍五入一致。
 内核 `qingyu1232/qcc-integrator-281806` v1；manifest 随 2026-11-18 清理删除，
 可从锚点 `b754ef5` 取回（`.../20261117_deep/integration/members_281806_correct.json`）。
 
@@ -35,7 +35,7 @@ kaggle competitions submit -c google-verifiable-quantum-circuit-compilation \
   （`qingyu1232/qcc-integrator-281806` 输出，85,016,504 B）。
 - 同一 DQI 件 `575b043f` 在 58464076 那次提交拿到 LB 28.15094 = 其本地 GM，
   说明榜单 salt 对它是干净的；本包只把 invsqrt 从 `0af21cb8`(74,797.37) 换成
-  `563d0583`(74,560.91)，预期 LB ≈ **28.1807**。
+  `563d0583`(74,560.91)，榜单返回 **28.18067**。
 
 ## 第三轮研究结论（为什么暂时只有 +0.03）
 

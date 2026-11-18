@@ -8,7 +8,7 @@
 
 | 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 最佳 COMPLETE **28.15094**（ref 58464076）；已提交 **28.180659** 包（ref 58487952，清理时 PENDING）；gold 28.71339 需单腿再降 5.46% |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 最佳 COMPLETE **28.18067**（ref 58487952）；gold 28.71339 需单腿再降 5.46% |
 | invsqrt | `codex/invsqrt-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
 | 化学 / dfthcsos | `codex/dfthcsos-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
 | DQI | `codex/dqi-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
@@ -50,13 +50,13 @@
 | 2026-11-16 | [换件：公开最高真实包（Ozertuu 28.091）](experiments/ARCHIVE_closed_lines.md) | 58420406 | **28.09090，COMPLETE（rank 255/3152）** |
 | 2026-11-16 | [换件：28.09486 sub1（f2cdab0b + ccc2ab84 + sub1，三件官方 verifier 全 PASS）](experiments/ARCHIVE_closed_lines.md) | 58424363 | **28.09486，COMPLETE（rank 188/3160）** |
 | 2026-11-17 | [换 DQI：61c8348d → 575b043f（+4 个已证明 product-retention closings，mean T 367,116.06）](submissions/20261117_deep_575b043f/README.md) | 58464076 | **28.15094，COMPLETE（rank 156，silver 线内）** |
-| 2026-11-18 | [28.1807 包：invsqrt 563d0583 + DQI 575b043f + chem a73b25d2](submissions/20261118_281806/README.md) | 58487952 | 已提交；清理读取时仍 PENDING，本地 GM **28.180659**（不写成已通过） |
+| 2026-11-18 | [28.1807 包：invsqrt 563d0583 + DQI 575b043f + chem a73b25d2](submissions/20261118_281806/README.md) | 58487952 | **28.18067，COMPLETE**（本地 GM 28.180659） |
 
 当前最佳 COMPLETE 为 **28.15094 包（本账号 `58464076`，rank 156）**：
 `0af21cb8` invsqrt + `575b043f` DQI + `a73b25d2` chemistry。
 2026-11-18 又提交 **28.180659** 包（ref `58487952`）：只把 invsqrt 换成 `563d0583`
 （44Q，74,560.91），DQI/chem 同件；18 成员 SHA-256 固定，未改动官方 verifier 全量 PASS。
-清理读取榜单时该提交仍为 PENDING，预期 28.1807，**不把预期写成已通过**。
+榜单已返回 **28.18067，COMPLETE**（本地 GM 28.180659，四舍五入一致）。
 2026-11-18 用 Kaggle MCP 复查公开前沿：最高公开包是 junmiaotiao 的 U（ref `58482406`，
 GM 28.18083687），比本包高 **0.00018**；其 DQI `5f901c55` 比我们的 `575b043f` 少 6 个
 Toffoli，但一次 DQI 失败约 −0.043 GM，故未重提。公开件没有 >28.2 的方案；榜首 31.50404
