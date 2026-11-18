@@ -1,0 +1,452 @@
+Multiplication in finite fields with
+Chudnovsky-type algorithms over the projective
+line
+St´ephane Ballet, Alexis Bonnecaze, and Bastien Pacifico
+Aix Marseille Univ, CNRS, Centrale Marseille, I2M, Marseille, France
+Stephane.Ballet@univ-amu.fr
+Alexis.Bonnecaze@univ-amu.fr
+Bastien.Pacifico@univ-amu.fr
+Abstract. We propose a Recursive Polynomial Generic Construction
+(RPGC) of multiplication algorithms in any finite field Fqn based on the
+method of D.V. and G.V. Chudnovsky specialized on the projective line.
+These algorithms are of type polynomial interpolation and the Karatsuba
+algorithm is seen as a particular case of this construction. We show that
+the bilinear complexity of algorithms provided by our method is quasi-
+linear with respect to the extension degree n, and we give a uniform
+bound for this complexity. We also prove that the construction of these
+algorithms is deterministic and can be done in polynomial time. We give
+an asymptotic bound for the complexity of their construction.
+Keywords: Finite fields, Bilinear complexity, Polynomial interpolation, Alge-
+braic function fields.
+1 Introduction
+Multiplication in finite fields has been at the heart of many works since the end
+of the twentieth century [20,8]. In addition to being interesting for the theoretical
+side, this subject is of interest to many applications that need fast arithmetic,
+such as cryptography. Different strategies have been studied to build a multipli-
+cation algorithm. Among them, interpolation algorithms on algebraic curves, due
+to D.V. and G.V. Chudnovsky [10], have been widely studied for their qualities
+in terms of bilinear complexity [2]. Nevertheless, they present a certain number
+of weaknesses, including their difficulty of construction and use. In this paper,
+we propose a construction method that allows us to bypass these difficulties, by
+doing polynomial interpolation, while preserving the benefit of Chudnovsky-type
+algorithms.
+Multiplications in a degree n extension of Fq require different kind of opera-
+tions in Fq . Let x = Pn i=1 xiei and y = Pn i=1 yiei be two elements of Fqn , in a
+basis {e1, . . . , en} of Fqn over Fq . By the usual method, the product of x and y
+is given by the formula
+z = xy =
+nX
+h=1
+zheh =
+nX
+h=1
+ nX
+i,j=1
+tijhxiyj
+
+eh, (1)
+with
+eiej =
+nX
+h=1
+tijheh,
+where tijh ∈ Fq are constants in Fq . Two different types of multiplications are
+involved in this product. The scalar ones are multiplications by a constant in
+Fq , and the bilinear ones depend on the two elements being multiplied (i.e.
+the xiyj ). Of the two, bilinear multiplications are known to be computationally
+heavier ([18], see Survey [2]). This explains the motivation to reduce the number
+of bilinear multiplications in multiplication algorithms and led to the study of
+the bilinear complexity, that can be defined as follows.
+Definition 1. Let U be an algorithm for the multiplication in Fqn over Fq . Its
+number of bilinear multiplications is called its bilinear complexity, written µ(U ).
+The bilinear complexity of the multiplication in Fqn over Fq , denoted by µq (n),
+is the quantity:
+µq (n) = min U µ(U ),
+where U is running over all multiplication algorithms in Fqn over Fq .
+1.1 Some known-results
+From the works of Winograd and De Groote [11] applied to the multiplication
+in any finite field Fqn , it is proven that for all n we have µq (n) ≥ 2n − 1, equal-
+ity being ensured if and only if n ≤ 1 2 q + 1 ([2], Theorem 2.2). Winograd also
+proved that this lower bound is obtained with interpolation algorithms [21]. In
+1987, D.V. and G.V. Chudnovsky proposed an interpolation method on alge-
+braic curves [10], generalizing polynomial interpolation. This method makes it
+possible to multiply in any extension of degree n of Fq , with a good bilinear
+complexity, provided that one has an algebraic curve with a sufficient number of
+rational points. This original algorithm is called the Chudnovsky–Chudnovsky
+Multiplication Algorithm (CCMA). More generally, a multiplication algorithm
+using interpolation over algebraic curves is said to be of type Chudnovsky.
+For an increasing degree of the extension, the interpolation requires more
+and more rational points (i.e. rational places). From the Serre–Weil bound, the
+number of rational places is bounded for a fixed genus. Hence, the classical
+strategy is to build these algorithms over function fields of growing genus. Ballet
+proved that the bilinear complexity is linear in the degree of the extension ([3], see
+[2]) using the original algorithm over an explicit tower of function fields defined
+by Garcia and Stichtenoth [12]. However, it is not clear that these algorithms
+can be constructed in a reasonable time since we have no method to find the
+2
+place of degree n required to represent Fqn ([18], Remark 5). Moreover, there is
+no generic and deterministic construction for both the divisors and the bases of
+the Riemann–Roch spaces involved in the algorithms.
+The strategy of growing genus was natural since the original algorithm evalu-
+ates only on rational places of a function field. But several years later, thanks to
+the works of Ballet and Rolland [6], Arnaud [1], Cenk and ¨Ozbudak [9], and Ran-
+driambololona [17], the method has been extended to the evaluations at places
+of higher degrees, and to the use of derivative evaluations. These generalizations
+led to the introduction of another strategy for constructing the algorithm for
+asymptotically large extensions. The evaluation at places of higher degrees al-
+lows one to fix a function field and to evaluate at places of growing degrees. In [5],
+Ballet, Bonnecaze and Tukumuli built Chudnovsky-type algorithms with inter-
+polation only over elliptic curves, i.e. fixing the genus g of the function field to be
+equal to 1, and using places of increasing degrees. This work gave a quasi-linear
+asymptotic bound for the bilinear complexity of these algorithms with respect
+to the degree of the extension. Moreover, they can be constructed in polynomial
+time. This latest result is not yet established for the growing genus strategy.
+1.2 New results and organization
+This extended abstract is based on the preprint [4]. In this paper, we build
+Chudnovsky-type algorithms for the multiplication in any finite field Fqn , with
+interpolation only over the projective line, i.e. fixing the genus g to be equal to 0,
+and using places of increasing degrees. In small extensions, the bilinear complex-
+ity of the obtained algorithms can equalize the best known bound and sometimes
+even improve it. Compared with the construction over elliptic curves, our work
+has the advantages of giving an uniform bound for the bilinear complexity of
+our algorithms and of giving a generic construction of algorithms for the mul-
+tiplication in any finite field. Namely, the implied Riemann–Roch spaces and
+their associated representations are generic. More precisely, the divisors defining
+the Riemann–Roch spaces as well as the associated bases are of the same form
+for all q and n. These are explicitly given and do not have to be computed.
+Moreover, our set up enables us to interpolate with polynomials. This makes our
+algorithms closer to well-known algorithms based on polynomial interpolation
+such as Karatsuba [16] or Cook [7].
+This paper begins with an overview of the current generalizations of CCMA.
+Section 3 focuses on the multiplication in small extensions. We explain how
+to reach the equality in the Winograd–De Groote bound with our construc-
+tion. Moreover, this construction naturally integrates the trick of Karatsuba
+algorithm. In Section 4, we give a Recursive Polynomial Generic Construction
+(RPGC) of algorithms for the multiplication in any extension of Fq , and give a
+natural strategy to build algorithms with a good bilinear complexity. In Section
+5, we prove the existence of such algorithms having a quasi-linear uniform bound
+for their bilinear complexities, with respect to the extension degrees. Then, we
+show that their construction is deterministic, and give a polynomial asymptotic
+bound for this construction.
+3
+2 Chudnovsky and Chudnovsky Multiplication Algorithm
+A large description of CCMA and its generalizations is given in [2]. We first recall
+some basics of function field theory and introduce the notions required for our
+study. Then, we recall a specialized version of the generalized theorem/algorithm
+over a function field of arbitrary genus g, which will be useful for the proposed
+construction.
+Let F/Fq be a function field of genus g over Fq . For O a valuation ring, the
+place P is defined to be P = O \ O×. We denote by FP the residue class field
+at the place P , that is isomorphic to Fqd , d being the degree of the place. A
+rational place is a place of degree 1. We also denote by Bd(F/Fq ) the number of
+places of degree d of F over Fq . A divisor D is a formal sum D = P i niPi, where
+Pi are places and ni are relative integers. The support supp D of D is the set of
+the places Pj for which nj ̸= 0, and D is effective if all the ni are positive. The
+degree of D is defined by deg D = P i ni. The Riemann–Roch space associated
+to the divisor D is denoted by L(D). A divisor D is said to be non-special if
+dim L(D) = deg(D) + 1 − g. Details about algebraic function fields can be found
+in [19].
+Since Ballet and Rolland [6], Arnaud [1], then Cenk and ¨Ozbudak [9] and
+finally the best current generalization due to Randriambololona [17], the algo-
+rithm has been extended to the evaluation at places of arbitrary degrees and with
+multiplicity greater than 1. In the following, we only consider the generalization
+to the evaluation at places of arbitrary degrees. The statement of the algorithm
+requires the following definition of the generalized Hadamard product.
+Definition 2. Let q be a prime power. The generalized Hadamard product in
+Fqd1 × · · · × FqdN , denoted by ⊙, is given for all (a1, . . . , aN ), (b1, . . . , bN ) ∈
+Fqd1 × · · · × FqdN by
+(a1, . . . , aN )⊙(b1, . . . , bN ) = (a1b1, . . . , aN bN ).
+Now, let us introduce a specialized version of the current generalization of
+CCMA.
+Theorem 1 (CCMA at places of arbitrary degrees without derivative
+evaluations).
+Let
+– n be a positive integer,
+– F/Fq be an algebraic function field of genus g,
+– Q be a degree n place of F/Fq ,
+– D be a divisor of F/Fq ,
+– P = {P1, . . . , PN } be a set of places of arbitrary degrees of F/Fq ,
+We suppose that supp D ∩ {Q, P1, ..., PN } = ∅ and that
+(i) the evaluation map
+EvQ : L(D) → FQ
+f 7→ f (Q)
+is surjective,
+4
+(ii) the evaluation map
+EvP : L(2D) → Fqdeg P1 × · · · × Fqdeg PN
+f 7→
+ 
+f (P1), . . . , f (PN )
+
+is injective.
+Then,
+(1) we have a multiplication algorithm U F,P q,n (D, Q) such that for any two ele-
+ments x, y in Fqn :
+xy = EQ ◦ EvP |ImEvP
+−1
+
+EP ◦ Ev−1 Q (x)⊙EP ◦ Ev−1 Q (y)  , (2)
+where EQ denotes the canonical projection from the valuation ring OQ of
+the place Q in its residue class field FQ, EP the extension of EvP on the
+valuation ring OQ of the place Q, EvP |ImEvP
+−1 the restriction of the inverse
+map of EvP on its image, ⊙ the generalized Hadamard product and ◦ the
+standard composition map;
+(2) the algorithm U F,P q,n (D, Q) defined by (2) has bilinear complexity
+µ(U F,P q,n (D, Q)) =
+NX
+i=1
+µq (deg Pi).
+Remark 1. The condition that the supports of the divisor D and Q, P1, ..., Pn
+are disjoint is not necessary because it is always possible to move the support
+(see [18, Remark 2.3]). However, this is a simplifying assumption almost always
+made in the literature.
+Moreover, recall that sufficient application conditions are given in [2]:
+Theorem 2. Existence of the objects satisfying the conditions of Theorem 1
+above is ensured by the following numerical criteria:
+(a) a sufficient condition for the existence of a place Q in F/Fq of degree n is
+that 2g + 1 ≤ q(n−1)/2(q1/2 − 1), where g is the genus of F ,
+(b) a sufficient condition for (i) is that the divisor D − Q is non-special,
+(c) a necessary and sufficient condition for (ii) is that the divisor 2D − G is
+zero-dimensional:
+dim L(2D − G) = 0
+where G = P1 + · · · + PN .
+In the following, we specialize these results to the rational function field
+Fq (x).
+5
+3 CCMA and the multiplication in small extensions of Fq
+3.1 Polynomial interpolation over rational points
+As seen in the introduction, the multiplication in any extension of Fq of degree
+n ≤ 1 2 q + 1 requires exactly 2n − 1 bilinear multiplications [11], and every algo-
+rithm reaching this optimal bilinear complexity is of type interpolation [21]. In
+this section, we construct Chudnovsky-type algorithms over the projective line
+using polynomial interpolation, and which have optimal bilinear complexity for
+q a prime power and n ≤ 1 2 q + 1. We begin with the following set up.
+PGC : Polynomial Generic Construction
+For q a prime power and n < 1 2 q + 1 a positive integer. We set
+– Q is a place of degree n of Fq (x),
+– D = (n − 1)P∞,
+– P is a set of rational places distinct from P∞ of cardinal |P| = 2n − 1,
+– the basis of L(D) is {1, x, . . . , xn−1}, and
+– the basis of L(2D) is {1, x, . . . , x2n−1}.
+In our construction, we set the function field to be Fq (x), and the divisor
+to be D = (n − 1)P∞. In order to define an algorithm for the multiplication
+in Fqn with Theorem 1, the only variables left are the place Q, and the set P.
+Hence, we denote the algorithm using these parameters by U P q,n(Q) to lighten
+the notations.
+Proposition 1. Let q be a prime power, n < 1 2 q +1 be an integer and P be a set
+of rational places distinct from P∞ of cardinal |P| = 2n − 1. Then, PGC is a set-
+up for a CCMA from Theorem 1, denoted by U P q,n(Q), for the multiplication in
+Fqn . This algorithm interpolates over polynomials and computes 2n − 1 bilinear
+multiplications in Fq .
+Remark 2. CCMA cannot be constructed with PGC when n = 1 2 q + 1.
+When q is odd, the equality of Remark 2 never happens, because 1 2 q + 1 is
+not an integer. For an even q ≥ 4, we can use a place R of degree n − 1 to define
+the divisor, i.e. set D = R. With this setting, we obtain an algorithm of bilinear
+complexity 2n − 1, but that interpolates no longer with polynomials but with
+rational functions. When q = 2 and n = 2, the rational function field over F2
+has only 3 rational places, while 4 are required by our construction (3 for the
+evaluations, and 1 to define D), and we cannot use the previous argument to
+obtain an algorithm of optimal bilinear complexity. In the next section, we see
+how to obtain a polynomial interpolation algorithm in these cases.
+6
+3.2 The case of n = 1 2 q + 1 and polynomial interpolation
+We consider the case of Remark 2: the extension of Fq of degree n = 1 2 q + 1.
+We want to build a Chudnovsky-type algorithm over the rational function field
+Fq (x), demanding D = (n − 1)P∞ to interpolate with polynomials. From the
+results of Winograd and De Groote, it must be possible to construct such an
+algorithm with optimal bilinear complexity. We use that the evaluation at a place
+in the support of the divisor can be defined [18, Remark 2.3]. In our context, it
+yields to the following definition of evaluation at P∞.
+Definition 3. Let k be a positive integer and P∞ be the place at infinity of
+Fq (x). Set L(D) = L(kP∞), we define the evaluation at P∞ to be for all f =Pk−1
+i=0 fixi ∈ L(D),
+fD (P∞) := fk−1,
+that is the leading coefficient of f . We specify the divisor D in the notation as
+the evaluation depends on the Riemann–Roch space from which it is defined.
+This definition makes sense since
+fD (P∞)gD (P∞) = (f g)2D (P∞), (3)
+and using this, we obtain the following result.
+Proposition 2. Let q ≥ 2 be an even prime power and n = 1 2 q + 1. Let P be
+the set of all rational places of Fq (x). Given Q a place of degree n, there exists a
+Chudnovsky-type algorithm over the projective line U P q,n(Q) for the multiplication
+in Fqn . This algorithm interpolates over polynomials and computes 2n−1 bilinear
+multiplications in Fq .
+3.3 A particular case: the quadratic extension of F2
+The case of q = 2 and n = 2 is problematic and interesting. CCMA cannot be
+constructed with PGC for the multiplication in F22 over F2. In fact, the rational
+function field F2(x) has only three rational places: P0, the place associated to the
+polynomial x, P1, associated to x−1, and P∞, the place at infinity. The proposed
+construction requires P∞ to define the Riemann–Roch space and three other
+places to evaluate. Proposition 2 gives a Chudnovsky-type algorithm reaching
+this optimal bilinear complexity, that is exactly the Karatsuba’s algorithm.
+Corollary 1. Let Q be the degree 2 place of F2(x) and P = {P0, P1, P∞}, where
+P0 and P1 are the places associated to x and x−1 respectively, and P∞ is the place
+at infinity. Then, U P 2,2(Q) is a Chudnovsky-type algorithm for the multiplication
+in the quadratic extension of F2 with bilinear complexity µ(U2,2) = 3. Moreover,
+its bilinear multiplications are corresponding to those of the Karatsuba Algorithm.
+7
+Remark 3. Corollary 1 becomes generalized to any prime power q. Let P0, P1
+and P∞ be the places of Fq (x) associated to x, x − 1 and at infinity. Let P2 =
+{P0, P1, P∞}, and Q be a degree 2 place of Fq (x). Then, U P2 q,2 (Q) is a Chudnovsky-
+type algorithm for the multiplication in the quadratic extension of Fq , such that
+µ(U P2 2,2 ) = 3. The bilinear multiplications of this algorithm are again exactly
+those of Karatsuba Algorithm i.e. let f = f0 + f1x and g = g0 + g1x be two
+elements of L(P∞), then
+f g = f (P0)g(P0) +
+ 
+f (P1)g(P1) − f (P0)g(P0) − fD (P∞)gD (P∞)
+
+x
++fD (P∞)gD (P∞)x2
+4 Recursive Chudnovsky-type algorithm on Fq(x)
+4.1 Recursive Polynomial Generic Construction
+In this section, we propose a recursive generic construction of Chudnovsky-type
+algorithms specialized to the projective line for the multiplication in all exten-
+sions Fqn , using places of increasing degrees. But at this step, we still do not
+have any information about how to compute the multiplications of the evalu-
+ations at places of an arbitrary degree. Concretely, let Pi ∈ P be a place of
+degree di. Then, for f, g ∈ L((n − 1)P∞), the evaluations f (Pi) and g(Pi) are
+some elements in Fqdi . To compute (f g)(Pi) = f (Pi)g(Pi), we use the algorithm
+U Pi q,di (Pi). Such an algorithm is called a recursive Chudnovsky-type algorithm over the projective line.
+Definition 4. Let q be a prime power and n > 1 2 q + 1 be a positive integer. We
+call a recursive Chudnovsky-type algorithm over the projective line an algorithm,
+that computes the multiplications in intermediate extensions with recursively-
+defined algorithms.
+Example 1. Set P3 = {P0, P1, P∞, P 2 1 }. The sum of the degrees of the places in
+P3 is equal to 3 × 1 + 1 × 2 = 5 = 2 × 3 − 1, and this set is suitable. The algorithm
+U P3 3,3 computes 3 bilinear multiplications in Fq , and U P2 3,2 (P 2 1 ) computing itself 3
+more bilinear multiplications. Finally, its bilinear complexity is µ(U P3 3,3 ) = 3 ×
+1 + 1 × 3 = 6. That is the best-known (and optimal) bound for the multiplication
+in the extensions of degree 3 of F3. Table 1 illustrates the structure of U P3 3,3 .
+U P3 3,3 (P 3)
+P0
+P1
+P∞
+U P2 3,2 (P 2 1 ) P0 P1
+P∞
+Table 1: Diagram of the construction of U P3 3,3 (Q).
+8
+Our strategy can be summarized as follows:
+RPGC: Recursive Polynomial Generic Construction
+For q a prime power and n ≥ 2 a positive integer, let Q be a place of degree n
+of Fq (x). Then, U P q,n(Q) is an algorithm for the multiplication in Fqn , with the
+following settings:
+– D = (n − 1)P∞,
+– P = {P1, . . . , PN } is a set of places such that PN i=1 deg Pi = 2n − 1,
+– the basis of L(D) is {1, x, . . . , xn−1},
+– the basis of L(2D) is {1, x, . . . , x2n−1}, and
+– apply recursively RPGC to every non-rational places in P.
+Table 2 shows this bilinear complexity for the extensions of degree lower than
+18 of Fq , with q = 2, 3, 4. We underline the bilinear complexity when it equals the
+one given by Table 2 of [2], and we denote by + when we beat this complexity.
+n 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
+µ(U P deg 2,n ) 3 6 11 15 18 26 29 37 40 48 51 60 65 70 78 81 90
+µ(U P deg 3,n ) 3 6 9 12 16 19 24 28 31 36 40 43 48 52 55 60 64
+µ(U P deg 4,n ) 3 5 8 11 14 17 20 23 27 30 33 37 40 43+ 47 50+ 53
+Table 2: Bilinear complexity of U P q,n in small extensions of F2, F3 and F4.
+5 Asymptotical study for RPGC
+5.1 Bound for the bilinear complexity of RPGC
+Our bound for the bilinear complexity requires to introduce the iterated loga-
+rithm.
+Definition 5. Let q be a prime power. For all integer n, the iterated logarithm
+of n in the basis √q, denoted by log∗√q (n), is defined by the following recursive
+function:
+log∗√q (n) =
+
+
+
+0 if n ≤ 1 and q > 2
+0 if n ≤ 5 and q = 2
+1 + log∗(log(n)) elsewhere.
+9
+Theorem 3. Let q be a prime power and n ≥ 2 a positive integer. Then, there
+exists a recursive Chudnovsky-type algorithm U P q,n over the projective line for the
+multiplication in Fqn over Fq such that its bilinear complexity verifies
+µ(U P q,n) ≤ Cn
+ 4q2
+(q − 1)
+log∗√q (2n)
+,
+where C = 1 for q ≥ 3 and C = 14 5 for q = 2.
+Asymptotically, this bound is the same as for the construction of [5], i.e. with
+algorithms constructed over elliptic curves. On the other hand, the generalized
+Karatsuba algorithm, which is a Divide and Conquer construction based on the
+multiplication of two polynomials of degree 1 (i.e. U P2 2,2 here), requires O(nlog2 3)
+multiplications, all of them bilinear. This is much more than the bilinear com-
+plexity obtained with our construction.
+Remark 4. Note that [13, Section 9.5] gives a similar bound on the bilinear com-
+plexity, but this bound is a lower bound while our is an upper bound. However, it
+would possibly be relevant to compare our algorithms more thoroughly with the
+recent results by Harvey, van der Hoeven and Lecerf [13,15,14]. But this work of
+comparison is sufficiently important to require a further work of its own.
+5.2 Complexity of the construction of U P q,n
+Our construction has the advantage of using generic parameters. In particular,
+the divisor and the bases of the Riemann Roch spaces are explicitly given. The
+construction of our algorithms consists mainly in the construction of an irre-
+ductible polynomial of degree n on Fq as well as the matrices corresponding to
+the evaluation maps. This gives the following complexity, given by the number
+of elementary operations in Fq . We use the standard Landau notation O.
+Theorem 4. For all prime power q and all positive integer n, the recursive
+Chudnovsky-type algorithms over the projective line U P q,n of Theorem 3 are con-
+structible deterministically and in time O(n4).
+References
+1. Nicolas Arnaud. ´Evaluations d´eriv´ees, multiplication dans les corps finis et codes
+correcteurs. PhD thesis, Universit´e de la M´editerran´ee, Institut de Math´ematiques
+de Luminy, 2006.
+2. S. Ballet, J. Pieltant, M. Rambaud, H. Randriambololona, R. Rolland, and J. Chau-
+mine. On the tensor rank of multiplication in finite extensions of finite fields and
+related issues in algebraic geometry. Russian Mathematical Surveys, 76(1):29–89,
+feb 2021.
+3. St´ephane Ballet. Curves with Many Points and Multiplication Complexity in Any
+Extension of Fq . Finite Fields and Their Applications, 5:364–377, 1999.
+10
+4. St´ephane Ballet, Alexis Bonnecaze, and Bastien Pacifico. Multiplication
+in finite fields with Chudnovsky-type algorithms on the projective line.
+https://hal.archives-ouvertes.fr/hal-02911546.
+5. St´ephane Ballet, Alexis Bonnecaze, and Mila Tukumuli. On the construction of
+elliptic Chudnovsky-type algorithms for multiplication in large extensions of finite
+fields. Journal of Algebra and Its Applications, 15(1):26 pages, 2016.
+6. St´ephane Ballet and Robert Rolland. Multiplication algorithm in a finite field and
+tensor rank of the multiplication. Journal of Algebra, 272(1):173–185, 2004.
+7. Marco Bodrato. Towards optimal Toom-Cook multiplication for univariate and
+multivariate polynomials in characteristic 2 and 0. In Claude Carlet and Berk
+Sunar, editors, Arithmetic of Finite Fields, pages 116–133, Berlin, Heidelberg, 2007.
+Springer Berlin Heidelberg.
+8. A. Bostan, G. Lecerf, and ´E. Schost. Tellegen’s principle into practice. In Proceed-
+ings of the 2003 International Symposium on Symbolic and Algebraic Computation,
+ISSAC ’03, page 37–44, New York, NY, USA, 2003. Association for Computing
+Machinery.
+9. Murat Cenk and Ferruh ¨Ozbudak. On multiplication in finite fields. Journal of
+Complexity, pages 172–186, 2010.
+10. David Chudnovsky and Gregory Chudnovsky. Algebraic complexities and algebraic
+curves over finite fields. Journal of Complexity, 4:285–316, 1988.
+11. Hans De Groote. Characterization of division algebras of minimal rank and the
+structure of their algorithm varieties. SIAM Journal on Computing, 12(1):101–117,
+1983.
+12. Arnaldo Garcia and Henning Stichtenoth. A tower of Artin-Schreier extensions of
+function fields attaining the Drinfeld-Vl˘adut¸ bound. Inventiones Mathematicae,
+121:211–222, 1995.
+13. David Harvey, Joris Van Der Hoeven, and Gr´egoire Lecerf. Faster polynomial
+multiplication over finite fields. J. ACM, 63(6), jan 2017.
+14. David Harvey and Joris Van Der Hoeven. Faster polynomial multiplication over
+finite fields using cyclotomic coefficient rings. Journal of Complexity, 54:101404,
+October 2019.
+15. David Harvey and Joris Van Der Hoeven. Polynomial multiplication over finite
+fields in time O(n log n). working paper or preprint, March 2019.
+16. Anatolii Karatsuba. Multiplication of multidigit number on automata. Soviet
+Physics Doklady, 7:595–596, 1963.
+17. Hugues Randriambololona. Bilinear complexity of algebras and the Chudnovsky-
+Chudnovsky interpolation method. Journal of Complexity, 28(4):489–517, 2012.
+18. Igor Shparlinski, Michael Tsfasman, and Serguei Vl˘adut¸. Curves with many points
+and multiplication in finite fields. In H. Stichtenoth and M.A. Tsfasman, editors,
+Coding Theory and Algebraic Geometry, number 1518 in Lectures Notes in Math-
+ematics, pages 145–169, Berlin, 1992. Springer-Verlag. Proceedings of AGCT-3
+conference, June 17-21, 1991, Luminy.
+19. Henning Stichtenoth. Algebraic Function Fields and Codes. Number 254 in Grad-
+uate Texts in Mathematics. Springer-Verlag, second edition, 2008.
+20. Joachim von zur Gathen and Jugen Gerhard. Modern Computer Algebra. Cam-
+bridge University Press, 2003.
+21. Shmuel Winograd. On Multiplication in Algebraic Extension Fields. Theoretical
+Computer Science, 8:359–377, 1979.
+11
