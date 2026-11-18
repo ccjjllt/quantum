@@ -1,0 +1,21 @@
+{
+  "id": "zhuating/qcc-chem-pub-eval-all",
+  "title": "Qcc Chem Pub Eval All",
+  "code_file": "main.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "machine_shape": "",
+  "dataset_sources": [
+    "marculera/dfthc-merge-pipeline",
+    "marculera/dfthc-compact-pipeline"
+  ],
+  "competition_sources": [
+    "google-verifiable-quantum-circuit-compilation"
+  ],
+  "kernel_sources": [],
+  "model_sources": []
+}
