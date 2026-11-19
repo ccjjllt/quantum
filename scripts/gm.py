@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Geometric-mean calculator for a three-leg candidate (pure arithmetic, no simulation).
 
-    python3 scripts/gm.py invsqrt=74797.36535717871 dqi=346413579540.50 chem=294643137.73
-    python3 scripts/gm.py --current                 # the shipped 28.15083 triple
+    python3 scripts/gm.py invsqrt=74405.67238374705 dqi=345256821433.9815 chem=294642170.565169
+    python3 scripts/gm.py --current                 # the shipped 28.23162 triple (58522779)
 
 REFERENCE costs are the competition's baseline submission, fixed by the task.
 Nothing here verifies a circuit: it only converts official verifier costs to the
@@ -18,9 +18,9 @@ REFERENCE = {
     "dqi": 24439463583672.93,
     "chem": 3355599588.3155375,
 }
-CURRENT = {"invsqrt": 74797.36535717871, "dqi": 346409762292.7187, "chem": 294643137.73}  # 58464076
-GOLD = 28.71339
-SILVER_CUT = 28.14702
+CURRENT = {"invsqrt": 74405.67238374705, "dqi": 345256821433.9815, "chem": 294642170.565169}  # 58522779
+GOLD = 28.80569  # approx top-17 cutoff on 2026-11-19 snapshot
+SILVER_CUT = 28.23162
 
 
 def gm(costs: dict[str, float]) -> float:
@@ -40,15 +40,13 @@ def main() -> None:
     if missing:
         p.error(f"missing legs: {sorted(missing)}")
     g = gm(costs)
-    print(f"costs   : " + "  ".join(f"{k}={costs[k]:.6f}" for k in REFERENCE))
-    print(f"ratios  : " + "  ".join(f"{k}={REFERENCE[k]/costs[k]:.6f}" for k in REFERENCE))
+    print("costs   : " + "  ".join(f"{k}={costs[k]:.6f}" for k in REFERENCE))
+    print("ratios  : " + "  ".join(f"{k}={REFERENCE[k]/costs[k]:.6f}" for k in REFERENCE))
     print(f"GM      : {g:.8f}")
-    print(f"vs current 28.15094 : {g - 28.15094:+.5f}   (local model of 58464076: 28.150932)")
+    print(f"vs current 28.23162 : {g - 28.23162:+.5f}   (local GM of 58522779: 28.231630)")
     print(f"vs gold {GOLD}     : {g - GOLD:+.5f}  "
           f"({'ABOVE' if g >= GOLD else 'below'})")
     print(f"vs silver {SILVER_CUT}: {g - SILVER_CUT:+.5f}")
-    for leg in REFERENCE:
-        need = g * (REFERENCE[leg] / (REFERENCE[leg] / costs[leg])) ** 0  # placeholder
     # single-leg targets for gold (other two held)
     others = {k: REFERENCE[k] / costs[k] for k in REFERENCE}
     print("\nsingle-leg cost needed for gold, other two held:")

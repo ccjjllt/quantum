@@ -26,9 +26,7 @@ kaggle competitions submit -c google-verifiable-quantum-circuit-compilation \
   -k qingyu1232/qcc-integrator-281806 -v 1 -f submission.zip
 ```
 
-**已排定自动提交**：`submit_at_reset.sh`（后台运行，日志 `submit.log`）在 UTC 00:00
-名额重置后（北京 08:00）执行上面这条命令，最多重试 3 次，随后把 `competitions submissions`
-的成绩追加到同一日志。取消：`pkill -f submit_at_reset.sh`。
+已于 2026-11-18T00:47:06Z 完成提交（ref `58487952`，COMPLETE 28.18067）。原计划脚本与日志已随 2026-11-19 清理移除，官方 `receipt.json` 保留在本目录。
 
 - 11-17 UTC 当天 5/5 已用（01:36 / 02:13 / 02:43 / 03:23 / 09:29），所以之前
   `CreateCodeSubmission` 返回 400；内核输出里 `submission.zip` 已确认存在且 sha256 与回执一致
@@ -42,8 +40,7 @@ kaggle competitions submit -c google-verifiable-quantum-circuit-compilation \
 tape 的 Toffoli **100% 闭合**：EEA 两趟 317,748（7,565 个 GF(2¹²) 域乘法 × 42）
 + Chien 44,264（4,024 × 11）+ 相位 5,977 = 367,989。乘法秩 42 是 F₂ 上最好已知值
 （33 是 F₄ 的数），对齐/桶形移位不存在，块级冗余为 0。详见
-[已停止研究总览 §9](../../docs/abandoned-research.md) 与
-[逐轮归档 §7](../../experiments/ARCHIVE_closed_lines.md)。
+[已停止研究总览](../../docs/abandoned-research.md)。
 
 到 31.4 的缺口 = EEA 的**商项调度**：现役是整除调度（每步 δ+1 项、Σ(δ+1)=104/35 步），
 归一化 divstep（每步降 1 度、商恒为标量）把每趟乘法从 3,648 降到约 1,700–2,450，
