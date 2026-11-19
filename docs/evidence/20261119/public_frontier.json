@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-19",
+  "competition": "google-verifiable-quantum-circuit-compilation",
+  "filters": {
+    "notebooks": "competition, DateRun",
+    "notebooks_returned": 70,
+    "datasets": "vqcc, Updated",
+    "datasets_returned": 20,
+    "leaderboard_rows_returned": 12
+  },
+  "leaderboard_top10": [
+    {
+      "team": "Z³C¹oherence",
+      "score": "31.74002"
+    },
+    {
+      "team": "ThemBones",
+      "score": "31.64282"
+    },
+    {
+      "team": "Rithvik Redrouthu",
+      "score": "31.02835"
+    },
+    {
+      "team": "Yicheng Guang & Taiseiu",
+      "score": "30.71253"
+    },
+    {
+      "team": "Christoffer Thimsen",
+      "score": "30.28986"
+    },
+    {
+      "team": "Entangled Team",
+      "score": "30.28512"
+    },
+    {
+      "team": "Schrödinger’s cat lived",
+      "score": "29.97900"
+    },
+    {
+      "team": "Slingshot Effect",
+      "score": "29.57281"
+    },
+    {
+      "team": "mliston",
+      "score": "29.33122"
+    },
+    {
+      "team": "yu4u",
+      "score": "29.23215"
+    }
+  ],
+  "account_best": {
+    "ref": 58522779,
+    "public_score": "28.23162",
+    "status": "COMPLETE"
+  },
+  "notebooks": [
+    {
+      "ref": "maoxin123/qcc-28-23-4-022-toffoli-chemistry-loaders",
+      "version": 6,
+      "reported_gm_in_execution_log": 28.23717,
+      "inv": {
+        "sha256": "acc7b9c86b4f65c0204194779a85d2c6b6631538316ffab2091c416a178f60a0",
+        "cost": 74361.66973599327
+      },
+      "dqi": {
+        "sha256_prefix": "15a4b740",
+        "cost": 345256821433.9815
+      },
+      "chem": {
+        "sha256_prefix": "56ef2562",
+        "cost": 294643137.73357135
+      }
+    },
+    {
+      "ref": "ghazarosbarseghyan91/qcc-28-235-three-salt-dqi",
+      "version": 4,
+      "public_score_reported_by_author": "28.23498",
+      "submission_id_reported_by_author": 58551726,
+      "inv_cost_at_default_salt": 74383.69875786705,
+      "dqi": {
+        "sha256": "4471b4933c18fd654a3ab7cf15cb01958b98ccbd9b2ce37d567289fff10962f5",
+        "mean_T": 365872.2036425781,
+        "value_errors": 0,
+        "phase_errors": 0,
+        "cost_at_default_salt": 345236065276.47076,
+        "other_salt": "one failure on notebook-verification reported by author"
+      },
+      "chem": {
+        "npz_sha256": "6ef06081cb9c5752ee7235c86d480ddfc5db027f01e5d5d66a544dbda85d1958",
+        "cost": 294642169.5116752
+      }
+    },
+    {
+      "ref": "leotang09/vqcc-t7421-submission",
+      "version": 60,
+      "published_bundle_member_prefixes": [
+        "acc7b9c8",
+        "4471b493",
+        "6ef06081"
+      ],
+      "role": "hash-checked assembly; each cost here sourced from other authors' verifier runs"
+    }
+  ]
+}
