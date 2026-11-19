@@ -2,20 +2,19 @@
 
 本仓库用于 [Google Quantum AI — Verifiable Quantum Circuit Compilation](https://www.kaggle.com/competitions/google-verifiable-quantum-circuit-compilation)。
 根工作区使用 **main**，负责公开优秀方案的来源与版本管理、比较选择、组合装配、submission 和提交回执。
-三个研究分支曾分别推进算法、电路与资源成本研究；均已于 2026-11-13 停止，详见 [总览](docs/abandoned-research.md)。
+三个研究分支保留了 11 月 13 日收尾的旧实验，11 月 18 日重新检出，用于研究冲击 29 至 31.5 分的新算法。[公开方案比较与本轮研究入口](docs/public-comparison-20261118.md)
 
 ## 分支与本地工作区
 
 | 职责 | 分支 | 本地目录 | 当前状态 |
 |---|---|---|---|
-| 公开方案治理与 submission | `main` | 仓库根目录 | 最佳 COMPLETE **28.18067**（ref 58487952）；gold 28.71339 需单腿再降 5.46% |
-| invsqrt | `codex/invsqrt-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
-| 化学 / dfthcsos | `codex/dfthcsos-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
-| DQI | `codex/dqi-research` | 已删除（分支保留） | 已停止；见 [总览](docs/abandoned-research.md) §9 |
+| 公开方案治理与 submission | `main` | 仓库根目录 | 最佳 COMPLETE **28.20311**（58517010）；28.23163 已提交（58522779，PENDING） |
+| invsqrt | `codex/invsqrt-research` | `.worktree/invsqrt` | 2026-11-18：43Q 退休/相位扇出重写、旋转余量、查表-相位融合均 no-go；Q≥44 结构下界 |
+| 化学 / dfthcsos | `codex/dfthcsos-research` | `.worktree/dfthcsos` | 2026-11-18：6T、8-bit、Q<427、(8,129,44) 重训、`Lambda` 一范数均 no-go；`Lambda` 283.144 已是可行下限（误差预算仅 0.114 mHa） |
+| DQI | `codex/dqi-research` | `.worktree/dqi` | 2026-11-18：抽稀/889Q/divstep/retained/2 数组/quotient sweep/ancilla/x-adic/BM-Gao-WB 全 no-go（BM 下界 3t+6=111 字）；tape floor 367,110.166 |
 
-三个研究 worktree 已于 2026-11-18 删除；分支 `codex/*-research` 与提交全部保留，
-可用 `git worktree add .worktree/dqi codex/dqi-research` 重建。三条研究线于 2026-11-13 停止，
-2026-11-17/18 的最后一轮 frontier push 也在 14 条轴全部实测关闭后收尾
+三个旧研究工作区在 2026-11-18 清理后已从原分支恢复。三条旧研究线于 2026-11-13 停止，
+2026-11-17/18 的 frontier push 在 14 条轴全部实测关闭后收尾
 （见 [已停止研究总览 §9](docs/abandoned-research.md)）。已关闭实验的详细文档、脚本与
 大型 artifacts 已清理。官方数据与公开源清单保留；环境可用 `uv sync` 重建。
 采用研究成果时，main 记录实际选定的产物、来源、参数和验证范围，不整支混入研究过程。
@@ -51,16 +50,24 @@
 | 2026-11-16 | [换件：28.09486 sub1（f2cdab0b + ccc2ab84 + sub1，三件官方 verifier 全 PASS）](experiments/ARCHIVE_closed_lines.md) | 58424363 | **28.09486，COMPLETE（rank 188/3160）** |
 | 2026-11-17 | [换 DQI：61c8348d → 575b043f（+4 个已证明 product-retention closings，mean T 367,116.06）](submissions/20261117_deep_575b043f/README.md) | 58464076 | **28.15094，COMPLETE（rank 156，silver 线内）** |
 | 2026-11-18 | [28.1807 包：invsqrt 563d0583 + DQI 575b043f + chem a73b25d2](submissions/20261118_281806/README.md) | 58487952 | **28.18067，COMPLETE**（本地 GM 28.180659） |
+| 2026-11-18 | [公开 28.19 组合 W：invsqrt 864f81cd + DQI 5f901c55 + chem 4d63be3d](submissions/20261118_2819/README.md) | 58496528 | **28.18965，COMPLETE**（本地 GM 28.189660；独立复核三腿 PASS） |
+| 2026-11-18 | [公开 28.20042 包：invsqrt d0227f3c + 同 DQI/chem](submissions/20261118_2820/README.md) | 58514074 | **28.20041，COMPLETE**，rank 120/3327（本地 GM 28.200418，只换 invsqrt −85.22） |
+| 2026-11-19 | [公开 HW-30 DQI `35fa5ef9`：−105.01 mean T](submissions/20261119_hw30/README.md) | 58517010 | **28.20311，COMPLETE**，rank 134/3332（本地 GM 28.203115） |
+| 2026-11-18 | [公开 SOTA 28.23163：DQI `15a4b740` −1,110.95 mean T](submissions/20261118_sota2823/README.md) | 58522779 | 已创建，PENDING（本地 GM 28.231630；DQI 365,894.20 已独立复核 PASS） |
 
-当前最佳 COMPLETE 为 **28.15094 包（本账号 `58464076`，rank 156）**：
-`0af21cb8` invsqrt + `575b043f` DQI + `a73b25d2` chemistry。
-2026-11-18 又提交 **28.180659** 包（ref `58487952`）：只把 invsqrt 换成 `563d0583`
-（44Q，74,560.91），DQI/chem 同件；18 成员 SHA-256 固定，未改动官方 verifier 全量 PASS。
-榜单已返回 **28.18067，COMPLETE**（本地 GM 28.180659，四舍五入一致）。
-2026-11-18 用 Kaggle MCP 复查公开前沿：最高公开包是 junmiaotiao 的 U（ref `58482406`，
-GM 28.18083687），比本包高 **0.00018**；其 DQI `5f901c55` 比我们的 `575b043f` 少 6 个
-Toffoli，但一次 DQI 失败约 −0.043 GM，故未重提。公开件没有 >28.2 的方案；榜首 31.50404
-无公开电路。详见 [总览 §9.9](docs/abandoned-research.md)。
+当前最佳 COMPLETE 为 **28.18965 包（本账号 `58496528`）**：
+`864f81cd` invsqrt（44Q，74,490.94707587373）+ `5f901c55` DQI（890Q，346,404,203,610.11，
+mean T 367,110.166，0/0）+ `4d63be3d` 化学（427Q，T=14,706，294,642,170.565）。
+18 成员 SHA-256 固定，未改动官方 verifier 三腿全量 PASS（invsqrt 200,540,928 shots、
+DQI 102,400 shots、chem 78,080 shots），本地 GM **28.189660448**。
+榜单返回 **28.18965，COMPLETE**；2026-11-18T06:40Z 快照为 rank 149/3300，**12:46Z 为 rank 184/3314
+（跌破银线：28.18965 并列块已扩到 288 队，前 5% = 165）**。榜面只显示 5 位小数，
+GM +0.00001 即可越过整个并列块。本轮找到的新杠杆：化学 `Lambda` 一范数（`lambda_eff = sqrt(E_gap(2Lambda-E_gap))`，
+`Lambda` = 270.1148 npz 权重项 + 13.0291 角度字项 = 283.1440）——`Lambda` 每降 1，GM +0.0167，
+且不花 T/Q；见 [next-generation-20261118](docs/next-generation-20261118.md)。
+上一版 **28.18067**（`58487952`）为 `563d0583` invsqrt + `575b043f` DQI + `a73b25d2` chem。
+2026-11-18 公开前沿复查：**没有 >28.19 的公开包**；榜首 31.50701 无公开电路。
+详见 [公开前沿 2026-11-18b](docs/public-frontier-20261118b.md) 与 [总览 §9.9](docs/abandoned-research.md)。
 （更早的 28.15083 包为 `58454232`）：
 `f2cdab0b` invsqrt（44Q，75,006.38）+ `ccc2ab84` DQI（890Q，347,375,470,571.73）+
 `sub1` 化学（427Q，T=14,712，294,762,697.44）。三件由官方 verifier 在本账号复核 PASS
@@ -139,7 +146,7 @@ macOS 使用 PyPI 原生 kickmix，不导入比赛数据包面向 Kaggle Linux �
 本地 `.venv` 已在 2026-11-18 清理，运行任何脚本前先 `uv sync`；安装完成不代表全量验证通过。
 
 ```text
-.worktree/            已删除；分支 codex/*-research 保留，可 git worktree add 重建（不入 Git）
+.worktree/            三个独立研究工作区；新实验和证据在对应分支目录
 data/competition/     官方原始数据和未修改的验证器（不入 Git）
 docs/research-map.md  比赛契约与公开资料的带日期快照
 docs/abandoned-research.md  已停止研究总览、放弃原因与四次清理记录
