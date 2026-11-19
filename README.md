@@ -7,12 +7,13 @@
 | 职责 | 分支 / 目录 | 当前状态 |
 |---|---|---|
 | 公开方案治理与提交 | `main`（仓库根目录） | 最佳 COMPLETE **`28.23162`**（ref `58522779`，rank **183 / 3,355**，本地 GM `28.231630`） |
-| invsqrt | `codex/invsqrt-research`（已停） | 44Q `d0227f3c` 局部优化、43Q 重写/按需标志、`Z_POW` 与查表融合均 no-go（[详情](docs/abandoned-research.md)） |
-| DQI | `codex/dqi-research`（已停） | 890Q 局部/rewrite/sweep/掩码插值、2 数组/x-adic/BM/Gao/WB 均 no-go（[详情](docs/abandoned-research.md)） |
-| 化学 / dfthcsos | `codex/dfthcsos-research`（已停） | 形状/重训/BLISS-THC/`Lambda` 重拟合与列规范、loader H-A/B/C 均 no-go（[详情](docs/abandoned-research.md)） |
+| invsqrt | `codex/invsqrt-research` | 314 段平移平方的全域数值模型成立，已测平方与查表子电路 |
+| DQI | `codex/dqi-research` | 已生成 17 阶可逆欧氏子电路，正评估双载荷替换的宽度、相位与异常支点 |
+| 化学 / dfthcsos | `codex/dfthcsos-research` | 共享后缀已生成 20 个 ANGLE 家族，均未达到 20 mHa |
 
 - **现役最佳三件套（`58522779`）**：invsqrt `d0227f3c`（44Q，74,405.672，200,540,928 shots PASS）+ DQI `15a4b740`（890Q，345,256,821,433.98，mean T 365,894.20，102,400 shots 0/0 PASS）+ 化学 `4d63be3d`（427Q，T=14,706，294,642,170.57，78,080 shots PASS）。
-- **清理说明**：三条自研线已停止，已关闭的实验文档、脚本、`.worktree/`、旧候选 `artifacts/` 与本地环境缓存均已清理以释放磁盘空间（详见 [abandoned-research.md](docs/abandoned-research.md)）。
+- **历史清理**：上一轮停止的实验、工作区及缓存已于 11 月 19 日清理；已关闭的架构、数据和恢复锚点见[停研总览](docs/abandoned-research.md)。
+- **11 月 19 日新架构复核**：旧实验清理后已恢复三个研究工作区。本轮比较了公开新件、DQI 双载荷变换、invsqrt 平移平方与化学共享 Givens 角。账面公开组合为 28.23776；本账号最佳仍为 28.23162。[完整研究与预算](docs/research-directions-20261119.md)
 
 ## 近期与关键提交记录
 
