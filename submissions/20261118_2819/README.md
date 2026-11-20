@@ -53,7 +53,6 @@
   - DQI `5f901c55`：**346,404,203,610.1118**，102,400 shots 0 value / 0 phase PASS，mean T 367,110.166。
   - chem `4d63be3d` + 15 loaders：**294,642,170.565169**，78,080 shots PASS，λ_eff 46.921562797，T=14,706。
   - GM 复算 **28.18966044813323**。
-- 证据：`docs/evidence/20261118b/{combo_w_verification.json,verify_invsqrt.json,verify_dqi.json,verify_dfthcsos.json}`；细节见 [`docs/public-frontier.md`](../../docs/public-frontier.md)。
 - 已提交的 zip 是作者容器 `ea55e2a9…`，其 18 成员内容摘要 `fe9fa7b0…` 与新构建的 `134ceaaa…` 相同；因此上述逐成员官方验证适用于 ref `58496528`。
 - 本提交只换件，不改官方 verifier。
 - **Kaggle 回执：`COMPLETE`，public score `28.18965`**（ref `58496528`，2026-11-18T05:38:36Z）。榜单四舍五入与本地 GM 28.189660448 一致。
