@@ -21,6 +21,4 @@ P0（299497670.48）再退一级，Lera 为回退。
 - 三项全齐后可组新三件套（预期本地 GM ≈25.303，即 Maoxin 笔记本自报口径）；
   组包与提交需用户另行批准。
 
-## 依据
-- 工作区解剖：`.worktree/dfthcsos/experiments/dfthcsos/20261111_lera_deep/README.md`
-- 放弃记录：`.worktree/dfthcsos/experiments/dfthcsos/ABANDONED.md`
+[化学停研记录](../../docs/abandoned-research.md)
