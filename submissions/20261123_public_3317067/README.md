@@ -28,7 +28,7 @@
 ## 回执
 
 - ref `58806317`，提交时间 2026-11-24T02:22:31Z（`ccjjllt`），本日剩余提交次数以 Kaggle 页面为准。
-- 线上 public score：待评分返回后更新。
+- 线上 public score：**33.17067**（`COMPLETE`），与公开 notebook 报告一致，为账号当前最高分。
 
 ## 致谢
 
